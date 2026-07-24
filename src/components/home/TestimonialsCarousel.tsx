@@ -36,6 +36,7 @@ export default function TestimonialsCarousel() {
           {loop.map((t, i) => (
             <div
               key={i}
+              className="lp-tcard"
               style={{
                 width: 400,
                 flex: "none",

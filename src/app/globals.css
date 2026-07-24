@@ -108,6 +108,94 @@ a:hover {
 /* Pause a marquee track while hovered */
 .lp-marquee-pause:hover { animation-play-state: paused; }
 
+/* ---- DEMO: global font-family toggle (remove later) ---- */
+/* Leave the font-toggle button itself on its own font so it stays legible */
+:root[data-font="work"] body *:not(.lp-fonttoggle):not(.lp-fonttoggle *) {
+  font-family: "Work Sans", sans-serif !important;
+}
+:root[data-font="jakarta"] body *:not(.lp-fonttoggle):not(.lp-fonttoggle *) {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Responsive overrides (inline styles are the desktop base;          */
+/* these !important rules restyle them at smaller widths)             */
+/* ------------------------------------------------------------------ */
+
+/* Nav base (desktop) — hamburger + mobile-only items hidden */
+.lp-nav { display: flex; gap: 32px; align-items: center; }
+.lp-hamburger { display: none; }
+.lp-nav-cta { display: none; }
+/* Blueprint: accordion is mobile-only */
+.lp-bp-mobile { display: none; }
+
+/* Tablet and below: collapse the widest grids */
+@media (max-width: 900px) {
+  .lp-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+  .lp-grid-3,
+  .lp-hero-grid,
+  .lp-blueprint-grid,
+  .lp-why-grid,
+  .lp-founders-grid { grid-template-columns: 1fr !important; }
+  .lp-hero-grid { gap: 48px !important; }
+  .lp-footer-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* Phones */
+@media (max-width: 640px) {
+  /* Shrink the generous 48px side gutters */
+  .lp-sec { padding-left: 20px !important; padding-right: 20px !important; }
+
+  .lp-grid-4 { grid-template-columns: 1fr !important; }
+  .lp-impact-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .lp-footer-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+
+  .lp-cert-features { grid-template-columns: 1fr !important; }
+
+  /* Trim tall hero padding */
+  .lp-hero { padding-top: 64px !important; padding-bottom: 72px !important; }
+
+  /* Header: show hamburger, hide the standalone CTA */
+  .lp-hamburger { display: inline-flex; }
+  .lp-header-cta { display: none !important; }
+
+  /* Nav becomes a dropdown panel under the sticky header */
+  .lp-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: #fff;
+    border-bottom: 1px solid #e3eaf0;
+    box-shadow: 0 14px 30px rgba(10, 27, 51, 0.1);
+    padding: 6px 20px 16px;
+  }
+  .lp-nav.lp-nav-open { display: flex; }
+  .lp-nav > a { padding: 14px 6px; border-bottom: 1px solid #eef3f7; }
+  .lp-nav-cta { display: block !important; margin-top: 12px; border-bottom: none !important; }
+
+  /* Blueprint: swap the two-column layout for the accordion */
+  .lp-bp-desktop { display: none !important; }
+  .lp-bp-mobile { display: flex !important; }
+
+  /* Hero stat row wraps; drop the vertical dividers */
+  .lp-hero-stats { flex-wrap: wrap; gap: 22px !important; }
+  .lp-hero-divider { display: none !important; }
+
+  /* Testimonial cards fit the viewport */
+  .lp-tcard { width: 82vw !important; max-width: 360px; }
+
+  /* CTA panel padding */
+  .lp-cta { padding: 44px 26px !important; }
+
+  /* Hide the WhatsApp tooltip bubble, keep the button */
+  .lp-wa-tip { display: none !important; }
+}
+
 /* Reveal-on-scroll base state */
 .lp-reveal {
   opacity: 0;

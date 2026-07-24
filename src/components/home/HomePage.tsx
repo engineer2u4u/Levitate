@@ -5,6 +5,8 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Reveal from "./Reveal";
 import Counter from "./Counter";
 import TestimonialsCarousel from "./TestimonialsCarousel";
+import ScrollToTop from "./ScrollToTop";
+import FontToggle from "./FontToggle";
 import { contact, navLinks, services, blueprintSteps, certs, whyPoints, impactStats, tickerA, tickerB, gallery, founders } from "@/lib/homeData";
 
 /* ------------------------------------------------------------------ */
@@ -60,6 +62,9 @@ const tiltLeave = (e: React.MouseEvent<HTMLDivElement>) => {
 export default function HomePage() {
   const [videoOpen, setVideoOpen] = useState(false);
   const [step, setStep] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
+  // Mobile blueprint accordion: independent open item (null = all collapsed)
+  const [openStep, setOpenStep] = useState<number | null>(0);
   const userPicked = useRef(false);
 
   // Blueprint auto-advance every 4.5s while in viewport.
@@ -103,9 +108,13 @@ export default function HomePage() {
 
   return (
     <>
+      <ScrollToTop />
+      <FontToggle />
+
       {/* WHATSAPP FLOAT */}
       <div style={{ position: "fixed", bottom: 26, right: 26, zIndex: 90, display: "flex", alignItems: "center", gap: 10 }}>
         <div
+          className="lp-wa-tip"
           style={{
             background: "#fff",
             color: "#0a1b33",
@@ -141,6 +150,7 @@ export default function HomePage() {
 
       {/* TOP CONTACT BAR */}
       <div
+        className="lp-sec"
         style={{
           background: "#fff",
           borderBottom: "1px solid #e3eaf0",
@@ -157,14 +167,14 @@ export default function HomePage() {
         }}
       >
         <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
+          <a href={`mailto:${contact.email}`} className="lp-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
             <MailIcon />
             {contact.email}
-          </span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
+          </a>
+          <a href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`} className="lp-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
             <PhoneIcon />
             {contact.phone}
-          </span>
+          </a>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#3d5064" }}>
           <span style={{ color: "#f5b942", letterSpacing: "1px" }}>★★★★★</span> {contact.rating} on Google Reviews
@@ -173,6 +183,7 @@ export default function HomePage() {
 
       {/* STICKY HEADER */}
       <div
+        className="lp-sec"
         style={{
           position: "sticky",
           top: 0,
@@ -191,24 +202,56 @@ export default function HomePage() {
         <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 8, padding: "6px 12px", display: "flex", alignItems: "center" }}>
           <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 34, display: "block" }} />
         </div>
-        <nav style={{ display: "flex", gap: 32, font: "600 14px 'Manrope',sans-serif" }}>
+        <nav className={`lp-nav${menuOpen ? " lp-nav-open" : ""}`} style={{ font: "600 14px 'Manrope',sans-serif" }}>
           {navLinks.map((l, i) => (
-            <a key={l} href="#" className={i === 0 ? undefined : "lp-navlink"} style={i === 0 ? { color: "#1b8f88" } : undefined}>
+            <a key={l} href="#" onClick={() => setMenuOpen(false)} className={i === 0 ? undefined : "lp-navlink"} style={i === 0 ? { color: "#1b8f88" } : undefined}>
               {l}
             </a>
           ))}
+          <a
+            href="#"
+            onClick={() => setMenuOpen(false)}
+            className="lp-nav-cta lp-btn-grad"
+            style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 13.5px 'Manrope',sans-serif", padding: "12px 22px", borderRadius: 999, textAlign: "center" }}
+          >
+            Book a Discovery Call
+          </a>
         </nav>
         <a
           href="#"
-          className="lp-btn-grad"
+          className="lp-header-cta lp-btn-grad"
           style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 13.5px 'Manrope',sans-serif", padding: "11px 22px", borderRadius: 999, whiteSpace: "nowrap" }}
         >
           Book a Discovery Call
         </a>
+        <button
+          type="button"
+          className="lp-hamburger"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((o) => !o)}
+          style={{ width: 44, height: 44, borderRadius: 10, color: "rgb(47 135 211)", cursor: "pointer", alignItems: "center", justifyContent: "center" }}
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+            {menuOpen ? (
+              <path d="M6 6l12 12M18 6L6 18" />
+            ) : (
+              <>
+                <path d="M3 6h18" />
+                <path d="M3 12h18" />
+                <path d="M3 18h18" />
+              </>
+            )}
+          </svg>
+        </button>
       </div>
 
       {/* HERO */}
-      <div data-screen-label="Hero" style={{ position: "relative", overflow: "hidden", background: "#eef4f7", padding: "110px 48px", minHeight: "72vh", display: "flex", alignItems: "center" }}>
+      <div
+        data-screen-label="Hero"
+        className="lp-sec lp-hero"
+        style={{ position: "relative", overflow: "hidden", background: "#eef4f7", padding: "110px 48px", minHeight: "72vh", display: "flex", alignItems: "center" }}
+      >
         <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
           <img
             src="/assets/founder-speaking.jpeg"
@@ -228,7 +271,10 @@ export default function HomePage() {
           />
           <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 120, background: "linear-gradient(180deg,transparent,#f7fafc)" }} />
         </div>
-        <div style={{ position: "relative", maxWidth: 1240, margin: "0 auto", width: "100%", display: "grid", gridTemplateColumns: "1.25fr .75fr", gap: 64, alignItems: "center" }}>
+        <div
+          className="lp-hero-grid"
+          style={{ position: "relative", maxWidth: 1240, margin: "0 auto", width: "100%", display: "grid", gridTemplateColumns: "1.25fr .75fr", gap: 64, alignItems: "center" }}
+        >
           <div>
             <div
               style={{
@@ -266,7 +312,7 @@ export default function HomePage() {
                 className="lp-btn-grad"
                 style={{
                   background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)",
-                  color: "#04121f",
+                  color: "#fff",
                   font: "700 15px 'Manrope',sans-serif",
                   padding: "16px 30px",
                   borderRadius: 999,
@@ -295,21 +341,21 @@ export default function HomePage() {
                 Book a Discovery Call
               </a>
             </div>
-            <div style={{ display: "flex", gap: 40, marginTop: 48 }}>
+            <div className="lp-hero-stats" style={{ display: "flex", gap: 40, marginTop: 48 }}>
               <div>
                 <div style={{ font: "700 30px 'Space Grotesk',sans-serif", color: "#0a1b33", fontVariantNumeric: "tabular-nums" }}>
                   <Counter to={2000} trigger="mount" />+
                 </div>
                 <div style={{ font: "500 12.5px 'Manrope',sans-serif", color: "#8296a9", letterSpacing: ".06em", textTransform: "uppercase" }}>Professionals trained</div>
               </div>
-              <div style={{ width: 1, background: "rgba(10,27,51,.14)" }} />
+              <div className="lp-hero-divider" style={{ width: 1, background: "rgba(10,27,51,.14)" }} />
               <div>
                 <div style={{ font: "700 30px 'Space Grotesk',sans-serif", color: "#0a1b33", fontVariantNumeric: "tabular-nums" }}>
                   <Counter to={15} trigger="mount" />+ yrs
                 </div>
                 <div style={{ font: "500 12.5px 'Manrope',sans-serif", color: "#8296a9", letterSpacing: ".06em", textTransform: "uppercase" }}>Global HR experience</div>
               </div>
-              <div style={{ width: 1, background: "rgba(10,27,51,.14)" }} />
+              <div className="lp-hero-divider" style={{ width: 1, background: "rgba(10,27,51,.14)" }} />
               <div>
                 <div style={{ font: "700 30px 'Space Grotesk',sans-serif", color: "#0a1b33" }}>
                   4.9<span style={{ color: "#f5b942", fontSize: 20 }}> ★</span>
@@ -345,7 +391,6 @@ export default function HomePage() {
               <div style={{ font: "500 13px 'Manrope',sans-serif", color: "#5b6e82", marginTop: 5 }}>
                 Why we build certified workplace facilitators
                 <br />
-                <span style={{ fontFamily: "monospace", color: "#1b8f88", fontSize: "11.5px" }}>video placeholder · 2 min watch</span>
               </div>
             </div>
           </div>
@@ -382,14 +427,13 @@ export default function HomePage() {
               boxShadow: "0 40px 120px rgba(10,27,51,.45)",
             }}
           >
-            <img src="/assets/founder-speaking.jpeg" alt="Founder video" style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.45 }} />
-            <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16, textAlign: "center", padding: 32 }}>
-              <div style={{ width: 84, height: 84, borderRadius: "50%", background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <div style={{ width: 0, height: 0, borderLeft: "24px solid #fff", borderTop: "14px solid transparent", borderBottom: "14px solid transparent", marginLeft: 6 }} />
-              </div>
-              <div style={{ font: "700 22px 'Space Grotesk',sans-serif", color: "#fff" }}>A Message from Our Founder</div>
-              <div style={{ font: "500 13px monospace", color: "#5fd9d2" }}>founder video will be embedded here — drop in the final video file or YouTube/Vimeo link</div>
-            </div>
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/wwsRPlyvxuM?autoplay=1&rel=0&modestbranding=1"
+              title="A Message from Our Founder"
+              allow="accelerated-download; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              style={{ width: "100%", height: "100%", border: "none", display: "block" }}
+            />
             <div
               onClick={() => setVideoOpen(false)}
               className="lp-close-btn"
@@ -478,7 +522,7 @@ export default function HomePage() {
       </div>
 
       {/* SERVICES */}
-      <div data-screen-label="Services" style={{ background: "#f4f7f9", padding: "96px 48px" }}>
+      <div data-screen-label="Services" className="lp-sec" style={{ background: "#f4f7f9", padding: "96px 48px" }}>
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 32, flexWrap: "wrap", marginBottom: 52 }}>
             <div>
@@ -491,7 +535,7 @@ export default function HomePage() {
               We work with professionals, organizations and institutions across four core verticals.
             </p>
           </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 26, perspective: 1400 }}>
+          <div className="lp-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 26, perspective: 1400 }}>
             {services.map((s) => (
               <Reveal
                 key={s.num}
@@ -541,7 +585,7 @@ export default function HomePage() {
       </div>
 
       {/* BLUEPRINT */}
-      <div data-screen-label="Blueprint" style={{ background: "#fff", padding: "96px 48px" }}>
+      <div data-screen-label="Blueprint" className="lp-sec" style={{ background: "#fff", padding: "96px 48px" }}>
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
             <div style={{ font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>The Levitate Learning Blueprint</div>
@@ -551,7 +595,7 @@ export default function HomePage() {
               and ends with workplace application
             </h2>
           </Reveal>
-          <Reveal style={{ display: "grid", gridTemplateColumns: "380px 1fr", gap: 28, alignItems: "stretch" }}>
+          <Reveal className="lp-blueprint-grid lp-bp-desktop" style={{ display: "grid", gridTemplateColumns: "380px 1fr", gap: 28, alignItems: "stretch" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {blueprintSteps.map((b, i) => {
                 const on = i === step;
@@ -651,11 +695,100 @@ export default function HomePage() {
               </div>
             </div>
           </Reveal>
+
+          {/* Mobile: accordion layout */}
+          <div className="lp-bp-mobile" style={{ display: "none", flexDirection: "column", gap: 12 }}>
+            {blueprintSteps.map((b, i) => {
+              const on = i === openStep;
+              return (
+                <div
+                  key={b.num}
+                  style={{ border: `1px solid ${on ? "rgba(27,143,136,.5)" : "#e3eaf0"}`, borderRadius: 16, overflow: "hidden", background: "#fff", transition: "border-color .3s ease" }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenStep((prev) => (prev === i ? null : i))}
+                    aria-expanded={on}
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 14,
+                      padding: "16px 18px",
+                      cursor: "pointer",
+                      border: "none",
+                      textAlign: "left",
+                      background: on ? "linear-gradient(120deg,#2fc4bc,#2f7fd6)" : "#f4f7f9",
+                      transition: "background .3s ease",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 40,
+                        height: 40,
+                        flex: "none",
+                        borderRadius: "50%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        font: "700 16px 'Space Grotesk',sans-serif",
+                        background: on ? "rgba(255,255,255,.22)" : "#e3ecf2",
+                        color: on ? "#fff" : "#5b6e82",
+                      }}
+                    >
+                      {b.num}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ font: "700 16px 'Space Grotesk',sans-serif", color: on ? "#fff" : "#0a1b33" }}>{b.title}</div>
+                      <div style={{ font: "500 12px 'Manrope',sans-serif", color: on ? "rgba(255,255,255,.85)" : "#8296a9", marginTop: 2 }}>{b.short}</div>
+                    </div>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke={on ? "#fff" : "#5b6e82"}
+                      strokeWidth={2.5}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      style={{ flex: "none", transform: on ? "rotate(180deg)" : "rotate(0)", transition: "transform .3s ease" }}
+                    >
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
+                  {on && (
+                    <div style={{ padding: "16px 18px 20px", animation: "fadeUp .3s ease" }}>
+                      <img src={b.img} alt={b.title} style={{ width: "100%", height: 150, objectFit: "cover", borderRadius: 12, display: "block", marginBottom: 16 }} />
+                      <div style={{ font: "400 14.5px/1.7 'Manrope',sans-serif", color: "#3d5064", textWrap: "pretty" } as CSSProperties}>{b.desc}</div>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 14 }}>
+                        {b.chips.map((ch) => (
+                          <div
+                            key={ch}
+                            style={{
+                              background: "rgba(47,196,188,.12)",
+                              border: "1px solid rgba(27,143,136,.35)",
+                              color: "#136f6a",
+                              font: "600 12px 'Manrope',sans-serif",
+                              padding: "6px 12px",
+                              borderRadius: 999,
+                            }}
+                          >
+                            {ch}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+            <div style={{ font: "500 11.5px 'Manrope',sans-serif", color: "#8296a9", padding: "2px 4px" }}>Tap any step to expand or collapse</div>
+          </div>
         </div>
       </div>
 
       {/* CERTIFICATIONS */}
-      <div data-screen-label="Certifications" style={{ position: "relative", background: "#f7fafc", padding: "96px 48px", overflow: "hidden" }}>
+      <div data-screen-label="Certifications" className="lp-sec" style={{ position: "relative", background: "#f7fafc", padding: "96px 48px", overflow: "hidden" }}>
         <div
           style={{
             position: "absolute",
@@ -680,7 +813,7 @@ export default function HomePage() {
               For HR professionals, L&amp;D leaders, educators, consultants, coaches, managers and aspiring corporate trainers.
             </p>
           </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22 }}>
+          <div className="lp-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22 }}>
             {certs.map((c) => (
               <Reveal
                 key={c.num}
@@ -727,8 +860,8 @@ export default function HomePage() {
       </div>
 
       {/* WHY LEVITATE + CERTIFICATE */}
-      <div data-screen-label="Why Levitate" style={{ background: "#f4f7f9", padding: "96px 48px" }}>
-        <div style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
+      <div data-screen-label="Why Levitate" className="lp-sec" style={{ background: "#f4f7f9", padding: "96px 48px" }}>
+        <div className="lp-why-grid" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
           <Reveal>
             <div style={{ font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Why Get Certified With Us</div>
             <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: "0 0 18px", letterSpacing: "-.02em" }}>
@@ -821,7 +954,7 @@ export default function HomePage() {
                 certificate preview — issued on program completion
               </div>
             </div>
-            <div style={{ position: "relative", display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14, marginTop: 20 }}>
+            <div className="lp-cert-features" style={{ position: "relative", display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14, marginTop: 20 }}>
               <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 14px", textAlign: "center" }}>
                 <svg
                   width="26"
@@ -889,9 +1022,10 @@ export default function HomePage() {
       <div
         ref={impactRef}
         data-screen-label="Impact"
+        className="lp-sec"
         style={{ background: "linear-gradient(120deg,#e7f5f3,#eaf1fa)", borderTop: "1px solid rgba(27,143,136,.2)", borderBottom: "1px solid rgba(27,143,136,.2)", padding: "64px 48px" }}
       >
-        <div style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 32, textAlign: "center" }}>
+        <div className="lp-impact-grid" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 32, textAlign: "center" }}>
           {impactStats.map((st, i) => (
             <div key={st.label} style={{ animation: impactIn ? "popIn .6s ease both" : undefined, animationDelay: impactIn ? `${i * 0.08}s` : undefined }}>
               <div
@@ -915,7 +1049,7 @@ export default function HomePage() {
       </div>
 
       {/* FOUNDERS */}
-      <div data-screen-label="Founders" style={{ background: "#fff", padding: "96px 48px" }}>
+      <div data-screen-label="Founders" className="lp-sec" style={{ background: "#fff", padding: "96px 48px" }}>
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
             <div style={{ font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Leadership</div>
@@ -923,7 +1057,7 @@ export default function HomePage() {
               Built on HR legacy. Strengthened by global workplace practice.
             </h2>
           </Reveal>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28 }}>
+          <div className="lp-founders-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28 }}>
             {founders.map((f) => (
               <Reveal key={f.name} style={{ background: "#f4f7f9", border: "1px solid #e3eaf0", borderRadius: 20, overflow: "hidden", display: "flex", flexDirection: "column" }}>
                 <img src={f.img} alt={f.alt} style={{ width: "100%", aspectRatio: "16/9", objectFit: "cover", display: "block", objectPosition: f.imgPos }} />
@@ -957,8 +1091,9 @@ export default function HomePage() {
       </div>
 
       {/* CTA */}
-      <div data-screen-label="CTA" style={{ position: "relative", background: "#fff", padding: "40px 48px 110px", overflow: "hidden" }}>
+      <div data-screen-label="CTA" className="lp-sec" style={{ position: "relative", background: "#fff", padding: "40px 48px 110px", overflow: "hidden" }}>
         <Reveal
+          className="lp-cta"
           style={{
             position: "relative",
             maxWidth: 1100,
@@ -994,7 +1129,7 @@ export default function HomePage() {
             <a
               href="#"
               className="lp-btn-grad"
-              style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#04121f", font: "700 15px 'Manrope',sans-serif", padding: "16px 30px", borderRadius: 999 }}
+              style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 15px 'Manrope',sans-serif", padding: "16px 30px", borderRadius: 999 }}
             >
               Request a Training Proposal
             </a>
@@ -1010,9 +1145,9 @@ export default function HomePage() {
       </div>
 
       {/* FOOTER */}
-      <div style={{ background: "#eef3f7", borderTop: "1px solid #dbe5ec", padding: "64px 48px 32px" }}>
+      <div className="lp-sec" style={{ background: "#eef3f7", borderTop: "1px solid #dbe5ec", padding: "64px 48px 32px" }}>
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1.2fr", gap: 48, marginBottom: 48 }}>
+          <div className="lp-footer-grid" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1.2fr", gap: 48, marginBottom: 48 }}>
             <div>
               <div style={{ background: "#fff", border: "1px solid #dbe5ec", borderRadius: 8, padding: "6px 12px", display: "inline-flex", marginBottom: 18 }}>
                 <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 30, display: "block" }} />
@@ -1044,18 +1179,18 @@ export default function HomePage() {
             <div>
               <div style={{ font: "700 13px 'Space Grotesk',sans-serif", color: "#0a1b33", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 16 }}>Contact</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10, font: "500 13.5px 'Manrope',sans-serif", color: "#5b6e82" }}>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 9 }}>
+                <a href={`mailto:${contact.email}`} className="lp-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 9 }}>
                   <MailIcon size={14} />
                   {contact.email}
-                </span>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 9 }}>
+                </a>
+                <a href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`} className="lp-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 9 }}>
                   <PhoneIcon size={14} />
                   {contact.phone}
-                </span>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 9 }}>
+                </a>
+                <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" className="lp-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 9 }}>
                   <WhatsAppIcon size={14} />
                   WhatsApp: {contact.phone}
-                </span>
+                </a>
               </div>
               <div
                 style={{ display: "inline-flex", alignItems: "center", gap: 12, marginTop: 18, background: "#fff", border: "1px solid rgba(27,143,136,.4)", borderRadius: 12, padding: "12px 16px" }}
