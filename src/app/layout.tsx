@@ -26,8 +26,8 @@ export const metadata: Metadata = {
   applicationName: "Levitate PeopleSoft",
   authors: [{ name: "Levitate PeopleSoft" }],
   icons: {
-    icon: "/icon.png",
-    apple: "/icon.png",
+    icon: "/assets/cropped-Levitate_peoplesoft-32x32.png",
+    apple: "/assets/cropped-Levitate_peoplesoft-32x32.png",
   },
   openGraph: {
     title: "Levitate PeopleSoft — Elevating Trainers. Transforming Workplaces.",
