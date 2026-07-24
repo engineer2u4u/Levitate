@@ -366,15 +366,21 @@ export default function HomePage() {
           </div>
           <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 22 }}>
             <div style={{ position: "relative", width: 190, height: 190, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ position: "absolute", inset: 0, border: "1px dashed rgba(27,143,136,.5)", borderRadius: "50%", animation: "spinSlow 28s linear infinite" }} />
-              <div style={{ position: "absolute", inset: 16, border: "1px solid rgba(10,27,51,.15)", borderRadius: "50%" }} />
-              <div
+              <div style={{ position: "absolute", inset: 0, border: "1px dashed rgba(27,143,136,.5)", borderRadius: "50%", animation: "spinSlow 28s linear infinite", pointerEvents: "none" }} />
+              <div style={{ position: "absolute", inset: 16, border: "1px solid rgba(10,27,51,.15)", borderRadius: "50%", pointerEvents: "none" }} />
+              <button
+                type="button"
                 onClick={() => setVideoOpen(true)}
+                aria-label="Play the founder's message video"
                 className="lp-video-btn"
                 style={{
+                  position: "relative",
+                  zIndex: 2,
                   width: 110,
                   height: 110,
                   borderRadius: "50%",
+                  border: "none",
+                  padding: 0,
                   background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)",
                   display: "flex",
                   alignItems: "center",
@@ -384,7 +390,7 @@ export default function HomePage() {
                 }}
               >
                 <div style={{ width: 0, height: 0, borderLeft: "30px solid #fff", borderTop: "18px solid transparent", borderBottom: "18px solid transparent", marginLeft: 8 }} />
-              </div>
+              </button>
             </div>
             <div style={{ textAlign: "center" }}>
               <div style={{ font: "700 17px 'Space Grotesk',sans-serif", color: "#0a1b33" }}>A Message from Our Founder</div>
@@ -428,7 +434,7 @@ export default function HomePage() {
             }}
           >
             <iframe
-              src="https://www.youtube-nocookie.com/embed/wwsRPlyvxuM?autoplay=1&rel=0&modestbranding=1"
+              src="https://www.youtube-nocookie.com/embed/oMmr-q1Ipaw?autoplay=1&rel=0&modestbranding=1"
               title="A Message from Our Founder"
               allow="accelerated-download; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
