@@ -1,0 +1,250 @@
+// Content ported from "Levitate Homepage Light.dc.html" (Claude Design project)
+
+export const contact = {
+  email: "contactus@levitatepeoplesoft.com",
+  phone: "+91-70656 45999",
+  whatsapp: "https://wa.me/917065645999",
+  rating: "4.9",
+};
+
+export const navLinks = ["Home", "Services", "Certifications", "About Us", "Contact"];
+
+export type Service = { num: string; title: string; desc: string };
+export const services: Service[] = [
+  {
+    num: "01",
+    title: "Train-the-Trainer Certification Programs",
+    desc: "Practice-led facilitator certifications across leadership, DEI, wellbeing, POSH, POCSO and future HR readiness.",
+  },
+  {
+    num: "02",
+    title: "Corporate Training Solutions",
+    desc: "Customized, outcome-focused interventions that strengthen leadership, communication, collaboration and culture.",
+  },
+  {
+    num: "03",
+    title: "Institutional Training",
+    desc: "Campus-to-corporate readiness, communication, interview preparation and professional skills for students.",
+  },
+  {
+    num: "04",
+    title: "HR Advisory & Workplace Culture Consulting",
+    desc: "POSH compliance, IC advisory, HR policy review, people practices and employee experience support.",
+  },
+];
+
+export type BlueprintStep = {
+  num: string;
+  title: string;
+  short: string;
+  img: string;
+  desc: string;
+  chips: string[];
+};
+export const blueprintSteps: BlueprintStep[] = [
+  {
+    num: "1",
+    title: "Diagnose",
+    short: "Understand context & gaps",
+    img: "/assets/workshop-tables.jpeg",
+    desc: "We begin by understanding the business context, participant profile, capability gaps and workplace challenges — through stakeholder discussions, Training Needs Analysis, role expectations, surveys and real organizational priorities.",
+    chips: ["Stakeholder discussions", "Training Needs Analysis", "Surveys & feedback", "Role expectations"],
+  },
+  {
+    num: "2",
+    title: "Design",
+    short: "Build the learning journey",
+    img: "/assets/audience-red-hall.jpeg",
+    desc: "Insights become a focused learning journey — defining outcomes, designing modules, selecting the right format, building case scenarios and aligning the program to the needs of your team, institution or organization.",
+    chips: ["Outcome definition", "Module design", "Case scenarios", "Format selection"],
+  },
+  {
+    num: "3",
+    title: "Facilitate",
+    short: "Bring learning to life",
+    img: "/assets/workshop-handsup.jpeg",
+    desc: "We bring learning to life through interactive facilitation — real workplace cases, role plays, reflection exercises, group discussions, practical tools and blended learning methods that keep participants engaged.",
+    chips: ["Role plays", "Workplace cases", "Group discussions", "Blended learning"],
+  },
+  {
+    num: "4",
+    title: "Measure",
+    short: "Make impact visible",
+    img: "/assets/founder-speaking.jpeg",
+    desc: "We assess learning impact through feedback, reflection, pre- and post-learning indicators, action plans, manager inputs and outcome reviews — so learning translates into visible behaviour and workplace application.",
+    chips: ["Pre/post indicators", "Action plans", "Manager inputs", "Outcome reviews"],
+  },
+];
+
+export type Cert = {
+  num: string;
+  tag: string;
+  title: string;
+  sub: string;
+  desc: string;
+};
+export const certs: Cert[] = [
+  {
+    num: "01",
+    tag: "Flagship",
+    title: "Certified Corporate Leadership Facilitator",
+    sub: "Powered by the HUMAN Leadership Framework",
+    desc: "Facilitate leadership conversations on trust, coaching, feedback, accountability and team growth.",
+  },
+  {
+    num: "02",
+    tag: "DEI · TTT",
+    title: "Certified Inclusive Workplace Facilitator",
+    sub: "Diversity, Equity & Inclusion Certification",
+    desc: "Lead meaningful conversations on inclusion, unconscious bias, belonging and psychological safety.",
+  },
+  {
+    num: "03",
+    tag: "Wellbeing",
+    title: "Certified Workplace Wellbeing Facilitator",
+    sub: "Applied Mental Health & Wellbeing Certification",
+    desc: "Facilitate workplace mental-health conversations with confidence, sensitivity and ethical responsibility.",
+  },
+  {
+    num: "04",
+    tag: "POSH",
+    title: "Certified POSH & Workplace Dignity Facilitator",
+    sub: "POSH Train-the-Trainer Certification",
+    desc: "POSH awareness, manager sensitisation and IC capability building — with legal clarity and maturity.",
+  },
+  {
+    num: "05",
+    tag: "POCSO",
+    title: "Certified POCSO & Child Safety Facilitator",
+    sub: "POCSO Train-the-Trainer Certification",
+    desc: "Child-safety awareness sessions with sensitivity, legal clarity and responsible communication.",
+  },
+  {
+    num: "06",
+    tag: "For Students",
+    title: "HR Edge Certification",
+    sub: "Integrated DEI, POSH & Wellbeing Certification",
+    desc: "A career advantage for MBA-HR, PGDM-HR and early-career HR professionals entering modern workplaces.",
+  },
+];
+
+export type WhyPoint = { t: string; d: string };
+export const whyPoints: WhyPoint[] = [
+  {
+    t: "Global content with workplace relevance",
+    d: "Global workplace content, practical HR insights and real-world application.",
+  },
+  {
+    t: "Practice-led learning",
+    d: "Cases, role plays, reflection, discussion and facilitation practice — not only theory.",
+  },
+  {
+    t: "Designed for sensitive conversations",
+    d: "Leadership, DEI, wellbeing, POSH and POCSO facilitated with confidence, clarity and care.",
+  },
+  {
+    t: "Trainer toolkits included",
+    d: "Templates, case studies, facilitation guides, session plans and workplace-ready tools.",
+  },
+  {
+    t: "Assessment-based certification",
+    d: "Linked to participation, practice, reflection and assessment — not just attendance.",
+  },
+];
+
+export type ImpactStat = {
+  to: number;
+  dec: number;
+  suffix: string;
+  label: string;
+};
+export const impactStats: ImpactStat[] = [
+  { to: 2000, dec: 0, suffix: "+", label: "Participants trained" },
+  { to: 15, dec: 0, suffix: "+", label: "Years global HR experience" },
+  { to: 35, dec: 0, suffix: "+", label: "Years HR legacy (ONGC)" },
+  { to: 4.9, dec: 1, suffix: "★", label: "Google review rating" },
+];
+
+export type Testimonial = {
+  initials: string;
+  name: string;
+  role: string;
+  quote: string;
+};
+export const testimonials: Testimonial[] = [
+  {
+    initials: "SN",
+    name: "Shalini N.",
+    role: "HR Business Partner, IT Services",
+    quote:
+      "The POSH facilitator certification completely changed how I handle sensitive sessions. The case-based practice and difficult-question drills gave me real confidence, not just a certificate.",
+  },
+  {
+    initials: "AM",
+    name: "Arjun M.",
+    role: "L&D Lead, Manufacturing",
+    quote:
+      "Most TTT programs stop at theory. Here we facilitated live, got dissected feedback and left with a full trainer toolkit I still use every week.",
+  },
+  {
+    initials: "RK",
+    name: "Dr. Ritu K.",
+    role: "Professor & Placement Head, B-School",
+    quote:
+      "The campus-to-corporate program transformed how our final-year students show up in interviews. Practical, HR-led and grounded in what employers actually expect.",
+  },
+];
+
+export const tickerA = [
+  "Corporate Leadership Facilitation",
+  "Diversity, Equity & Inclusion",
+  "Workplace Mental Health & Wellbeing",
+  "POSH Train-the-Trainer",
+  "POCSO & Child Safety",
+  "HR Edge Certification",
+  "Flexible Training Modes",
+  "Delivered by Industry Experts",
+  "Hands-On Learning",
+];
+
+export const tickerB = [
+  "ISO Certified Organization",
+  "4.9★ Google Reviews",
+  "2000+ Participants Trained",
+  "Train-the-Trainer Programs",
+  "Campus to Corporate",
+  "HR Advisory & Culture Consulting",
+  "Assessment-Based Certification",
+  "Trainer Toolkits Included",
+];
+
+export const gallery = [
+  "/assets/founder-speaking.jpeg",
+  "/assets/group-chitkara.jpeg",
+  "/assets/workshop-tables.jpeg",
+  "/assets/audience-red-hall.jpeg",
+  "/assets/workshop-handsup.jpeg",
+  "/assets/outdoor-group.jpeg",
+  "/assets/school-group.jpeg",
+  "/assets/students-group.png",
+  "/assets/award-speaker.jpeg",
+];
+
+export const founders = [
+  {
+    img: "/assets/hr-conclave-stage.jpeg",
+    alt: "Parichita Kotnala speaking",
+    imgPos: "50% 50%",
+    name: "Parichita Kotnala",
+    role: "Founder & Managing Partner · Global HR Leader",
+    bio: "15+ years of global HR leadership across India, the UK, Europe and North America — spanning leadership enablement, workplace culture, DEI, POSH, POCSO, wellbeing and people advisory. She leads Levitate's practice-led certification programs for credible workplace facilitators.",
+  },
+  {
+    img: "/assets/plant-gift.jpeg",
+    alt: "Levitate PeopleSoft session",
+    imgPos: "50% 30%",
+    name: "Mr. Ravindra Prem Nath",
+    role: "Founder & Principal Advisor · Former Chief Manager – HR, ONGC",
+    bio: "35+ years of institutional HR leadership at one of India's leading public sector enterprises — people management, employee relations, HR governance and organizational learning. He founded Levitate PeopleSoft in 2023 and guides it with deep practical HR judgment.",
+  },
+];
