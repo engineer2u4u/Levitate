@@ -105,6 +105,9 @@ a:hover {
 .lp-close-btn { transition: background 0.2s ease; }
 .lp-close-btn:hover { background: rgba(47, 196, 188, 0.3); }
 
+/* Pause a marquee track while hovered */
+.lp-marquee-pause:hover { animation-play-state: paused; }
+
 /* Reveal-on-scroll base state */
 .lp-reveal {
   opacity: 0;
