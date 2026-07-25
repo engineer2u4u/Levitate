@@ -26,7 +26,6 @@ export default function ServicePage({
   const [sent, setSent] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
   const other = services.filter((s) => s.key !== pageKey);
-  const listCols = p.listGrid === "repeat(4,1fr)" ? "site-grid-4" : "site-grid-3";
 
   return (
     <>
@@ -99,7 +98,7 @@ export default function ServicePage({
             <div style={eyebrow}>{p.listEyebrow}</div>
             <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>{p.listHeading}</h2>
           </Reveal>
-          <div className={listCols} style={{ display: "grid", gridTemplateColumns: p.listGrid, gap: 18 }}>
+          <div className="site-offer" style={{ display: "grid", gridTemplateColumns: p.listGrid, gap: 18 }}>
             {p.items.map((it) => (
               <Reveal key={it.num} className="site-card" style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 18, padding: "28px 26px", display: "flex", flexDirection: "column", gap: 10, boxShadow: "0 2px 6px rgba(10,27,51,.05)" }}>
                 <div style={{ font: "700 12px 'Space Grotesk',sans-serif", color: "rgba(10,27,51,.22)" }}>{it.num}</div>
@@ -119,7 +118,7 @@ export default function ServicePage({
               <div style={eyebrow}>{p.processEyebrow}</div>
               <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>{p.processHeading}</h2>
             </Reveal>
-            <div className="site-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 20 }}>
+            <div className="site-process" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 20 }}>
               {p.process.map((s) => (
                 <Reveal key={s.num} style={{ position: "relative", background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 16, padding: "28px 24px" }}>
                   <div style={{ position: "absolute", top: 0, left: 20, right: 20, height: 3, background: "linear-gradient(90deg,#2fc4bc,#2f7fd6)" }} />

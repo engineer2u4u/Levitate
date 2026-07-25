@@ -253,8 +253,8 @@ a:hover {
   .site-page-sec { padding-left: 20px !important; padding-right: 20px !important; }
   .site-grid-2 { grid-template-columns: 1fr !important; }
   .site-grid-3 { grid-template-columns: 1fr !important; }
-  .site-grid-4 { grid-template-columns: 1fr 1fr !important; }
-  .site-grid-5 { grid-template-columns: 1fr 1fr !important; }
+  .site-grid-4 { grid-template-columns: 1fr !important; }
+  .site-grid-5 { grid-template-columns: 1fr !important; }
   .site-grid-6 { grid-template-columns: 1fr 1fr !important; }
   .site-stack { grid-template-columns: 1fr !important; gap: 28px !important; }
   .site-stack-rev { direction: ltr; }
@@ -268,8 +268,27 @@ a:hover {
 }
 
 /* Framework pillar grids collapse on small screens */
-@media (max-width: 760px) {
+@media (min-width: 641px) and (max-width: 760px) {
   .site-pillars { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 640px) {
+  .site-pillars { grid-template-columns: 1fr !important; }
+}
+
+/* Service "process" steps: 4-up desktop, 2-up tablet, full width on mobile */
+@media (min-width: 641px) and (max-width: 980px) {
+  .site-process { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 640px) {
+  .site-process { grid-template-columns: 1fr !important; }
+}
+
+/* Service "offer" / key-areas grid: 2-up tablet, full width on mobile */
+@media (min-width: 641px) and (max-width: 980px) {
+  .site-offer { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 640px) {
+  .site-offer { grid-template-columns: 1fr !important; }
 }
 /* On mobile, show the image column of a reversed leadership card first */
 @media (max-width: 640px) {
