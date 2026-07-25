@@ -1,13 +1,31 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Reveal from "./Reveal";
 import Counter from "./Counter";
 import TestimonialsCarousel from "./TestimonialsCarousel";
 import ScrollToTop from "./ScrollToTop";
 import FontToggle from "./FontToggle";
-import { contact, navLinks, services, blueprintSteps, certs, whyPoints, impactStats, tickerA, tickerB, gallery, founders } from "@/lib/homeData";
+import SiteHeader from "@/components/site/SiteHeader";
+import { contact, services, blueprintSteps, certs, whyPoints, impactStats, tickerA, tickerB, gallery, founders } from "@/lib/homeData";
+
+// Home section links → routes (indexes align with homeData.services / homeData.certs)
+const SERVICE_HREFS = ["/services/train-the-trainer", "/services/corporate", "/services/institutional", "/services/advisory"];
+const CERT_HREFS = ["/certifications#leadership", "/certifications#dei", "/certifications#wellbeing", "/certifications#posh", "/certifications#pocso", "/certifications#hredge"];
+const FOOTER_SERVICES: [string, string][] = [
+  ["Train-the-Trainer Certifications", "/services/train-the-trainer"],
+  ["Corporate Training Solutions", "/services/corporate"],
+  ["Institutional Training", "/services/institutional"],
+  ["HR Advisory & Culture Consulting", "/services/advisory"],
+];
+const FOOTER_COMPANY: [string, string][] = [
+  ["About Us", "/about"],
+  ["Certification Programs", "/certifications"],
+  ["Testimonials", "#testimonials"],
+  ["Contact", "/contact"],
+];
 
 /* ------------------------------------------------------------------ */
 /* Small inline icons (stroke-based, matching the design)             */
@@ -62,7 +80,6 @@ const tiltLeave = (e: React.MouseEvent<HTMLDivElement>) => {
 export default function HomePage() {
   const [videoOpen, setVideoOpen] = useState(false);
   const [step, setStep] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
   // Mobile blueprint accordion: independent open item (null = all collapsed)
   const [openStep, setOpenStep] = useState<number | null>(0);
   const userPicked = useRef(false);
@@ -148,103 +165,8 @@ export default function HomePage() {
         </a>
       </div>
 
-      {/* TOP CONTACT BAR */}
-      <div
-        className="lp-sec"
-        style={{
-          background: "#fff",
-          borderBottom: "1px solid #e3eaf0",
-          padding: "8px 48px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          rowGap: 6,
-          columnGap: 16,
-          lineHeight: 1.5,
-          font: "500 12.5px/1.5 'Manrope',sans-serif",
-          color: "#5b6e82",
-        }}
-      >
-        <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
-          <a href={`mailto:${contact.email}`} className="lp-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
-            <MailIcon />
-            {contact.email}
-          </a>
-          <a href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`} className="lp-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
-            <PhoneIcon />
-            {contact.phone}
-          </a>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#3d5064" }}>
-          <span style={{ color: "#f5b942", letterSpacing: "1px" }}>★★★★★</span> {contact.rating} on Google Reviews
-        </div>
-      </div>
-
-      {/* STICKY HEADER */}
-      <div
-        className="lp-sec"
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 80,
-          background: "rgba(255,255,255,.85)",
-          backdropFilter: "blur(14px)",
-          borderBottom: "1px solid #e3eaf0",
-          padding: "14px 48px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: 14,
-        }}
-      >
-        <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 8, padding: "6px 12px", display: "flex", alignItems: "center" }}>
-          <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 34, display: "block" }} />
-        </div>
-        <nav className={`lp-nav${menuOpen ? " lp-nav-open" : ""}`} style={{ font: "600 14px 'Manrope',sans-serif" }}>
-          {navLinks.map((l, i) => (
-            <a key={l} href="#" onClick={() => setMenuOpen(false)} className={i === 0 ? undefined : "lp-navlink"} style={i === 0 ? { color: "#1b8f88" } : undefined}>
-              {l}
-            </a>
-          ))}
-          <a
-            href="#"
-            onClick={() => setMenuOpen(false)}
-            className="lp-nav-cta lp-btn-grad"
-            style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 13.5px 'Manrope',sans-serif", padding: "12px 22px", borderRadius: 999, textAlign: "center" }}
-          >
-            Book a Discovery Call
-          </a>
-        </nav>
-        <a
-          href="#"
-          className="lp-header-cta lp-btn-grad"
-          style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 13.5px 'Manrope',sans-serif", padding: "11px 22px", borderRadius: 999, whiteSpace: "nowrap" }}
-        >
-          Book a Discovery Call
-        </a>
-        <button
-          type="button"
-          className="lp-hamburger"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((o) => !o)}
-          style={{ width: 44, height: 44, borderRadius: 10, color: "rgb(47 135 211)", cursor: "pointer", alignItems: "center", justifyContent: "center" }}
-        >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
-            {menuOpen ? (
-              <path d="M6 6l12 12M18 6L6 18" />
-            ) : (
-              <>
-                <path d="M3 6h18" />
-                <path d="M3 12h18" />
-                <path d="M3 18h18" />
-              </>
-            )}
-          </svg>
-        </button>
-      </div>
+      {/* HEADER (shared with all pages) */}
+      <SiteHeader active="home" />
 
       {/* HERO */}
       <div
@@ -307,8 +229,8 @@ export default function HomePage() {
               high-trust, inclusive and human-centred workplaces.
             </p>
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-              <a
-                href="#"
+              <Link
+                href="/certifications"
                 className="lp-btn-grad"
                 style={{
                   background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)",
@@ -324,9 +246,9 @@ export default function HomePage() {
                 }}
               >
                 Explore Certification Programs <span>→</span>
-              </a>
-              <a
-                href="#"
+              </Link>
+              <Link
+                href="/contact"
                 className="lp-btn-outline"
                 style={{
                   border: "1.5px solid rgba(10,27,51,.28)",
@@ -339,7 +261,7 @@ export default function HomePage() {
                 }}
               >
                 Book a Discovery Call
-              </a>
+              </Link>
             </div>
             <div className="lp-hero-stats" style={{ display: "flex", gap: 40, marginTop: 48 }}>
               <div>
@@ -542,7 +464,7 @@ export default function HomePage() {
             </p>
           </Reveal>
           <div className="lp-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 26, perspective: 1400 }}>
-            {services.map((s) => (
+            {services.map((s, i) => (
               <Reveal
                 key={s.num}
                 className="lp-svc-card"
@@ -581,9 +503,9 @@ export default function HomePage() {
                 </div>
                 <div style={{ font: "700 18px/1.3 'Space Grotesk',sans-serif", color: "#0a1b33", transform: "translateZ(26px)" }}>{s.title}</div>
                 <div style={{ font: "400 14px/1.65 'Manrope',sans-serif", color: "#5b6e82", flex: 1, textWrap: "pretty", transform: "translateZ(16px)" } as CSSProperties}>{s.desc}</div>
-                <a href="#" style={{ font: "700 13.5px 'Manrope',sans-serif", color: "#1b8f88", transform: "translateZ(26px)" }}>
+                <Link href={SERVICE_HREFS[i] ?? "/services/train-the-trainer"} style={{ font: "700 13.5px 'Manrope',sans-serif", color: "#1b8f88", transform: "translateZ(26px)" }}>
                   Explore →
-                </a>
+                </Link>
               </Reveal>
             ))}
           </div>
@@ -820,7 +742,7 @@ export default function HomePage() {
             </p>
           </Reveal>
           <div className="lp-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22 }}>
-            {certs.map((c) => (
+            {certs.map((c, i) => (
               <Reveal
                 key={c.num}
                 className="lp-cert-card"
@@ -856,9 +778,9 @@ export default function HomePage() {
                 <div style={{ font: "700 19px/1.3 'Space Grotesk',sans-serif", color: "#0a1b33" }}>{c.title}</div>
                 <div style={{ font: "600 13px 'Manrope',sans-serif", color: "#2f7fd6" }}>{c.sub}</div>
                 <div style={{ font: "400 13.5px/1.65 'Manrope',sans-serif", color: "#5b6e82", flex: 1, textWrap: "pretty" } as CSSProperties}>{c.desc}</div>
-                <a href="#" style={{ font: "700 13.5px 'Manrope',sans-serif", color: "#1b8f88" }}>
+                <Link href={CERT_HREFS[i] ?? "/certifications"} style={{ font: "700 13.5px 'Manrope',sans-serif", color: "#1b8f88" }}>
                   Program details →
-                </a>
+                </Link>
               </Reveal>
             ))}
           </div>
@@ -1079,7 +1001,9 @@ export default function HomePage() {
       </div>
 
       {/* TESTIMONIALS */}
-      <TestimonialsCarousel />
+      <div id="testimonials" style={{ scrollMarginTop: 80 }}>
+        <TestimonialsCarousel />
+      </div>
 
       {/* GALLERY MARQUEE */}
       <div data-screen-label="Gallery" style={{ background: "#fff", padding: "72px 0", overflow: "hidden" }}>
@@ -1132,20 +1056,20 @@ export default function HomePage() {
             Partner with Levitate PeopleSoft for certification programs, customized training interventions and institutional learning solutions.
           </p>
           <div style={{ position: "relative", display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-            <a
-              href="#"
+            <Link
+              href="/contact"
               className="lp-btn-grad"
               style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 15px 'Manrope',sans-serif", padding: "16px 30px", borderRadius: 999 }}
             >
               Request a Training Proposal
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              href="/contact"
               className="lp-btn-outline-light"
               style={{ border: "1.5px solid rgba(255,255,255,.25)", color: "#e8f1f8", font: "700 15px 'Manrope',sans-serif", padding: "16px 30px", borderRadius: 999 }}
             >
               Book a Discovery Call
-            </a>
+            </Link>
           </div>
         </Reveal>
       </div>
@@ -1155,9 +1079,9 @@ export default function HomePage() {
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <div className="lp-footer-grid" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1.2fr", gap: 48, marginBottom: 48 }}>
             <div>
-              <div style={{ background: "#fff", border: "1px solid #dbe5ec", borderRadius: 8, padding: "6px 12px", display: "inline-flex", marginBottom: 18 }}>
+              <Link href="/" style={{ background: "#fff", border: "1px solid #dbe5ec", borderRadius: 8, padding: "6px 12px", display: "inline-flex", marginBottom: 18 }}>
                 <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 30, display: "block" }} />
-              </div>
+              </Link>
               <p style={{ font: "400 13.5px/1.7 'Manrope',sans-serif", color: "#5b6e82", maxWidth: 320, margin: 0 }}>
                 Elevating trainers, transforming workplaces and enabling human-centred change through practice-led certification and training.
               </p>
@@ -1165,20 +1089,20 @@ export default function HomePage() {
             <div>
               <div style={{ font: "700 13px 'Space Grotesk',sans-serif", color: "#0a1b33", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 16 }}>Services</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10, font: "500 13.5px 'Manrope',sans-serif" }}>
-                {["Train-the-Trainer Certifications", "Corporate Training Solutions", "Institutional Training", "HR Advisory & Culture Consulting"].map((x) => (
-                  <a key={x} href="#" className="lp-footlink">
-                    {x}
-                  </a>
+                {FOOTER_SERVICES.map(([label, href]) => (
+                  <Link key={label} href={href} className="lp-footlink">
+                    {label}
+                  </Link>
                 ))}
               </div>
             </div>
             <div>
               <div style={{ font: "700 13px 'Space Grotesk',sans-serif", color: "#0a1b33", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 16 }}>Company</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10, font: "500 13.5px 'Manrope',sans-serif" }}>
-                {["About Us", "Certification Programs", "Testimonials", "Contact"].map((x) => (
-                  <a key={x} href="#" className="lp-footlink">
-                    {x}
-                  </a>
+                {FOOTER_COMPANY.map(([label, href]) => (
+                  <Link key={label} href={href} className="lp-footlink">
+                    {label}
+                  </Link>
                 ))}
               </div>
             </div>

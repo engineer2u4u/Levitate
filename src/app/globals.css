@@ -206,3 +206,76 @@ a:hover {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ================================================================== */
+/*  Multi-page site chrome (header / footer / nav)                    */
+/* ================================================================== */
+.site-navlink { transition: color 0.2s ease; }
+.site-navlink:hover { color: #1b8f88 !important; }
+.site-footlink { color: #5b6e82; transition: color 0.2s ease; }
+.site-footlink:hover { color: #1b8f88; }
+.site-dropitem { transition: background 0.2s ease, color 0.2s ease; }
+.site-dropitem:hover { background: #f4f7f9; color: #1b8f88 !important; }
+
+.site-nav { display: flex; }
+.site-hamburger { display: none; }
+.site-mobile-menu { display: none; }
+
+@media (max-width: 900px) {
+  .site-footer-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+@media (max-width: 760px) {
+  .site-sec { padding-left: 20px !important; padding-right: 20px !important; }
+  .site-nav { display: none; }
+  .site-header-cta { display: none !important; }
+  .site-hamburger { display: inline-flex; }
+  .site-footer-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+
+  .site-mobile-menu {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-bottom: 1px solid #e3eaf0;
+    box-shadow: 0 14px 30px rgba(10, 27, 51, 0.1);
+    padding: 8px 20px 16px;
+  }
+  .site-mlink { padding: 13px 6px; border-bottom: 1px solid #eef3f7; }
+  .site-msub { padding-left: 18px; font-size: 14px; }
+}
+
+/* Page section side-gutter trim on small screens */
+@media (max-width: 640px) {
+  .site-page-sec { padding-left: 20px !important; padding-right: 20px !important; }
+  .site-grid-2 { grid-template-columns: 1fr !important; }
+  .site-grid-3 { grid-template-columns: 1fr !important; }
+  .site-grid-4 { grid-template-columns: 1fr 1fr !important; }
+  .site-grid-5 { grid-template-columns: 1fr 1fr !important; }
+  .site-grid-6 { grid-template-columns: 1fr 1fr !important; }
+  .site-stack { grid-template-columns: 1fr !important; gap: 28px !important; }
+  .site-stack-rev { direction: ltr; }
+}
+@media (min-width: 641px) and (max-width: 980px) {
+  .site-grid-3 { grid-template-columns: 1fr 1fr !important; }
+  .site-grid-4 { grid-template-columns: 1fr 1fr !important; }
+  .site-grid-5 { grid-template-columns: 1fr 1fr 1fr !important; }
+  .site-grid-6 { grid-template-columns: repeat(3, 1fr) !important; }
+  .site-stack { grid-template-columns: 1fr !important; gap: 40px !important; }
+}
+
+/* Framework pillar grids collapse on small screens */
+@media (max-width: 760px) {
+  .site-pillars { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+/* On mobile, show the image column of a reversed leadership card first */
+@media (max-width: 640px) {
+  .site-order-first { order: -1; }
+}
+
+/* Card hover lift used across service/certification cards */
+.site-card { transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
+.site-card:hover { transform: translateY(-4px); border-color: rgba(27, 143, 136, 0.55); box-shadow: 0 18px 40px rgba(10, 27, 51, 0.12); }
