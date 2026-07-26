@@ -297,6 +297,21 @@ a:hover {
   .site-order-first { order: -1; }
 }
 
+/* Decorative certificate glow bleeds 30px past its parent. On mobile the card
+   is full width, so the horizontal bleed spills past the viewport and creates a
+   sideways scroll — pin it to the edges and keep only the vertical bleed. */
+@media (max-width: 640px) {
+  .site-glow { left: 0 !important; right: 0 !important; }
+}
+
+/* Safety net: clip any stray horizontal overflow. `clip` (not `hidden`) so the
+   sticky header keeps working — overflow:hidden on an ancestor breaks sticky. */
+html,
+body {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
 /* Certification cards: accordion affordance on mobile only */
 .site-cert-chev { display: none; }
 @media (max-width: 640px) {

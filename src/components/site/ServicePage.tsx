@@ -155,7 +155,7 @@ export default function ServicePage({
               </div>
             </Reveal>
             <Reveal style={{ position: "relative" }}>
-              <div style={{ position: "absolute", inset: -30, background: "radial-gradient(circle at 50% 40%,rgba(47,196,188,.18),transparent 70%)" }} />
+              <div className="site-glow" style={{ position: "absolute", inset: -30, background: "radial-gradient(circle at 50% 40%,rgba(47,196,188,.18),transparent 70%)" }} />
               <div style={{ position: "relative", background: "#fdfefe", border: "1px solid #dbe5ec", borderRadius: 6, boxShadow: "0 30px 70px rgba(10,27,51,.18)", padding: "36px 40px" }}>
                 <div style={{ border: "2px solid #0a1b33", outline: "1px solid #2fc4bc", outlineOffset: 5, padding: "32px 28px", textAlign: "center" }}>
                   <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 32, margin: "0 auto 16px", display: "block" }} />

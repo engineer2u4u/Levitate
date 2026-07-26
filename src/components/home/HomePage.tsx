@@ -56,7 +56,13 @@ function WhatsAppIcon({ size = 14 }: { size?: number }) {
 /* ------------------------------------------------------------------ */
 /* Tilt handlers (perspective rotate on mouse move)                   */
 /* ------------------------------------------------------------------ */
+// Touch devices fire a synthetic mousemove on tap but no mouseleave, which
+// would leave a card stuck scaled/rotated (and nudge the page wider). Only
+// tilt where a real pointer can hover.
+const canHover = () => typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches;
+
 const tiltMoveDeep = (e: React.MouseEvent<HTMLDivElement>) => {
+  if (!canHover()) return;
   const el = e.currentTarget;
   const r = el.getBoundingClientRect();
   const x = (e.clientX - r.left) / r.width - 0.5;
@@ -64,6 +70,7 @@ const tiltMoveDeep = (e: React.MouseEvent<HTMLDivElement>) => {
   el.style.transform = `perspective(1000px) rotateX(${(-y * 10).toFixed(2)}deg) rotateY(${(x * 10).toFixed(2)}deg) translateY(-6px) scale(1.02)`;
 };
 const tiltMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  if (!canHover()) return;
   const el = e.currentTarget;
   const r = el.getBoundingClientRect();
   const x = (e.clientX - r.left) / r.width - 0.5;
@@ -826,7 +833,7 @@ export default function HomePage() {
             </div>
           </Reveal>
           <Reveal style={{ position: "relative" }}>
-            <div style={{ position: "absolute", inset: -30, background: "radial-gradient(circle at 50% 40%,rgba(47,196,188,.18),transparent 70%)" }} />
+            <div className="site-glow" style={{ position: "absolute", inset: -30, background: "radial-gradient(circle at 50% 40%,rgba(47,196,188,.18),transparent 70%)" }} />
             <div
               onMouseMove={tiltMove}
               onMouseLeave={tiltLeave}
