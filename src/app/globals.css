@@ -297,6 +297,13 @@ a:hover {
   .site-order-first { order: -1; }
 }
 
+/* Certification cards: accordion affordance on mobile only */
+.site-cert-chev { display: none; }
+@media (max-width: 640px) {
+  .site-cert-chev { display: inline-flex; }
+  .site-cert-card { padding: 24px 20px !important; }
+}
+
 /* Card hover lift used across service/certification cards */
 .site-card { transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
 .site-card:hover { transform: translateY(-4px); border-color: rgba(27, 143, 136, 0.55); box-shadow: 0 18px 40px rgba(10, 27, 51, 0.12); }

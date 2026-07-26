@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import Reveal from "@/components/home/Reveal";
 
 const included = ["Facilitation practice & feedback", "Trainer toolkit: templates, guides, FAQs", "Workplace case studies & scenarios", "Assessment-linked certification"];
@@ -60,6 +60,29 @@ function CertIcon({ d }: { d: React.ReactNode }) {
 }
 
 export default function CertificationsPage() {
+  // Mobile-only accordion: cards collapse below 640px. Desktop always expanded.
+  const [isMobile, setIsMobile] = useState(false);
+  const [openId, setOpenId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 640px)");
+    const apply = () => setIsMobile(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  // Open the program targeted by the URL hash (e.g. /certifications#posh).
+  useEffect(() => {
+    const fromHash = () => {
+      const id = window.location.hash.replace("#", "");
+      if (programs.some((p) => p.id === id)) setOpenId(id);
+    };
+    fromHash();
+    window.addEventListener("hashchange", fromHash);
+    return () => window.removeEventListener("hashchange", fromHash);
+  }, []);
+
   return (
     <>
       {/* HERO */}
@@ -83,7 +106,7 @@ export default function CertificationsPage() {
       <div className="site-page-sec" style={{ background: "#f4f7f9", padding: "24px 48px 60px" }}>
         <div className="site-grid-6" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 12 }}>
           {programs.map((p) => (
-            <a key={p.id} href={`#${p.id}`} className="site-card" style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 16px", display: "flex", flexDirection: "column", gap: 6, boxShadow: "0 2px 6px rgba(10,27,51,.05)" }}>
+            <a key={p.id} href={`#${p.id}`} onClick={() => setOpenId(p.id)} className="site-card" style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 16px", display: "flex", flexDirection: "column", gap: 6, boxShadow: "0 2px 6px rgba(10,27,51,.05)" }}>
               <div style={{ font: "700 10.5px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".13em", textTransform: "uppercase" }}>{p.tag}</div>
               <div style={{ font: "700 13px/1.35 'Space Grotesk',sans-serif", color: "#0a1b33" }}>{p.short}</div>
             </a>
@@ -94,17 +117,31 @@ export default function CertificationsPage() {
       {/* PROGRAM DETAILS */}
       <div className="site-page-sec" style={{ background: "#fff", padding: "20px 48px 80px" }}>
         <div style={{ maxWidth: 1240, margin: "0 auto", display: "flex", flexDirection: "column", gap: 26 }}>
-          {programs.map((p) => (
-            <Reveal key={p.id} style={{ background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 22, padding: "42px 44px", boxShadow: "0 2px 8px rgba(10,27,51,.05)", scrollMarginTop: 110 }}>
+          {programs.map((p) => {
+            const collapsed = isMobile && openId !== p.id;
+            return (
+            <Reveal key={p.id} className="site-cert-card" style={{ background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 22, padding: "42px 44px", boxShadow: "0 2px 8px rgba(10,27,51,.05)", scrollMarginTop: 110 }}>
               <div id={p.id} style={{ position: "relative", top: -110 }} />
               <div className="site-stack" style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: 48, alignItems: "stretch" }}>
                 <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
-                    <div style={{ width: 46, height: 46, flex: "none", borderRadius: 13, background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 16px 'Space Grotesk',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 10px 22px rgba(27,143,136,.3)" }}>{p.num}</div>
-                    <div style={{ font: "700 11.5px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", border: "1px solid rgba(27,143,136,.4)", borderRadius: 999, padding: "6px 14px" }}>{p.tag}</div>
+                  <div
+                    onClick={isMobile ? () => setOpenId(collapsed ? p.id : null) : undefined}
+                    role={isMobile ? "button" : undefined}
+                    aria-expanded={isMobile ? !collapsed : undefined}
+                    style={{ cursor: isMobile ? "pointer" : "default" }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
+                      <div style={{ width: 46, height: 46, flex: "none", borderRadius: 13, background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 16px 'Space Grotesk',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 10px 22px rgba(27,143,136,.3)" }}>{p.num}</div>
+                      <div style={{ font: "700 11.5px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", border: "1px solid rgba(27,143,136,.4)", borderRadius: 999, padding: "6px 14px" }}>{p.tag}</div>
+                      <span className="site-cert-chev" style={{ marginLeft: "auto", flex: "none", width: 30, height: 30, borderRadius: "50%", background: collapsed ? "#eef3f7" : "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: collapsed ? "#5b6e82" : "#fff", alignItems: "center", justifyContent: "center" }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" style={{ transform: collapsed ? "rotate(0deg)" : "rotate(180deg)", transition: "transform .3s ease" }}><path d="M6 9l6 6 6-6" /></svg>
+                      </span>
+                    </div>
+                    <h2 style={{ font: "700 clamp(24px,2.5vw,32px)/1.2 'Space Grotesk',sans-serif", color: "#0a1b33", margin: "0 0 6px", letterSpacing: "-.02em" }}>{p.title}</h2>
+                    <div style={{ font: "600 14px 'Manrope',sans-serif", color: "#2f7fd6", marginBottom: collapsed ? 0 : 18 }}>{p.sub}</div>
                   </div>
-                  <h2 style={{ font: "700 clamp(24px,2.5vw,32px)/1.2 'Space Grotesk',sans-serif", color: "#0a1b33", margin: "0 0 6px", letterSpacing: "-.02em" }}>{p.title}</h2>
-                  <div style={{ font: "600 14px 'Manrope',sans-serif", color: "#2f7fd6", marginBottom: 18 }}>{p.sub}</div>
+                  {!collapsed && (
+                  <>
                   <p style={{ font: "400 15px/1.75 'Manrope',sans-serif", color: "#5b6e82", margin: "0 0 14px", maxWidth: 640, textWrap: "pretty" } as CSSProperties}>{p.p1}</p>
                   <p style={{ font: "400 15px/1.75 'Manrope',sans-serif", color: "#5b6e82", margin: 0, maxWidth: 640, textWrap: "pretty" } as CSSProperties}>{p.p2}</p>
                   <div style={{ marginTop: 24, background: "#fff", border: "1px solid rgba(27,143,136,.35)", borderRadius: 16, padding: "24px 26px" }}>
@@ -119,7 +156,10 @@ export default function CertificationsPage() {
                       ))}
                     </div>
                   </div>
+                  </>
+                  )}
                 </div>
+                {!collapsed && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 14, height: "100%" }}>
                   <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 16, padding: "22px 22px" }}>
                     <div style={{ font: "700 11.5px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 10 }}>Ideal for</div>
@@ -136,9 +176,11 @@ export default function CertificationsPage() {
                   </div>
                   <Link href="/contact" className="lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Manrope',sans-serif", padding: "14px 22px", borderRadius: 999, textAlign: "center", marginTop: "auto" }}>Enquire about this program</Link>
                 </div>
+                )}
               </div>
             </Reveal>
-          ))}
+            );
+          })}
         </div>
       </div>
 
