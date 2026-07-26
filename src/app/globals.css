@@ -227,6 +227,8 @@ a:hover {
 
 @media (max-width: 760px) {
   .site-sec { padding-left: 20px !important; padding-right: 20px !important; }
+  /* Hide the top email/phone/Google-reviews bar on mobile */
+  .site-topbar { display: none !important; }
   .site-nav { display: none; }
   .site-header-cta { display: none !important; }
   .site-hamburger { display: inline-flex; }

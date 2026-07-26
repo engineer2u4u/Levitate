@@ -29,7 +29,7 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
   return (
     <>
       {/* TOP CONTACT BAR */}
-      <div className="site-sec" style={{ background: "#fff", borderBottom: "1px solid #e3eaf0", padding: "8px 48px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", rowGap: 6, columnGap: 16, font: "500 12.5px/1.5 'Manrope',sans-serif", color: "#5b6e82" }}>
+      <div className="site-sec site-topbar" style={{ background: "#fff", borderBottom: "1px solid #e3eaf0", padding: "8px 48px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", rowGap: 6, columnGap: 16, font: "500 12.5px/1.5 'Manrope',sans-serif", color: "#5b6e82" }}>
         <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
           <a href={`mailto:${contact.email}`} className="site-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 7 }}><MailIcon />{contact.email}</a>
           <a href={`tel:${contact.tel}`} className="site-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 7 }}><PhoneIcon />{contact.phone}</a>
