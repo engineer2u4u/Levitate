@@ -6,7 +6,19 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// Social platforms require absolute image URLs. Override per environment with
+// NEXT_PUBLIC_SITE_URL (e.g. a staging domain) — defaults to production.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://levitatepeoplesoft.com";
+
+const OG_IMAGE = {
+  url: "/og-image.png",
+  width: 1200,
+  height: 630,
+  alt: "Levitate PeopleSoft",
+};
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Levitate PeopleSoft — Elevating Trainers. Transforming Workplaces.",
     template: "%s · Levitate PeopleSoft",
@@ -29,19 +41,18 @@ export const metadata: Metadata = {
     icon: "/assets/cropped-Levitate_peoplesoft-32x32.png",
     apple: "/assets/cropped-Levitate_peoplesoft-32x32.png",
   },
+  // No explicit og/twitter title+description here: Next falls back to each
+  // page's own title/description, so shared subpage links show their own name.
   openGraph: {
-    title: "Levitate PeopleSoft — Elevating Trainers. Transforming Workplaces.",
-    description:
-      "Practice-led certification programs, corporate learning interventions and institutional training solutions that build high-trust, inclusive and human-centred workplaces.",
     siteName: "Levitate PeopleSoft",
     type: "website",
     locale: "en_IN",
+    url: SITE_URL,
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Levitate PeopleSoft — Elevating Trainers. Transforming Workplaces.",
-    description:
-      "Practice-led certification, corporate learning and institutional training for human-centred workplaces.",
+    images: [OG_IMAGE],
   },
 };
 
