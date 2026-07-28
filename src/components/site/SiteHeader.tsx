@@ -29,7 +29,7 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
   return (
     <>
       {/* TOP CONTACT BAR */}
-      <div className="site-sec site-topbar" style={{ background: "#fff", borderBottom: "1px solid #e3eaf0", padding: "8px 48px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", rowGap: 6, columnGap: 16, font: "500 12.5px/1.5 'Manrope',sans-serif", color: "#5b6e82" }}>
+      <div className="site-sec site-topbar" style={{ background: "#fff", borderBottom: "1px solid #e3eaf0", padding: "8px 48px", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", rowGap: 6, columnGap: 16, font: "500 12.5px/1.5 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
         <div style={{ display: "flex", gap: 22, flexWrap: "wrap" }}>
           <a href={`mailto:${contact.email}`} className="site-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 7 }}><MailIcon />{contact.email}</a>
           <a href={`tel:${contact.tel}`} className="site-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 7 }}><PhoneIcon />{contact.phone}</a>
@@ -47,7 +47,7 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="site-nav" style={{ alignItems: "center", gap: 32, font: "600 14px 'Manrope',sans-serif" }}>
+        <nav className="site-nav" style={{ alignItems: "center", gap: 24, font: "600 14px 'Plus Jakarta Sans',sans-serif" }}>
           <Link href="/" className="site-navlink" style={active === "home" ? topActive : topIdle}>Home</Link>
           <div onMouseEnter={() => setSvcOpen(true)} onMouseLeave={() => setSvcOpen(false)} style={{ position: "relative", display: "flex", alignItems: "center" }}>
             <Link href={services[0].href} className="site-navlink" style={{ ...(active === "services" ? topActive : topIdle), display: "inline-flex", alignItems: "center", gap: 6 }}>
@@ -57,17 +57,18 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
             <div style={{ position: "absolute", top: "100%", left: -16, paddingTop: 16, minWidth: 320, display: svcOpen ? "block" : "none" }}>
               <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: 8, boxShadow: "0 22px 48px rgba(10,27,51,.16)", display: "flex", flexDirection: "column", gap: 2 }}>
                 {services.map((s) => (
-                  <Link key={s.key} href={s.href} className="site-dropitem" style={{ padding: "11px 14px", borderRadius: 10, font: "600 13.5px/1.35 'Manrope',sans-serif", display: "block", color: active === "services" ? "#1b8f88" : "#0a1b33" }}>{s.label}</Link>
+                  <Link key={s.key} href={s.href} className="site-dropitem" style={{ padding: "11px 14px", borderRadius: 10, font: "600 13.5px/1.35 'Plus Jakarta Sans',sans-serif", display: "block", color: active === "services" ? "#1b8f88" : "#0a1b33" }}>{s.label}</Link>
                 ))}
               </div>
             </div>
           </div>
           <Link href="/certifications" className="site-navlink" style={active === "certifications" ? topActive : topIdle}>Certifications</Link>
           <Link href="/about" className="site-navlink" style={active === "about" ? topActive : topIdle}>About Us</Link>
+          <Link href="/parichita-kotnala" className="site-navlink" style={{ ...(active === "parichita" ? topActive : topIdle), whiteSpace: "nowrap" }}>Parichita Kotnala</Link>
           <Link href="/contact" className="site-navlink" style={active === "contact" ? topActive : topIdle}>Contact</Link>
         </nav>
 
-        <Link href="/contact" className="site-header-cta lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 13.5px 'Manrope',sans-serif", padding: "11px 22px", borderRadius: 999, whiteSpace: "nowrap" }}>
+        <Link href="/contact" className="site-header-cta lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 13.5px 'Plus Jakarta Sans',sans-serif", padding: "11px 22px", borderRadius: 999, whiteSpace: "nowrap" }}>
           Book a Discovery Call
         </Link>
 
@@ -80,16 +81,17 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="site-mobile-menu" style={{ font: "600 15px 'Manrope',sans-serif" }}>
+          <div className="site-mobile-menu" style={{ font: "600 15px 'Plus Jakarta Sans',sans-serif" }}>
             <Link href="/" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "home" ? "#1b8f88" : "#0a1b33" }}>Home</Link>
-            <div style={{ padding: "12px 6px 4px", font: "700 11px 'Manrope',sans-serif", color: "#8296a9", letterSpacing: ".14em", textTransform: "uppercase" }}>Services</div>
+            <div style={{ padding: "12px 6px 4px", font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", letterSpacing: ".14em", textTransform: "uppercase" }}>Services</div>
             {services.map((s) => (
               <Link key={s.key} href={s.href} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064" }}>{s.short}</Link>
             ))}
             <Link href="/certifications" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "certifications" ? "#1b8f88" : "#0a1b33" }}>Certifications</Link>
             <Link href="/about" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "about" ? "#1b8f88" : "#0a1b33" }}>About Us</Link>
+            <Link href="/parichita-kotnala" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "parichita" ? "#1b8f88" : "#0a1b33" }}>Parichita Kotnala</Link>
             <Link href="/contact" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "contact" ? "#1b8f88" : "#0a1b33" }}>Contact</Link>
-            <Link href="/contact" onClick={() => setMenuOpen(false)} className="lp-btn-grad" style={{ marginTop: 12, textAlign: "center", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Manrope',sans-serif", padding: "13px 22px", borderRadius: 999 }}>Book a Discovery Call</Link>
+            <Link href="/contact" onClick={() => setMenuOpen(false)} className="lp-btn-grad" style={{ marginTop: 12, textAlign: "center", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "13px 22px", borderRadius: 999 }}>Book a Discovery Call</Link>
           </div>
         )}
       </div>

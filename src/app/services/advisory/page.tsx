@@ -15,7 +15,8 @@ export default function Page() {
   return (
     <>
       <SiteHeader active="services" />
-      <ServicePage pageKey="advisory" />
+      {/* showCredential=false: no certificate section on HR Advisory per client edits */}
+      <ServicePage pageKey="advisory" showCredential={false} />
       <SiteFooter />
       <WhatsAppFloat />
       <ScrollToTop />

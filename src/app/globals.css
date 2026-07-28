@@ -4,7 +4,7 @@
 body {
   margin: 0;
   background: #f7fafc;
-  font-family: "Manrope", sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 a {
@@ -107,15 +107,6 @@ a:hover {
 
 /* Pause a marquee track while hovered */
 .lp-marquee-pause:hover { animation-play-state: paused; }
-
-/* ---- DEMO: global font-family toggle (remove later) ---- */
-/* Leave the font-toggle button itself on its own font so it stays legible */
-:root[data-font="work"] body *:not(.lp-fonttoggle):not(.lp-fonttoggle *) {
-  font-family: "Work Sans", sans-serif !important;
-}
-:root[data-font="jakarta"] body *:not(.lp-fonttoggle):not(.lp-fonttoggle *) {
-  font-family: "Plus Jakarta Sans", sans-serif !important;
-}
 
 /* ------------------------------------------------------------------ */
 /* Responsive overrides (inline styles are the desktop base;          */
@@ -310,6 +301,19 @@ html,
 body {
   overflow-x: clip;
   max-width: 100%;
+}
+
+/* Accreditations grid */
+@media (max-width: 640px) {
+  .site-accred-grid { grid-template-columns: 1fr !important; }
+}
+
+/* Client / partner logo grid */
+@media (min-width: 641px) and (max-width: 980px) {
+  .site-logo-grid { grid-template-columns: repeat(3, 1fr) !important; }
+}
+@media (max-width: 640px) {
+  .site-logo-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
 }
 
 /* Certification cards: accordion affordance on mobile only */

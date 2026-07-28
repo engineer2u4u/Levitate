@@ -3,7 +3,7 @@ import { contact } from "@/lib/site";
 export default function WhatsAppFloat() {
   return (
     <div style={{ position: "fixed", bottom: 26, right: 26, zIndex: 90, display: "flex", alignItems: "center", gap: 10 }}>
-      <div className="lp-wa-tip" style={{ background: "#fff", color: "#0a1b33", font: "600 12px/1.3 'Manrope',sans-serif", padding: "8px 14px", borderRadius: 10, border: "1px solid rgba(47,196,188,.45)", boxShadow: "0 8px 24px rgba(10,27,51,.14)" }}>
+      <div className="lp-wa-tip" style={{ background: "#fff", color: "#0a1b33", font: "600 12px/1.3 'Plus Jakarta Sans',sans-serif", padding: "8px 14px", borderRadius: 10, border: "1px solid rgba(47,196,188,.45)", boxShadow: "0 8px 24px rgba(10,27,51,.14)" }}>
         Chat with us on WhatsApp
       </div>
       <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" style={{ width: 54, height: 54, borderRadius: "50%", background: "#25d366", display: "flex", alignItems: "center", justifyContent: "center", animation: "pulse 2.6s infinite", boxShadow: "0 10px 26px rgba(10,27,51,.25)" }}>

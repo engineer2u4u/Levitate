@@ -7,8 +7,10 @@ import Reveal from "./Reveal";
 import Counter from "./Counter";
 import TestimonialsCarousel from "./TestimonialsCarousel";
 import ScrollToTop from "./ScrollToTop";
-import FontToggle from "./FontToggle";
 import SiteHeader from "@/components/site/SiteHeader";
+import TrustedBy from "@/components/site/TrustedBy";
+import Accreditations from "@/components/site/Accreditations";
+import CredentialsStrip from "@/components/site/CredentialsStrip";
 import { contact, services, blueprintSteps, certs, whyPoints, impactStats, tickerA, tickerB, gallery, founders } from "@/lib/homeData";
 
 // Home section links → routes (indexes align with homeData.services / homeData.certs)
@@ -133,7 +135,6 @@ export default function HomePage() {
   return (
     <>
       <ScrollToTop />
-      <FontToggle />
 
       {/* WHATSAPP FLOAT */}
       <div style={{ position: "fixed", bottom: 26, right: 26, zIndex: 90, display: "flex", alignItems: "center", gap: 10 }}>
@@ -142,7 +143,7 @@ export default function HomePage() {
           style={{
             background: "#fff",
             color: "#0a1b33",
-            font: "600 12px/1.3 'Manrope',sans-serif",
+            font: "600 12px/1.3 'Plus Jakarta Sans',sans-serif",
             padding: "8px 14px",
             borderRadius: 10,
             border: "1px solid rgba(47,196,188,.45)",
@@ -205,14 +206,14 @@ export default function HomePage() {
           style={{ position: "relative", maxWidth: 1240, margin: "0 auto", width: "100%", display: "grid", gridTemplateColumns: "1.25fr .75fr", gap: 64, alignItems: "center" }}
         >
           <div>
-            <div
+            {/* <div
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 8,
                 border: "1px solid rgba(27,143,136,.45)",
                 color: "#1b8f88",
-                font: "600 12px 'Manrope',sans-serif",
+                font: "600 12px 'Plus Jakarta Sans',sans-serif",
                 letterSpacing: ".16em",
                 textTransform: "uppercase",
                 padding: "8px 16px",
@@ -223,17 +224,18 @@ export default function HomePage() {
             >
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#2fc4bc" }} />
               Workplace Capability · Certification · Reskilling
-            </div>
-            <h1 style={{ font: "700 clamp(40px,4.6vw,62px)/1.08 'Space Grotesk',sans-serif", color: "#0a1b33", margin: "0 0 24px", letterSpacing: "-.02em" }}>
+            </div> */}
+            <h1 style={{ font: "700 clamp(40px,4.6vw,58px)/1.08 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 24px", letterSpacing: "-.02em" }}>
               Elevating Trainers.
               <br />
               Transforming Workplaces.
               <br />
               <span style={{ background: "linear-gradient(120deg,#1b8f88,#2f7fd6)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>Leading Human Change.</span>
             </h1>
-            <p style={{ font: "400 17px/1.7 'Manrope',sans-serif", color: "#5b6e82", maxWidth: 560, margin: "0 0 36px", textWrap: "pretty" } as CSSProperties}>
-              Global content. Practical facilitation. Real workplace application. We design certification programs, corporate learning interventions and institutional training solutions that build
-              high-trust, inclusive and human-centred workplaces.
+            <p style={{ font: "400 17px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 560, margin: "0 0 36px", textWrap: "pretty" } as CSSProperties}>
+              <strong style={{ color: "#000" }}>Global content | Practical facilitation | Real workplace application.</strong>
+              <br />
+              We design certification programs, corporate learning interventions and institutional training solutions that build high-trust, inclusive and human-centred workplaces.
             </p>
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
               <Link
@@ -242,7 +244,7 @@ export default function HomePage() {
                 style={{
                   background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)",
                   color: "#fff",
-                  font: "700 15px 'Manrope',sans-serif",
+                  font: "700 15px 'Plus Jakarta Sans',sans-serif",
                   padding: "16px 30px",
                   borderRadius: 999,
                   display: "inline-flex",
@@ -260,7 +262,7 @@ export default function HomePage() {
                 style={{
                   border: "1.5px solid rgba(10,27,51,.28)",
                   color: "#0a1b33",
-                  font: "700 15px 'Manrope',sans-serif",
+                  font: "700 15px 'Plus Jakarta Sans',sans-serif",
                   padding: "16px 30px",
                   borderRadius: 999,
                   whiteSpace: "nowrap",
@@ -272,24 +274,24 @@ export default function HomePage() {
             </div>
             <div className="lp-hero-stats" style={{ display: "flex", gap: 40, marginTop: 48 }}>
               <div>
-                <div style={{ font: "700 30px 'Space Grotesk',sans-serif", color: "#0a1b33", fontVariantNumeric: "tabular-nums" }}>
+                <div style={{ font: "700 30px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", fontVariantNumeric: "tabular-nums" }}>
                   <Counter to={2000} trigger="mount" />+
                 </div>
-                <div style={{ font: "500 12.5px 'Manrope',sans-serif", color: "#8296a9", letterSpacing: ".06em", textTransform: "uppercase" }}>Professionals trained</div>
+                <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", letterSpacing: ".06em", textTransform: "uppercase" }}>Professionals trained</div>
               </div>
               <div className="lp-hero-divider" style={{ width: 1, background: "rgba(10,27,51,.14)" }} />
               <div>
-                <div style={{ font: "700 30px 'Space Grotesk',sans-serif", color: "#0a1b33", fontVariantNumeric: "tabular-nums" }}>
+                <div style={{ font: "700 30px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", fontVariantNumeric: "tabular-nums" }}>
                   <Counter to={15} trigger="mount" />+ yrs
                 </div>
-                <div style={{ font: "500 12.5px 'Manrope',sans-serif", color: "#8296a9", letterSpacing: ".06em", textTransform: "uppercase" }}>Global HR experience</div>
+                <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", letterSpacing: ".06em", textTransform: "uppercase" }}>Global HR experience</div>
               </div>
               <div className="lp-hero-divider" style={{ width: 1, background: "rgba(10,27,51,.14)" }} />
               <div>
-                <div style={{ font: "700 30px 'Space Grotesk',sans-serif", color: "#0a1b33" }}>
+                <div style={{ font: "700 30px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>
                   4.9<span style={{ color: "#f5b942", fontSize: 20 }}> ★</span>
                 </div>
-                <div style={{ font: "500 12.5px 'Manrope',sans-serif", color: "#8296a9", letterSpacing: ".06em", textTransform: "uppercase" }}>Google reviews</div>
+                <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", letterSpacing: ".06em", textTransform: "uppercase" }}>Google reviews</div>
               </div>
             </div>
           </div>
@@ -322,8 +324,8 @@ export default function HomePage() {
               </button>
             </div>
             <div style={{ textAlign: "center" }}>
-              <div style={{ font: "700 17px 'Space Grotesk',sans-serif", color: "#0a1b33" }}>A Message from Our Founder</div>
-              <div style={{ font: "500 13px 'Manrope',sans-serif", color: "#5b6e82", marginTop: 5 }}>
+              <div style={{ font: "700 17px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>A Message from Our Founder</div>
+              <div style={{ font: "500 13px 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginTop: 5 }}>
                 Why we build certified workplace facilitators
                 <br />
               </div>
@@ -362,9 +364,10 @@ export default function HomePage() {
               boxShadow: "0 40px 120px rgba(10,27,51,.45)",
             }}
           >
+            {/* Only mounted while the modal is open, so nothing loads until asked */}
             <iframe
-              src="https://www.youtube-nocookie.com/embed/oMmr-q1Ipaw?autoplay=1&rel=0&modestbranding=1"
-              title="A Message from Our Founder"
+              src="https://www.youtube-nocookie.com/embed/4pf99e4AKBU?autoplay=1&rel=0&modestbranding=1"
+              title="A Message from Our Founder — Levitate PeopleSoft"
               allow="accelerated-download; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
               style={{ width: "100%", height: "100%", border: "none", display: "block" }}
@@ -382,7 +385,7 @@ export default function HomePage() {
                 background: "rgba(255,255,255,.1)",
                 border: "1px solid rgba(255,255,255,.25)",
                 color: "#fff",
-                font: "600 18px 'Manrope',sans-serif",
+                font: "600 18px 'Plus Jakarta Sans',sans-serif",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -421,7 +424,7 @@ export default function HomePage() {
                 border: "1px solid rgba(27,143,136,.3)",
                 borderRadius: 999,
                 background: "rgba(47,196,188,.07)",
-                font: "600 13.5px 'Space Grotesk',sans-serif",
+                font: "600 13.5px 'Plus Jakarta Sans',sans-serif",
                 color: "#0a1b33",
                 whiteSpace: "nowrap",
               }}
@@ -444,7 +447,7 @@ export default function HomePage() {
                 border: "1px solid rgba(47,127,214,.3)",
                 borderRadius: 999,
                 background: "rgba(47,127,214,.06)",
-                font: "600 13.5px 'Space Grotesk',sans-serif",
+                font: "600 13.5px 'Plus Jakarta Sans',sans-serif",
                 color: "#5b6e82",
                 whiteSpace: "nowrap",
               }}
@@ -461,12 +464,12 @@ export default function HomePage() {
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 32, flexWrap: "wrap", marginBottom: 52 }}>
             <div>
-              <div style={{ font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Our Services</div>
-              <h2 style={{ font: "700 clamp(30px,3.2vw,44px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em", maxWidth: 640 }}>
-                Learning, certification and capability-building for modern workplaces
+              <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Our Services</div>
+              <h2 style={{ font: "700 clamp(30px,3.2vw,44px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em", maxWidth: 640 }}>
+                Learning, Certification and Capability-building for modern workplaces
               </h2>
             </div>
-            <p style={{ font: "400 15.5px/1.7 'Manrope',sans-serif", color: "#5b6e82", maxWidth: 400, margin: 0 }}>
+            <p style={{ font: "400 15.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 400, margin: 0 }}>
               We work with professionals, organizations and institutions across four core verticals.
             </p>
           </Reveal>
@@ -500,7 +503,7 @@ export default function HomePage() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    font: "700 19px 'Space Grotesk',sans-serif",
+                    font: "700 19px 'Plus Jakarta Sans',sans-serif",
                     color: "#fff",
                     boxShadow: "0 10px 22px rgba(27,143,136,.35)",
                     transform: "translateZ(36px)",
@@ -508,9 +511,9 @@ export default function HomePage() {
                 >
                   {s.num}
                 </div>
-                <div style={{ font: "700 18px/1.3 'Space Grotesk',sans-serif", color: "#0a1b33", transform: "translateZ(26px)" }}>{s.title}</div>
-                <div style={{ font: "400 14px/1.65 'Manrope',sans-serif", color: "#5b6e82", flex: 1, textWrap: "pretty", transform: "translateZ(16px)" } as CSSProperties}>{s.desc}</div>
-                <Link href={SERVICE_HREFS[i] ?? "/services/train-the-trainer"} style={{ font: "700 13.5px 'Manrope',sans-serif", color: "#1b8f88", transform: "translateZ(26px)" }}>
+                <div style={{ font: "700 18px/1.3 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", transform: "translateZ(26px)" }}>{s.title}</div>
+                <div style={{ font: "400 14px/1.65 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", flex: 1, textWrap: "pretty", transform: "translateZ(16px)" } as CSSProperties}>{s.desc}</div>
+                <Link href={SERVICE_HREFS[i] ?? "/services/train-the-trainer"} style={{ font: "700 13.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", transform: "translateZ(26px)" }}>
                   Explore →
                 </Link>
               </Reveal>
@@ -523,8 +526,8 @@ export default function HomePage() {
       <div data-screen-label="Blueprint" className="lp-sec" style={{ background: "#fff", padding: "96px 48px" }}>
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
-            <div style={{ font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>The Levitate Learning Blueprint</div>
-            <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>
+            <div style={{ font: "700 18px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>The Levitate Learning Blueprint</div>
+            <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>
               Learning that begins with context
               <br />
               and ends with workplace application
@@ -560,7 +563,7 @@ export default function HomePage() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        font: "700 17px 'Space Grotesk',sans-serif",
+                        font: "700 17px 'Plus Jakarta Sans',sans-serif",
                         background: on ? "rgba(255,255,255,.22)" : "#e3ecf2",
                         color: on ? "#fff" : "#5b6e82",
                         transition: "background .3s ease",
@@ -569,10 +572,10 @@ export default function HomePage() {
                       {b.num}
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ font: "700 17px 'Space Grotesk',sans-serif", color: on ? "#fff" : "#0a1b33" }}>{b.title}</div>
-                      <div style={{ font: "500 12px 'Manrope',sans-serif", color: on ? "rgba(255,255,255,.85)" : "#8296a9", marginTop: 2 }}>{b.short}</div>
+                      <div style={{ font: "700 17px 'Plus Jakarta Sans',sans-serif", color: on ? "#fff" : "#0a1b33" }}>{b.title}</div>
+                      <div style={{ font: "500 12px 'Plus Jakarta Sans',sans-serif", color: on ? "rgba(255,255,255,.85)" : "#8296a9", marginTop: 2 }}>{b.short}</div>
                     </div>
-                    <div style={{ font: "700 16px 'Manrope',sans-serif", color: on ? "#fff" : "#5b6e82" }}>→</div>
+                    <div style={{ font: "700 16px 'Plus Jakarta Sans',sans-serif", color: on ? "#fff" : "#5b6e82" }}>→</div>
                   </div>
                 );
               })}
@@ -581,12 +584,12 @@ export default function HomePage() {
                   <div key={b.num} style={{ flex: 1, height: 4, borderRadius: 2, background: i === step ? "linear-gradient(90deg,#2fc4bc,#2f7fd6)" : "#dde7ee", transition: "background .3s ease" }} />
                 ))}
               </div>
-              <div style={{ font: "500 11.5px 'Manrope',sans-serif", color: "#8296a9", padding: "2px 4px" }}>Auto-plays every few seconds — click any step to explore</div>
+              <div style={{ font: "500 11.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", padding: "2px 4px" }}>Auto-plays every few seconds — click any step to explore</div>
             </div>
             <div style={{ position: "relative", borderRadius: 22, overflow: "hidden", background: "#eef4f7", border: "1px solid #e3eaf0", minHeight: 420 }}>
               <img src={activeStep.img} alt={activeStep.title} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.22 }} />
               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg,rgba(244,249,251,.96) 20%,rgba(244,249,251,.62))" }} />
-              <div style={{ position: "absolute", right: -20, bottom: -50, font: "700 260px 'Space Grotesk',sans-serif", color: "rgba(27,143,136,.09)", lineHeight: 1, pointerEvents: "none" }}>
+              <div style={{ position: "absolute", right: -20, bottom: -50, font: "700 260px 'Plus Jakarta Sans',sans-serif", color: "rgba(27,143,136,.09)", lineHeight: 1, pointerEvents: "none" }}>
                 {activeStep.num}
               </div>
               <div style={{ position: "relative", padding: "52px 54px", display: "flex", flexDirection: "column", height: "100%", boxSizing: "border-box", justifyContent: "center", gap: 18 }}>
@@ -599,7 +602,7 @@ export default function HomePage() {
                     border: "1px solid rgba(27,143,136,.45)",
                     borderRadius: 999,
                     padding: "7px 16px",
-                    font: "700 11.5px 'Manrope',sans-serif",
+                    font: "700 11.5px 'Plus Jakarta Sans',sans-serif",
                     color: "#1b8f88",
                     letterSpacing: ".16em",
                     textTransform: "uppercase",
@@ -608,8 +611,8 @@ export default function HomePage() {
                 >
                   Step {activeStep.num} of 4
                 </div>
-                <div style={{ font: "700 40px 'Space Grotesk',sans-serif", color: "#0a1b33", letterSpacing: "-.02em" }}>{activeStep.title}</div>
-                <div style={{ font: "400 16px/1.75 'Manrope',sans-serif", color: "#3d5064", maxWidth: 520, textWrap: "pretty" } as CSSProperties}>{activeStep.desc}</div>
+                <div style={{ font: "700 40px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", letterSpacing: "-.02em" }}>{activeStep.title}</div>
+                <div style={{ font: "400 16px/1.75 'Plus Jakarta Sans',sans-serif", color: "#3d5064", maxWidth: 520, textWrap: "pretty" } as CSSProperties}>{activeStep.desc}</div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 6 }}>
                   {activeStep.chips.map((ch) => (
                     <div
@@ -618,7 +621,7 @@ export default function HomePage() {
                         background: "rgba(47,196,188,.12)",
                         border: "1px solid rgba(27,143,136,.35)",
                         color: "#136f6a",
-                        font: "600 12.5px 'Manrope',sans-serif",
+                        font: "600 12.5px 'Plus Jakarta Sans',sans-serif",
                         padding: "7px 14px",
                         borderRadius: 999,
                       }}
@@ -666,7 +669,7 @@ export default function HomePage() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        font: "700 16px 'Space Grotesk',sans-serif",
+                        font: "700 16px 'Plus Jakarta Sans',sans-serif",
                         background: on ? "rgba(255,255,255,.22)" : "#e3ecf2",
                         color: on ? "#fff" : "#5b6e82",
                       }}
@@ -674,8 +677,8 @@ export default function HomePage() {
                       {b.num}
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ font: "700 16px 'Space Grotesk',sans-serif", color: on ? "#fff" : "#0a1b33" }}>{b.title}</div>
-                      <div style={{ font: "500 12px 'Manrope',sans-serif", color: on ? "rgba(255,255,255,.85)" : "#8296a9", marginTop: 2 }}>{b.short}</div>
+                      <div style={{ font: "700 16px 'Plus Jakarta Sans',sans-serif", color: on ? "#fff" : "#0a1b33" }}>{b.title}</div>
+                      <div style={{ font: "500 12px 'Plus Jakarta Sans',sans-serif", color: on ? "rgba(255,255,255,.85)" : "#8296a9", marginTop: 2 }}>{b.short}</div>
                     </div>
                     <svg
                       width="18"
@@ -694,7 +697,7 @@ export default function HomePage() {
                   {on && (
                     <div style={{ padding: "16px 18px 20px", animation: "fadeUp .3s ease" }}>
                       <img src={b.img} alt={b.title} style={{ width: "100%", height: 150, objectFit: "cover", borderRadius: 12, display: "block", marginBottom: 16 }} />
-                      <div style={{ font: "400 14.5px/1.7 'Manrope',sans-serif", color: "#3d5064", textWrap: "pretty" } as CSSProperties}>{b.desc}</div>
+                      <div style={{ font: "400 14.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#3d5064", textWrap: "pretty" } as CSSProperties}>{b.desc}</div>
                       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 14 }}>
                         {b.chips.map((ch) => (
                           <div
@@ -703,7 +706,7 @@ export default function HomePage() {
                               background: "rgba(47,196,188,.12)",
                               border: "1px solid rgba(27,143,136,.35)",
                               color: "#136f6a",
-                              font: "600 12px 'Manrope',sans-serif",
+                              font: "600 12px 'Plus Jakarta Sans',sans-serif",
                               padding: "6px 12px",
                               borderRadius: 999,
                             }}
@@ -717,7 +720,7 @@ export default function HomePage() {
                 </div>
               );
             })}
-            <div style={{ font: "500 11.5px 'Manrope',sans-serif", color: "#8296a9", padding: "2px 4px" }}>Tap any step to expand or collapse</div>
+            <div style={{ font: "500 11.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", padding: "2px 4px" }}>Tap any step to expand or collapse</div>
           </div>
         </div>
       </div>
@@ -739,12 +742,12 @@ export default function HomePage() {
         <div style={{ position: "relative", maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 32, flexWrap: "wrap", marginBottom: 52 }}>
             <div>
-              <div style={{ font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Certification Programs</div>
-              <h2 style={{ font: "700 clamp(30px,3.2vw,44px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em", maxWidth: 620 }}>
+              <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Certification Programs</div>
+              <h2 style={{ font: "700 clamp(30px,3.2vw,44px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em", maxWidth: 620 }}>
                 Choose your certification pathway
               </h2>
             </div>
-            <p style={{ font: "400 15.5px/1.7 'Manrope',sans-serif", color: "#5b6e82", maxWidth: 420, margin: 0 }}>
+            <p style={{ font: "400 15.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 420, margin: 0 }}>
               For HR professionals, L&amp;D leaders, educators, consultants, coaches, managers and aspiring corporate trainers.
             </p>
           </Reveal>
@@ -769,7 +772,7 @@ export default function HomePage() {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div
                     style={{
-                      font: "700 11px 'Manrope',sans-serif",
+                      font: "700 11px 'Plus Jakarta Sans',sans-serif",
                       color: "#1b8f88",
                       letterSpacing: ".14em",
                       textTransform: "uppercase",
@@ -780,12 +783,12 @@ export default function HomePage() {
                   >
                     {c.tag}
                   </div>
-                  <div style={{ font: "700 15px 'Space Grotesk',sans-serif", color: "rgba(10,27,51,.2)" }}>{c.num}</div>
+                  <div style={{ font: "700 15px 'Plus Jakarta Sans',sans-serif", color: "rgba(10,27,51,.2)" }}>{c.num}</div>
                 </div>
-                <div style={{ font: "700 19px/1.3 'Space Grotesk',sans-serif", color: "#0a1b33" }}>{c.title}</div>
-                <div style={{ font: "600 13px 'Manrope',sans-serif", color: "#2f7fd6" }}>{c.sub}</div>
-                <div style={{ font: "400 13.5px/1.65 'Manrope',sans-serif", color: "#5b6e82", flex: 1, textWrap: "pretty" } as CSSProperties}>{c.desc}</div>
-                <Link href={CERT_HREFS[i] ?? "/certifications"} style={{ font: "700 13.5px 'Manrope',sans-serif", color: "#1b8f88" }}>
+                <div style={{ font: "700 19px/1.3 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{c.title}</div>
+                <div style={{ font: "600 13px 'Plus Jakarta Sans',sans-serif", color: "#2f7fd6" }}>{c.sub}</div>
+                <div style={{ font: "400 13.5px/1.65 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", flex: 1, textWrap: "pretty" } as CSSProperties}>{c.desc}</div>
+                <Link href={CERT_HREFS[i] ?? "/certifications"} style={{ font: "700 13.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88" }}>
                   Program details →
                 </Link>
               </Reveal>
@@ -798,11 +801,11 @@ export default function HomePage() {
       <div data-screen-label="Why Levitate" className="lp-sec" style={{ background: "#f4f7f9", padding: "96px 48px" }}>
         <div className="lp-why-grid" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
           <Reveal>
-            <div style={{ font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Why Get Certified With Us</div>
-            <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: "0 0 18px", letterSpacing: "-.02em" }}>
+            <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Why Get Certified With Us</div>
+            <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 18px", letterSpacing: "-.02em" }}>
               Built for professionals who refuse to remain slide-based trainers
             </h2>
-            <p style={{ font: "400 15px/1.7 'Manrope',sans-serif", color: "#5b6e82", margin: "0 0 30px" }}>
+            <p style={{ font: "400 15px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 30px" }}>
               Our programs help participants become confident, credible and responsible workplace facilitators.
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -825,8 +828,8 @@ export default function HomePage() {
                     </svg>
                   </div>
                   <div>
-                    <div style={{ font: "700 15.5px 'Space Grotesk',sans-serif", color: "#0a1b33" }}>{w.t}</div>
-                    <div style={{ font: "400 13.5px/1.6 'Manrope',sans-serif", color: "#5b6e82", marginTop: 3 }}>{w.d}</div>
+                    <div style={{ font: "700 15.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{w.t}</div>
+                    <div style={{ font: "400 13.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginTop: 3 }}>{w.d}</div>
                   </div>
                 </div>
               ))}
@@ -849,10 +852,10 @@ export default function HomePage() {
             >
               <div style={{ border: "2px solid #0a1b33", outline: "1px solid #2fc4bc", outlineOffset: 5, padding: "34px 30px", textAlign: "center" }}>
                 <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 34, margin: "0 auto 18px", display: "block" }} />
-                <div style={{ font: "600 10.5px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".3em", textTransform: "uppercase", marginBottom: 14 }}>Certificate of Completion</div>
-                <div style={{ font: "400 12.5px 'Manrope',sans-serif", color: "#5b6e82" }}>This certifies that</div>
-                <div style={{ font: "700 26px 'Space Grotesk',sans-serif", color: "#0a1b33", borderBottom: "1px solid #cfdbe4", padding: "8px 0", margin: "6px 24px 12px" }}>Participant Name</div>
-                <div style={{ font: "400 12.5px/1.6 'Manrope',sans-serif", color: "#5b6e82", marginBottom: 18 }}>
+                <div style={{ font: "600 10.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".3em", textTransform: "uppercase", marginBottom: 14 }}>Certificate of Completion</div>
+                <div style={{ font: "400 12.5px 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>This certifies that</div>
+                <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", borderBottom: "1px solid #cfdbe4", padding: "8px 0", margin: "6px 24px 12px" }}>Participant Name</div>
+                <div style={{ font: "400 12.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginBottom: 18 }}>
                   has successfully completed the
                   <br />
                   <strong style={{ color: "#0a1b33" }}>Certified Corporate Leadership Facilitator Program</strong>
@@ -861,8 +864,8 @@ export default function HomePage() {
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 26, padding: "0 8px" }}>
                   <div style={{ textAlign: "left" }}>
-                    <div style={{ font: "600 13px 'Space Grotesk',sans-serif", color: "#0a1b33", borderTop: "1px solid #cfdbe4", paddingTop: 6 }}>Parichita Kotnala</div>
-                    <div style={{ font: "400 10.5px 'Manrope',sans-serif", color: "#8296a9" }}>Founder &amp; Managing Partner</div>
+                    <div style={{ font: "600 13px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", borderTop: "1px solid #cfdbe4", paddingTop: 6 }}>Parichita Kotnala</div>
+                    <div style={{ font: "400 10.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9" }}>Founder &amp; Managing Partner</div>
                   </div>
                   <div
                     style={{
@@ -873,7 +876,7 @@ export default function HomePage() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      font: "700 9px 'Manrope',sans-serif",
+                      font: "700 9px 'Plus Jakarta Sans',sans-serif",
                       color: "#1b8f88",
                       textAlign: "center",
                       letterSpacing: ".08em",
@@ -884,9 +887,6 @@ export default function HomePage() {
                     SEAL
                   </div>
                 </div>
-              </div>
-              <div style={{ textAlign: "center", font: "600 11px 'Manrope',sans-serif", color: "#8296a9", marginTop: 14, fontFamily: "monospace" }}>
-                certificate preview — issued on program completion
               </div>
             </div>
             <div className="lp-cert-features" style={{ position: "relative", display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14, marginTop: 20 }}>
@@ -905,8 +905,8 @@ export default function HomePage() {
                   <path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z" />
                   <path d="M9 12l2 2 4-4" />
                 </svg>
-                <div style={{ font: "700 12.5px 'Space Grotesk',sans-serif", color: "#0a1b33", marginTop: 8 }}>Assessment-based</div>
-                <div style={{ font: "500 11px/1.5 'Manrope',sans-serif", color: "#8296a9", marginTop: 2 }}>Practice + assessment, not attendance</div>
+                <div style={{ font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginTop: 8 }}>Assessment-based</div>
+                <div style={{ font: "500 11px/1.5 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 2 }}>Practice + assessment, not attendance</div>
               </div>
               <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 14px", textAlign: "center" }}>
                 <svg
@@ -925,8 +925,8 @@ export default function HomePage() {
                   <path d="M5.5 16c.6-1.4 1.7-2 3-2s2.4.6 3 2" />
                   <path d="M14 9h5M14 12h5M14 15h3" />
                 </svg>
-                <div style={{ font: "700 12.5px 'Space Grotesk',sans-serif", color: "#0a1b33", marginTop: 8 }}>Verifiable ID</div>
-                <div style={{ font: "500 11px/1.5 'Manrope',sans-serif", color: "#8296a9", marginTop: 2 }}>Unique certificate number on issue</div>
+                <div style={{ font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginTop: 8 }}>Verifiable ID</div>
+                <div style={{ font: "500 11px/1.5 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 2 }}>Unique certificate number on issue</div>
               </div>
               <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 14px", textAlign: "center" }}>
                 <svg
@@ -945,8 +945,8 @@ export default function HomePage() {
                   <path d="M3 13h18" />
                   <path d="M11 13v2h2v-2" />
                 </svg>
-                <div style={{ font: "700 12.5px 'Space Grotesk',sans-serif", color: "#0a1b33", marginTop: 8 }}>Trainer toolkit</div>
-                <div style={{ font: "500 11px/1.5 'Manrope',sans-serif", color: "#8296a9", marginTop: 2 }}>Ships with facilitation resources</div>
+                <div style={{ font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginTop: 8 }}>Trainer toolkit</div>
+                <div style={{ font: "500 11px/1.5 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 2 }}>Ships with facilitation resources</div>
               </div>
             </div>
           </Reveal>
@@ -965,7 +965,7 @@ export default function HomePage() {
             <div key={st.label} style={{ animation: impactIn ? "popIn .6s ease both" : undefined, animationDelay: impactIn ? `${i * 0.08}s` : undefined }}>
               <div
                 style={{
-                  font: "700 52px 'Space Grotesk',sans-serif",
+                  font: "700 52px 'Plus Jakarta Sans',sans-serif",
                   background: "linear-gradient(120deg,#1b8f88,#2f7fd6)",
                   WebkitBackgroundClip: "text",
                   backgroundClip: "text",
@@ -977,7 +977,7 @@ export default function HomePage() {
                 {st.suffix}
               </div>
               <div style={{ width: 36, height: 3, borderRadius: 2, background: "linear-gradient(90deg,#2fc4bc,#2f7fd6)", margin: "10px auto" }} />
-              <div style={{ font: "600 13px 'Manrope',sans-serif", color: "#5b6e82", letterSpacing: ".08em", textTransform: "uppercase" }}>{st.label}</div>
+              <div style={{ font: "600 13px 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", letterSpacing: ".08em", textTransform: "uppercase" }}>{st.label}</div>
             </div>
           ))}
         </div>
@@ -987,8 +987,8 @@ export default function HomePage() {
       <div data-screen-label="Founders" className="lp-sec" style={{ background: "#fff", padding: "96px 48px" }}>
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
-            <div style={{ font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Leadership</div>
-            <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>
+            <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Leadership</div>
+            <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>
               Built on HR legacy. Strengthened by global workplace practice.
             </h2>
           </Reveal>
@@ -997,9 +997,9 @@ export default function HomePage() {
               <Reveal key={f.name} style={{ background: "#f4f7f9", border: "1px solid #e3eaf0", borderRadius: 20, overflow: "hidden", display: "flex", flexDirection: "column" }}>
                 <img src={f.img} alt={f.alt} style={{ width: "100%", aspectRatio: "16/9", objectFit: "cover", display: "block", objectPosition: f.imgPos }} />
                 <div style={{ padding: "28px 30px" }}>
-                  <div style={{ font: "700 21px 'Space Grotesk',sans-serif", color: "#0a1b33" }}>{f.name}</div>
-                  <div style={{ font: "600 13px 'Manrope',sans-serif", color: "#1b8f88", margin: "4px 0 14px" }}>{f.role}</div>
-                  <p style={{ font: "400 14px/1.7 'Manrope',sans-serif", color: "#5b6e82", margin: 0 }}>{f.bio}</p>
+                  <div style={{ font: "700 21px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{f.name}</div>
+                  <div style={{ font: "600 13px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", margin: "4px 0 14px" }}>{f.role}</div>
+                  <p style={{ font: "400 14px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: 0 }}>{f.bio}</p>
                 </div>
               </Reveal>
             ))}
@@ -1015,8 +1015,8 @@ export default function HomePage() {
       {/* GALLERY MARQUEE */}
       <div data-screen-label="Gallery" style={{ background: "#fff", padding: "72px 0", overflow: "hidden" }}>
         <Reveal style={{ textAlign: "center", marginBottom: 40, padding: "0 48px" }}>
-          <div style={{ font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 12 }}>In The Room</div>
-          <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>
+          <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 12 }}>In The Room</div>
+          <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>
             Sessions across campuses, conclaves and corporates
           </h2>
         </Reveal>
@@ -1026,6 +1026,15 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+
+      {/* TRUSTED ACROSS ORGANIZATIONS AND INSTITUTIONS */}
+      <TrustedBy />
+
+      {/* ACCREDITATIONS */}
+      <Accreditations />
+
+      {/* CREDENTIALS STRIP (ISO / DPIIT / MSME / Udyam) */}
+      <CredentialsStrip />
 
       {/* CTA */}
       <div data-screen-label="CTA" className="lp-sec" style={{ position: "relative", background: "#fff", padding: "40px 48px 110px", overflow: "hidden" }}>
@@ -1056,24 +1065,24 @@ export default function HomePage() {
               filter: "blur(20px)",
             }}
           />
-          <h2 style={{ position: "relative", font: "700 clamp(28px,3.2vw,42px)/1.2 'Space Grotesk',sans-serif", color: "#f2f7fb", margin: "0 0 16px", letterSpacing: "-.02em" }}>
+          <h2 style={{ position: "relative", font: "700 clamp(28px,3.2vw,42px)/1.2 'Plus Jakarta Sans',sans-serif", color: "#f2f7fb", margin: "0 0 16px", letterSpacing: "-.02em" }}>
             Ready to build workplace capability that lasts?
           </h2>
-          <p style={{ position: "relative", font: "400 16px/1.7 'Manrope',sans-serif", color: "#a9bcd0", maxWidth: 620, margin: "0 auto 34px" }}>
+          <p style={{ position: "relative", font: "400 16px/1.7 'Plus Jakarta Sans',sans-serif", color: "#a9bcd0", maxWidth: 620, margin: "0 auto 34px" }}>
             Partner with Levitate PeopleSoft for certification programs, customized training interventions and institutional learning solutions.
           </p>
           <div style={{ position: "relative", display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <Link
               href="/contact"
               className="lp-btn-grad"
-              style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 15px 'Manrope',sans-serif", padding: "16px 30px", borderRadius: 999 }}
+              style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999 }}
             >
               Request a Training Proposal
             </Link>
             <Link
               href="/contact"
               className="lp-btn-outline-light"
-              style={{ border: "1.5px solid rgba(255,255,255,.25)", color: "#e8f1f8", font: "700 15px 'Manrope',sans-serif", padding: "16px 30px", borderRadius: 999 }}
+              style={{ border: "1.5px solid rgba(255,255,255,.25)", color: "#e8f1f8", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999 }}
             >
               Book a Discovery Call
             </Link>
@@ -1089,13 +1098,13 @@ export default function HomePage() {
               <Link href="/" style={{ background: "#fff", border: "1px solid #dbe5ec", borderRadius: 8, padding: "6px 12px", display: "inline-flex", marginBottom: 18 }}>
                 <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 30, display: "block" }} />
               </Link>
-              <p style={{ font: "400 13.5px/1.7 'Manrope',sans-serif", color: "#5b6e82", maxWidth: 320, margin: 0 }}>
+              <p style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 320, margin: 0 }}>
                 Elevating trainers, transforming workplaces and enabling human-centred change through practice-led certification and training.
               </p>
             </div>
             <div>
-              <div style={{ font: "700 13px 'Space Grotesk',sans-serif", color: "#0a1b33", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 16 }}>Services</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10, font: "500 13.5px 'Manrope',sans-serif" }}>
+              <div style={{ font: "700 13px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 16 }}>Services</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, font: "500 13.5px 'Plus Jakarta Sans',sans-serif" }}>
                 {FOOTER_SERVICES.map(([label, href]) => (
                   <Link key={label} href={href} className="lp-footlink">
                     {label}
@@ -1104,8 +1113,8 @@ export default function HomePage() {
               </div>
             </div>
             <div>
-              <div style={{ font: "700 13px 'Space Grotesk',sans-serif", color: "#0a1b33", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 16 }}>Company</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10, font: "500 13.5px 'Manrope',sans-serif" }}>
+              <div style={{ font: "700 13px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 16 }}>Company</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, font: "500 13.5px 'Plus Jakarta Sans',sans-serif" }}>
                 {FOOTER_COMPANY.map(([label, href]) => (
                   <Link key={label} href={href} className="lp-footlink">
                     {label}
@@ -1114,8 +1123,8 @@ export default function HomePage() {
               </div>
             </div>
             <div>
-              <div style={{ font: "700 13px 'Space Grotesk',sans-serif", color: "#0a1b33", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 16 }}>Contact</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10, font: "500 13.5px 'Manrope',sans-serif", color: "#5b6e82" }}>
+              <div style={{ font: "700 13px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 16 }}>Contact</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, font: "500 13.5px 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
                 <a href={`mailto:${contact.email}`} className="lp-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 9 }}>
                   <MailIcon size={14} />
                   {contact.email}
@@ -1128,32 +1137,13 @@ export default function HomePage() {
                   <WhatsAppIcon size={14} />
                   WhatsApp: {contact.phone}
                 </a>
-              </div>
-              <div
-                style={{ display: "inline-flex", alignItems: "center", gap: 12, marginTop: 18, background: "#fff", border: "1px solid rgba(27,143,136,.4)", borderRadius: 12, padding: "12px 16px" }}
-              >
-                <div
-                  style={{
-                    width: 40,
-                    height: 40,
-                    flex: "none",
-                    borderRadius: "50%",
-                    border: "2px solid #2fc4bc",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    font: "700 10px 'Space Grotesk',sans-serif",
-                    color: "#1b8f88",
-                    textAlign: "center",
-                    lineHeight: 1.1,
-                  }}
-                >
-                  ISO
-                </div>
-                <div>
-                  <div style={{ font: "700 13px 'Space Grotesk',sans-serif", color: "#0a1b33" }}>ISO Certified</div>
-                  <div style={{ font: "500 11.5px 'Manrope',sans-serif", color: "#5b6e82" }}>Quality-assured training organization</div>
-                </div>
+                <span style={{ display: "inline-flex", alignItems: "flex-start", gap: 9, lineHeight: 1.6 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none", marginTop: 3 }}>
+                    <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                  Ansal Esencia, Sector 67, Gurugram
+                </span>
               </div>
             </div>
           </div>
@@ -1165,12 +1155,15 @@ export default function HomePage() {
               justifyContent: "space-between",
               flexWrap: "wrap",
               gap: 12,
-              font: "500 12.5px 'Manrope',sans-serif",
+              font: "500 12.5px 'Plus Jakarta Sans',sans-serif",
               color: "#8296a9",
             }}
           >
             <span>© 2026 Levitate PeopleSoft. All rights reserved.</span>
-            <span>Founded 2023 · Built on HR legacy, strengthened by global practice</span>
+            <span style={{ display: "inline-flex", gap: 18, flexWrap: "wrap" }}>
+              <Link href="/privacy-policy" className="lp-footlink">Privacy Policy</Link>
+              <Link href="/disclaimer" className="lp-footlink">Disclaimer</Link>
+            </span>
           </div>
         </div>
       </div>

@@ -53,7 +53,7 @@ const programs: Program[] = [
     pillarTitle: "The EDGE Readiness Framework", pillars: [{ k: "E", v: "Everyday Inclusion" }, { k: "D", v: "Dignity & POSH Awareness" }, { k: "G", v: "Growth & Wellbeing" }, { k: "E", v: "Employable HR Judgment" }] },
 ];
 
-const eyebrow: CSSProperties = { font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 };
+const eyebrow: CSSProperties = { font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 };
 
 function CertIcon({ d }: { d: React.ReactNode }) {
   return <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" style={{ display: "block", margin: "0 auto" }}>{d}</svg>;
@@ -91,14 +91,14 @@ export default function CertificationsPage() {
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 78% 45%,rgba(47,127,214,.13),transparent 60%)" }} />
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 90, background: "linear-gradient(180deg,transparent,#f7fafc)" }} />
         <div style={{ position: "relative", maxWidth: 1240, margin: "0 auto" }}>
-          <div style={{ font: "500 12.5px 'Manrope',sans-serif", color: "#8296a9", marginBottom: 18 }}>
+          <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 18 }}>
             <Link href="/" style={{ color: "#8296a9" }}>Home</Link> / <span style={{ color: "#1b8f88" }}>Certifications</span>
           </div>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, border: "1px solid rgba(27,143,136,.45)", color: "#1b8f88", font: "600 12px 'Manrope',sans-serif", letterSpacing: ".16em", textTransform: "uppercase", padding: "8px 16px", borderRadius: 999, background: "rgba(255,255,255,.6)", marginBottom: 24 }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, border: "1px solid rgba(27,143,136,.45)", color: "#1b8f88", font: "600 12px 'Plus Jakarta Sans',sans-serif", letterSpacing: ".16em", textTransform: "uppercase", padding: "8px 16px", borderRadius: 999, background: "rgba(255,255,255,.6)", marginBottom: 24 }}>
             <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#2fc4bc" }} />Certification Programs
           </div>
-          <h1 style={{ font: "700 clamp(34px,4vw,54px)/1.12 'Space Grotesk',sans-serif", color: "#0a1b33", margin: "0 0 20px", letterSpacing: "-.02em", maxWidth: 820 }}>Choose Your Certification Pathway</h1>
-          <p style={{ font: "400 16.5px/1.75 'Manrope',sans-serif", color: "#5b6e82", maxWidth: 740, margin: 0, textWrap: "pretty" } as CSSProperties}>Whether you are an HR professional, L&amp;D leader, educator, consultant, coach, manager or aspiring corporate trainer, Levitate PeopleSoft helps you build facilitation capability for the workplace conversations that matter most.</p>
+          <h1 style={{ font: "700 clamp(34px,4vw,54px)/1.12 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 20px", letterSpacing: "-.02em", maxWidth: 820 }}>Choose Your Certification Pathway</h1>
+          <p style={{ font: "400 16.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 740, margin: 0, textWrap: "pretty" } as CSSProperties}>Whether you are an HR professional, L&amp;D leader, educator, consultant, coach, manager or aspiring corporate trainer, Levitate PeopleSoft helps you build facilitation capability for the workplace conversations that matter most.</p>
         </div>
       </div>
 
@@ -107,8 +107,8 @@ export default function CertificationsPage() {
         <div className="site-grid-6" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 12 }}>
           {programs.map((p) => (
             <a key={p.id} href={`#${p.id}`} onClick={() => setOpenId(p.id)} className="site-card" style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 16px", display: "flex", flexDirection: "column", gap: 6, boxShadow: "0 2px 6px rgba(10,27,51,.05)" }}>
-              <div style={{ font: "700 10.5px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".13em", textTransform: "uppercase" }}>{p.tag}</div>
-              <div style={{ font: "700 13px/1.35 'Space Grotesk',sans-serif", color: "#0a1b33" }}>{p.short}</div>
+              <div style={{ font: "700 10.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".13em", textTransform: "uppercase" }}>{p.tag}</div>
+              <div style={{ font: "700 13px/1.35 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{p.short}</div>
             </a>
           ))}
         </div>
@@ -131,27 +131,27 @@ export default function CertificationsPage() {
                     style={{ cursor: isMobile ? "pointer" : "default" }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
-                      <div style={{ width: 46, height: 46, flex: "none", borderRadius: 13, background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 16px 'Space Grotesk',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 10px 22px rgba(27,143,136,.3)" }}>{p.num}</div>
-                      <div style={{ font: "700 11.5px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", border: "1px solid rgba(27,143,136,.4)", borderRadius: 999, padding: "6px 14px" }}>{p.tag}</div>
+                      <div style={{ width: 46, height: 46, flex: "none", borderRadius: 13, background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 16px 'Plus Jakarta Sans',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 10px 22px rgba(27,143,136,.3)" }}>{p.num}</div>
+                      <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", border: "1px solid rgba(27,143,136,.4)", borderRadius: 999, padding: "6px 14px" }}>{p.tag}</div>
                       <span className="site-cert-chev" style={{ marginLeft: "auto", flex: "none", width: 30, height: 30, borderRadius: "50%", background: collapsed ? "#eef3f7" : "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: collapsed ? "#5b6e82" : "#fff", alignItems: "center", justifyContent: "center" }}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" style={{ transform: collapsed ? "rotate(0deg)" : "rotate(180deg)", transition: "transform .3s ease" }}><path d="M6 9l6 6 6-6" /></svg>
                       </span>
                     </div>
-                    <h2 style={{ font: "700 clamp(24px,2.5vw,32px)/1.2 'Space Grotesk',sans-serif", color: "#0a1b33", margin: "0 0 6px", letterSpacing: "-.02em" }}>{p.title}</h2>
-                    <div style={{ font: "600 14px 'Manrope',sans-serif", color: "#2f7fd6", marginBottom: collapsed ? 0 : 18 }}>{p.sub}</div>
+                    <h2 style={{ font: "700 clamp(24px,2.5vw,32px)/1.2 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 6px", letterSpacing: "-.02em" }}>{p.title}</h2>
+                    <div style={{ font: "600 14px 'Plus Jakarta Sans',sans-serif", color: "#2f7fd6", marginBottom: collapsed ? 0 : 18 }}>{p.sub}</div>
                   </div>
                   {!collapsed && (
                   <>
-                  <p style={{ font: "400 15px/1.75 'Manrope',sans-serif", color: "#5b6e82", margin: "0 0 14px", maxWidth: 640, textWrap: "pretty" } as CSSProperties}>{p.p1}</p>
-                  <p style={{ font: "400 15px/1.75 'Manrope',sans-serif", color: "#5b6e82", margin: 0, maxWidth: 640, textWrap: "pretty" } as CSSProperties}>{p.p2}</p>
+                  <p style={{ font: "400 15px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 14px", maxWidth: 640, textWrap: "pretty" } as CSSProperties}>{p.p1}</p>
+                  <p style={{ font: "400 15px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: 0, maxWidth: 640, textWrap: "pretty" } as CSSProperties}>{p.p2}</p>
                   <div style={{ marginTop: 24, background: "#fff", border: "1px solid rgba(27,143,136,.35)", borderRadius: 16, padding: "24px 26px" }}>
-                    <div style={{ font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 16 }}>{p.pillarTitle}</div>
+                    <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 16 }}>{p.pillarTitle}</div>
                     <div className="site-pillars" style={{ display: "grid", gridTemplateColumns: `repeat(${p.pillars.length},minmax(0,1fr))`, gap: 12 }}>
                       {p.pillars.map((h, i) => (
                         <div key={i} style={{ position: "relative", background: "linear-gradient(165deg,#f7fafc,#eef4f7)", border: "1px solid #e3eaf0", borderRadius: 12, padding: "16px 13px 14px", overflow: "hidden" }}>
                           <div style={{ position: "absolute", top: 0, left: 12, right: 12, height: 2, background: "linear-gradient(90deg,#2fc4bc,#2f7fd6)" }} />
-                          <div style={{ font: "700 30px/1 'Space Grotesk',sans-serif", background: "linear-gradient(120deg,#1b8f88,#2f7fd6)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", letterSpacing: "-.02em" }}>{h.k}</div>
-                          <div style={{ font: "600 12px/1.4 'Manrope',sans-serif", color: "#3d5064", marginTop: 7 }}>{h.v}</div>
+                          <div style={{ font: "700 30px/1 'Plus Jakarta Sans',sans-serif", background: "linear-gradient(120deg,#1b8f88,#2f7fd6)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", letterSpacing: "-.02em" }}>{h.k}</div>
+                          <div style={{ font: "600 12px/1.4 'Plus Jakarta Sans',sans-serif", color: "#3d5064", marginTop: 7 }}>{h.v}</div>
                         </div>
                       ))}
                     </div>
@@ -162,19 +162,19 @@ export default function CertificationsPage() {
                 {!collapsed && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 14, height: "100%" }}>
                   <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 16, padding: "22px 22px" }}>
-                    <div style={{ font: "700 11.5px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 10 }}>Ideal for</div>
-                    <div style={{ font: "400 13.5px/1.7 'Manrope',sans-serif", color: "#5b6e82" }}>{p.ideal}</div>
+                    <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 10 }}>Ideal for</div>
+                    <div style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>{p.ideal}</div>
                   </div>
                   <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 16, padding: "22px 22px", display: "flex", flexDirection: "column", gap: 12 }}>
-                    <div style={{ font: "700 11.5px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase" }}>What&apos;s included</div>
+                    <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase" }}>What&apos;s included</div>
                     {included.map((inc) => (
                       <div key={inc} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none", marginTop: 2 }}><path d="M5 13l4 4 10-10" /></svg>
-                        <div style={{ font: "500 13px/1.55 'Manrope',sans-serif", color: "#3d5064" }}>{inc}</div>
+                        <div style={{ font: "500 13px/1.55 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>{inc}</div>
                       </div>
                     ))}
                   </div>
-                  <Link href="/contact" className="lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Manrope',sans-serif", padding: "14px 22px", borderRadius: 999, textAlign: "center", marginTop: "auto" }}>Enquire about this program</Link>
+                  <Link href="/contact" className="lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "14px 22px", borderRadius: 999, textAlign: "center", marginTop: "auto" }}>Enquire about this program</Link>
                 </div>
                 )}
               </div>
@@ -189,8 +189,8 @@ export default function CertificationsPage() {
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ maxWidth: 760, marginBottom: 44 }}>
             <div style={eyebrow}>Why Get Certified With Us</div>
-            <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: "0 0 16px", letterSpacing: "-.02em" }}>Built for professionals who refuse to remain slide-based trainers</h2>
-            <p style={{ font: "400 15.5px/1.75 'Manrope',sans-serif", color: "#5b6e82", margin: 0 }}>Our programs help participants become confident, credible and responsible workplace facilitators.</p>
+            <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 16px", letterSpacing: "-.02em" }}>Built for professionals who refuse to remain slide-based trainers</h2>
+            <p style={{ font: "400 15.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: 0 }}>Our programs help participants become confident, credible and responsible workplace facilitators.</p>
           </Reveal>
           <div className="site-grid-5" style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 16 }}>
             {why.map((w) => (
@@ -198,8 +198,8 @@ export default function CertificationsPage() {
                 <div style={{ width: 32, height: 32, borderRadius: "50%", background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round"><path d="M5 13l4 4 10-10" /></svg>
                 </div>
-                <div style={{ font: "700 15.5px/1.3 'Space Grotesk',sans-serif", color: "#0a1b33" }}>{w.t}</div>
-                <div style={{ font: "400 13.5px/1.65 'Manrope',sans-serif", color: "#5b6e82", textWrap: "pretty" } as CSSProperties}>{w.d}</div>
+                <div style={{ font: "700 15.5px/1.3 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{w.t}</div>
+                <div style={{ font: "400 13.5px/1.65 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", textWrap: "pretty" } as CSSProperties}>{w.d}</div>
               </Reveal>
             ))}
           </div>
@@ -211,20 +211,20 @@ export default function CertificationsPage() {
         <div className="site-stack" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 64, alignItems: "center" }}>
           <Reveal>
             <div style={eyebrow}>Certificate Preview</div>
-            <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.18 'Space Grotesk',sans-serif", color: "#0a1b33", margin: "0 0 16px", letterSpacing: "-.02em" }}>A credential that reflects practice, not just attendance</h2>
-            <p style={{ font: "400 15.5px/1.75 'Manrope',sans-serif", color: "#5b6e82", margin: "0 0 26px" }}>Certificates are issued upon successful completion of program requirements, including participation, practice activities and assessment where applicable.</p>
+            <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.18 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 16px", letterSpacing: "-.02em" }}>A credential that reflects practice, not just attendance</h2>
+            <p style={{ font: "400 15.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 26px" }}>Certificates are issued upon successful completion of program requirements, including participation, practice activities and assessment where applicable.</p>
             <div className="site-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
               <div style={{ background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 14px", textAlign: "center" }}>
                 <CertIcon d={<><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z" /><path d="M9 12l2 2 4-4" /></>} />
-                <div style={{ font: "700 12.5px 'Space Grotesk',sans-serif", color: "#0a1b33", marginTop: 8 }}>Assessment-based</div>
+                <div style={{ font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginTop: 8 }}>Assessment-based</div>
               </div>
               <div style={{ background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 14px", textAlign: "center" }}>
                 <CertIcon d={<><rect x="3" y="5" width="18" height="14" rx="2" /><circle cx="8.5" cy="11" r="2" /><path d="M5.5 16c.6-1.4 1.7-2 3-2s2.4.6 3 2" /><path d="M14 9h5M14 12h5M14 15h3" /></>} />
-                <div style={{ font: "700 12.5px 'Space Grotesk',sans-serif", color: "#0a1b33", marginTop: 8 }}>Verifiable ID</div>
+                <div style={{ font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginTop: 8 }}>Verifiable ID</div>
               </div>
               <div style={{ background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 14px", textAlign: "center" }}>
                 <CertIcon d={<><rect x="3" y="8" width="18" height="12" rx="2" /><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" /><path d="M3 13h18" /><path d="M11 13v2h2v-2" /></>} />
-                <div style={{ font: "700 12.5px 'Space Grotesk',sans-serif", color: "#0a1b33", marginTop: 8 }}>Trainer toolkit</div>
+                <div style={{ font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginTop: 8 }}>Trainer toolkit</div>
               </div>
             </div>
           </Reveal>
@@ -233,19 +233,18 @@ export default function CertificationsPage() {
             <div style={{ position: "relative", background: "#fdfefe", border: "1px solid #dbe5ec", borderRadius: 6, boxShadow: "0 30px 70px rgba(10,27,51,.18)", padding: "38px 42px" }}>
               <div style={{ border: "2px solid #0a1b33", outline: "1px solid #2fc4bc", outlineOffset: 5, padding: "34px 30px", textAlign: "center" }}>
                 <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 34, margin: "0 auto 18px", display: "block" }} />
-                <div style={{ font: "600 10.5px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".3em", textTransform: "uppercase", marginBottom: 14 }}>Certificate of Completion</div>
-                <div style={{ font: "400 12.5px 'Manrope',sans-serif", color: "#5b6e82" }}>This certifies that</div>
-                <div style={{ font: "700 26px 'Space Grotesk',sans-serif", color: "#0a1b33", borderBottom: "1px solid #cfdbe4", padding: "8px 0", margin: "6px 24px 12px" }}>Participant Name</div>
-                <div style={{ font: "400 12.5px/1.6 'Manrope',sans-serif", color: "#5b6e82", marginBottom: 18 }}>has successfully completed the<br /><strong style={{ color: "#0a1b33" }}>Certified Corporate Leadership Facilitator Program</strong><br />including participation, practice and assessment</div>
+                <div style={{ font: "600 10.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".3em", textTransform: "uppercase", marginBottom: 14 }}>Certificate of Completion</div>
+                <div style={{ font: "400 12.5px 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>This certifies that</div>
+                <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", borderBottom: "1px solid #cfdbe4", padding: "8px 0", margin: "6px 24px 12px" }}>Participant Name</div>
+                <div style={{ font: "400 12.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginBottom: 18 }}>has successfully completed the<br /><strong style={{ color: "#0a1b33" }}>Certified Corporate Leadership Facilitator Program</strong><br />including participation, practice and assessment</div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 26, padding: "0 8px" }}>
                   <div style={{ textAlign: "left" }}>
-                    <div style={{ font: "600 13px 'Space Grotesk',sans-serif", color: "#0a1b33", borderTop: "1px solid #cfdbe4", paddingTop: 6 }}>Parichita Kotnala</div>
-                    <div style={{ font: "400 10.5px 'Manrope',sans-serif", color: "#8296a9" }}>Founder &amp; Managing Partner</div>
+                    <div style={{ font: "600 13px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", borderTop: "1px solid #cfdbe4", paddingTop: 6 }}>Parichita Kotnala</div>
+                    <div style={{ font: "400 10.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9" }}>Founder &amp; Managing Partner</div>
                   </div>
-                  <div style={{ width: 58, height: 58, borderRadius: "50%", border: "2px solid #2fc4bc", display: "flex", alignItems: "center", justifyContent: "center", font: "700 9px 'Manrope',sans-serif", color: "#1b8f88", textAlign: "center", letterSpacing: ".08em" }}>LPS<br />SEAL</div>
+                  <div style={{ width: 58, height: 58, borderRadius: "50%", border: "2px solid #2fc4bc", display: "flex", alignItems: "center", justifyContent: "center", font: "700 9px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", textAlign: "center", letterSpacing: ".08em" }}>LPS<br />SEAL</div>
                 </div>
               </div>
-              <div style={{ textAlign: "center", font: "600 11px monospace", color: "#8296a9", marginTop: 14 }}>certificate preview — issued on program completion</div>
             </div>
           </Reveal>
         </div>
@@ -255,11 +254,11 @@ export default function CertificationsPage() {
       <div className="site-page-sec" style={{ position: "relative", background: "#fff", padding: "20px 48px 110px", overflow: "hidden" }}>
         <Reveal style={{ position: "relative", maxWidth: 1100, margin: "0 auto", background: "linear-gradient(135deg,#0c2a45,#0a1f38)", border: "1px solid rgba(47,196,188,.35)", borderRadius: 26, padding: "60px 56px", textAlign: "center", overflow: "hidden", boxShadow: "0 30px 70px rgba(10,27,51,.25)" }}>
           <div style={{ position: "absolute", top: -120, left: "50%", transform: "translateX(-50%)", width: 600, height: 300, background: "radial-gradient(ellipse,rgba(47,196,188,.25),transparent 70%)", filter: "blur(20px)" }} />
-          <h2 style={{ position: "relative", font: "700 clamp(26px,3vw,40px)/1.2 'Space Grotesk',sans-serif", color: "#f2f7fb", margin: "0 0 16px", letterSpacing: "-.02em" }}>Not sure which pathway fits you?</h2>
-          <p style={{ position: "relative", font: "400 16px/1.7 'Manrope',sans-serif", color: "#a9bcd0", maxWidth: 600, margin: "0 auto 32px" }}>Book a short discovery call and we&apos;ll map your experience and goals to the right certification.</p>
+          <h2 style={{ position: "relative", font: "700 clamp(26px,3vw,40px)/1.2 'Plus Jakarta Sans',sans-serif", color: "#f2f7fb", margin: "0 0 16px", letterSpacing: "-.02em" }}>Not sure which pathway fits you?</h2>
+          <p style={{ position: "relative", font: "400 16px/1.7 'Plus Jakarta Sans',sans-serif", color: "#a9bcd0", maxWidth: 600, margin: "0 auto 32px" }}>Book a short discovery call and we&apos;ll map your experience and goals to the right certification.</p>
           <div style={{ position: "relative", display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-            <Link href="/contact" className="lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 15px 'Manrope',sans-serif", padding: "16px 30px", borderRadius: 999 }}>Book a Discovery Call</Link>
-            <Link href="/services/train-the-trainer" className="lp-btn-outline-light" style={{ border: "1.5px solid rgba(255,255,255,.25)", color: "#e8f1f8", font: "700 15px 'Manrope',sans-serif", padding: "16px 30px", borderRadius: 999 }}>Explore All Services</Link>
+            <Link href="/contact" className="lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999 }}>Book a Discovery Call</Link>
+            <Link href="/services/train-the-trainer" className="lp-btn-outline-light" style={{ border: "1.5px solid rgba(255,255,255,.25)", color: "#e8f1f8", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999 }}>Explore All Services</Link>
           </div>
         </Reveal>
       </div>

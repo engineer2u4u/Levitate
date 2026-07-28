@@ -8,14 +8,15 @@ import ServicePage from "@/components/site/ServicePage";
 export const metadata: Metadata = {
   title: "Train-the-Trainer Certification Programs",
   description:
-    "Practice-led facilitator certifications across leadership, DEI, wellbeing, POSH, POCSO and HR Edge — built for professionals who want to become credible workplace facilitators.",
+    "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, POSH and POCSO — along with HR Edge Certification for future HR professionals., POSH, POCSO and HR Edge — built for professionals who want to become credible workplace facilitators.",
 };
 
 export default function Page() {
   return (
     <>
       <SiteHeader active="services" />
-      <ServicePage pageKey="ttt" />
+      {/* showProcess=false: "How certification runs" removed per client edits */}
+      <ServicePage pageKey="ttt" showProcess={false} />
       <SiteFooter />
       <WhatsAppFloat />
       <ScrollToTop />

@@ -18,8 +18,8 @@ export default function TestimonialsCarousel() {
       style={{ background: "#f4f7f9", padding: "96px 0", overflow: "hidden" }}
     >
       <Reveal style={{ textAlign: "center", marginBottom: 52, padding: "0 48px" }}>
-        <div style={{ font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Testimonials</div>
-        <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>What our participants say</h2>
+        <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Testimonials</div>
+        <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>What our participants say</h2>
       </Reveal>
 
       <div
@@ -53,12 +53,12 @@ export default function TestimonialsCarousel() {
               }}
             >
               <div style={{ color: "#f5b942", fontSize: 16, letterSpacing: 2 }}>★★★★★</div>
-              <p style={{ font: "400 14.5px/1.7 'Manrope',sans-serif", color: "#3d5064", margin: 0, flex: 1, textWrap: "pretty" } as React.CSSProperties}>“{t.quote}”</p>
+              <p style={{ font: "400 14.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#3d5064", margin: 0, flex: 1, textWrap: "pretty" } as React.CSSProperties}>“{t.quote}”</p>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ width: 42, height: 42, flex: "none", borderRadius: "50%", background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 15px 'Space Grotesk',sans-serif", display: "flex", alignItems: "center", justifyContent: "center" }}>{t.initials}</div>
+                <div style={{ width: 42, height: 42, flex: "none", borderRadius: "50%", background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 15px 'Plus Jakarta Sans',sans-serif", display: "flex", alignItems: "center", justifyContent: "center" }}>{t.initials}</div>
                 <div>
-                  <div style={{ font: "700 14px 'Space Grotesk',sans-serif", color: "#0a1b33" }}>{t.name}</div>
-                  <div style={{ font: "500 12px 'Manrope',sans-serif", color: "#8296a9" }}>{t.role}</div>
+                  <div style={{ font: "700 14px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{t.name}</div>
+                  <div style={{ font: "500 12px 'Plus Jakarta Sans',sans-serif", color: "#8296a9" }}>{t.role}</div>
                 </div>
               </div>
             </div>
@@ -66,9 +66,6 @@ export default function TestimonialsCarousel() {
         </div>
       </div>
 
-      <div style={{ textAlign: "center", font: "600 11.5px monospace", color: "#8296a9", marginTop: 28, padding: "0 48px" }}>
-        placeholder testimonials — to be replaced with real participant feedback
-      </div>
     </div>
   );
 }

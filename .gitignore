@@ -27,6 +27,13 @@
 # local agent/editor config
 .claude/
 
+# Large media: GitHub hard-rejects files over 100 MB, and video does not
+# belong in git history. Upload these straight to the host instead.
+/public/assets/*.mp4
+/public/assets/*.mov
+/public/assets/*.webm
+*.crdownload
+
 # debug
 npm-debug.log*
 yarn-debug.log*

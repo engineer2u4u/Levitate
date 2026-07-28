@@ -20,7 +20,7 @@ const hpills = ["Flexible Training Modes", "Delivered By Industry Experts", "Han
 const pkTags = ["Leadership enablement", "Workplace culture", "DEI", "POSH & POCSO", "Wellbeing", "People advisory"];
 const rpnTags = ["ONGC · Chief Manager HR", "Employee relations", "HR governance", "Workforce capability", "Organizational learning"];
 const accred = [
-  { badge: "ISO", t: "ISO Certified", d: "Quality-assured training organization (standard designation to be confirmed)." },
+  { badge: "ISO", t: "ISO Certified", d: "Quality-assured training organization." },
   { badge: "TTT", t: "Train-the-Trainer Framework", d: "Practice-led facilitator development with assessment-linked certification." },
   { badge: "POSH", t: "POSH & IC Advisory", d: "Programs designed with legal clarity and facilitation sensitivity." },
   { badge: "HR EDGE", t: "HR Edge Curriculum", d: "Integrated DEI, POSH and wellbeing certification for future HR professionals." },
@@ -37,7 +37,7 @@ const gallery = [
   "/assets/award-speaker.jpeg",
 ];
 
-const eyebrow: CSSProperties = { font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 };
+const eyebrow: CSSProperties = { font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 };
 
 export default function AboutPage() {
   return (
@@ -59,7 +59,7 @@ export default function AboutPage() {
         />
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 90, background: "linear-gradient(180deg,transparent,#f7fafc)" }} />
         <div style={{ position: "relative", maxWidth: 1240, margin: "0 auto" }}>
-          <div style={{ font: "500 12.5px 'Manrope',sans-serif", color: "#8296a9", marginBottom: 18 }}>
+          <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 18 }}>
             <Link href="/" style={{ color: "#8296a9" }}>
               Home
             </Link>{" "}
@@ -72,7 +72,7 @@ export default function AboutPage() {
               gap: 8,
               border: "1px solid rgba(27,143,136,.45)",
               color: "#1b8f88",
-              font: "600 12px 'Manrope',sans-serif",
+              font: "600 12px 'Plus Jakarta Sans',sans-serif",
               letterSpacing: ".16em",
               textTransform: "uppercase",
               padding: "8px 16px",
@@ -84,12 +84,12 @@ export default function AboutPage() {
             <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#2fc4bc" }} />
             About Levitate PeopleSoft
           </div>
-          <h1 style={{ font: "700 clamp(34px,4vw,54px)/1.12 'Space Grotesk',sans-serif", color: "#0a1b33", margin: "0 0 20px", letterSpacing: "-.02em", maxWidth: 820 }}>
+          <h1 style={{ font: "700 clamp(34px,4vw,54px)/1.12 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 20px", letterSpacing: "-.02em", maxWidth: 820 }}>
             Built on HR Legacy.
             <br />
             Strengthened by Global Workplace Practice.
           </h1>
-          <p style={{ font: "400 16.5px/1.75 'Manrope',sans-serif", color: "#5b6e82", maxWidth: 700, margin: 0, textWrap: "pretty" } as CSSProperties}>
+          <p style={{ font: "400 16.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 700, margin: 0, textWrap: "pretty" } as CSSProperties}>
             Levitate PeopleSoft is a workplace capability, facilitator certification and reskilling organization focused on helping professionals and organizations build future-ready people
             capability.
           </p>
@@ -101,10 +101,10 @@ export default function AboutPage() {
         <div className="site-stack" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1.15fr .85fr", gap: 64, alignItems: "start" }}>
           <Reveal>
             <div style={eyebrow}>Our Story</div>
-            <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.18 'Space Grotesk',sans-serif", color: "#0a1b33", margin: "0 0 22px", letterSpacing: "-.02em" }}>
+            <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.18 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 22px", letterSpacing: "-.02em" }}>
               A blend of Indian institutional HR depth and contemporary global practice
             </h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16, font: "400 15.5px/1.8 'Manrope',sans-serif", color: "#5b6e82" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16, font: "400 15.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
               <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                 Our journey began in 2023, founded by <strong style={{ color: "#0a1b33" }}>Mr. Ravindra Prem Nath</strong>, Founder &amp; Principal Advisor and former Chief Manager – HR at ONGC. With
                 over 35 years of experience in people management, employee relations, HR governance, workforce capability building and organizational learning, he brings deep institutional HR wisdom
@@ -123,8 +123,8 @@ export default function AboutPage() {
               </p>
             </div>
             <div style={{ marginTop: 28, background: "#f4f7f9", border: "1px solid rgba(27,143,136,.35)", borderRadius: 16, padding: "28px 30px" }}>
-              <div style={{ font: "700 12px 'Manrope',sans-serif", color: "#1b8f88", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 10 }}>Our Purpose</div>
-              <div style={{ font: "600 21px/1.5 'Space Grotesk',sans-serif", color: "#0a1b33", textWrap: "pretty" } as CSSProperties}>
+              <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 10 }}>Our Purpose</div>
+              <div style={{ font: "600 21px/1.5 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", textWrap: "pretty" } as CSSProperties}>
                 To elevate trainers, transform workplaces and enable human-centred change — helping professionals become confident facilitators who lead conversations that shape high-trust, inclusive
                 and future-ready workplaces.
               </div>
@@ -141,7 +141,7 @@ export default function AboutPage() {
                 <div key={f.l} style={{ background: "#f4f7f9", border: "1px solid #e3eaf0", borderRadius: 16, padding: "22px 20px" }}>
                   <div
                     style={{
-                      font: "700 30px 'Space Grotesk',sans-serif",
+                      font: "700 30px 'Plus Jakarta Sans',sans-serif",
                       background: "linear-gradient(120deg,#1b8f88,#2f7fd6)",
                       WebkitBackgroundClip: "text",
                       backgroundClip: "text",
@@ -150,7 +150,7 @@ export default function AboutPage() {
                   >
                     {f.v}
                   </div>
-                  <div style={{ font: "600 12px 'Manrope',sans-serif", color: "#5b6e82", letterSpacing: ".07em", textTransform: "uppercase", marginTop: 6 }}>{f.l}</div>
+                  <div style={{ font: "600 12px 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", letterSpacing: ".07em", textTransform: "uppercase", marginTop: 6 }}>{f.l}</div>
                 </div>
               ))}
             </div>
@@ -163,7 +163,7 @@ export default function AboutPage() {
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 52 }}>
             <div style={eyebrow}>Leadership</div>
-            <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>The people behind Levitate PeopleSoft</h2>
+            <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>The people behind Levitate PeopleSoft</h2>
           </Reveal>
           <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
             <Reveal
@@ -180,16 +180,16 @@ export default function AboutPage() {
             >
               <div style={{ position: "relative", minHeight: 340 }}>
                 <img
-                  src="/assets/students-group.png"
+                  src="/assets/parichita-full.jpg"
                   alt="Parichita Kotnala"
-                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "35% 30%", display: "block" }}
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 20%", display: "block" }}
                 />
               </div>
               <div style={{ padding: "40px 44px" }}>
-                <div style={{ font: "700 26px 'Space Grotesk',sans-serif", color: "#0a1b33" }}>Parichita Kotnala</div>
-                <div style={{ font: "600 13.5px 'Manrope',sans-serif", color: "#1b8f88", margin: "6px 0 4px" }}>Founder &amp; Managing Partner</div>
-                <div style={{ font: "500 12.5px 'Manrope',sans-serif", color: "#8296a9", marginBottom: 18 }}>Global HR Leader · Workplace Culture Facilitator · Certification Program Designer</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 12, font: "400 14.5px/1.75 'Manrope',sans-serif", color: "#5b6e82" }}>
+                <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>Parichita Kotnala</div>
+                <div style={{ font: "600 13.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", margin: "6px 0 4px" }}>Founder &amp; Managing Partner</div>
+                <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 18 }}>Global HR Leader · Workplace Culture Facilitator · Certification Program Designer</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12, font: "400 14.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
                   <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                     Parichita brings over 15 years of global HR, leadership development and workplace culture experience across diverse teams and business environments. Her work spans HR business
                     partnering, leadership enablement, performance, employee relations, workplace compliance, POSH, POCSO, wellbeing, DEI and people advisory.
@@ -208,7 +208,7 @@ export default function AboutPage() {
                         background: "rgba(47,196,188,.1)",
                         border: "1px solid rgba(27,143,136,.32)",
                         color: "#136f6a",
-                        font: "600 12px 'Manrope',sans-serif",
+                        font: "600 12px 'Plus Jakarta Sans',sans-serif",
                         padding: "7px 14px",
                         borderRadius: 999,
                       }}
@@ -232,10 +232,10 @@ export default function AboutPage() {
               }}
             >
               <div style={{ padding: "40px 44px" }}>
-                <div style={{ font: "700 26px 'Space Grotesk',sans-serif", color: "#0a1b33" }}>Mr. Ravindra Prem Nath</div>
-                <div style={{ font: "600 13.5px 'Manrope',sans-serif", color: "#1b8f88", margin: "6px 0 4px" }}>Founder &amp; Principal Advisor</div>
-                <div style={{ font: "500 12.5px 'Manrope',sans-serif", color: "#8296a9", marginBottom: 18 }}>Former Chief Manager – HR, ONGC · 35+ Years of HR Leadership</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 12, font: "400 14.5px/1.75 'Manrope',sans-serif", color: "#5b6e82" }}>
+                <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>Mr. Ravindra Prem Nath</div>
+                <div style={{ font: "600 13.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", margin: "6px 0 4px" }}>Founder &amp; Principal Advisor</div>
+                <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 18 }}>Former Chief Manager – HR, ONGC · 35+ Years of HR Leadership</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12, font: "400 14.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
                   <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                     Mr. Nath brings over three decades of rich HR leadership experience from ONGC, one of India&apos;s leading public sector enterprises. As Chief Manager – HR he worked across people
                     management, employee relations, workforce administration, HR governance, learning initiatives and organizational capability building in a large-scale institutional environment.
@@ -253,7 +253,7 @@ export default function AboutPage() {
                         background: "rgba(47,127,214,.09)",
                         border: "1px solid rgba(47,127,214,.3)",
                         color: "#215f9e",
-                        font: "600 12px 'Manrope',sans-serif",
+                        font: "600 12px 'Plus Jakarta Sans',sans-serif",
                         padding: "7px 14px",
                         borderRadius: 999,
                       }}
@@ -265,9 +265,9 @@ export default function AboutPage() {
               </div>
               <div className="site-order-first" style={{ position: "relative", minHeight: 340 }}>
                 <img
-                  src="/assets/plant-gift.jpeg"
-                  alt="Ravindra Prem Nath"
-                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 22%", display: "block" }}
+                  src="/assets/ravindra-full.jpg"
+                  alt="Mr. Ravindra Prem Nath"
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 20%", display: "block" }}
                 />
               </div>
             </Reveal>
@@ -286,7 +286,7 @@ export default function AboutPage() {
               <div key={h.l} style={{ background: "rgba(255,255,255,.7)", border: "1px solid rgba(27,143,136,.28)", borderRadius: 18, padding: "26px 28px", textAlign: "center" }}>
                 <div
                   style={{
-                    font: "700 40px 'Space Grotesk',sans-serif",
+                    font: "700 40px 'Plus Jakarta Sans',sans-serif",
                     background: "linear-gradient(120deg,#1b8f88,#2f7fd6)",
                     WebkitBackgroundClip: "text",
                     backgroundClip: "text",
@@ -295,7 +295,7 @@ export default function AboutPage() {
                 >
                   {h.v}
                 </div>
-                <div style={{ font: "600 12.5px 'Manrope',sans-serif", color: "#5b6e82", letterSpacing: ".08em", textTransform: "uppercase", marginTop: 8 }}>{h.l}</div>
+                <div style={{ font: "600 12.5px 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", letterSpacing: ".08em", textTransform: "uppercase", marginTop: 8 }}>{h.l}</div>
               </div>
             ))}
           </div>
@@ -307,7 +307,7 @@ export default function AboutPage() {
                   background: "#fff",
                   border: "1px solid rgba(27,143,136,.32)",
                   color: "#0a1b33",
-                  font: "600 13px 'Space Grotesk',sans-serif",
+                  font: "600 13px 'Plus Jakarta Sans',sans-serif",
                   padding: "10px 20px",
                   borderRadius: 999,
                   display: "flex",
@@ -328,7 +328,7 @@ export default function AboutPage() {
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 44 }}>
             <div style={eyebrow}>Accreditations &amp; Standards</div>
-            <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>Practice governed by standards, not slideware</h2>
+            <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>Practice governed by standards, not slideware</h2>
           </Reveal>
           <div className="site-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 18 }}>
             {accred.map((a) => (
@@ -343,7 +343,7 @@ export default function AboutPage() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    font: "700 12px 'Space Grotesk',sans-serif",
+                    font: "700 12px 'Plus Jakarta Sans',sans-serif",
                     color: "#1b8f88",
                     textAlign: "center",
                     lineHeight: 1.15,
@@ -351,12 +351,11 @@ export default function AboutPage() {
                 >
                   {a.badge}
                 </div>
-                <div style={{ font: "700 15.5px 'Space Grotesk',sans-serif", color: "#0a1b33" }}>{a.t}</div>
-                <div style={{ font: "400 13px/1.6 'Manrope',sans-serif", color: "#5b6e82", marginTop: 6 }}>{a.d}</div>
+                <div style={{ font: "700 15.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{a.t}</div>
+                <div style={{ font: "400 13px/1.6 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginTop: 6 }}>{a.d}</div>
               </Reveal>
             ))}
           </div>
-          <div style={{ textAlign: "center", font: "600 11.5px monospace", color: "#8296a9", marginTop: 20 }}>ISO standard designation to be confirmed before publishing</div>
         </div>
       </div>
 
@@ -364,7 +363,7 @@ export default function AboutPage() {
       <div style={{ background: "#f4f7f9", padding: "72px 0", overflow: "hidden" }}>
         <Reveal style={{ textAlign: "center", marginBottom: 36, padding: "0 48px" }}>
           <div style={{ ...eyebrow, marginBottom: 12 }}>In The Room</div>
-          <h2 style={{ font: "700 clamp(24px,2.6vw,34px)/1.15 'Space Grotesk',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>
+          <h2 style={{ font: "700 clamp(24px,2.6vw,34px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>
             Sessions across campuses, conclaves and corporates
           </h2>
         </Reveal>
@@ -403,24 +402,24 @@ export default function AboutPage() {
               filter: "blur(20px)",
             }}
           />
-          <h2 style={{ position: "relative", font: "700 clamp(26px,3vw,40px)/1.2 'Space Grotesk',sans-serif", color: "#f2f7fb", margin: "0 0 16px", letterSpacing: "-.02em" }}>
+          <h2 style={{ position: "relative", font: "700 clamp(26px,3vw,40px)/1.2 'Plus Jakarta Sans',sans-serif", color: "#f2f7fb", margin: "0 0 16px", letterSpacing: "-.02em" }}>
             Let&apos;s build capability that lasts
           </h2>
-          <p style={{ position: "relative", font: "400 16px/1.7 'Manrope',sans-serif", color: "#a9bcd0", maxWidth: 600, margin: "0 auto 32px" }}>
+          <p style={{ position: "relative", font: "400 16px/1.7 'Plus Jakarta Sans',sans-serif", color: "#a9bcd0", maxWidth: 600, margin: "0 auto 32px" }}>
             Partner with us for certification programs, customized training interventions and institutional learning solutions.
           </p>
           <div style={{ position: "relative", display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <Link
               href="/contact"
               className="lp-btn-grad"
-              style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 15px 'Manrope',sans-serif", padding: "16px 30px", borderRadius: 999 }}
+              style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999 }}
             >
               Book a Discovery Call
             </Link>
             <Link
               href="/certifications"
               className="lp-btn-outline-light"
-              style={{ border: "1.5px solid rgba(255,255,255,.25)", color: "#e8f1f8", font: "700 15px 'Manrope',sans-serif", padding: "16px 30px", borderRadius: 999 }}
+              style={{ border: "1.5px solid rgba(255,255,255,.25)", color: "#e8f1f8", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999 }}
             >
               Explore Certifications
             </Link>

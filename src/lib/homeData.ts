@@ -14,7 +14,7 @@ export const services: Service[] = [
   {
     num: "01",
     title: "Train-the-Trainer Certification Programs",
-    desc: "Practice-led facilitator certifications across leadership, DEI, wellbeing, POSH, POCSO and future HR readiness.",
+    desc: "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, POSH and POCSO — along with HR Edge Certification for future HR professionals.",
   },
   {
     num: "02",
@@ -183,15 +183,13 @@ export const testimonials: Testimonial[] = [
     initials: "AM",
     name: "Arjun M.",
     role: "L&D Lead, Manufacturing",
-    quote:
-      "Most TTT programs stop at theory. Here we facilitated live, got dissected feedback and left with a full trainer toolkit I still use every week.",
+    quote: "Most TTT programs stop at theory. Here we facilitated live, got dissected feedback and left with a full trainer toolkit I still use every week.",
   },
   {
     initials: "RK",
     name: "Dr. Ritu K.",
     role: "Professor & Placement Head, B-School",
-    quote:
-      "The campus-to-corporate program transformed how our final-year students show up in interviews. Practical, HR-led and grounded in what employers actually expect.",
+    quote: "The campus-to-corporate program transformed how our final-year students show up in interviews. Practical, HR-led and grounded in what employers actually expect.",
   },
 ];
 
@@ -232,7 +230,7 @@ export const gallery = [
 
 export const founders = [
   {
-    img: "/assets/hr-conclave-stage.jpeg",
+    img: "/assets/parichita.jpg",
     alt: "Parichita Kotnala speaking",
     imgPos: "50% 50%",
     name: "Parichita Kotnala",
@@ -240,8 +238,8 @@ export const founders = [
     bio: "15+ years of global HR leadership across India, the UK, Europe and North America — spanning leadership enablement, workplace culture, DEI, POSH, POCSO, wellbeing and people advisory. She leads Levitate's practice-led certification programs for credible workplace facilitators.",
   },
   {
-    img: "/assets/plant-gift.jpeg",
-    alt: "Levitate PeopleSoft session",
+    img: "/assets/ravindra.png",
+    alt: "Mr. Ravindra Prem Nath",
     imgPos: "50% 30%",
     name: "Mr. Ravindra Prem Nath",
     role: "Founder & Principal Advisor · Former Chief Manager – HR, ONGC",
