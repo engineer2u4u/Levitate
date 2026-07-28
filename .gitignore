@@ -34,6 +34,12 @@
 /public/assets/*.webm
 *.crdownload
 
+# Unoptimised source images kept locally for re-cropping. The site references
+# the resized copies (parichita-full.jpg, ravindra-full.jpg), so keep the
+# 15 MB originals out of git history.
+/public/assets/Parichita full.jpeg
+/public/assets/Ravindra Prem Nath - full.png
+
 # debug
 npm-debug.log*
 yarn-debug.log*

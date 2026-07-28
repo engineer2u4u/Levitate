@@ -6,6 +6,7 @@ import { useState, type CSSProperties } from "react";
 import Reveal from "@/components/home/Reveal";
 import { contact, services, type ServiceKey } from "@/lib/site";
 import { PAGES } from "@/lib/serviceData";
+import PoshSection from "./PoshSection";
 
 const eyebrow: CSSProperties = { font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 };
 const check = (
@@ -14,7 +15,17 @@ const check = (
   </svg>
 );
 
-export default function ServicePage({ pageKey, showProcess = true, showCredential = true }: { pageKey: ServiceKey; showProcess?: boolean; showCredential?: boolean }) {
+export default function ServicePage({
+  pageKey,
+  showProcess = true,
+  showCredential = true,
+  showPosh = false,
+}: {
+  pageKey: ServiceKey;
+  showProcess?: boolean;
+  showCredential?: boolean;
+  showPosh?: boolean;
+}) {
   const p = PAGES[pageKey];
   const [opt, setOpt] = useState(0);
   const [sent, setSent] = useState(false);
@@ -153,6 +164,9 @@ export default function ServicePage({ pageKey, showProcess = true, showCredentia
           </div>
         </div>
       </div>
+
+      {/* POSH */}
+      {showPosh && <PoshSection />}
 
       {/* PROCESS */}
       {showProcess && (
