@@ -346,42 +346,6 @@ export default function AboutPage() {
       </div>
 
       {/* ACCREDITATIONS */}
-      <div className="site-page-sec" style={{ background: "#fff", padding: "88px 48px" }}>
-        <div style={{ maxWidth: 1240, margin: "0 auto" }}>
-          <Reveal style={{ textAlign: "center", marginBottom: 44 }}>
-            <div style={eyebrow}>Accreditations &amp; Standards</div>
-            <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>
-              Practice governed by standards, not slideware
-            </h2>
-          </Reveal>
-          <div className="site-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 18 }}>
-            {accred.map((a) => (
-              <Reveal key={a.t} style={{ background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 18, padding: "28px 24px", textAlign: "center", boxShadow: "0 2px 6px rgba(10,27,51,.05)" }}>
-                <div
-                  style={{
-                    width: 56,
-                    height: 56,
-                    margin: "0 auto 14px",
-                    borderRadius: "50%",
-                    border: "2px solid #2fc4bc",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    font: "700 12px 'Plus Jakarta Sans',sans-serif",
-                    color: "#1b8f88",
-                    textAlign: "center",
-                    lineHeight: 1.15,
-                  }}
-                >
-                  {a.badge}
-                </div>
-                <div style={{ font: "700 15.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{a.t}</div>
-                <div style={{ font: "400 13px/1.6 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginTop: 6 }}>{a.d}</div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* GALLERY */}
       <div style={{ background: "#f4f7f9", padding: "72px 0", overflow: "hidden" }}>

@@ -36,6 +36,7 @@ export const trustedLogos: { name: string; src: string }[] = [
   { name: "Bid Kinetic", src: "/assets/logos/bid-kinetic.png" },
   { name: "Works365", src: "/assets/logos/works365.png" },
   { name: "Rude Labs", src: "/assets/logos/rudelabs.png" },
+  { name: "CliniWings", src: "/assets/logos/cliniwings.png" },
   { name: "CAD", src: "/assets/logos/cad.png" },
   { name: "Chitkara University", src: "/assets/logos/chitkara-university.png" },
   { name: "St. Xavier's High School", src: "/assets/logos/st-xaviers.png" },

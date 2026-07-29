@@ -54,7 +54,7 @@ export const CREDENTIALS: Credential[] = [
   {
     key: "udyam",
     label: "Udyam Registration",
-    sub: "UDYAM-XX-00-0000000",
+    sub: "UDYAM-HR-05-0195892",
     title: "Udyam registration",
     paths: (
       <>
