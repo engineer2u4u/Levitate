@@ -1,0 +1,60 @@
+# Levitate PeopleSoft — static export (Next.js `output: export`)
+
+# --- Force HTTPS (kept from the previous SG-Optimizer config) ---
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# --- Directory indexes ---
+# The export writes about/index.html, so Apache serves clean URLs natively.
+DirectoryIndex index.html index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # /about -> /about/  so the directory index is found
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME}/index.html -f
+    RewriteRule ^(.*[^/])$ /$1/ [L,R=301]
+</IfModule>
+
+# --- 404 ---
+ErrorDocument 404 /404/index.html
+
+# --- Caching ---
+<IfModule mod_expires.c>
+    ExpiresActive On
+    # Hashed build assets are immutable
+    <FilesMatch "\.(js|css|woff2)$">
+        ExpiresDefault "access plus 1 year"
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|ico)$">
+        ExpiresDefault "access plus 30 days"
+    </FilesMatch>
+    # HTML must revalidate so deploys are picked up immediately
+    <FilesMatch "\.html$">
+        ExpiresDefault "access plus 0 seconds"
+        Header set Cache-Control "public, max-age=0, must-revalidate"
+    </FilesMatch>
+</IfModule>
+
+# --- Compression ---
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json image/svg+xml
+</IfModule>
+
+# --- Security ---
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Never serve the mail credentials file, wherever it ends up
+<Files "enquiry-config.php">
+    Require all denied
+</Files>
