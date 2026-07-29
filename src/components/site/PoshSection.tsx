@@ -55,7 +55,7 @@ export default function PoshSection() {
               Discuss a POSH program
             </Link>
             <Link
-              href="/services/advisory"
+              href="/hr-consulting-services"
               className="lp-btn-outline"
               style={{ border: "1.5px solid rgba(10,27,51,.24)", color: "#0a1b33", font: "700 14.5px 'Plus Jakarta Sans',sans-serif", padding: "14px 26px", borderRadius: 999 }}
             >

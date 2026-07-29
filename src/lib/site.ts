@@ -20,9 +20,9 @@ export const services: {
   href: string;
 }[] = [
   { key: "ttt", num: "01", label: "Train-the-Trainer Certification Programs", short: "Train-the-Trainer Certifications", href: "/services/train-the-trainer" },
-  { key: "corporate", num: "02", label: "Corporate Training Solutions", short: "Corporate Training Solutions", href: "/services/corporate" },
+  { key: "corporate", num: "02", label: "Corporate Training Solutions", short: "Corporate Training Solutions", href: "/corporate-soft-skills-training-service" },
   { key: "institutional", num: "03", label: "Institutional Training", short: "Institutional Training", href: "/services/institutional" },
-  { key: "advisory", num: "04", label: "HR Advisory & Workplace Culture Consulting", short: "HR Advisory & Culture Consulting", href: "/services/advisory" },
+  { key: "advisory", num: "04", label: "HR Advisory & Workplace Culture Consulting", short: "HR Advisory & Culture Consulting", href: "/hr-consulting-services" },
 ];
 
 export type NavKey = "home" | "services" | "certifications" | "about" | "parichita" | "contact";

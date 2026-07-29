@@ -15,16 +15,16 @@ import YouTubeEmbed from "@/components/site/YouTubeEmbed";
 import { contact, services, blueprintSteps, certs, whyPoints, impactStats, tickerA, tickerB, gallery, founders } from "@/lib/homeData";
 
 // Home section links → routes (indexes align with homeData.services / homeData.certs)
-const SERVICE_HREFS = ["/services/train-the-trainer", "/services/corporate", "/services/institutional", "/services/advisory"];
+const SERVICE_HREFS = ["/services/train-the-trainer", "/corporate-soft-skills-training-service", "/services/institutional", "/hr-consulting-services"];
 const CERT_HREFS = ["/certifications#leadership", "/certifications#dei", "/certifications#wellbeing", "/certifications#posh", "/certifications#pocso", "/certifications#hredge"];
 const FOOTER_SERVICES: [string, string][] = [
   ["Train-the-Trainer Certifications", "/services/train-the-trainer"],
-  ["Corporate Training Solutions", "/services/corporate"],
+  ["Corporate Training Solutions", "/corporate-soft-skills-training-service"],
   ["Institutional Training", "/services/institutional"],
-  ["HR Advisory & Culture Consulting", "/services/advisory"],
+  ["HR Advisory & Culture Consulting", "/hr-consulting-services"],
 ];
 const FOOTER_COMPANY: [string, string][] = [
-  ["About Us", "/about"],
+  ["About Us", "/about-us"],
   ["Certification Programs", "/certifications"],
   ["Testimonials", "#testimonials"],
   ["Contact", "/contact"],

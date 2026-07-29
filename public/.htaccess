@@ -8,14 +8,31 @@
     RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
 
+# --- Legacy WordPress URLs -> closest current page (301, preserves ranking) ---
+# These slugs are indexed by Google from the previous site. Pages whose slug we
+# adopted outright (about-us, contact, hr-consulting-services,
+# corporate-soft-skills-training-service) need no rule — they resolve directly.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule ^campus-to-corporate-student-training-programs/?$   /services/institutional/      [L,R=301]
+    RewriteRule ^online-hr-programs-service/?$                      /services/train-the-trainer/  [L,R=301]
+    RewriteRule ^legal-and-ethical-compliance/?$                    /certifications/              [L,R=301]
+    RewriteRule ^home(-new)?/?$                                     /                             [L,R=301]
+
+    # Old WordPress plumbing that crawlers still request
+    RewriteRule ^(wp-content|wp-includes|wp-admin|wp-json)(/.*)?$   /                             [L,R=301]
+    RewriteRule ^(xmlrpc\.php|wp-login\.php)$                       /                             [L,R=301]
+</IfModule>
+
 # --- Directory indexes ---
-# The export writes about/index.html, so Apache serves clean URLs natively.
+# The export writes about-us/index.html, so Apache serves clean URLs natively.
 DirectoryIndex index.html index.php
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # /about -> /about/  so the directory index is found
+    # /about-us -> /about-us/  so the directory index is found
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME}/index.html -f
     RewriteRule ^(.*[^/])$ /$1/ [L,R=301]

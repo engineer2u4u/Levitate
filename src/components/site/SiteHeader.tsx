@@ -90,7 +90,7 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
             </div>
           </div>
           <Link href="/certifications" className="site-navlink" style={active === "certifications" ? topActive : topIdle}>Certifications</Link>
-          <Link href="/about" className="site-navlink" style={active === "about" ? topActive : topIdle}>About Us</Link>
+          <Link href="/about-us" className="site-navlink" style={active === "about" ? topActive : topIdle}>About Us</Link>
           <Link href="/parichita-kotnala" className="site-navlink" style={{ ...(active === "parichita" ? topActive : topIdle), whiteSpace: "nowrap" }}>Parichita Kotnala</Link>
           <Link href="/contact" className="site-navlink" style={active === "contact" ? topActive : topIdle}>Contact</Link>
         </nav>
@@ -145,7 +145,7 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
               <Link key={s.key} href={s.href} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064" }}>{s.short}</Link>
             ))}
             <Link href="/certifications" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "certifications" ? "#1b8f88" : "#0a1b33" }}>Certifications</Link>
-            <Link href="/about" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "about" ? "#1b8f88" : "#0a1b33" }}>About Us</Link>
+            <Link href="/about-us" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "about" ? "#1b8f88" : "#0a1b33" }}>About Us</Link>
             <Link href="/parichita-kotnala" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "parichita" ? "#1b8f88" : "#0a1b33" }}>Parichita Kotnala</Link>
             <Link href="/contact" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "contact" ? "#1b8f88" : "#0a1b33" }}>Contact</Link>
             <Link href="/contact" onClick={() => setMenuOpen(false)} className="lp-btn-grad" style={{ marginTop: 12, textAlign: "center", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "13px 22px", borderRadius: 999 }}>Book a Discovery Call</Link>
