@@ -27,13 +27,6 @@ export const services: {
 
 export type NavKey = "home" | "services" | "certifications" | "about" | "parichita" | "contact";
 
-/** Accreditations / recognitions (logos supplied by the client). */
-export const accreditationLogos: { name: string; src: string; note: string }[] = [
-  { name: "GCG", src: "/assets/accreditations/gcg.png", note: "Global Career Guidance" },
-  { name: "SHRM Recertification Provider", src: "/assets/accreditations/shrm.png", note: "SHRM-CP | SHRM-SCP" },
-  { name: "peopleHum Top 200 Global Thought Leader", src: "/assets/accreditations/peoplehum.png", note: "Top 200 Global Thought Leader, 2021" },
-];
-
 /** Organizations and institutions we have worked with (logos supplied by the client). */
 export const trustedLogos: { name: string; src: string }[] = [
   { name: "GenXAI", src: "/assets/logos/genxai.png" },

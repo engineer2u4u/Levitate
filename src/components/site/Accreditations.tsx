@@ -1,10 +1,11 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import Reveal from "@/components/home/Reveal";
-import { accreditationLogos } from "@/lib/site";
+import { byKey, CredentialIcon } from "./credentialIcons";
 
-/** Accreditations strip — client-supplied recognition badges. */
+/** Accreditations — official registrations and certifications. */
+const SHOWN = ["iso", "dpiit", "udyam"].map(byKey);
+
 export default function Accreditations() {
   return (
     <div className="site-page-sec" style={{ background: "#fff", padding: "76px 48px" }}>
@@ -15,14 +16,14 @@ export default function Accreditations() {
         </Reveal>
 
         <div className="site-accred-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22, maxWidth: 900, margin: "0 auto" }}>
-          {accreditationLogos.map((a) => (
+          {SHOWN.map((c) => (
             <Reveal
-              key={a.name}
+              key={c.key}
               style={{
                 background: "#f7fafc",
                 border: "1px solid #e3eaf0",
                 borderRadius: 18,
-                padding: "28px 24px",
+                padding: "32px 24px",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -31,8 +32,11 @@ export default function Accreditations() {
                 boxShadow: "0 2px 6px rgba(10,27,51,.05)",
               }}
             >
-              <img src={a.src} alt={a.name} title={a.name} loading="lazy" style={{ height: 96, width: "auto", maxWidth: "100%", objectFit: "contain", display: "block" }} />
-              <div style={{ font: "500 12px/1.5 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>{a.note}</div>
+              <CredentialIcon c={c} size={64} />
+              <div>
+                <div style={{ font: "700 16px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{c.label}</div>
+                <div style={{ font: "500 12.5px/1.5 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginTop: 5 }}>{c.sub}</div>
+              </div>
             </Reveal>
           ))}
         </div>

@@ -49,6 +49,9 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# Mail credentials — lives above the web root on the server, never in git
+enquiry-config.php
+
 # vercel
 .vercel
 

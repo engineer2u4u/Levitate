@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, type CSSProperties } from "react";
 import Reveal from "@/components/home/Reveal";
 import { contact } from "@/lib/site";
+import { submitEnquiry } from "@/lib/submitEnquiry";
 
 const INTENTS = ["Certification program (individual)", "Corporate training intervention", "Institutional / student program", "HR advisory & culture consulting", "Something else"];
 
@@ -62,6 +63,8 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 export default function ContactPage() {
   const [intent, setIntent] = useState(0);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState(0);
 
   return (
@@ -151,27 +154,40 @@ export default function ContactPage() {
               </div>
             ) : (
               <form
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
-                  setSent(true);
-                  if (typeof window !== "undefined") window.scrollTo({ top: 240, behavior: "smooth" });
+                  if (sending) return;
+                  const form = e.currentTarget;
+                  setSending(true);
+                  setError(null);
+                  const res = await submitEnquiry(form, { intent: INTENTS[intent] });
+                  setSending(false);
+                  if (res.ok) {
+                    setSent(true);
+                    form.reset();
+                    if (typeof window !== "undefined") window.scrollTo({ top: 240, behavior: "smooth" });
+                  } else {
+                    setError(res.error);
+                  }
                 }}
               >
+                {/* honeypot — hidden from people, tempting to bots */}
+                <input type="text" name="company_website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }} />
                 <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 10 }}>Enquiry form</div>
                 <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 6 }}>Tell us what you need</div>
                 <div style={{ font: "400 14px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginBottom: 28 }}>Fields marked * are required. We never share your details.</div>
                 <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
                   <Field label="Full name *">
-                    <input required type="text" placeholder="Your name" style={inputStyle} />
+                    <input required name="name" type="text" placeholder="Your name" style={inputStyle} />
                   </Field>
                   <Field label="Email *">
-                    <input required type="email" placeholder="you@company.com" style={inputStyle} />
+                    <input required name="email" type="email" placeholder="you@company.com" style={inputStyle} />
                   </Field>
                   <Field label="Phone / WhatsApp *">
-                    <input required type="tel" placeholder="+91" style={inputStyle} />
+                    <input required name="phone" type="tel" placeholder="+91" style={inputStyle} />
                   </Field>
                   <Field label="Organization / Institution">
-                    <input type="text" placeholder="Company or college name" style={inputStyle} />
+                    <input name="organization" type="text" placeholder="Company or college name" style={inputStyle} />
                   </Field>
                 </div>
                 <div style={{ marginTop: 22 }}>
@@ -203,8 +219,8 @@ export default function ContactPage() {
                 </div>
                 <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, marginTop: 22 }}>
                   <Field label="Approx. participants">
-                    <select style={inputStyle}>
-                      <option>Just me</option>
+                    <select name="participants" style={inputStyle}>
+                      <option>Individual</option>
                       <option>2 – 15</option>
                       <option>16 – 40</option>
                       <option>41 – 100</option>
@@ -212,7 +228,7 @@ export default function ContactPage() {
                     </select>
                   </Field>
                   <Field label="Preferred mode">
-                    <select style={inputStyle}>
+                    <select name="mode" style={inputStyle}>
                       <option>In-person</option>
                       <option>Virtual / live online</option>
                       <option>Blended</option>
@@ -222,10 +238,11 @@ export default function ContactPage() {
                 </div>
                 <label style={{ display: "flex", flexDirection: "column", gap: 7, marginTop: 22 }}>
                   <span style={{ font: "600 12.5px 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>Your requirement</span>
-                  <textarea rows={5} placeholder="Context, capability gaps, timelines, anything else we should know" style={{ ...inputStyle, resize: "vertical" }} />
+                  <textarea name="message" rows={5} placeholder="Context, capability gaps, timelines, anything else we should know" style={{ ...inputStyle, resize: "vertical" }} />
                 </label>
                 <button
                   type="submit"
+                  disabled={sending}
                   className="lp-btn-grad"
                   style={{
                     marginTop: 26,
@@ -238,12 +255,22 @@ export default function ContactPage() {
                     display: "inline-flex",
                     alignItems: "center",
                     gap: 10,
-                    cursor: "pointer",
+                    cursor: sending ? "wait" : "pointer",
+                    opacity: sending ? 0.72 : 1,
                     boxShadow: "0 12px 28px rgba(27,143,136,.26)",
                   }}
                 >
-                  Send enquiry <span>→</span>
+                  {sending ? "Sending…" : "Send enquiry"} <span>→</span>
                 </button>
+                {error && (
+                  <div role="alert" style={{ marginTop: 16, background: "#fff5f5", border: "1px solid #f3c9c9", color: "#8f2828", borderRadius: 12, padding: "13px 16px", font: "500 13px/1.6 'Plus Jakarta Sans',sans-serif" }}>
+                    {error} You can also email us at{" "}
+                    <a href={`mailto:${contact.email}`} style={{ color: "#8f2828", textDecoration: "underline" }}>
+                      {contact.email}
+                    </a>
+                    .
+                  </div>
+                )}
                 <div style={{ display: "flex", gap: 10, alignItems: "flex-start", marginTop: 18, background: "#fff", border: "1px solid #e3eaf0", borderRadius: 12, padding: "14px 16px" }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none", marginTop: 1 }}>
                     <path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z" />
@@ -289,7 +316,14 @@ export default function ContactPage() {
               <a
                 href={contact.whatsapp}
                 className="lp-btn-grad"
-                style={{ display: "inline-flex", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "13px 24px", borderRadius: 999 }}
+                style={{
+                  display: "inline-flex",
+                  background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)",
+                  color: "#fff",
+                  font: "700 14px 'Plus Jakarta Sans',sans-serif",
+                  padding: "13px 24px",
+                  borderRadius: 999,
+                }}
               >
                 Book a Discovery Call
               </a>
@@ -368,7 +402,9 @@ export default function ContactPage() {
                       {on ? "−" : "+"}
                     </div>
                   </button>
-                  {on && <div style={{ padding: "0 26px 24px", font: "400 14.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 700, textWrap: "pretty" } as CSSProperties}>{f.a}</div>}
+                  {on && (
+                    <div style={{ padding: "0 26px 24px", font: "400 14.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 700, textWrap: "pretty" } as CSSProperties}>{f.a}</div>
+                  )}
                 </div>
               );
             })}

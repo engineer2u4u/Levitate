@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { contact, services, type NavKey } from "@/lib/site";
 
 function MailIcon({ size = 13 }: { size?: number }) {
@@ -25,6 +25,15 @@ const topIdle = { color: "#3d5064" };
 export default function SiteHeader({ active }: { active?: NavKey }) {
   const [svcOpen, setSvcOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  // Header starts large and compacts once the page is scrolled.
+  const [shrunk, setShrunk] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShrunk(window.scrollY > 60);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <>
@@ -40,14 +49,32 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
       </div>
 
       {/* STICKY HEADER */}
-      <div className="site-sec" style={{ position: "sticky", top: 0, zIndex: 80, background: "rgba(255,255,255,.9)", backdropFilter: "blur(14px)", borderBottom: "1px solid #e3eaf0", padding: "14px 48px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 14 }}>
-        <Link href="/" style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 8, padding: "6px 12px", display: "flex", alignItems: "center" }}>
+      <div
+        className={`site-sec site-header${shrunk ? " is-shrunk" : ""}`}
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 80,
+          background: "rgba(255,255,255,.9)",
+          backdropFilter: "blur(14px)",
+          borderBottom: "1px solid #e3eaf0",
+          padding: shrunk ? "10px 48px" : "18px 48px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: 14,
+          transition: "padding .28s ease, box-shadow .28s ease",
+          boxShadow: shrunk ? "0 6px 20px rgba(10,27,51,.07)" : "none",
+        }}
+      >
+        <Link href="/" className="site-logo" style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 10, padding: shrunk ? "5px 12px" : "8px 16px", display: "flex", alignItems: "center", transition: "padding .28s ease" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 34, display: "block" }} />
+          <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: shrunk ? 36 : 52, display: "block", transition: "height .28s ease" }} />
         </Link>
 
         {/* Desktop nav */}
-        <nav className="site-nav" style={{ alignItems: "center", gap: 24, font: "600 14px 'Plus Jakarta Sans',sans-serif" }}>
+        <nav className="site-nav" style={{ alignItems: "center", gap: shrunk ? 24 : 28, font: `600 ${shrunk ? 14 : 15.5}px 'Plus Jakarta Sans',sans-serif`, transition: "gap .28s ease, font-size .28s ease" }}>
           <Link href="/" className="site-navlink" style={active === "home" ? topActive : topIdle}>Home</Link>
           <div onMouseEnter={() => setSvcOpen(true)} onMouseLeave={() => setSvcOpen(false)} style={{ position: "relative", display: "flex", alignItems: "center" }}>
             <Link href={services[0].href} className="site-navlink" style={{ ...(active === "services" ? topActive : topIdle), display: "inline-flex", alignItems: "center", gap: 6 }}>
@@ -68,13 +95,43 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
           <Link href="/contact" className="site-navlink" style={active === "contact" ? topActive : topIdle}>Contact</Link>
         </nav>
 
-        <Link href="/contact" className="site-header-cta lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 13.5px 'Plus Jakarta Sans',sans-serif", padding: "11px 22px", borderRadius: 999, whiteSpace: "nowrap" }}>
+        <Link
+          href="/contact"
+          className="site-header-cta lp-btn-grad"
+          style={{
+            background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)",
+            color: "#fff",
+            font: `700 ${shrunk ? 13.5 : 15}px 'Plus Jakarta Sans',sans-serif`,
+            padding: shrunk ? "11px 22px" : "14px 28px",
+            borderRadius: 999,
+            whiteSpace: "nowrap",
+            transition: "padding .28s ease, font-size .28s ease",
+          }}
+        >
           Book a Discovery Call
         </Link>
 
         {/* Hamburger */}
-        <button type="button" className="site-hamburger" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} onClick={() => setMenuOpen((o) => !o)} style={{ width: 44, height: 44, borderRadius: 10, border: "1px solid #e3eaf0", background: "#fff", color: "#0a1b33", cursor: "pointer", alignItems: "center", justifyContent: "center" }}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+        <button
+          type="button"
+          className="site-hamburger"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((o) => !o)}
+          style={{
+            width: shrunk ? 44 : 52,
+            height: shrunk ? 44 : 52,
+            borderRadius: 12,
+            border: "1px solid #e3eaf0",
+            background: "#fff",
+            color: "#0a1b33",
+            cursor: "pointer",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "width .28s ease, height .28s ease",
+          }}
+        >
+          <svg width={shrunk ? 22 : 26} height={shrunk ? 22 : 26} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
             {menuOpen ? <path d="M6 6l12 12M18 6L6 18" /> : <><path d="M3 6h18" /><path d="M3 12h18" /><path d="M3 18h18" /></>}
           </svg>
         </button>

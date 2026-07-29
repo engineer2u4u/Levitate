@@ -86,7 +86,7 @@ export type Cert = {
 export const certs: Cert[] = [
   {
     num: "01",
-    tag: "Flagship",
+    tag: "Leadership Certification · TTT",
     title: "Certified Corporate Leadership Facilitator",
     sub: "Powered by the HUMAN Leadership Framework",
     desc: "Facilitate leadership conversations on trust, coaching, feedback, accountability and team growth.",
@@ -100,28 +100,28 @@ export const certs: Cert[] = [
   },
   {
     num: "03",
-    tag: "Wellbeing",
+    tag: "Workplace Wellbeing · TTT",
     title: "Certified Workplace Wellbeing Facilitator",
     sub: "Applied Mental Health & Wellbeing Certification",
     desc: "Facilitate workplace mental-health conversations with confidence, sensitivity and ethical responsibility.",
   },
   {
     num: "04",
-    tag: "POSH",
+    tag: "POSH · TTT",
     title: "Certified POSH & Workplace Dignity Facilitator",
     sub: "POSH Train-the-Trainer Certification",
     desc: "POSH awareness, manager sensitisation and IC capability building — with legal clarity and maturity.",
   },
   {
     num: "05",
-    tag: "POCSO",
+    tag: "POCSO · TTT",
     title: "Certified POCSO & Child Safety Facilitator",
     sub: "POCSO Train-the-Trainer Certification",
     desc: "Child-safety awareness sessions with sensitivity, legal clarity and responsible communication.",
   },
   {
     num: "06",
-    tag: "For Students",
+    tag: "HR Edge Certification · TTT",
     title: "HR Edge Certification",
     sub: "Integrated DEI, POSH & Wellbeing Certification",
     desc: "A career advantage for MBA-HR, PGDM-HR and early-career HR professionals entering modern workplaces.",
@@ -207,6 +207,8 @@ export const tickerA = [
 
 export const tickerB = [
   "ISO Certified Organization",
+  "DPIIT Recognition",
+  "UDYAM Recognition",
   "4.9★ Google Reviews",
   "2000+ Participants Trained",
   "Train-the-Trainer Programs",
@@ -219,10 +221,13 @@ export const tickerB = [
 export const gallery = [
   "/assets/founder-speaking.jpeg",
   "/assets/group-chitkara.jpeg",
+  "/assets/session-auditorium-talk.jpg",
   "/assets/workshop-tables.jpeg",
   "/assets/audience-red-hall.jpeg",
+  "/assets/session-office-workshop.jpg",
   "/assets/workshop-handsup.jpeg",
   "/assets/outdoor-group.jpeg",
+  "/assets/plant-gift.jpeg",
   "/assets/school-group.jpeg",
   "/assets/students-group.png",
   "/assets/award-speaker.jpeg",
@@ -242,7 +247,7 @@ export const founders = [
     alt: "Mr. Ravindra Prem Nath",
     imgPos: "50% 30%",
     name: "Mr. Ravindra Prem Nath",
-    role: "Founder & Principal Advisor · Former Chief Manager – HR, ONGC",
+    role: "Director",
     bio: "35+ years of institutional HR leadership at one of India's leading public sector enterprises — people management, employee relations, HR governance and organizational learning. He founded Levitate PeopleSoft in 2023 and guides it with deep practical HR judgment.",
   },
 ];

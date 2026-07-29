@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, type CSSProperties } from "react";
 import Reveal from "@/components/home/Reveal";
+import YouTubeEmbed from "./YouTubeEmbed";
 
 const POINTS = [
   "Employee awareness sessions that explain the law in plain language",
@@ -64,75 +65,113 @@ export default function PoshSection() {
           </div>
         </Reveal>
 
-        {/* Video — right. preload="none" and click-to-load so the file is never
-            fetched until the visitor actually asks for it. */}
+        {/* Video — right. The cover always shows; clicking opens the video in a
+            modal, matching the founder video on the home page. */}
         <Reveal>
-          <div
+          <button
+            type="button"
+            onClick={() => setPlaying(true)}
+            aria-label="Play the POSH programme video"
+            className="lp-posh-play"
             style={{
               position: "relative",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 14,
+              width: "100%",
+              aspectRatio: "16/9",
               borderRadius: 20,
               overflow: "hidden",
               border: "1px solid #e3eaf0",
-              background: "#050d1a",
-              aspectRatio: "16/9",
+              padding: 0,
+              cursor: "pointer",
+              backgroundImage: "url('/assets/posh-cover.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
               boxShadow: "0 24px 60px rgba(10,27,51,.18)",
             }}
           >
-            {playing ? (
-              <iframe
-                src="https://www.youtube-nocookie.com/embed/wfGzTNtutXs?autoplay=1&rel=0&modestbranding=1"
-                title="POSH & Workplace Dignity — Levitate PeopleSoft"
-                allow="accelerated-download; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-                style={{ width: "100%", height: "100%", border: "none", display: "block" }}
-              />
-            ) : (
-              <button
-                type="button"
-                onClick={() => setPlaying(true)}
-                aria-label="Play the POSH programme video"
-                className="lp-posh-play"
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  width: "100%",
-                  height: "100%",
-                  border: "none",
-                  padding: 0,
-                  cursor: "pointer",
-                  backgroundImage: "url('/assets/posh-cover.jpg')",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 14,
-                }}
-              >
-                {/* scrim keeps the play control legible over the frame */}
-                <span style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(10,27,51,.18),rgba(10,27,51,.52))" }} />
-                <span
-                  style={{
-                    position: "relative",
-                    width: 78,
-                    height: 78,
-                    borderRadius: "50%",
-                    background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxShadow: "0 14px 34px rgba(10,27,51,.45)",
-                  }}
-                >
-                  <span style={{ width: 0, height: 0, borderLeft: "22px solid #fff", borderTop: "13px solid transparent", borderBottom: "13px solid transparent", marginLeft: 6 }} />
-                </span>
-                <span style={{ position: "relative", font: "700 16px 'Plus Jakarta Sans',sans-serif", color: "#fff", textShadow: "0 2px 12px rgba(10,27,51,.5)" }}>Watch a POSH session</span>
-              </button>
-            )}
-          </div>
+            {/* scrim keeps the play control legible over the frame */}
+            <span style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(10,27,51,.18),rgba(10,27,51,.52))" }} />
+            <span
+              style={{
+                position: "relative",
+                width: 78,
+                height: 78,
+                borderRadius: "50%",
+                background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 14px 34px rgba(10,27,51,.45)",
+              }}
+            >
+              <span style={{ width: 0, height: 0, borderLeft: "22px solid #fff", borderTop: "13px solid transparent", borderBottom: "13px solid transparent", marginLeft: 6 }} />
+            </span>
+            <span style={{ position: "relative", font: "700 16px 'Plus Jakarta Sans',sans-serif", color: "#fff", textShadow: "0 2px 12px rgba(10,27,51,.5)" }}>Watch a POSH session</span>
+          </button>
         </Reveal>
       </div>
+
+      {/* VIDEO MODAL */}
+      {playing && (
+        <div
+          onClick={() => setPlaying(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 200,
+            background: "rgba(10,27,51,.55)",
+            backdropFilter: "blur(8px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 48,
+            animation: "fadeUp .3s ease",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: "relative",
+              width: "min(960px,100%)",
+              aspectRatio: "16/9",
+              background: "#050d1a",
+              border: "1px solid rgba(47,196,188,.4)",
+              borderRadius: 18,
+              overflow: "hidden",
+              boxShadow: "0 40px 120px rgba(10,27,51,.45)",
+            }}
+          >
+            <YouTubeEmbed id="wfGzTNtutXs" title="POSH &amp; Workplace Dignity — Levitate PeopleSoft" />
+            <div
+              onClick={() => setPlaying(false)}
+              className="lp-close-btn"
+              style={{
+                position: "absolute",
+                top: 14,
+                right: 14,
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                background: "rgba(255,255,255,.1)",
+                border: "1px solid rgba(255,255,255,.25)",
+                color: "#fff",
+                font: "600 18px 'Plus Jakarta Sans',sans-serif",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                zIndex: 2,
+              }}
+            >
+              ✕
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

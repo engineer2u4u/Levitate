@@ -188,7 +188,9 @@ export default function AboutPage() {
               <div style={{ padding: "40px 44px" }}>
                 <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>Parichita Kotnala</div>
                 <div style={{ font: "600 13.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", margin: "6px 0 4px" }}>Founder &amp; Managing Partner</div>
-                <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 18 }}>Global HR Leader · Workplace Culture Facilitator · Certification Program Designer</div>
+                <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 18 }}>
+                  Global HR Leader · Workplace Culture Facilitator · Certification Program Designer
+                </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, font: "400 14.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
                   <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                     Parichita brings over 15 years of global HR, leadership development and workplace culture experience across diverse teams and business environments. Her work spans HR business
@@ -234,15 +236,16 @@ export default function AboutPage() {
               <div style={{ padding: "40px 44px" }}>
                 <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>Mr. Ravindra Prem Nath</div>
                 <div style={{ font: "600 13.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", margin: "6px 0 4px" }}>Founder &amp; Principal Advisor</div>
-                <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 18 }}>Former Chief Manager – HR, ONGC · 35+ Years of HR Leadership</div>
+                <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 18 }}>Director</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, font: "400 14.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
                   <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                     Mr. Nath brings over three decades of rich HR leadership experience from ONGC, one of India&apos;s leading public sector enterprises. As Chief Manager – HR he worked across people
                     management, employee relations, workforce administration, HR governance, learning initiatives and organizational capability building in a large-scale institutional environment.
                   </p>
                   <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
-                    In 2023 he founded Levitate PeopleSoft with the vision of enabling people and organizations through structured HR learning, advisory and capability-building interventions. As
-                    Principal Advisor he continues to guide the practice with depth of experience and practical HR judgment.
+                    A blend of Indian institutional HR depth and contemporary global practice Our journey began in 2023, founded by Mr. Ravindra Prem Nath, former Chief Manager – HR at ONGC. With over
+                    35 years of experience in people management, employee relations, HR governance, workforce capability building and organizational learning, he brings deep institutional HR wisdom
+                    and people-centred workplace experience to Levitate PeopleSoft.
                   </p>
                 </div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 9, marginTop: 20 }}>
@@ -328,7 +331,9 @@ export default function AboutPage() {
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 44 }}>
             <div style={eyebrow}>Accreditations &amp; Standards</div>
-            <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>Practice governed by standards, not slideware</h2>
+            <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>
+              Practice governed by standards, not slideware
+            </h2>
           </Reveal>
           <div className="site-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 18 }}>
             {accred.map((a) => (

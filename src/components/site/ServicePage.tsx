@@ -6,6 +6,7 @@ import { useState, type CSSProperties } from "react";
 import Reveal from "@/components/home/Reveal";
 import { contact, services, type ServiceKey } from "@/lib/site";
 import { PAGES } from "@/lib/serviceData";
+import { submitEnquiry } from "@/lib/submitEnquiry";
 import PoshSection from "./PoshSection";
 
 const eyebrow: CSSProperties = { font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 };
@@ -29,6 +30,8 @@ export default function ServicePage({
   const p = PAGES[pageKey];
   const [opt, setOpt] = useState(0);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [openFaq, setOpenFaq] = useState(0);
   const other = services.filter((s) => s.key !== pageKey);
 
@@ -206,7 +209,7 @@ export default function ServicePage({
       )}
 
       {/* CREDENTIAL */}
-      {showCredential && (
+      {/* {showCredential && (
         <div className="site-page-sec" style={{ background: "#f4f7f9", padding: "80px 48px" }}>
           <div className="site-stack" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 60, alignItems: "center" }}>
             <Reveal>
@@ -286,7 +289,7 @@ export default function ServicePage({
             </Reveal>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* ENQUIRY */}
       <div id="enquire" className="site-page-sec" style={{ background: "#fff", padding: "80px 48px", scrollMarginTop: 100 }}>
@@ -324,27 +327,40 @@ export default function ServicePage({
               </div>
             ) : (
               <form
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
-                  setSent(true);
-                  if (typeof window !== "undefined") window.scrollTo({ top: 240, behavior: "smooth" });
+                  if (sending) return;
+                  const form = e.currentTarget;
+                  setSending(true);
+                  setError(null);
+                  const res = await submitEnquiry(form, { intent: `${p.crumb} — ${p.options[opt]}` });
+                  setSending(false);
+                  if (res.ok) {
+                    setSent(true);
+                    form.reset();
+                    if (typeof window !== "undefined") window.scrollTo({ top: 240, behavior: "smooth" });
+                  } else {
+                    setError(res.error);
+                  }
                 }}
               >
+                {/* honeypot — hidden from people, tempting to bots */}
+                <input type="text" name="company_website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }} />
                 <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 10 }}>Enquiry form</div>
                 <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 6 }}>{p.formHeading}</div>
                 <div style={{ font: "400 14px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginBottom: 24 }}>{p.formSub}</div>
                 <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
                   <Field label="Full name *">
-                    <input required type="text" placeholder="Your name" style={inputStyle} />
+                    <input required name="name" type="text" placeholder="Your name" style={inputStyle} />
                   </Field>
                   <Field label="Email *">
-                    <input required type="email" placeholder="you@company.com" style={inputStyle} />
+                    <input required name="email" type="email" placeholder="you@company.com" style={inputStyle} />
                   </Field>
                   <Field label="Phone / WhatsApp *">
-                    <input required type="tel" placeholder="+91" style={inputStyle} />
+                    <input required name="phone" type="tel" placeholder="+91" style={inputStyle} />
                   </Field>
                   <Field label={p.orgLabel}>
-                    <input type="text" placeholder={p.orgPlaceholder} style={inputStyle} />
+                    <input name="organization" type="text" placeholder={p.orgPlaceholder} style={inputStyle} />
                   </Field>
                 </div>
                 <div style={{ marginTop: 22 }}>
@@ -378,8 +394,8 @@ export default function ServicePage({
                   <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: p.hideFormParticipants || p.hideFormMode ? "1fr" : "1fr 1fr", gap: 18, marginTop: 22 }}>
                     {!p.hideFormParticipants && (
                       <Field label="Approx. participants">
-                        <select style={inputStyle}>
-                          <option>Just me</option>
+                        <select name="participants" style={inputStyle}>
+                          <option>Individual</option>
                           <option>2 – 15</option>
                           <option>16 – 40</option>
                           <option>41 – 100</option>
@@ -389,7 +405,7 @@ export default function ServicePage({
                     )}
                     {!p.hideFormMode && (
                       <Field label="Preferred mode">
-                        <select style={inputStyle}>
+                        <select name="mode" style={inputStyle}>
                           <option>In-person</option>
                           <option>Virtual / live online</option>
                           <option>Blended</option>
@@ -401,10 +417,11 @@ export default function ServicePage({
                 )}
                 <label style={{ display: "flex", flexDirection: "column", gap: 7, marginTop: 22 }}>
                   <span style={{ font: "600 12.5px 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>Your requirement</span>
-                  <textarea rows={5} placeholder={p.msgPlaceholder} style={{ ...inputStyle, resize: "vertical" }} />
+                  <textarea name="message" rows={5} placeholder={p.msgPlaceholder} style={{ ...inputStyle, resize: "vertical" }} />
                 </label>
                 <button
                   type="submit"
+                  disabled={sending}
                   className="lp-btn-grad"
                   style={{
                     marginTop: 26,
@@ -417,12 +434,22 @@ export default function ServicePage({
                     display: "inline-flex",
                     alignItems: "center",
                     gap: 10,
-                    cursor: "pointer",
+                    cursor: sending ? "wait" : "pointer",
+                    opacity: sending ? 0.72 : 1,
                     boxShadow: "0 12px 28px rgba(27,143,136,.26)",
                   }}
                 >
-                  {p.formButton} <span>→</span>
+                  {sending ? "Sending…" : p.formButton} <span>→</span>
                 </button>
+                {error && (
+                  <div role="alert" style={{ marginTop: 16, background: "#fff5f5", border: "1px solid #f3c9c9", color: "#8f2828", borderRadius: 12, padding: "13px 16px", font: "500 13px/1.6 'Plus Jakarta Sans',sans-serif" }}>
+                    {error} You can also email us at{" "}
+                    <a href={`mailto:${contact.email}`} style={{ color: "#8f2828", textDecoration: "underline" }}>
+                      {contact.email}
+                    </a>
+                    .
+                  </div>
+                )}
                 <div style={{ display: "flex", gap: 10, alignItems: "flex-start", marginTop: 18, background: "#fff", border: "1px solid #e3eaf0", borderRadius: 12, padding: "14px 16px" }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none", marginTop: 1 }}>
                     <path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z" />

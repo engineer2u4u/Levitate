@@ -10,7 +10,8 @@ import ScrollToTop from "./ScrollToTop";
 import SiteHeader from "@/components/site/SiteHeader";
 import TrustedBy from "@/components/site/TrustedBy";
 import Accreditations from "@/components/site/Accreditations";
-import CredentialsStrip from "@/components/site/CredentialsStrip";
+// import CredentialsStrip from "@/components/site/CredentialsStrip";
+import YouTubeEmbed from "@/components/site/YouTubeEmbed";
 import { contact, services, blueprintSteps, certs, whyPoints, impactStats, tickerA, tickerB, gallery, founders } from "@/lib/homeData";
 
 // Home section links → routes (indexes align with homeData.services / homeData.certs)
@@ -91,25 +92,9 @@ export default function HomePage() {
   const [step, setStep] = useState(0);
   // Mobile blueprint accordion: independent open item (null = all collapsed)
   const [openStep, setOpenStep] = useState<number | null>(0);
-  const userPicked = useRef(false);
 
-  // Blueprint auto-advance every 4.5s while in viewport.
-  useEffect(() => {
-    const bpEl = document.querySelector<HTMLElement>('[data-screen-label="Blueprint"]');
-    const id = setInterval(() => {
-      if (userPicked.current || !bpEl) return;
-      const r = bpEl.getBoundingClientRect();
-      if (r.bottom > 0 && r.top < window.innerHeight) {
-        setStep((s) => (s + 1) % 4);
-      }
-    }, 4500);
-    return () => clearInterval(id);
-  }, []);
-
-  const selectStep = (i: number) => {
-    userPicked.current = true;
-    setStep(i);
-  };
+  // Blueprint steps change only on click — no auto-advance.
+  const selectStep = (i: number) => setStep(i);
 
   const activeStep = blueprintSteps[step];
 
@@ -299,11 +284,15 @@ export default function HomePage() {
             <div style={{ position: "relative", width: 190, height: 190, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <div style={{ position: "absolute", inset: 0, border: "1px dashed rgba(27,143,136,.5)", borderRadius: "50%", animation: "spinSlow 28s linear infinite", pointerEvents: "none" }} />
               <div style={{ position: "absolute", inset: 16, border: "1px solid rgba(10,27,51,.15)", borderRadius: "50%", pointerEvents: "none" }} />
+              {/* expanding sonar rings — purely decorative, sit behind the button */}
+              <span className="lp-play-ring" style={{ animationDelay: "0s" }} />
+              <span className="lp-play-ring" style={{ animationDelay: "1.1s" }} />
+              <span className="lp-play-ring" style={{ animationDelay: "2.2s" }} />
               <button
                 type="button"
                 onClick={() => setVideoOpen(true)}
                 aria-label="Play the founder's message video"
-                className="lp-video-btn"
+                className="lp-video-btn lp-play-btn"
                 style={{
                   position: "relative",
                   zIndex: 2,
@@ -316,11 +305,13 @@ export default function HomePage() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  animation: "pulse 2.4s infinite",
                   cursor: "pointer",
                 }}
               >
-                <div style={{ width: 0, height: 0, borderLeft: "30px solid #fff", borderTop: "18px solid transparent", borderBottom: "18px solid transparent", marginLeft: 8 }} />
+                <span
+                  className="lp-play-tri"
+                  style={{ width: 0, height: 0, borderLeft: "30px solid #fff", borderTop: "18px solid transparent", borderBottom: "18px solid transparent", marginLeft: 8 }}
+                />
               </button>
             </div>
             <div style={{ textAlign: "center" }}>
@@ -365,13 +356,7 @@ export default function HomePage() {
             }}
           >
             {/* Only mounted while the modal is open, so nothing loads until asked */}
-            <iframe
-              src="https://www.youtube-nocookie.com/embed/4pf99e4AKBU?autoplay=1&rel=0&modestbranding=1"
-              title="A Message from Our Founder — Levitate PeopleSoft"
-              allow="accelerated-download; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              style={{ width: "100%", height: "100%", border: "none", display: "block" }}
-            />
+            <YouTubeEmbed id="4pf99e4AKBU" title="A Message from Our Founder — Levitate PeopleSoft" />
             <div
               onClick={() => setVideoOpen(false)}
               className="lp-close-btn"
@@ -526,7 +511,9 @@ export default function HomePage() {
       <div data-screen-label="Blueprint" className="lp-sec" style={{ background: "#fff", padding: "96px 48px" }}>
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ textAlign: "center", marginBottom: 56 }}>
-            <div style={{ font: "700 18px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>The Levitate Learning Blueprint</div>
+            <div style={{ font: "700 18px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>
+              The Levitate Learning Blueprint
+            </div>
             <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>
               Learning that begins with context
               <br />
@@ -584,7 +571,7 @@ export default function HomePage() {
                   <div key={b.num} style={{ flex: 1, height: 4, borderRadius: 2, background: i === step ? "linear-gradient(90deg,#2fc4bc,#2f7fd6)" : "#dde7ee", transition: "background .3s ease" }} />
                 ))}
               </div>
-              <div style={{ font: "500 11.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", padding: "2px 4px" }}>Auto-plays every few seconds — click any step to explore</div>
+              <div style={{ font: "500 11.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", padding: "2px 4px" }}>Click any step to explore</div>
             </div>
             <div style={{ position: "relative", borderRadius: 22, overflow: "hidden", background: "#eef4f7", border: "1px solid #e3eaf0", minHeight: 420 }}>
               <img src={activeStep.img} alt={activeStep.title} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.22 }} />
@@ -852,7 +839,9 @@ export default function HomePage() {
             >
               <div style={{ border: "2px solid #0a1b33", outline: "1px solid #2fc4bc", outlineOffset: 5, padding: "34px 30px", textAlign: "center" }}>
                 <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 34, margin: "0 auto 18px", display: "block" }} />
-                <div style={{ font: "600 10.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".3em", textTransform: "uppercase", marginBottom: 14 }}>Certificate of Completion</div>
+                <div style={{ font: "600 10.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".3em", textTransform: "uppercase", marginBottom: 14 }}>
+                  Certificate of Completion
+                </div>
                 <div style={{ font: "400 12.5px 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>This certifies that</div>
                 <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", borderBottom: "1px solid #cfdbe4", padding: "8px 0", margin: "6px 24px 12px" }}>Participant Name</div>
                 <div style={{ font: "400 12.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginBottom: 18 }}>
@@ -1034,7 +1023,7 @@ export default function HomePage() {
       <Accreditations />
 
       {/* CREDENTIALS STRIP (ISO / DPIIT / MSME / Udyam) */}
-      <CredentialsStrip />
+      {/* <CredentialsStrip /> */}
 
       {/* CTA */}
       <div data-screen-label="CTA" className="lp-sec" style={{ position: "relative", background: "#fff", padding: "40px 48px 110px", overflow: "hidden" }}>
@@ -1161,8 +1150,12 @@ export default function HomePage() {
           >
             <span>© 2026 Levitate PeopleSoft. All rights reserved.</span>
             <span style={{ display: "inline-flex", gap: 18, flexWrap: "wrap" }}>
-              <Link href="/privacy-policy" className="lp-footlink">Privacy Policy</Link>
-              <Link href="/disclaimer" className="lp-footlink">Disclaimer</Link>
+              <Link href="/privacy-policy" className="lp-footlink">
+                Privacy Policy
+              </Link>
+              <Link href="/disclaimer" className="lp-footlink">
+                Disclaimer
+              </Link>
             </span>
           </div>
         </div>
