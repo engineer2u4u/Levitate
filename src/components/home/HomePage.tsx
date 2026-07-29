@@ -210,7 +210,7 @@ export default function HomePage() {
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#2fc4bc" }} />
               Workplace Capability · Certification · Reskilling
             </div> */}
-            <h1 style={{ font: "700 clamp(40px,4.6vw,58px)/1.08 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 24px", letterSpacing: "-.02em" }}>
+            <h1 style={{ font: "700 clamp(40px,4.6vw,45px)/1.08 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 24px", letterSpacing: "-.02em" }}>
               Elevating Trainers.
               <br />
               Transforming Workplaces.

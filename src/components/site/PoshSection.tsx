@@ -17,19 +17,18 @@ export default function PoshSection() {
   const [playing, setPlaying] = useState(false);
 
   return (
-    <div className="site-page-sec" style={{ background: "#fff", padding: "80px 48px" }}>
+    <div id="POSH" className="site-page-sec" style={{ background: "#fff", padding: "80px 48px" }}>
       <div className="site-stack" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center" }}>
         {/* Content — left */}
         <Reveal>
-          <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>
-            POSH &amp; Workplace Dignity
-          </div>
+          <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>POSH &amp; Workplace Dignity</div>
           <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.18 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 18px", letterSpacing: "-.02em" }}>
             POSH programs delivered with legal clarity and facilitation maturity
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 14, font: "400 15.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
             <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
-              Prevention of Sexual Harassment is not a tick-box session. Our POSH programs help organizations meet their obligations while genuinely shifting how people behave — combining accurate legal grounding with the sensitivity these conversations demand.
+              Prevention of Sexual Harassment is not a tick-box session. Our POSH programs help organizations meet their obligations while genuinely shifting how people behave — combining accurate
+              legal grounding with the sensitivity these conversations demand.
             </p>
             <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
               Sessions are led by an internationally certified POSH educator and trainer, empanelled on the SHe-Box portal of the Ministry of Women and Child Development, Government of India.

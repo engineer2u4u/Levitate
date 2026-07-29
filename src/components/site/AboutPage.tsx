@@ -106,16 +106,16 @@ export default function AboutPage() {
             </h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 16, font: "400 15.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
               <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
-                Our journey began in 2023, founded by <strong style={{ color: "#0a1b33" }}>Mr. Ravindra Prem Nath</strong>, Founder &amp; Principal Advisor and former Chief Manager – HR at ONGC. With
-                over 35 years of experience in people management, employee relations, HR governance, workforce capability building and organizational learning, he brings deep institutional HR wisdom
-                and people-centred workplace experience to Levitate PeopleSoft.
+                Our journey began in 2023, founded by <strong style={{ color: "#0a1b33" }}>Mr. Ravindra Prem Nath</strong>, former Chief Manager – HR at ONGC. With over 35 years of experience in
+                people management, employee relations, HR governance, workforce capability building and organizational learning, he brings deep institutional HR wisdom and people-centred workplace
+                experience to Levitate PeopleSoft.
               </p>
               <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                 This foundation of disciplined HR practice, employee sensitivity and organizational learning has shaped Levitate&apos;s commitment to practical, responsible and human-centred learning.
               </p>
               <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                 Today, Levitate PeopleSoft is led forward by <strong style={{ color: "#0a1b33" }}>Parichita Kotnala</strong>, Founder &amp; Managing Partner, who brings over 15 years of global HR
-                leadership, leadership development and workplace culture experience across diverse teams, geographies and business environments — spanning India, the UK, Europe and North America.
+                leadership, leadership development and workplace culture experience across diverse teams, geographies and business environments — spanning India, the UK, Europe, USA and Canada.
               </p>
               <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                 We specialize in Train-the-Trainer certification programs, workplace facilitator development, corporate training and HR capability-building solutions across leadership, DEI, workplace
@@ -219,6 +219,24 @@ export default function AboutPage() {
                     </div>
                   ))}
                 </div>
+                <Link
+                  href="/parichita-kotnala"
+                  className="lp-btn-grad"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 9,
+                    marginTop: 24,
+                    background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)",
+                    color: "#fff",
+                    font: "700 14px 'Plus Jakarta Sans',sans-serif",
+                    padding: "13px 26px",
+                    borderRadius: 999,
+                    boxShadow: "0 10px 24px rgba(27,143,136,.26)",
+                  }}
+                >
+                  Know more about Parichita <span aria-hidden="true">→</span>
+                </Link>
               </div>
             </Reveal>
             <Reveal
@@ -235,8 +253,9 @@ export default function AboutPage() {
             >
               <div style={{ padding: "40px 44px" }}>
                 <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>Mr. Ravindra Prem Nath</div>
-                <div style={{ font: "600 13.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", margin: "6px 0 4px" }}>Founder &amp; Principal Advisor</div>
-                <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 18 }}>Director</div>
+                <div style={{ font: "600 13.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", margin: "6px 0 4px" }}>Director &amp; Principal Advisor</div>
+                {/* <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 18 }}>Director</div> */}
+                <br />
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, font: "400 14.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
                   <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                     Mr. Nath brings over three decades of rich HR leadership experience from ONGC, one of India&apos;s leading public sector enterprises. As Chief Manager – HR he worked across people

@@ -65,7 +65,8 @@ export default function ContactPage() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [openFaq, setOpenFaq] = useState(0);
+  // -1 = all collapsed (the toggle already uses -1 to mean "closed")
+  const [openFaq, setOpenFaq] = useState<number>(-1);
 
   return (
     <>
@@ -263,7 +264,18 @@ export default function ContactPage() {
                   {sending ? "Sending…" : "Send enquiry"} <span>→</span>
                 </button>
                 {error && (
-                  <div role="alert" style={{ marginTop: 16, background: "#fff5f5", border: "1px solid #f3c9c9", color: "#8f2828", borderRadius: 12, padding: "13px 16px", font: "500 13px/1.6 'Plus Jakarta Sans',sans-serif" }}>
+                  <div
+                    role="alert"
+                    style={{
+                      marginTop: 16,
+                      background: "#fff5f5",
+                      border: "1px solid #f3c9c9",
+                      color: "#8f2828",
+                      borderRadius: 12,
+                      padding: "13px 16px",
+                      font: "500 13px/1.6 'Plus Jakarta Sans',sans-serif",
+                    }}
+                  >
                     {error} You can also email us at{" "}
                     <a href={`mailto:${contact.email}`} style={{ color: "#8f2828", textDecoration: "underline" }}>
                       {contact.email}
