@@ -79,17 +79,13 @@ export default function PoshSection() {
             }}
           >
             {playing ? (
-              <video
-                src="/assets/Posh.mp4"
-                poster="/assets/posh-cover.jpg"
-                controls
-                autoPlay
-                playsInline
-                preload="none"
-                style={{ width: "100%", height: "100%", display: "block", objectFit: "contain", background: "#050d1a" }}
-              >
-                Your browser does not support the video tag.
-              </video>
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/wfGzTNtutXs?autoplay=1&rel=0&modestbranding=1"
+                title="POSH & Workplace Dignity — Levitate PeopleSoft"
+                allow="accelerated-download; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+                style={{ width: "100%", height: "100%", border: "none", display: "block" }}
+              />
             ) : (
               <button
                 type="button"
