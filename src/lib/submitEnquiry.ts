@@ -27,8 +27,14 @@ const val = (data: FormData, key: string) => {
 export async function submitEnquiry(form: HTMLFormElement, extra: Record<string, string> = {}): Promise<EnquiryResult> {
   const data = new FormData(form);
 
-  // Honeypot — bots fill this, people never see it. Pretend success, send nothing.
-  if (val(data, "company_website") !== "") return { ok: true };
+  // Honeypot. It is a CHECKBOX on purpose: Chrome autofill populates every text
+  // input in a form regardless of name or visibility, which silently swallowed
+  // real enquiries. Autofill never ticks checkboxes, but bots that fill every
+  // input will. An unticked checkbox is absent from FormData entirely.
+  if (data.get("hp_zx") !== null) {
+    console.warn("[enquiry] honeypot triggered — nothing sent.");
+    return { ok: true };
+  }
 
   if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
     return { ok: false, error: "The enquiry form is not configured yet." };

@@ -345,7 +345,7 @@ export default function ServicePage({
                 }}
               >
                 {/* honeypot — hidden from people, tempting to bots */}
-                <input type="text" name="company_website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }} />
+                <input type="checkbox" name="hp_zx" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }} />
                 <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 10 }}>Enquiry form</div>
                 <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 6 }}>{p.formHeading}</div>
                 <div style={{ font: "400 14px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginBottom: 24 }}>{p.formSub}</div>
