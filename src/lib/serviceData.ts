@@ -58,7 +58,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     img: "/assets/students-group.png",
     facts: [
       { k: "Format", v: "Online and Weekend Batches" },
-      { k: "Assessment", v: "Practice + written" },
+      { k: "Assessment", v: "Assessment + Peer Review" },
       { k: "Credential", v: "Certificate + ID" },
     ],
     introHeading: "Our Certification Approach",
