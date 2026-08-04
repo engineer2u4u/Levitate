@@ -26,10 +26,6 @@ const certifications = [
     d: "Internationally certified",
   },
   {
-    t: "Empanelled POSH Trainer — SHe-Box portal",
-    d: "Ministry of Women and Child Development (MWCD), Government of India",
-  },
-  {
     t: "Certified Soft-Skills Trainer",
     d: "LifeLabs Learning, USA",
   },
@@ -143,9 +139,8 @@ export default function ParichitaPage() {
                 Training and Development recognised by the Department of Personnel and Training (DoPT), Government of India.
               </p>
               <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
-                She is an internationally certified POSH and POCSO Educator and Trainer and an empanelled POSH Trainer on the SHe-Box portal of the Ministry of Women and Child Development (MWCD),
-                Government of India. She is also a certified soft-skills trainer through LifeLabs Learning, USA, and a certified Workplace Mental Health and Wellbeing Trainer, with specialised
-                training in Adult Mental Health First Aid from MHFA England.
+                She is an internationally certified POSH and POCSO Educator and Trainer. She is also a certified soft-skills trainer through LifeLabs Learning, USA, and a certified Workplace Mental
+                Health and Wellbeing Trainer, with specialised training in Adult Mental Health First Aid from MHFA England.
               </p>
               <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                 Through Levitate PeopleSoft, Parichita brings together global corporate experience, strong subject expertise and practical facilitation to develop credible trainers, capable leaders
