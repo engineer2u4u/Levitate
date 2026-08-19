@@ -52,9 +52,6 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
           <a href={`mailto:${contact.email}`} className="site-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 7 }}><MailIcon />{contact.email}</a>
           <a href={`tel:${contact.tel}`} className="site-footlink" style={{ display: "inline-flex", alignItems: "center", gap: 7 }}><PhoneIcon />{contact.phone}</a>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#3d5064" }}>
-          <span style={{ color: "#f5b942", letterSpacing: "1px" }}>★★★★★</span> {contact.rating} on Google Reviews
-        </div>
       </div>
 
       {/* STICKY HEADER */}

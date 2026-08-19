@@ -276,13 +276,6 @@ export default function HomePage() {
                 </div>
                 <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", letterSpacing: ".06em", textTransform: "uppercase" }}>Global HR experience</div>
               </div>
-              <div className="lp-hero-divider" style={{ width: 1, background: "rgba(10,27,51,.14)" }} />
-              <div>
-                <div style={{ font: "700 30px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>
-                  4.9<span style={{ color: "#f5b942", fontSize: 20 }}> ★</span>
-                </div>
-                <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", letterSpacing: ".06em", textTransform: "uppercase" }}>Google reviews</div>
-              </div>
             </div>
           </div>
           <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 22 }}>
@@ -960,7 +953,7 @@ export default function HomePage() {
         className="lp-sec"
         style={{ background: "linear-gradient(120deg,#e7f5f3,#eaf1fa)", borderTop: "1px solid rgba(27,143,136,.2)", borderBottom: "1px solid rgba(27,143,136,.2)", padding: "64px 48px" }}
       >
-        <div className="lp-impact-grid" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 32, textAlign: "center" }}>
+        <div className="lp-impact-grid" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 32, textAlign: "center" }}>
           {impactStats.map((st, i) => (
             <div key={st.label} style={{ animation: impactIn ? "popIn .6s ease both" : undefined, animationDelay: impactIn ? `${i * 0.08}s` : undefined }}>
               <div

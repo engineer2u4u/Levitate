@@ -4,7 +4,6 @@ export const contact = {
   email: "contactus@levitatepeoplesoft.com",
   phone: "+91-70656 45999",
   whatsapp: "https://wa.me/917065645999",
-  rating: "4.9",
 };
 
 export const navLinks = ["Home", "Services", "Certifications", "About Us", "Contact"];
@@ -162,7 +161,6 @@ export const impactStats: ImpactStat[] = [
   { to: 2000, dec: 0, suffix: "+", label: "Participants trained" },
   { to: 15, dec: 0, suffix: "+", label: "Years global HR experience" },
   { to: 35, dec: 0, suffix: "+", label: "Years HR legacy (ONGC)" },
-  { to: 4.9, dec: 1, suffix: "★", label: "Google review rating" },
 ];
 
 export type VideoTestimonial = {
@@ -228,7 +226,6 @@ export const tickerB = [
   "ISO Certified Organization",
   "DPIIT Recognition",
   "UDYAM Recognition",
-  "4.9★ Google Reviews",
   "2000+ Participants Trained",
   "Train-the-Trainer Programs",
   "Campus to Corporate",

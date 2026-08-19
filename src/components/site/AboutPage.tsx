@@ -12,7 +12,6 @@ const facts = [
   { v: "35+", l: "Yrs institutional HR legacy" },
 ];
 const highlights = [
-  { v: "4.9★", l: "Google Reviews rating" },
   { v: "2,000+", l: "Participants trained so far" },
   { v: "6", l: "Certification pathways" },
 ];
@@ -303,7 +302,7 @@ export default function AboutPage() {
         style={{ background: "linear-gradient(120deg,#e7f5f3,#eaf1fa)", borderTop: "1px solid rgba(27,143,136,.2)", borderBottom: "1px solid rgba(27,143,136,.2)", padding: "64px 48px" }}
       >
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
-          <div className="site-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22, marginBottom: 26 }}>
+          <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 22, marginBottom: 26 }}>
             {highlights.map((h) => (
               <div key={h.l} style={{ background: "rgba(255,255,255,.7)", border: "1px solid rgba(27,143,136,.28)", borderRadius: 18, padding: "26px 28px", textAlign: "center" }}>
                 <div

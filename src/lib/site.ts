@@ -5,7 +5,6 @@ export const contact = {
   phone: "+91-70656 45999",
   tel: "+917065645999",
   whatsapp: "https://wa.me/917065645999",
-  rating: "4.9",
   hours: "Mon – Sat · 9:30 AM – 6:30 PM IST",
   address: "Ansal Esencia, Sector 67, Gurugram",
 };
