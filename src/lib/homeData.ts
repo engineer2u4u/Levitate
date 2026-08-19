@@ -165,6 +165,25 @@ export const impactStats: ImpactStat[] = [
   { to: 4.9, dec: 1, suffix: "★", label: "Google review rating" },
 ];
 
+export type VideoTestimonial = {
+  /** YouTube video id — also drives the card thumbnail via i.ytimg.com. */
+  id: string;
+  /** The clip's YouTube title. Not shown on the card — it names the play
+   *  button and the lightbox iframe for screen readers. */
+  title: string;
+  /** Vertical (Shorts) clip — the lightbox sizes itself 9:16 instead of 16:9. */
+  portrait?: boolean;
+};
+
+/** Short client clips, played in the homepage lightbox. */
+export const videoTestimonials: VideoTestimonial[] = [
+  { id: "Nk4QnjDjhMM", title: "Advocate Esha Pimpulekar Shares Her Experience with Parichita | POCSO Training Testimonial" },
+  { id: "pFPoeH8_Szs", title: "GenXAI Shares Their Experience with Parichitta | Client Testimonial" },
+  { id: "omuq1o5ZNLk", title: "Poonam Bharkat Shares Her Experience with Parichitta | Client Testimonial" },
+  { id: "ZQ4Sc2QetDM", title: "Priyanka Pawar Shares Her Experience with Parichita's Training Sessions | Client Testimonial" },
+  { id: "n_86rMA9hPM", title: "Archana Malhotra Shares Her Experience with Parichita | POCSO Training Testimonial", portrait: true },
+];
+
 export type Testimonial = {
   initials: string;
   name: string;

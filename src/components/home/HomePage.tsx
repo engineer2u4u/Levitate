@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Reveal from "./Reveal";
 import Counter from "./Counter";
 import TestimonialsCarousel from "./TestimonialsCarousel";
+import VideoTestimonials from "./VideoTestimonials";
 import ScrollToTop from "./ScrollToTop";
 import SiteHeader from "@/components/site/SiteHeader";
 import AnnouncementBar from "@/components/site/AnnouncementBar";
@@ -89,7 +90,9 @@ const tiltLeave = (e: React.MouseEvent<HTMLDivElement>) => {
 /*  Home page                                                         */
 /* ================================================================== */
 export default function HomePage() {
-  const [videoOpen, setVideoOpen] = useState(false);
+  // One lightbox serves the founder's message and every video testimonial —
+  // null means closed, so the iframe only ever exists while a clip is playing.
+  const [video, setVideo] = useState<{ id: string; title: string; portrait?: boolean } | null>(null);
   const [step, setStep] = useState(0);
   // Mobile blueprint accordion: independent open item (null = all collapsed)
   const [openStep, setOpenStep] = useState<number | null>(0);
@@ -292,7 +295,7 @@ export default function HomePage() {
               <span className="lp-play-ring" style={{ animationDelay: "2.2s" }} />
               <button
                 type="button"
-                onClick={() => setVideoOpen(true)}
+                onClick={() => setVideo({ id: "4pf99e4AKBU", title: "A Message from Our Founder — Levitate PeopleSoft" })}
                 aria-label="Play the founder's message video"
                 className="lp-video-btn lp-play-btn"
                 style={{
@@ -328,9 +331,9 @@ export default function HomePage() {
       </div>
 
       {/* VIDEO MODAL */}
-      {videoOpen && (
+      {video && (
         <div
-          onClick={() => setVideoOpen(false)}
+          onClick={() => setVideo(null)}
           style={{
             position: "fixed",
             inset: 0,
@@ -348,8 +351,14 @@ export default function HomePage() {
             onClick={(e) => e.stopPropagation()}
             style={{
               position: "relative",
-              width: "min(960px,100%)",
-              aspectRatio: "16/9",
+              // Vertical clips get a 9:16 frame sized off the viewport height —
+              // a 16:9 box would pillarbox them down to a sliver.
+              // Width-driven so the frame keeps its ratio on narrow screens too:
+              // it is whichever is smaller — the width 78vh of height allows, or
+              // the space actually available.
+              ...(video.portrait
+                ? { width: "min(calc(78vh * 9 / 16),100%)", aspectRatio: "9/16" }
+                : { width: "min(960px,100%)", aspectRatio: "16/9" }),
               background: "#050d1a",
               border: "1px solid rgba(47,196,188,.4)",
               borderRadius: 18,
@@ -358,9 +367,9 @@ export default function HomePage() {
             }}
           >
             {/* Only mounted while the modal is open, so nothing loads until asked */}
-            <YouTubeEmbed id="4pf99e4AKBU" title="A Message from Our Founder — Levitate PeopleSoft" />
+            <YouTubeEmbed key={video.id} id={video.id} title={video.title} />
             <div
-              onClick={() => setVideoOpen(false)}
+              onClick={() => setVideo(null)}
               className="lp-close-btn"
               style={{
                 position: "absolute",
@@ -997,6 +1006,9 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+
+      {/* VIDEO TESTIMONIALS */}
+      <VideoTestimonials onPlay={setVideo} />
 
       {/* TESTIMONIALS */}
       <div id="testimonials" style={{ scrollMarginTop: 80 }}>

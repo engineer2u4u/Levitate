@@ -381,3 +381,47 @@ body {
 /* Card hover lift used across service/certification cards */
 .site-card { transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; }
 .site-card:hover { transform: translateY(-4px); border-color: rgba(27, 143, 136, 0.55); box-shadow: 0 18px 40px rgba(10, 27, 51, 0.12); }
+
+/* Video testimonial cards. Declared after .lp-reveal so the hover lift wins
+   over the reveal animation's own transform on the same element. */
+.lp-vt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 18px; }
+.lp-vt-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.lp-vt-card:hover { transform: translateY(-6px); box-shadow: 0 22px 46px rgba(10, 27, 51, 0.16); }
+
+/* Carousel position dots — only meaningful where the row scrolls, so the
+   media query below switches them on. Declared first so it wins. */
+.lp-vt-dots { display: none; justify-content: center; align-items: center; gap: 9px; margin-top: 22px; }
+.lp-vt-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: #cddae3;
+  cursor: pointer;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+.lp-vt-dot.is-active { width: 26px; background: linear-gradient(90deg, #2fc4bc, #2f7fd6); }
+
+/* On phones the row becomes a swipeable carousel: cards snap, and the next one
+   peeks past the section gutter so the swipe is discoverable. */
+@media (max-width: 760px) {
+  .lp-vt-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Bleed to the screen edges, then pad back in so the first and last card
+       still line up with the section's 20px gutter. */
+    margin-inline: -20px;
+    padding-inline: 20px;
+    padding-bottom: 4px;
+  }
+  .lp-vt-grid::-webkit-scrollbar { display: none; }
+  .lp-vt-card { flex: 0 0 78%; scroll-snap-align: center; }
+  /* Cards parked off-screen horizontally never intersect the viewport, so the
+     reveal would leave them blank until swiped to. Show them outright. */
+  .lp-vt-grid .lp-reveal { opacity: 1; transform: none; }
+  .lp-vt-dots { display: flex; }
+}
