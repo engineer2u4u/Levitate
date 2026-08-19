@@ -46,6 +46,10 @@ a:hover {
   0%, 100% { box-shadow: 0 0 0 0 rgba(47, 196, 188, 0.45); }
   70% { box-shadow: 0 0 0 18px rgba(47, 196, 188, 0); }
 }
+@keyframes redPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(226, 61, 61, 0.55); }
+  70% { box-shadow: 0 0 0 8px rgba(226, 61, 61, 0); }
+}
 @keyframes spinSlow {
   0% { transform: rotate(0); }
   100% { transform: rotate(360deg); }

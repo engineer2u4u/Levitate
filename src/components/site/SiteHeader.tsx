@@ -22,6 +22,15 @@ function PhoneIcon({ size = 13 }: { size?: number }) {
 const topActive = { color: "#1b8f88" };
 const topIdle = { color: "#3d5064" };
 
+/** Pulsing red flag on the Certifications link while cohorts are enrolling. */
+function NewBadge() {
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, background: "#e23d3d", color: "#fff", font: "800 9.5px 'Plus Jakarta Sans',sans-serif", letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 8px", borderRadius: 999, animation: "redPulse 1.8s infinite" }}>
+      New
+    </span>
+  );
+}
+
 export default function SiteHeader({ active }: { active?: NavKey }) {
   const [svcOpen, setSvcOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -89,7 +98,9 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
               </div>
             </div>
           </div>
-          <Link href="/certifications" className="site-navlink" style={active === "certifications" ? topActive : topIdle}>Certifications</Link>
+          <Link href="/certifications" className="site-navlink" style={{ ...(active === "certifications" ? topActive : topIdle), display: "inline-flex", alignItems: "center", gap: 8 }}>
+            Certifications<NewBadge />
+          </Link>
           <Link href="/about-us" className="site-navlink" style={active === "about" ? topActive : topIdle}>About Us</Link>
           <Link href="/parichita-kotnala" className="site-navlink" style={{ ...(active === "parichita" ? topActive : topIdle), whiteSpace: "nowrap" }}>Parichita Kotnala</Link>
           <Link href="/contact" className="site-navlink" style={active === "contact" ? topActive : topIdle}>Contact</Link>
@@ -144,7 +155,9 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
             {services.map((s) => (
               <Link key={s.key} href={s.href} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064" }}>{s.short}</Link>
             ))}
-            <Link href="/certifications" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "certifications" ? "#1b8f88" : "#0a1b33" }}>Certifications</Link>
+            <Link href="/certifications" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "certifications" ? "#1b8f88" : "#0a1b33", display: "flex", alignItems: "center", gap: 8 }}>
+              Certifications<NewBadge />
+            </Link>
             <Link href="/about-us" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "about" ? "#1b8f88" : "#0a1b33" }}>About Us</Link>
             <Link href="/parichita-kotnala" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "parichita" ? "#1b8f88" : "#0a1b33" }}>Parichita Kotnala</Link>
             <Link href="/contact" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "contact" ? "#1b8f88" : "#0a1b33" }}>Contact</Link>
