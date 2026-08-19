@@ -73,6 +73,10 @@ a:hover {
 .lp-btn-outline-light { transition: border-color 0.2s ease, color 0.2s ease; }
 .lp-btn-outline-light:hover { border-color: #2fc4bc; color: #2fc4bc; }
 
+/* Solid white pill, for buttons sitting on the teal gradient */
+.lp-btn-white { transition: background-color 0.2s ease; }
+.lp-btn-white:hover { background: #eafaf8 !important; }
+
 .lp-footlink { color: #5b6e82; transition: color 0.2s ease; }
 .lp-footlink:hover { color: #1b8f88; }
 
@@ -211,6 +215,11 @@ a:hover {
 .site-nav { display: flex; }
 .site-hamburger { display: none; }
 .site-mobile-menu { display: none; }
+
+/* Homepage enrolment bar: trim the gutters and centre the wrapped rows */
+@media (max-width: 760px) {
+  .site-annc { padding: 12px 20px !important; gap: 12px !important; text-align: center; }
+}
 
 @media (max-width: 900px) {
   .site-footer-grid { grid-template-columns: 1fr 1fr !important; }

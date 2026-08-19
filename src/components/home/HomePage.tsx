@@ -8,6 +8,7 @@ import Counter from "./Counter";
 import TestimonialsCarousel from "./TestimonialsCarousel";
 import ScrollToTop from "./ScrollToTop";
 import SiteHeader from "@/components/site/SiteHeader";
+import AnnouncementBar from "@/components/site/AnnouncementBar";
 import TrustedBy from "@/components/site/TrustedBy";
 import Accreditations from "@/components/site/Accreditations";
 // import CredentialsStrip from "@/components/site/CredentialsStrip";
@@ -160,6 +161,7 @@ export default function HomePage() {
 
       {/* HEADER (shared with all pages) */}
       <SiteHeader active="home" />
+      <AnnouncementBar />
 
       {/* HERO */}
       <div
