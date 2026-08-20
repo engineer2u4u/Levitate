@@ -387,6 +387,9 @@ export default function HomePage() {
         </div>
       )}
 
+      {/* VIDEO TESTIMONIALS — high up, straight after the hero, as social proof */}
+      <VideoTestimonials onPlay={setVideo} />
+
       {/* TICKER */}
       <div
         style={{
@@ -999,9 +1002,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-
-      {/* VIDEO TESTIMONIALS */}
-      <VideoTestimonials onPlay={setVideo} />
 
       {/* TESTIMONIALS */}
       <div id="testimonials" style={{ scrollMarginTop: 80 }}>

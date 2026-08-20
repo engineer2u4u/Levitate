@@ -113,12 +113,13 @@ export default function VideoTestimonials({ onPlay }: { onPlay: (clip: PlayableC
   }, [isCarousel, onScreen, held, scrollToCard]);
 
   return (
-    <div className="lp-sec" style={{ background: "#fff", padding: "24px 48px 96px" }}>
+    <div className="lp-sec" style={{ background: "#fff", padding: "72px 48px 80px" }}>
       <div style={{ maxWidth: 1240, margin: "0 auto" }}>
         <Reveal style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 32, flexWrap: "wrap", marginBottom: 44 }}>
           <div style={{ maxWidth: 640 }}>
             <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>In Their Own Words</div>
-            <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>Hear it from certified facilitators</h2>
+            <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 12px", letterSpacing: "-.02em" }}>Real Voices. Real Impact.</h2>
+            <p style={{ font: "400 15.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: 0 }}>Hear it from professionals we&apos;ve trained</p>
           </div>
           <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9" }}>{videoTestimonials.length} short clips · tap to play</div>
         </Reveal>
