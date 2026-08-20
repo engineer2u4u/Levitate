@@ -7,6 +7,29 @@ import Reveal from "@/components/home/Reveal";
 
 const eyebrow: CSSProperties = { font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 };
 
+const socials = [
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/leadershipcoach_parichita",
+    icon: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#e1306c" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.5" cy="6.5" r="1.1" fill="#e1306c" stroke="none" />
+      </svg>
+    ),
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/parichita-kotnala-1056692a",
+    icon: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="#0a66c2" aria-hidden="true">
+        <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.76V21h-4v-5.5c0-1.31-.03-3-1.9-3-1.9 0-2.2 1.42-2.2 2.9V21H9z" />
+      </svg>
+    ),
+  },
+];
+
 const expertise = ["Leadership development", "Talent & performance management", "Employee engagement", "Organisational culture", "Change management", "Inclusion", "Workplace capability building"];
 
 const regions = ["India", "United Kingdom", "Europe", "United States", "Canada"];
@@ -79,6 +102,22 @@ export default function ParichitaPage() {
           </div>
           <h1 style={{ font: "700 clamp(34px,4vw,54px)/1.12 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 14px", letterSpacing: "-.02em" }}>Parichita Kotnala</h1>
           <p style={{ font: "600 17px/1.6 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", margin: 0 }}>Founder &amp; Managing Partner, Levitate PeopleSoft</p>
+          <div style={{ display: "flex", gap: 12, marginTop: 22 }}>
+            {socials.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Parichita Kotnala on ${s.label}`}
+                className="site-social"
+                style={{ display: "inline-flex", alignItems: "center", gap: 9, background: "#fff", border: "1px solid #e3eaf0", borderRadius: 999, padding: "9px 18px 9px 14px", font: "600 13.5px 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}
+              >
+                {s.icon}
+                {s.label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 
