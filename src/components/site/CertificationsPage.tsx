@@ -19,6 +19,13 @@ const why = [
 type Program = {
   id: string; num: string; tag: string; short: string; title: string; sub: string;
   p1: string; p2: string; ideal: string; pillarTitle: string; pillars: { k: string; v: string }[];
+  /** Full curriculum breakdown. Only published for programs whose syllabus is finalised. */
+  curriculum?: {
+    intro: string;
+    facts: { k: string; v: string }[];
+    modules: string[];
+    closing: string;
+  };
 };
 
 const programs: Program[] = [
@@ -41,7 +48,25 @@ const programs: Program[] = [
     p1: "A Train-the-Trainer certification for professionals who want to facilitate POSH awareness, workplace dignity, respectful behaviour and harassment-prevention conversations with legal clarity and facilitation maturity.",
     p2: "Participants learn to explain key POSH concepts, design awareness sessions, use workplace case studies, support manager sensitisation, strengthen IC capability-building conversations and respond to difficult participant questions with sensitivity and responsibility.",
     ideal: "HR professionals, IC members, external members, legal professionals, compliance teams, consultants, workplace trainers and aspiring POSH facilitators.",
-    pillarTitle: "The CLEAR POSH Framework", pillars: [{ k: "C", v: "Clarity on the Law" }, { k: "L", v: "Listening Without Judgment" }, { k: "E", v: "Explaining Boundaries" }, { k: "A", v: "Addressing Resistance" }, { k: "R", v: "Responsible Reporting" }] },
+    pillarTitle: "The CLEAR POSH Framework", pillars: [{ k: "C", v: "Clarity on the Law" }, { k: "L", v: "Listening Without Judgment" }, { k: "E", v: "Explaining Boundaries" }, { k: "A", v: "Addressing Resistance" }, { k: "R", v: "Responsible Reporting" }],
+    curriculum: {
+      intro: "An intensive, practice-led certification designed to build legal understanding, inquiry competence and effective POSH facilitation skills.",
+      facts: [{ k: "Duration", v: "12 Hours" }, { k: "Tenure", v: "3 Weeks (Weekend Batch)" }, { k: "Curriculum", v: "11 Modules" }],
+      modules: [
+        "Purpose, Culture and the Certification Journey",
+        "India's Evolving POSH Landscape",
+        "The CLEAR POSH Framework",
+        "Genesis and Legal Foundation",
+        "Recognising Sexual Harassment",
+        "Coverage, Definitions and Jurisdiction",
+        "Prevention and Internal Committee Governance",
+        "Complaint Intake and Fair Inquiry",
+        "Compliance, Governance and Accountability",
+        "Applied Case Laboratory",
+        "Trainer Craft and Certification",
+      ],
+      closing: "Learn the law. Navigate sensitive situations. Facilitate with confidence.",
+    } },
   { id: "pocso", num: "05", tag: "POCSO", short: "POCSO & Child Safety", title: "Certified POCSO & Child Safety Facilitator Program", sub: "POCSO Train-the-Trainer Certification",
     p1: "A Train-the-Trainer certification for professionals who want to facilitate child-safety and POCSO awareness sessions with sensitivity, legal clarity and responsible communication.",
     p2: "Participants learn to explain child protection concepts, create age-appropriate and institution-sensitive awareness sessions, use case-based discussions, respond to sensitive questions, build awareness around safe and unsafe behaviours and support responsible reporting conversations.",
@@ -167,6 +192,28 @@ export default function CertificationsPage() {
                       ))}
                     </div>
                   </div>
+                  {p.curriculum && (
+                    <div style={{ marginTop: 14, background: "#fff", border: "1px solid #e3eaf0", borderRadius: 16, padding: "24px 26px" }}>
+                      <p style={{ font: "500 14.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#3d5064", margin: "0 0 16px", maxWidth: 640, textWrap: "pretty" } as CSSProperties}>{p.curriculum.intro}</p>
+                      <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 24 }}>
+                        {p.curriculum.facts.map((f) => (
+                          <div key={f.k} style={{ border: "1px solid rgba(27,143,136,.4)", background: "rgba(47,196,188,.08)", borderRadius: 999, padding: "7px 16px", font: "600 12.5px 'Plus Jakarta Sans',sans-serif", color: "#136f6a" }}>
+                            {f.k}: <span style={{ color: "#0a1b33" }}>{f.v}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 14 }}>Programme Modules</div>
+                      <ol className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 26px", listStyle: "none", margin: 0, padding: 0, counterReset: "mod" }}>
+                        {p.curriculum.modules.map((m, i) => (
+                          <li key={m} style={{ display: "flex", gap: 12, alignItems: "baseline", padding: "11px 0", borderBottom: "1px solid #eef3f7" }}>
+                            <span style={{ flex: "none", font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#2f7fd6", fontVariantNumeric: "tabular-nums" }}>{String(i + 1).padStart(2, "0")}</span>
+                            <span style={{ font: "500 13.5px/1.5 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>{m}</span>
+                          </li>
+                        ))}
+                      </ol>
+                      <div style={{ font: "700 13px/1.6 'Plus Jakarta Sans',sans-serif", color: "#136f6a", marginTop: 18 }}>{p.curriculum.closing}</div>
+                    </div>
+                  )}
                   </>
                   )}
                 </div>
