@@ -514,6 +514,9 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* ACCREDITATIONS */}
+      <Accreditations />
+
       {/* BLUEPRINT */}
       <div data-screen-label="Blueprint" className="lp-sec" style={{ background: "#fff", padding: "96px 48px" }}>
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
@@ -1025,9 +1028,6 @@ export default function HomePage() {
 
       {/* TRUSTED ACROSS ORGANIZATIONS AND INSTITUTIONS */}
       <TrustedBy />
-
-      {/* ACCREDITATIONS */}
-      <Accreditations />
 
       {/* CREDENTIALS STRIP (ISO / DPIIT / MSME / Udyam) */}
       {/* <CredentialsStrip /> */}
