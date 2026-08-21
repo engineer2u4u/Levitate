@@ -190,23 +190,39 @@ export type Testimonial = {
 };
 export const testimonials: Testimonial[] = [
   {
-    initials: "SN",
-    name: "Shalini N.",
-    role: "HR Business Partner, IT Services",
+    initials: "KV",
+    name: "Kanishk Vij",
+    role: "International Affairs | Diplomacy | Indian Politics | Public Policy, Konrad-Adenauer-Stiftung",
     quote:
-      "The POSH facilitator certification completely changed how I handle sensitive sessions. The case-based practice and difficult-question drills gave me real confidence, not just a certificate.",
+      "Understanding unconscious bias is critical for anyone shaping public policy — the decisions we make today affect diverse communities in ways we don't always see. Levitate's session gave us the tools to recognise those blind spots, which is essential training for future policymakers and bureaucrats.",
   },
   {
-    initials: "AM",
-    name: "Arjun M.",
-    role: "L&D Lead, Manufacturing",
-    quote: "Most TTT programs stop at theory. Here we facilitated live, got dissected feedback and left with a full trainer toolkit I still use every week.",
+    initials: "NG",
+    name: "Naresh Goli",
+    role: "Founder, Cliniwings",
+    quote:
+      "Training has helped our students get truly corporate-ready. The practical, real-world approach to personality development and interview skills has made a visible difference in how confidently they step into the professional world.",
   },
   {
-    initials: "RK",
-    name: "Dr. Ritu K.",
-    role: "Professor & Placement Head, B-School",
-    quote: "The campus-to-corporate program transformed how our final-year students show up in interviews. Practical, HR-led and grounded in what employers actually expect.",
+    initials: "DK",
+    name: "Dilpreet Kaur",
+    role: "Associate Director, Chitkara",
+    quote:
+      "Levitate's institutional training has been instrumental in preparing our students to be corporate-ready. From personality development to mastering the art of interviews in a real work environment, the sessions gave students practical exposure they simply don't get in a classroom.",
+  },
+  {
+    initials: "MB",
+    name: "Manisha Bisht",
+    role: "HR Manager, Krystelis",
+    quote:
+      "As an IC member, the quarterly sessions run by Levitate have made a real difference. They keep us updated, help us handle inquiries with more confidence, and give us a space to ask questions we wouldn't otherwise get answered.",
+  },
+  {
+    initials: "KP",
+    name: "Khushboo Paliwal",
+    role: "VP, GenXAI",
+    quote:
+      "The quarterly IC sessions with Levitate have been extremely valuable for our Internal Committee. Each session brings clarity on evolving compliance requirements and practical guidance on handling real cases.",
   },
 ];
 
