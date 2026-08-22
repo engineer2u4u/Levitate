@@ -9,7 +9,7 @@ const SHOWN = ["iso", "dpiit", "udyam"].map(byKey);
 
 export default function Accreditations() {
   return (
-    <div className="site-page-sec" style={{ background: "#fff", padding: "76px 48px" }}>
+    <div className="site-page-sec" style={{ background: "#fff", padding: "76px 48px 0" }}>
       <div style={{ maxWidth: 1240, margin: "0 auto" }}>
         <Reveal style={{ textAlign: "center", marginBottom: 40 }}>
           <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Accreditations</div>
@@ -50,7 +50,7 @@ export default function Accreditations() {
             alt="SHRM Recertification Provider — SHRM-CP and SHRM-SCP"
             width={120}
             height={121}
-            style={{ display: "block", width: 120, height: "auto" }}
+            style={{ display: "block", width: 215, height: "auto" }}
           />
           <p style={{ font: "italic 400 14.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 620, margin: "16px 0 0" }}>
             Levitate PeopleSoft is recognised by SHRM to offer Professional Development Credits for SHRM-CP and SHRM-SCP.
