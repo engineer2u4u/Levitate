@@ -358,10 +358,7 @@ body {
 .lp-posh-play { transition: background-size 0.4s ease; background-size: cover; }
 .lp-posh-play:hover { background-size: 106%; }
 
-/* Accreditations grid: 4-up desktop, 2-up tablet, stacked on phones */
-@media (min-width: 641px) and (max-width: 980px) {
-  .site-accred-grid { grid-template-columns: 1fr 1fr !important; }
-}
+/* Accreditations grid */
 @media (max-width: 640px) {
   .site-accred-grid { grid-template-columns: 1fr !important; }
 }

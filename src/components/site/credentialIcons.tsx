@@ -1,22 +1,11 @@
-/* eslint-disable @next/next/no-img-element */
 import type { ReactNode } from "react";
 
 /**
  * Monoline credential marks — single 64x64 grid, 3.5 stroke, round caps,
  * drawn with currentColor. Shared by the Accreditations grid and the
  * Credentials strip so both stay in sync.
- *
- * A credential supplies either `paths` (drawn in the house monoline style) or
- * `img`, for bodies that issue a fixed badge we are not free to redraw.
  */
-export type Credential = {
-  key: string;
-  label: string;
-  sub: string;
-  title: string;
-  paths?: ReactNode;
-  img?: string;
-};
+export type Credential = { key: string; label: string; sub: string; title: string; paths: ReactNode };
 
 export const CREDENTIALS: Credential[] = [
   {
@@ -78,30 +67,11 @@ export const CREDENTIALS: Credential[] = [
       </>
     ),
   },
-  {
-    key: "shrm",
-    label: "SHRM Recertification Provider",
-    sub: "SHRM-CP | SHRM-SCP",
-    title: "SHRM Recertification Provider",
-    img: "/assets/accreditations/shrm.png",
-  },
 ];
 
 export const byKey = (k: string) => CREDENTIALS.find((c) => c.key === k)!;
 
 export function CredentialIcon({ c, size }: { c: Credential; size: number }) {
-  // Issued badges ship as artwork; only the monoline marks are drawn inline.
-  if (c.img) {
-    return (
-      <img
-        src={c.img}
-        alt={c.title}
-        width={size}
-        height={size}
-        style={{ display: "block", width: size, height: size, objectFit: "contain", flex: "none" }}
-      />
-    );
-  }
   return (
     <span style={{ display: "block", width: size, height: size, color: "#1b8f88", flex: "none" }}>
       <svg
