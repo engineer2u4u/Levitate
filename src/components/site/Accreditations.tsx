@@ -4,7 +4,7 @@ import Reveal from "@/components/home/Reveal";
 import { byKey, CredentialIcon } from "./credentialIcons";
 
 /** Accreditations — official registrations and certifications. */
-const SHOWN = ["iso", "dpiit", "udyam"].map(byKey);
+const SHOWN = ["iso", "dpiit", "udyam", "shrm"].map(byKey);
 
 export default function Accreditations() {
   return (
@@ -15,7 +15,7 @@ export default function Accreditations() {
           <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>Accreditation & Industry Recognition</h2>
         </Reveal>
 
-        <div className="site-accred-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22, maxWidth: 900, margin: "0 auto" }}>
+        <div className="site-accred-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 22, maxWidth: 1180, margin: "0 auto" }}>
           {SHOWN.map((c) => (
             <Reveal
               key={c.key}
@@ -32,7 +32,8 @@ export default function Accreditations() {
                 boxShadow: "0 2px 6px rgba(10,27,51,.05)",
               }}
             >
-              <CredentialIcon c={c} size={64} />
+              {/* One size for every mark, so the labels below start on the same line */}
+              <CredentialIcon c={c} size={72} />
               <div>
                 <div style={{ font: "700 16px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{c.label}</div>
                 <div style={{ font: "500 12.5px/1.5 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginTop: 5 }}>{c.sub}</div>
