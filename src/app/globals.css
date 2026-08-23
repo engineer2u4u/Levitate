@@ -429,3 +429,14 @@ body {
 /* Social pills on the Parichita profile */
 .site-social { transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease; }
 .site-social:hover { border-color: rgba(27, 143, 136, 0.55); color: #1b8f88; box-shadow: 0 8px 20px rgba(10, 27, 51, 0.08); }
+
+/* Screen-reader-only text (the marquee announces its message once) */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+/* SHRM ticker: motion is decorative, so stop it for reduced-motion users */
+@media (prefers-reduced-motion: reduce) {
+  .site-shrm-track { animation: none !important; }
+  .site-shrm-bar { overflow-x: auto; }
+}

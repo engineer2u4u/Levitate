@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import ShrmMarquee from "@/components/site/ShrmMarquee";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -75,7 +76,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <ShrmMarquee />
+        {children}
+      </body>
     </html>
   );
 }
