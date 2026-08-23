@@ -24,7 +24,7 @@ export const services: {
   { key: "advisory", num: "04", label: "HR Advisory & Workplace Culture Consulting", short: "HR Advisory & Culture Consulting", href: "/hr-consulting-services" },
 ];
 
-export type NavKey = "home" | "services" | "certifications" | "about" | "parichita" | "contact";
+export type NavKey = "home" | "services" | "certifications" | "about" | "parichita" | "contact" | "lms";
 
 /** Organizations and institutions we have worked with (logos supplied by the client). */
 export const trustedLogos: { name: string; src: string }[] = [

@@ -430,6 +430,22 @@ body {
 .site-social { transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease; }
 .site-social:hover { border-color: rgba(27, 143, 136, 0.55); color: #1b8f88; box-shadow: 0 8px 20px rgba(10, 27, 51, 0.08); }
 
+/* ================================================================== */
+/*  LMS                                                               */
+/* ================================================================== */
+@media (min-width: 641px) and (max-width: 1040px) {
+  .lms-grid-3 { grid-template-columns: 1fr 1fr !important; }
+  .lms-split { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 640px) {
+  .lms-grid-3 { grid-template-columns: 1fr !important; }
+  .lms-split { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .lms-tabs { gap: 0 !important; }
+}
+/* Tab strip scrolls rather than wrapping on narrow screens */
+.lms-tabs { scrollbar-width: none; }
+.lms-tabs::-webkit-scrollbar { display: none; }
+
 /* Screen-reader-only text (the marquee announces its message once) */
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
