@@ -48,6 +48,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # Mail credentials — lives above the web root on the server, never in git
 enquiry-config.php
@@ -61,3 +62,4 @@ next-env.d.ts
 
 # Static export output
 /out/
+
