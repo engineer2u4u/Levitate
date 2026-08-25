@@ -169,6 +169,50 @@ export default function CourseDetail({ slug }: { slug: string }) {
             travel and simply scrolls away with the page. */}
         <div className="lms-split" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 330px", gap: 44 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
+            {/* The programme write-up from the certifications page — its
+                framework, who it suits and what it includes. Same source, so
+                the two pages cannot describe a programme differently. Leads the
+                column: the framework is the thing that explains the programme,
+                and it belongs above the list of what a participant leaves able
+                to do. The hero already carries the title, so this does not
+                repeat it. */}
+            {program && (
+              <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
+                <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 8 }}>About this certification</div>
+                <div style={{ font: "600 14px 'Plus Jakarta Sans',sans-serif", color: "#2f7fd6", marginBottom: 18 }}>{program.sub}</div>
+                <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 14px" }}>{program.p1}</p>
+                <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 24px" }}>{program.p2}</p>
+
+                <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 16, padding: "22px 24px", marginBottom: 22 }}>
+                  <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 16 }}>{program.pillarTitle}</div>
+                  <div className="lms-pillars" style={{ display: "grid", gridTemplateColumns: `repeat(${program.pillars.length}, minmax(0,1fr))`, gap: 12 }}>
+                    {program.pillars.map((p, i) => (
+                      <div key={`${p.k}-${i}`} style={{ background: "#fff", border: "1px solid #e3eaf0", borderTop: "3px solid #2f7fd6", borderRadius: 12, padding: "14px 14px" }}>
+                        <div style={{ font: "700 20px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", marginBottom: 6 }}>{p.k}</div>
+                        <div style={{ font: "600 12.5px/1.45 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{p.v}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+                  <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 16, padding: "20px 22px" }}>
+                    <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 10 }}>Ideal for</div>
+                    <div style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>{program.ideal}</div>
+                  </div>
+                  <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 16, padding: "20px 22px", display: "flex", flexDirection: "column", gap: 11 }}>
+                    <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase" }}>What&apos;s included</div>
+                    {included.map((inc) => (
+                      <div key={inc} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none", marginTop: 2 }}><path d="M5 13l4 4 10-10" /></svg>
+                        <div style={{ font: "500 13px/1.55 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>{inc}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {curriculum ? (
               <>
                 <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
@@ -329,46 +373,6 @@ export default function CourseDetail({ slug }: { slug: string }) {
               </>
             )}
 
-            {/* The programme write-up from the certifications page — its
-                framework, who it suits and what it includes. Same source, so
-                the two pages cannot describe a programme differently. */}
-            {program && (
-              <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
-                <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 10 }}>{program.tag}</div>
-                <div style={{ font: "700 20px/1.3 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 4 }}>{program.title}</div>
-                <div style={{ font: "600 13.5px 'Plus Jakarta Sans',sans-serif", color: "#2f7fd6", marginBottom: 18 }}>{program.sub}</div>
-                <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 14px" }}>{program.p1}</p>
-                <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 24px" }}>{program.p2}</p>
-
-                <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 16, padding: "22px 24px", marginBottom: 22 }}>
-                  <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 16 }}>{program.pillarTitle}</div>
-                  <div className="lms-pillars" style={{ display: "grid", gridTemplateColumns: `repeat(${program.pillars.length}, minmax(0,1fr))`, gap: 12 }}>
-                    {program.pillars.map((p, i) => (
-                      <div key={`${p.k}-${i}`} style={{ background: "#fff", border: "1px solid #e3eaf0", borderTop: "3px solid #2f7fd6", borderRadius: 12, padding: "14px 14px" }}>
-                        <div style={{ font: "700 20px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", marginBottom: 6 }}>{p.k}</div>
-                        <div style={{ font: "600 12.5px/1.45 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{p.v}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
-                  <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 16, padding: "20px 22px" }}>
-                    <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 10 }}>Ideal for</div>
-                    <div style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>{program.ideal}</div>
-                  </div>
-                  <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 16, padding: "20px 22px", display: "flex", flexDirection: "column", gap: 11 }}>
-                    <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase" }}>What&apos;s included</div>
-                    {included.map((inc) => (
-                      <div key={inc} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none", marginTop: 2 }}><path d="M5 13l4 4 10-10" /></svg>
-                        <div style={{ font: "500 13px/1.55 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>{inc}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
 
             {/* Every programme awards both certificates, so this sits outside
                 the brochure block rather than only on the courses that have
