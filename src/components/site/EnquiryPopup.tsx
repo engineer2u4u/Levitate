@@ -109,7 +109,7 @@ export default function EnquiryPopup() {
     >
       <button type="button" aria-label="Close" onClick={close} style={{ position: "absolute", inset: 0, cursor: "pointer", border: "none", background: "transparent", padding: 0 }} />
 
-      <div style={{ position: "relative", width: "100%", maxWidth: 470, background: "#fff", borderRadius: 22, padding: "30px 30px 26px", boxShadow: "0 30px 70px rgba(4,16,30,.42)", maxHeight: "92vh", overflowY: "auto" }}>
+      <div style={{ position: "relative", width: "100%", maxWidth: 650, background: "#fff", borderRadius: 22, padding: "30px 30px 26px", boxShadow: "0 30px 70px rgba(4,16,30,.42)", maxHeight: "92vh", overflowY: "auto" }}>
         <button
           type="button"
           onClick={close}

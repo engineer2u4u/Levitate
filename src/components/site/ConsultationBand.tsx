@@ -30,11 +30,11 @@ export default function ConsultationBand({
             <div style={{ font: "700 22px/1.3 'Plus Jakarta Sans',sans-serif", color: "#fff", letterSpacing: "-.01em" }}>
               Talk it through with us before you decide.
             </div>
-            <p style={{ font: "400 14px/1.7 'Plus Jakarta Sans',sans-serif", color: "rgba(255,255,255,.72)", margin: "8px 0 0", maxWidth: 520 }}>
+            {/* <p style={{ font: "400 14px/1.7 'Plus Jakarta Sans',sans-serif", color: "rgba(255,255,255,.72)", margin: "8px 0 0", maxWidth: 520 }}>
               {subject
                 ? `We will walk you through the curriculum, the batch dates and whether ${subject} suits where you are heading.`
                 : "Tell us what your team or your career needs, and we will point you to the right programme — or tell you honestly if we are not it."}
-            </p>
+            </p> */}
           </div>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
             <Link href="/contact" className="lp-btn-white" style={{ background: "#fff", color: "#0a1b33", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999, whiteSpace: "nowrap" }}>

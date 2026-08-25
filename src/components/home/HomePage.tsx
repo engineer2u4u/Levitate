@@ -224,9 +224,11 @@ export default function HomePage() {
               <br />
               <span style={{ background: "linear-gradient(120deg,#1b8f88,#2f7fd6)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>Leading Human Change.</span>
             </h1>
-            {/* The client's brand statement, verbatim, in place of the tagline
-                and description that used to sit here. */}
+            {/* Tagline as it was, with the client's brand statement beneath it
+                in place of the description that used to follow. */}
             <p style={{ font: "400 16px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 600, margin: "0 0 36px", textWrap: "pretty" } as CSSProperties}>
+              <strong style={{ color: "#000" }}>Global content | Practical facilitation | Real workplace application.</strong>
+              <br />
               We elevate professionals into confident workplace facilitators and corporate trainers who can lead meaningful learning experiences with credibility and practical skill. We also partner with organisations and institutions to design practical learning interventions that build capability, strengthen workplace behaviours and create real-world impact.
             </p>
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
