@@ -87,6 +87,28 @@ export default function CourseDetail({ slug }: { slug: string }) {
                   <div key={m} style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#e6f6f4", background: "rgba(255,255,255,.08)", border: "1px solid rgba(127,227,220,.35)", borderRadius: 999, padding: "8px 15px" }}>{m}</div>
                 ))}
               </div>
+
+              {/* Sits with the programme detail rather than in the price card —
+                  a prospect reaches for the brochure while reading, before
+                  they get as far as the fee. */}
+              {brochure && BROCHURE_ASSETS_READY && (
+                <a
+                  href={brochure.brochure.href}
+                  download
+                  className="lms-brochure-dl"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 12, marginTop: 24, background: "rgba(255,255,255,.08)", border: "1px solid rgba(127,227,220,.4)", borderRadius: 14, padding: "13px 20px 13px 15px" }}
+                >
+                  <span aria-hidden style={{ flex: "none", width: 34, height: 34, borderRadius: 10, background: "rgba(127,227,220,.16)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7fe3dc" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 3v12" /><path d="M7 12l5 5 5-5" /><path d="M4 20h16" />
+                    </svg>
+                  </span>
+                  <span>
+                    <span style={{ display: "block", font: "700 13px 'Plus Jakarta Sans',sans-serif", color: "#fff" }}>{brochure.brochure.label}</span>
+                    <span style={{ display: "block", font: "500 11px 'Plus Jakarta Sans',sans-serif", color: "rgba(255,255,255,.6)", marginTop: 2 }}>{brochure.brochure.meta}</span>
+                  </span>
+                </a>
+              )}
             </div>
 
             <div style={{ background: "#fff", borderRadius: 20, padding: 24, boxShadow: "0 24px 50px rgba(4,16,30,.35)" }}>
@@ -116,27 +138,6 @@ export default function CourseDetail({ slug }: { slug: string }) {
                     <span>Or call us on <a href={`tel:${contact.tel}`} style={{ fontWeight: 700 }}>{contact.phone}</a></span>
                   )}
                 </div>
-              )}
-
-              {/* The brochure is the thing a prospect forwards to whoever
-                  approves the spend, so it sits with the price, not buried
-                  further down the page. */}
-              {brochure && BROCHURE_ASSETS_READY && (
-                <a
-                  href={brochure.brochure.href}
-                  download
-                  style={{ display: "flex", alignItems: "center", gap: 11, marginTop: 14, background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 13, padding: "13px 15px" }}
-                >
-                  <span aria-hidden style={{ flex: "none", width: 32, height: 32, borderRadius: 9, background: "rgba(47,127,214,.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2f7fd6" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 3v12" /><path d="M7 12l5 5 5-5" /><path d="M4 20h16" />
-                    </svg>
-                  </span>
-                  <span>
-                    <span style={{ display: "block", font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{brochure.brochure.label}</span>
-                    <span style={{ display: "block", font: "500 11px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 2 }}>{brochure.brochure.meta}</span>
-                  </span>
-                </a>
               )}
 
               <div style={{ height: 1, background: "#eef2f6", margin: "18px 0" }} />
