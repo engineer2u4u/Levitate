@@ -113,10 +113,10 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
               TTT Certification<NewBadge />
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
             </button>
-            <div style={{ position: "absolute", top: "100%", left: -16, paddingTop: 16, minWidth: 300, display: certOpen ? "block" : "none" }}>
+            <div style={{ position: "absolute", top: "100%", left: -16, paddingTop: 16, minWidth: 390, display: certOpen ? "block" : "none" }}>
               <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: 8, boxShadow: "0 22px 48px rgba(10,27,51,.16)", display: "flex", flexDirection: "column", gap: 2 }}>
                 {COURSES.map((c) => (
-                  <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setCertOpen(false)} className="site-dropitem" style={{ padding: "11px 14px", borderRadius: 10, font: "600 13.5px/1.35 'Plus Jakarta Sans',sans-serif", display: "block", color: "#0a1b33" }}>{c.short}</Link>
+                  <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setCertOpen(false)} className="site-dropitem" style={{ padding: "11px 14px", borderRadius: 10, font: "600 13.5px/1.4 'Plus Jakarta Sans',sans-serif", display: "block", color: "#0a1b33" }}>{c.title}</Link>
                 ))}
               </div>
             </div>
@@ -181,7 +181,7 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
               TTT Certification<NewBadge />
             </div>
             {COURSES.map((c) => (
-              <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064" }}>{c.short}</Link>
+              <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064", lineHeight: 1.4 }}>{c.title}</Link>
             ))}
             <Link href="/about-us" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "about" ? "#1b8f88" : "#0a1b33" }}>About Us</Link>
             <Link href="/parichita-kotnala" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "parichita" ? "#1b8f88" : "#0a1b33" }}>Parichita Kotnala</Link>
