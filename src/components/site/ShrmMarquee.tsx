@@ -6,7 +6,7 @@
  * makes the loop seamless; `marquee` is the shared keyframe in globals.css.
  */
 const MESSAGE =
-  "Participants completing Levitate PeopleSoft's certification programs are eligible for SHRM Professional Development Credits (PDCs), applicable toward SHRM-CP and SHRM-SCP recertification.";
+  "Levitate PeopleSoft is now a SHRM Recertification Provider — recognised by one of the world's leading HR professional bodies, with eligible programmes offering SHRM Professional Development Credits (PDCs).";
 
 export default function ShrmMarquee() {
   return (

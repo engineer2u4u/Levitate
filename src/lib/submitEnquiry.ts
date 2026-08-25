@@ -44,13 +44,14 @@ export async function submitEnquiry(form: HTMLFormElement, extra: Record<string,
   const params: Record<string, string> = {
     from_name: val(data, "name"),
     from_email: val(data, "email"),
-    phone: val(data, "phone"),
+    phone: val(data, "phone") || "—",
     organization: val(data, "organization") || "—",
     intent: extra.intent || val(data, "intent") || "—",
     participants: val(data, "participants") || "—",
     mode: val(data, "mode") || "—",
     message: val(data, "message") || "—",
-    source: typeof window !== "undefined" ? window.location.pathname : "",
+    // A form may name where it came from; otherwise the page it sits on.
+    source: extra.source || (typeof window !== "undefined" ? window.location.pathname : ""),
     subject: `Website enquiry: ${extra.intent || val(data, "intent") || "General"}`,
   };
 
