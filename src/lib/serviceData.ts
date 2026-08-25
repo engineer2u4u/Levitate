@@ -56,7 +56,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     crumb: "Train-the-Trainer",
     eyebrow: "01 · Train-the-Trainer Certifications",
     title: "Train-the-Trainer Certification Programs",
-    lede: "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, POSH and POCSO — along with HR Edge Certification (for students) for future HR professionals.",
+    lede: "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, POSH and POCSO — along with HR Edge certification for future HR professionals.",
     img: "/assets/students-group.png",
     facts: [
       { k: "Format", v: "Online and Weekend Batches" },
@@ -65,7 +65,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     ],
     introHeading: "Our Certification Approach",
     intro: [
-      "Our certification programs are designed to help professionals build practical understanding, facilitation confidence and workplace-ready knowledge across six key areas: Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, POSH, POCSO and HR Edge Certification (for students).",
+      "Our certification programs are designed to help professionals build practical understanding, facilitation confidence and workplace-ready knowledge across six key areas: Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, POSH, POCSO and HR Edge certification.",
       "Each program is built with global workplace content, practical HR insights and real-world application. The learning combines structured live sessions, practical examples, case discussions, workplace scenarios and guided learning material to help participants understand both the concept and its application in modern workplaces.",
       "Participants receive access to session recordings, presentation decks, reading material, templates and relevant trainer resources to support continued learning beyond the live sessions.",
       "The focus is on helping participants understand the subject clearly, connect it with real workplace situations and build the confidence to facilitate awareness or learning conversations in their respective professional contexts.",
@@ -99,7 +99,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
       },
       {
         num: "03",
-        t: "Workplace Wellbeing Facilitator Program Mental Health & Wellbeing TTT",
+        t: "Workplace Wellbeing Facilitator Program (Mental Health & Wellbeing TTT)",
         href: "/lms/course/workplace-wellbeing",
         d: "Powered by the CARES Wellbeing Framework Train-the-Trainer Certification Applied Mental Health & Wellbeing — facilitate stress, burnout and psychological safety conversations with sensitivity and ethical boundaries.",
       },
@@ -117,7 +117,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
       },
       {
         num: "06",
-        t: "HR Edge Certification (for students)",
+        t: "HR Edge certification (HR Students)",
         href: "/lms/course/hr-edge",
         d: "Powered by the EDGE Rediness Framework Train-the-Trainer Certification Integrated DEI, POSH & Workplace Wellbeing for MBA-HR, PGDM-HR students and early-career HR professionals.",
       },
@@ -291,7 +291,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     intro: [
       "Our student programs build communication skills, professional conduct, interview preparedness, career clarity and a practical understanding of what organizations expect in the first two years of a career.",
       "Sessions are run by practitioners who have sat on the hiring side of the table. Students get mock interviews with real HR feedback, group-discussion practice, resume review and a candid view of how they come across to a recruiter.",
-      "Programs are scheduled around the placement calendar — pre-placement readiness, internship preparation, or a semester-long track. For HR postgraduates, the HR Edge Certification (for students) adds an applied credential beyond the degree.",
+      "Programs are scheduled around the placement calendar — pre-placement readiness, internship preparation, or a semester-long track. For HR postgraduates, the HR Edge certification adds an applied credential beyond the degree.",
     ],
     outcomes: [
       "Interview-ready introductions and answers",
@@ -301,7 +301,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
       "Confidence in professional communication",
       "An applied credential for HR students",
     ],
-    bestFor: "Final-year UG/PG students, placement and internship-readiness cohorts, early-career professionals, and MBA-HR / PGDM-HR students for the HR Edge Certification (for students).",
+    bestFor: "Final-year UG/PG students, placement and internship-readiness cohorts, early-career professionals, and MBA-HR / PGDM-HR students for the HR Edge certification.",
     deliverTitle: "What institutions receive",
     deliverables: [
       "Program design mapped to your placement calendar",
@@ -318,7 +318,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
       { num: "02", t: "Communication & Corporate Etiquette", d: "Email writing, presentation skills, group discussions, professional communication and business etiquette." },
       { num: "03", t: "Interview & Career Readiness", d: "Resume building, personal introduction, HR interview preparation, mock interviews with feedback and job-search confidence." },
       { num: "04", t: "Professional Skills for the Workplace", d: "Time management, teamwork, problem-solving, critical thinking, adaptability, ownership and workplace discipline." },
-      { num: "05", t: "HR Edge Certification (for students)", d: "An integrated certification for MBA-HR, PGDM-HR and HR postgraduate students combining DEI, POSH and workplace wellbeing." },
+      { num: "05", t: "HR Edge certification (HR Students)", d: "An integrated certification for MBA-HR, PGDM-HR and HR postgraduate students combining DEI, POSH and workplace wellbeing." },
     ],
     processEyebrow: "How we work with institutions",
     processHeading: "Built around your placement calendar, not ours",
@@ -331,13 +331,13 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     certEyebrow: "Student credential",
     certHeading: "A credential that means something to a recruiter",
     certBody:
-      "Students receive a certificate naming the program completed. For MBA-HR and PGDM-HR cohorts, the HR Edge Certification (for students) records an applied, assessment-based credential in DEI, POSH and workplace wellbeing — a genuine differentiator in HR interviews.",
-    certLabel: "HR Edge Certification (for students)",
+      "Students receive a certificate naming the program completed. For MBA-HR and PGDM-HR cohorts, the HR Edge certification records an applied, assessment-based credential in DEI, POSH and workplace wellbeing — a genuine differentiator in HR interviews.",
+    certLabel: "HR Edge certification (HR Students)",
     certName: "Student Name",
     certLine1: "This certifies that",
     certLine2: "has successfully completed the",
     certLine3: "integrated DEI, POSH and workplace wellbeing curriculum with assessment",
-    certProgram: "HR Edge Certification (for students) for Future HR Professionals",
+    certProgram: "HR Edge Certification for Future HR Professionals",
     audience: [
       "Final-year UG students",
       "Postgraduate students",
@@ -352,7 +352,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     orgLabel: "Institution *",
     orgPlaceholder: "College or university name",
     pickLabel: "Which program are you planning? *",
-    options: ["Campus to corporate", "Communication & etiquette", "Interview readiness", "Professional skills", "HR Edge Certification (for students)", "Full track"],
+    options: ["Campus to corporate", "Communication & etiquette", "Interview readiness", "Professional skills", "HR Edge certification (HR Students)", "Full track"],
     msgPlaceholder: "Cohort size, year of study, available slots and placement timelines",
     formButton: "Request institutional proposal",
     faqs: [

@@ -50,14 +50,14 @@ export const COURSES: Course[] = [
   {
     slug: "workplace-wellbeing",
     tag: "Wellbeing", mode: "Live online · dates announced soon",
-    title: "Workplace Wellbeing Facilitator Program Mental Health & Wellbeing TTT",
+    title: "Workplace Wellbeing Facilitator Program (Mental Health & Wellbeing TTT)",
     short: "Workplace Wellbeing",
     desc: "Facilitate workplace mental-health conversations with confidence, sensitivity and ethical care.",
     img: "/assets/outdoor-group.jpeg", status: "waitlist",
     feePaise: null, priceNote: "confirmed with batch dates",
     modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Parichita Kotnala",
     certificate: {
-      name: "Workplace Wellbeing Facilitator Program Mental Health & Wellbeing TTT",
+      name: "Workplace Wellbeing Facilitator Program (Mental Health & Wellbeing TTT)",
       closing: "in **Workplace Mental Health & Wellbeing** facilitation.",
       hours: "12 Hours",
     },
@@ -80,14 +80,14 @@ export const COURSES: Course[] = [
   {
     slug: "hr-edge",
     tag: "For students", mode: "Blended · campus cohorts",
-    title: "HR Edge Certification (for students)",
+    title: "HR Edge certification (HR Students)",
     short: "HR Edge",
     desc: "Integrated DEI, POSH and wellbeing certification for MBA-HR and early-career HR professionals.",
     img: "/assets/students-group.png", status: "waitlist",
     feePaise: null, priceNote: "institutional pricing available",
     modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Parichita Kotnala",
     certificate: {
-      name: "HR Edge Certification (for students)",
+      name: "HR Edge certification (HR Students)",
       closing: "in integrated **DEI, POSH & Workplace Wellbeing** facilitation.",
       hours: "12 Hours",
     },

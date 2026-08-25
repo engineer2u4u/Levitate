@@ -13,7 +13,7 @@ export const services: Service[] = [
   {
     num: "01",
     title: "Train-the-Trainer Certification Programs",
-    desc: "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, POSH and POCSO — along with HR Edge Certification (for students) for future HR professionals.",
+    desc: "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, POSH and POCSO — along with HR Edge certification for future HR professionals.",
   },
   {
     num: "02",
@@ -100,7 +100,7 @@ export const certs: Cert[] = [
   {
     num: "03",
     tag: "Workplace Wellbeing · TTT",
-    title: "Workplace Wellbeing Facilitator Program Mental Health & Wellbeing TTT",
+    title: "Workplace Wellbeing Facilitator Program (Mental Health & Wellbeing TTT)",
     sub: "Applied Mental Health & Wellbeing Certification",
     desc: "Facilitate workplace mental-health conversations with confidence, sensitivity and ethical responsibility.",
   },
@@ -120,8 +120,8 @@ export const certs: Cert[] = [
   },
   {
     num: "06",
-    tag: "HR Edge Certification (for students) · TTT",
-    title: "HR Edge Certification (for students)",
+    tag: "HR Edge certification · TTT",
+    title: "HR Edge certification (HR Students)",
     sub: "Integrated DEI, POSH & Wellbeing Certification",
     desc: "A career advantage for MBA-HR, PGDM-HR and early-career HR professionals entering modern workplaces.",
   },
@@ -232,7 +232,7 @@ export const tickerA = [
   "Workplace Mental Health & Wellbeing",
   "POSH Train-the-Trainer",
   "POCSO & Child Safety",
-  "HR Edge Certification (for students)",
+  "HR Edge certification (HR Students)",
   "Flexible Training Modes",
   "Delivered by Industry Experts",
   "Hands-On Learning",

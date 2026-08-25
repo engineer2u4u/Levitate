@@ -55,8 +55,8 @@ export const enquiryTopics: string[] = [
   "POCSO & Child Safety Facilitator Program (POCSO TTT)",
   "Corporate Leadership Facilitator Program (CLF TTT)",
   "Inclusive Workplace Facilitator Program (DEI TTT)",
-  "Workplace Wellbeing Facilitator Program Mental Health & Wellbeing TTT",
-  "HR Edge Certification (for students)",
+  "Workplace Wellbeing Facilitator Program (Mental Health & Wellbeing TTT)",
+  "HR Edge certification (HR Students)",
   "Corporate Training",
 ];
 
