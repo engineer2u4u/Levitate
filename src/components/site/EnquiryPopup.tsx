@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { submitEnquiry } from "@/lib/submitEnquiry";
+import { enquiryTopics } from "@/lib/site";
 
 /**
  * Landing enquiry pop-up.
@@ -32,14 +33,6 @@ const field: CSSProperties = {
   color: "#0a1b33",
   outline: "none",
 };
-
-const INTENTS = [
-  "Train-the-Trainer certification",
-  "Corporate training",
-  "Institutional / campus training",
-  "POSH / IC advisory",
-  "Something else",
-];
 
 export default function EnquiryPopup() {
   const [open, setOpen] = useState(false);
@@ -90,7 +83,10 @@ export default function EnquiryPopup() {
     if (busy || !formRef.current) return;
     setBusy(true);
     setError("");
-    const res = await submitEnquiry(formRef.current, { intent: "Website pop-up enquiry" });
+    // No `intent` override here — the dropdown's own value has to reach the
+    // mail, otherwise every pop-up enquiry arrives without the program on it.
+    // Provenance goes in `source` instead.
+    const res = await submitEnquiry(formRef.current, { source: `Landing pop-up (${window.location.pathname})` });
     setBusy(false);
     if (res.ok) {
       setSent(true);
@@ -160,24 +156,25 @@ export default function EnquiryPopup() {
                 </div>
                 <div>
                   <div style={label}>Organisation</div>
-                  <input name="organization" autoComplete="organization" placeholder="Where you work" style={field} />
-                </div>
-              </div>
-              <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                <div>
-                  <div style={label}>Email</div>
-                  <input name="email" type="email" required autoComplete="email" placeholder="you@company.com" style={field} />
-                </div>
-                <div>
-                  <div style={label}>Phone</div>
-                  <input name="phone" type="tel" autoComplete="tel" placeholder="+91 98110 24567" style={field} />
+                  <input name="organization" required autoComplete="organization" placeholder="Where you work" style={field} />
                 </div>
               </div>
               <div>
+                <div style={label}>Email</div>
+                <input name="email" type="email" required autoComplete="email" placeholder="you@company.com" style={field} />
+              </div>
+              <div>
                 <div style={label}>What are you interested in?</div>
-                <select name="intent" defaultValue={INTENTS[0]} style={{ ...field, cursor: "pointer" }}>
-                  {INTENTS.map((i) => <option key={i}>{i}</option>)}
+                {/* Starts unselected on purpose: a pre-picked first option would
+                    file every untouched form against the leadership program. */}
+                <select name="intent" required defaultValue="" style={{ ...field, cursor: "pointer" }}>
+                  <option value="" disabled>Choose a program</option>
+                  {enquiryTopics.map((t) => <option key={t}>{t}</option>)}
                 </select>
+              </div>
+              <div>
+                <div style={label}>Drop your query</div>
+                <textarea name="message" rows={3} placeholder="Tell us what you would like to know" style={{ ...field, resize: "vertical", minHeight: 84, font: "500 13.5px/1.6 'Plus Jakarta Sans',sans-serif" }} />
               </div>
 
               {error && (
@@ -192,7 +189,7 @@ export default function EnquiryPopup() {
                 className="lp-btn-grad"
                 style={{ cursor: busy ? "wait" : "pointer", border: "none", marginTop: 4, background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "13px 20px", borderRadius: 999, opacity: busy ? 0.75 : 1 }}
               >
-                {busy ? "Sending…" : "Send my enquiry"}
+                {busy ? "Sending…" : "Submit"}
               </button>
 
               <button

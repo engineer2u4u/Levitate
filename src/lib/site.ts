@@ -44,6 +44,22 @@ export const trustedLogos: { name: string; src: string }[] = [
   { name: "Hilton's School", src: "/assets/logos/hiltons-school.png" },
 ];
 
+/**
+ * What a visitor can put an enquiry against. The six certification programs in
+ * the order they appear on /certifications, plus corporate training — kept here
+ * rather than inside a form so every enquiry surface offers the same list and
+ * the reply mail always names a program the team recognises.
+ */
+export const enquiryTopics: string[] = [
+  "Certified Corporate Leadership Facilitator Program",
+  "Certified Inclusive Workplace Facilitator Program (DEI)",
+  "Certified Workplace Wellbeing Facilitator Program",
+  "Certified POSH & Workplace Dignity Facilitator Program",
+  "Certified POCSO & Child Safety Facilitator Program",
+  "HR Edge Certification (for students)",
+  "Corporate Training",
+];
+
 export type Batch = {
   tag: string; title: string; status: string; open: boolean;
   /** Short name + start date, used by the homepage announcement bar. Only set while enrolling. */
@@ -60,10 +76,10 @@ export type Batch = {
 export const batches: Batch[] = [
   { tag: "POSH Train-the-Trainer", title: "POSH TTT Certification", status: "Enrolling", open: true, short: "POSH TTT", starts: "26 September",
     rows: [{ k: "Batch starts", v: "26 September" }, { k: "Duration", v: "3 weeks" }, { k: "Batch type", v: "Weekend batch" }, { k: "Daily", v: "2 hours per day" }, { k: "Timing", v: "6:00 – 8:00 PM" }, { k: "Mode", v: "Live online" }],
-    fee: "₹15,000", feeNote: "inclusive of taxes", cta: "Enrol for this batch" },
+    fee: "₹25,000", feeNote: "inclusive of taxes", cta: "Enrol for this batch" },
   { tag: "POCSO Train-the-Trainer", title: "POCSO TTT Certification", status: "Enrolling", open: true, short: "POCSO TTT", starts: "18 September",
     rows: [{ k: "Batch dates", v: "18, 19 & 20 September" }, { k: "Duration", v: "3 days" }, { k: "Daily", v: "2 hours per day" }, { k: "Timing", v: "6:00 – 8:00 PM" }, { k: "Mode", v: "Live online" }, { k: "Seats", v: "Limited cohort" }],
-    fee: "₹13,000", feeNote: "inclusive of taxes", cta: "Enrol for this batch" },
+    fee: "₹20,000", feeNote: "inclusive of taxes", cta: "Enrol for this batch" },
   { tag: "DEI Train-the-Trainer", title: "Diversity, Equity & Inclusion Batch", status: "Dates coming soon", open: false,
     rows: [{ k: "Batch month", v: "October 2026" }, { k: "Exact dates", v: "To be announced" }, { k: "Timing", v: "To be confirmed" }, { k: "Mode", v: "Live online" }],
     fee: "On request", feeNote: "confirmed with batch dates", cta: "Join the waitlist" },
