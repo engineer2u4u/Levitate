@@ -7,9 +7,14 @@ import { byKey, CredentialIcon } from "./credentialIcons";
 /** Accreditations — official registrations and certifications. */
 const SHOWN = ["iso", "dpiit", "udyam"].map(byKey);
 
-export default function Accreditations() {
+/**
+ * `spaceBelow` adds the bottom padding the section normally goes without.
+ * The homepage runs straight into the next section and wants the gap closed;
+ * above the footer the SHRM line would otherwise sit flush against it.
+ */
+export default function Accreditations({ spaceBelow = false }: { spaceBelow?: boolean }) {
   return (
-    <div className="site-page-sec" style={{ background: "#fff", padding: "76px 48px 0" }}>
+    <div className="site-page-sec" style={{ background: "#fff", padding: `76px 48px ${spaceBelow ? 76 : 0}px` }}>
       <div style={{ maxWidth: 1240, margin: "0 auto" }}>
         <Reveal style={{ textAlign: "center", marginBottom: 40 }}>
           <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Accreditations</div>

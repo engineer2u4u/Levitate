@@ -80,7 +80,7 @@ export const POSH_BROCHURE: ProgramBrochure = {
     {
       title: "SHRM Certificate of Completion",
       caption: "Issued with the PDCs earned toward SHRM-CP® and SHRM-SCP® recertification.",
-      src: "/assets/certificates/posh-ttt-shrm-certificate.png",
+      src: "/assets/certificates/posh-ttt-shrm-certificate.jpg",
     },
     {
       title: "Levitate PeopleSoft Certificate of Training Completion",
@@ -92,25 +92,22 @@ export const POSH_BROCHURE: ProgramBrochure = {
   brochure: {
     href: "/assets/brochures/levitate-posh-ttt-brochure.pdf",
     label: "Download the programme brochure",
-    meta: "PDF · 13 pages",
+    meta: "PDF · 13 pages · 5 MB",
   },
 };
 
 /**
- * Whether the brochure PDF and the two certificate images are actually in
- * /public yet.
+ * Whether the brochure PDF and the two certificate images are in /public.
  *
- * The copy below is ready; the files are not. Rendering a download link to a
- * missing PDF or an <img> to a missing PNG would ship a 404 and two broken
- * images on the POSH page, so both are hidden until this flips. Add:
+ * The download link and the certificate images are hidden while this is false,
+ * so a programme whose copy is written but whose files have not arrived does
+ * not ship a 404 and two broken images. The files this guards:
  *
  *   public/assets/brochures/levitate-posh-ttt-brochure.pdf
- *   public/assets/certificates/posh-ttt-shrm-certificate.png
+ *   public/assets/certificates/posh-ttt-shrm-certificate.jpg
  *   public/assets/certificates/posh-ttt-levitate-certificate.png
- *
- * then set this to true.
  */
-export const BROCHURE_ASSETS_READY = false;
+export const BROCHURE_ASSETS_READY = true;
 
 export const BROCHURES: Record<string, ProgramBrochure> = {
   "posh-trainer": POSH_BROCHURE,

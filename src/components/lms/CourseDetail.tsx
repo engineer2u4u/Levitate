@@ -8,6 +8,8 @@ import { contact } from "@/lib/site";
 import { outlineBySlug } from "@/lib/programOutlines";
 import { BROCHURE_ASSETS_READY, brochureBySlug } from "@/lib/lms/poshBrochure";
 import UpcomingBatches from "@/components/site/UpcomingBatches";
+import FaqAccordion from "@/components/site/FaqAccordion";
+import { faqsBySlug } from "@/lib/lms/poshFaqs";
 import { curriculumBySlug } from "@/lib/lms/poshCurriculum";
 import { useSession } from "./useSession";
 
@@ -22,6 +24,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
   const curriculum = curriculumBySlug(slug);
   const outline = outlineBySlug(slug);
   const brochure = brochureBySlug(slug);
+  const faqs = faqsBySlug(slug);
   const { user, enrolments, openAuth } = useSession();
   const router = useRouter();
 
@@ -340,6 +343,8 @@ export default function CourseDetail({ slug }: { slug: string }) {
                 </div>
               </>
             )}
+
+            {faqs && <FaqAccordion items={faqs} />}
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
