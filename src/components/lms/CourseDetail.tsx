@@ -10,6 +10,7 @@ import { BROCHURE_ASSETS_READY, brochureBySlug } from "@/lib/lms/poshBrochure";
 import UpcomingBatches from "@/components/site/UpcomingBatches";
 import FaqAccordion from "@/components/site/FaqAccordion";
 import { faqsBySlug } from "@/lib/lms/poshFaqs";
+import { founders } from "@/lib/homeData";
 import { curriculumBySlug } from "@/lib/lms/poshCurriculum";
 import { useSession } from "./useSession";
 
@@ -25,6 +26,8 @@ export default function CourseDetail({ slug }: { slug: string }) {
   const outline = outlineBySlug(slug);
   const brochure = brochureBySlug(slug);
   const faqs = faqsBySlug(slug);
+  // Every certification is led by the founder; her card matches the homepage.
+  const facilitator = founders[0];
   const { user, enrolments, openAuth } = useSession();
   const router = useRouter();
 
@@ -350,13 +353,15 @@ export default function CourseDetail({ slug }: { slug: string }) {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
             <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 18, overflow: "hidden" }}>
-              <img src="/assets/parichita-speaking.png" alt="" style={{ width: "100%", aspectRatio: "16/10", objectFit: "cover", objectPosition: "35% 30%", display: "block" }} />
+              {/* Portrait, role and bio come from the homepage founder record,
+                  so the facilitator is shown the same way in both places. */}
+              <img src={facilitator.img} alt={facilitator.alt} style={{ width: "100%", aspectRatio: "16/10", objectFit: "cover", objectPosition: facilitator.imgPos, display: "block" }} />
               <div style={{ padding: "20px 22px" }}>
                 <div style={{ font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 8 }}>Facilitator</div>
                 <div style={{ font: "700 17px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{course.facilitator}</div>
-                <div style={{ font: "600 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", margin: "3px 0 10px" }}>Founder &amp; Managing Partner</div>
+                <div style={{ font: "600 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", margin: "3px 0 10px" }}>{facilitator.role}</div>
                 <div style={{ font: "400 12.5px/1.65 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
-                  15+ years of global HR leadership across India, the UK, Europe and North America — POSH, DEI, wellbeing and leadership facilitation.
+                  {facilitator.bio}
                 </div>
               </div>
             </div>

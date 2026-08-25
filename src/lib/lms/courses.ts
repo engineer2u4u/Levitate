@@ -20,7 +20,7 @@ export const COURSES: Course[] = [
     desc: "Facilitate child-safety awareness with sensitivity, legal clarity and responsible communication.",
     img: "/assets/school-group.jpeg", status: "enrolling",
     feePaise: 2000000, priceNote: "incl. taxes · from 18 Sep",
-    modulesLabel: "8 modules", hoursLabel: "8 hours", facilitator: "Levitate faculty",
+    modulesLabel: "8 modules", hoursLabel: "8 hours", facilitator: "Parichita Kotnala",
   },
   {
     slug: "inclusive-workplace",
@@ -30,7 +30,7 @@ export const COURSES: Course[] = [
     desc: "Lead conversations on inclusion, unconscious bias, belonging and psychological safety.",
     img: "/assets/workshop-handsup.jpeg", status: "waitlist",
     feePaise: null, priceNote: "confirmed with batch dates",
-    modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Levitate faculty",
+    modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Parichita Kotnala",
   },
   {
     slug: "workplace-wellbeing",
@@ -40,7 +40,7 @@ export const COURSES: Course[] = [
     desc: "Facilitate workplace mental-health conversations with confidence, sensitivity and ethical care.",
     img: "/assets/outdoor-group.jpeg", status: "waitlist",
     feePaise: null, priceNote: "confirmed with batch dates",
-    modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Levitate faculty",
+    modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Parichita Kotnala",
   },
   {
     slug: "leadership-facilitator",
@@ -60,7 +60,7 @@ export const COURSES: Course[] = [
     desc: "Integrated DEI, POSH and wellbeing certification for MBA-HR and early-career HR professionals.",
     img: "/assets/students-group.png", status: "waitlist",
     feePaise: null, priceNote: "institutional pricing available",
-    modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Levitate faculty",
+    modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Parichita Kotnala",
   },
 ];
 
