@@ -11,7 +11,9 @@ export default function AnnouncementBar() {
   if (open.length === 0) return null;
 
   return (
-    <div style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)" }}>
+    // Same ground as the SHRM ticker above the header, so the two bands read
+    // as one piece of site chrome rather than two competing stripes.
+    <div style={{ background: "linear-gradient(120deg,#0c2a45,#0a1f38)", borderBottom: "1px solid rgba(127,227,220,.25)" }}>
       <div
         className="site-annc"
         style={{ maxWidth: 1240, margin: "0 auto", padding: "12px 48px", display: "flex", alignItems: "center", justifyContent: "center", gap: 18, flexWrap: "wrap" }}

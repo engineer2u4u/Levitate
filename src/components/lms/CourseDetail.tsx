@@ -7,6 +7,10 @@ import { ENROLMENT_OPEN, courseBySlug, formatFee } from "@/lib/lms/courses";
 import { contact } from "@/lib/site";
 import { outlineBySlug } from "@/lib/programOutlines";
 import { BROCHURE_ASSETS_READY, brochureBySlug } from "@/lib/lms/poshBrochure";
+import { SHRM_ACCREDITATION, certificateCards } from "@/lib/certificateArt";
+import { included, programBySlug } from "@/lib/programs";
+import CertificateGallery from "@/components/site/CertificateGallery";
+import ConsultationBand from "@/components/site/ConsultationBand";
 import UpcomingBatches from "@/components/site/UpcomingBatches";
 import FaqAccordion from "@/components/site/FaqAccordion";
 import { faqsBySlug } from "@/lib/lms/poshFaqs";
@@ -26,6 +30,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
   const outline = outlineBySlug(slug);
   const brochure = brochureBySlug(slug);
   const faqs = faqsBySlug(slug);
+  const program = programBySlug(slug);
   // Every certification is led by the founder; her card matches the homepage.
   const facilitator = founders[0];
   const { user, enrolments, openAuth } = useSession();
@@ -159,7 +164,10 @@ export default function CourseDetail({ slug }: { slug: string }) {
 
       {/* BODY */}
       <div style={{ background: "#f7fafc", padding: "44px 48px 80px" }} className="site-page-sec">
-        <div className="lms-split" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 330px", gap: 44, alignItems: "start" }}>
+        {/* No `alignItems: start` here: the sidebar column has to stretch to
+            the row's height, or the sticky element inside it has no room to
+            travel and simply scrolls away with the page. */}
+        <div className="lms-split" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 330px", gap: 44 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 26 }}>
             {curriculum ? (
               <>
@@ -318,40 +326,79 @@ export default function CourseDetail({ slug }: { slug: string }) {
                   </div>
                 </div>
 
-                <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
-                  <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 18 }}>Certification &amp; recognition</div>
-                  <div style={{ background: "#f7fafc", borderLeft: "3px solid #1b8f88", borderRadius: "0 13px 13px 0", padding: "20px 22px", marginBottom: 18 }}>
-                    <div style={{ font: "700 14px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 8 }}>{brochure.accreditation.title}</div>
-                    <p style={{ font: "400 13.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 12px" }}>{brochure.accreditation.body}</p>
-                    <p style={{ font: "400 13px/1.75 'Plus Jakarta Sans',sans-serif", color: "#8296a9", margin: 0 }}>{brochure.accreditation.note}</p>
-                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 14 }}>
-                      {brochure.accreditation.badges.map((bd) => (
-                        <span key={bd} style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 999, padding: "7px 14px", font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#136f6a" }}>{bd}</span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {BROCHURE_ASSETS_READY && (
-                    <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
-                      {brochure.certificates.map((c) => (
-                        <figure key={c.title} style={{ margin: 0 }}>
-                          <img src={c.src} alt={`Sample ${c.title}`} style={{ width: "100%", display: "block", borderRadius: 12, border: "1px solid #e3eaf0", background: "#f7fafc" }} />
-                          <figcaption style={{ marginTop: 10 }}>
-                            <div style={{ font: "700 13px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{c.title}</div>
-                            <div style={{ font: "400 12px/1.6 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 3 }}>{c.caption}</div>
-                          </figcaption>
-                        </figure>
-                      ))}
-                    </div>
-                  )}
-                </div>
               </>
             )}
+
+            {/* The programme write-up from the certifications page — its
+                framework, who it suits and what it includes. Same source, so
+                the two pages cannot describe a programme differently. */}
+            {program && (
+              <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
+                <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 10 }}>{program.tag}</div>
+                <div style={{ font: "700 20px/1.3 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 4 }}>{program.title}</div>
+                <div style={{ font: "600 13.5px 'Plus Jakarta Sans',sans-serif", color: "#2f7fd6", marginBottom: 18 }}>{program.sub}</div>
+                <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 14px" }}>{program.p1}</p>
+                <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 24px" }}>{program.p2}</p>
+
+                <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 16, padding: "22px 24px", marginBottom: 22 }}>
+                  <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 16 }}>{program.pillarTitle}</div>
+                  <div className="lms-pillars" style={{ display: "grid", gridTemplateColumns: `repeat(${program.pillars.length}, minmax(0,1fr))`, gap: 12 }}>
+                    {program.pillars.map((p, i) => (
+                      <div key={`${p.k}-${i}`} style={{ background: "#fff", border: "1px solid #e3eaf0", borderTop: "3px solid #2f7fd6", borderRadius: 12, padding: "14px 14px" }}>
+                        <div style={{ font: "700 20px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", marginBottom: 6 }}>{p.k}</div>
+                        <div style={{ font: "600 12.5px/1.45 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{p.v}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+                  <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 16, padding: "20px 22px" }}>
+                    <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 10 }}>Ideal for</div>
+                    <div style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>{program.ideal}</div>
+                  </div>
+                  <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 16, padding: "20px 22px", display: "flex", flexDirection: "column", gap: 11 }}>
+                    <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase" }}>What&apos;s included</div>
+                    {included.map((inc) => (
+                      <div key={inc} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none", marginTop: 2 }}><path d="M5 13l4 4 10-10" /></svg>
+                        <div style={{ font: "500 13px/1.55 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>{inc}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Every programme awards both certificates, so this sits outside
+                the brochure block rather than only on the courses that have
+                one. Each is drawn with this programme's own name on it. */}
+            <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
+              <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 18 }}>Certification &amp; recognition</div>
+              <div style={{ background: "#f7fafc", borderLeft: "3px solid #1b8f88", borderRadius: "0 13px 13px 0", padding: "20px 22px", marginBottom: 18 }}>
+                <div style={{ font: "700 14px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 8 }}>{SHRM_ACCREDITATION.title}</div>
+                <p style={{ font: "400 13.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 12px" }}>{SHRM_ACCREDITATION.body}</p>
+                <p style={{ font: "400 13px/1.75 'Plus Jakarta Sans',sans-serif", color: "#8296a9", margin: 0 }}>{SHRM_ACCREDITATION.note}</p>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 14 }}>
+                  {SHRM_ACCREDITATION.badges.map((bd) => (
+                    <span key={bd} style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 999, padding: "7px 14px", font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#136f6a" }}>{bd}</span>
+                  ))}
+                </div>
+              </div>
+
+              <CertificateGallery cards={certificateCards(course.certificate)} />
+              <p style={{ font: "500 11.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#8296a9", margin: "14px 0 0" }}>
+                Specimens — select either to enlarge it.
+              </p>
+            </div>
 
             {faqs && <FaqAccordion items={faqs} />}
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+          {/* Facilitator and schedule stay in view while the long left column
+              scrolls past them. `top` clears the sticky site header. */}
+          <div>
+          <div className="lms-side-sticky" style={{ display: "flex", flexDirection: "column", gap: 18, position: "sticky", top: 96 }}>
             <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 18, overflow: "hidden" }}>
               {/* Portrait, role and bio come from the homepage founder record,
                   so the facilitator is shown the same way in both places. */}
@@ -383,38 +430,17 @@ export default function CourseDetail({ slug }: { slug: string }) {
               </div>
             )}
           </div>
+          </div>
         </div>
       </div>
+
+      {/* A programme page is long. This is the mid-page ask; the one above the
+          footer, which every page carries, is the second. */}
+      <ConsultationBand subject={course.short} background="#f7fafc" padding="0 48px 72px" />
 
       {/* Batch dates and fees sit on every program page, not only on the
           certifications page — this is where a visitor decides. */}
       <UpcomingBatches background="#eef4f7" />
-
-      {/* CONSULTATION BAND — the header's CTA is hidden on phones, so a program
-          page needs its own way to book without opening the menu. */}
-      <div className="site-page-sec" style={{ background: "#f4f7f9", padding: "0 48px 72px" }}>
-        <div style={{ maxWidth: 1240, margin: "0 auto" }}>
-          <div className="lms-cta-band" style={{ background: "linear-gradient(120deg,#0c2a45,#0a1f38)", borderRadius: 22, padding: "36px 40px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 28, flexWrap: "wrap" }}>
-            <div style={{ flex: 1, minWidth: 260 }}>
-              <div style={{ font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#7fe3dc", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 10 }}>Not sure if this is the right fit?</div>
-              <div style={{ font: "700 22px/1.3 'Plus Jakarta Sans',sans-serif", color: "#fff", letterSpacing: "-.01em" }}>
-                Talk it through with us before you decide.
-              </div>
-              <p style={{ font: "400 14px/1.7 'Plus Jakarta Sans',sans-serif", color: "rgba(255,255,255,.72)", margin: "8px 0 0", maxWidth: 520 }}>
-                We will walk you through the curriculum, the batch dates and whether {course.short} suits where you are heading.
-              </p>
-            </div>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <Link href="/contact" className="lp-btn-white" style={{ background: "#fff", color: "#0a1b33", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999, whiteSpace: "nowrap" }}>
-                Book a Consultation
-              </Link>
-              <a href={`tel:${contact.tel}`} className="lp-btn-outline-light" style={{ border: "1.5px solid rgba(255,255,255,.45)", color: "#fff", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 26px", borderRadius: 999, whiteSpace: "nowrap" }}>
-                {contact.phone}
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
     </>
   );
 }

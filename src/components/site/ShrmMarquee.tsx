@@ -23,7 +23,7 @@ export default function ShrmMarquee() {
       >
         {[0, 1].map((copy) => (
           <div key={copy} style={{ display: "flex", alignItems: "center" }}>
-            <span style={{ font: "600 12.5px/1 'Plus Jakarta Sans',sans-serif", color: "#e6f6f4", padding: "9px 0", whiteSpace: "nowrap" }}>
+            <span style={{ font: "600 15.5px/1 'Plus Jakarta Sans',sans-serif", color: "#e6f6f4", padding: "12px 0", whiteSpace: "nowrap" }}>
               {MESSAGE}
             </span>
             <span aria-hidden style={{ color: "#7fe3dc", padding: "0 26px" }}>•</span>

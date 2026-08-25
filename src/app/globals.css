@@ -464,3 +464,33 @@ body {
 /* Brochure download in the course hero — brightens on hover like the pills */
 .lms-brochure-dl { transition: background 0.2s ease, border-color 0.2s ease; }
 .lms-brochure-dl:hover { background: rgba(255, 255, 255, 0.14) !important; border-color: rgba(127, 227, 220, 0.7) !important; }
+
+/* Certificate specimens: magnifier cursor, and a lift on hover so the whole
+   card reads as clickable rather than only the pointer changing. */
+.lms-cert-zoom {
+  cursor: zoom-in;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.lms-cert-zoom:hover {
+  transform: translateY(-3px);
+  border-color: rgba(27, 143, 136, 0.55) !important;
+  box-shadow: 0 16px 38px rgba(10, 27, 51, 0.16);
+}
+.lms-cert-zoom:focus-visible { outline: 3px solid #2fc4bc; outline-offset: 3px; }
+/* The backdrop closes on click, so it carries the zoom-out affordance. */
+.lms-cert-lightbox { cursor: zoom-out; }
+
+/* Course sidebar sticks beside the scrolling detail column. Below the split
+   breakpoint the two stack, and a sticky element there would pin itself over
+   the content it is meant to sit beside. */
+@media (max-width: 1040px) {
+  .lms-side-sticky { position: static !important; }
+}
+
+/* Framework pillars: six across is fine on a wide column, not on a narrow one */
+@media (max-width: 900px) {
+  .lms-pillars { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 560px) {
+  .lms-pillars { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}

@@ -11,6 +11,11 @@ export const COURSES: Course[] = [
     img: "/assets/workshop-tables.jpeg", status: "enrolling",
     feePaise: 2500000, priceNote: "incl. taxes · from 26 Sep",
     modulesLabel: "11 modules", hoursLabel: "12 hours", facilitator: "Parichita Kotnala",
+    certificate: {
+      name: "Certified POSH & Workplace Dignity Facilitator Program (POSH TTT)",
+      closing: "under the **Prevention of Sexual Harassment at Workplace** (POSH Act, 2013).",
+      hours: "12 Hours",
+    },
   },
   {
     slug: "pocso-child-safety",
@@ -21,6 +26,11 @@ export const COURSES: Course[] = [
     img: "/assets/school-group.jpeg", status: "enrolling",
     feePaise: 2000000, priceNote: "incl. taxes · from 18 Sep",
     modulesLabel: "8 modules", hoursLabel: "8 hours", facilitator: "Parichita Kotnala",
+    certificate: {
+      name: "Certified POCSO & Child Safety Facilitator Program (POCSO TTT)",
+      closing: "under the **Protection of Children from Sexual Offences** (POCSO Act, 2012).",
+      hours: "8 Hours",
+    },
   },
   {
     slug: "inclusive-workplace",
@@ -31,6 +41,11 @@ export const COURSES: Course[] = [
     img: "/assets/workshop-handsup.jpeg", status: "waitlist",
     feePaise: null, priceNote: "confirmed with batch dates",
     modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Parichita Kotnala",
+    certificate: {
+      name: "Certified Inclusive Workplace Facilitator Program (DEI TTT)",
+      closing: "in **Diversity, Equity & Inclusion** workplace facilitation.",
+      hours: "12 Hours",
+    },
   },
   {
     slug: "workplace-wellbeing",
@@ -41,6 +56,11 @@ export const COURSES: Course[] = [
     img: "/assets/outdoor-group.jpeg", status: "waitlist",
     feePaise: null, priceNote: "confirmed with batch dates",
     modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Parichita Kotnala",
+    certificate: {
+      name: "Certified Workplace Wellbeing Facilitator Program (Wellbeing TTT)",
+      closing: "in **Workplace Mental Health & Wellbeing** facilitation.",
+      hours: "12 Hours",
+    },
   },
   {
     slug: "leadership-facilitator",
@@ -51,6 +71,11 @@ export const COURSES: Course[] = [
     img: "/assets/audience-red-hall.jpeg", status: "waitlist",
     feePaise: null, priceNote: "HUMAN Leadership Framework",
     modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Parichita Kotnala",
+    certificate: {
+      name: "Certified Corporate Leadership Facilitator Program",
+      closing: "powered by the **HUMAN Leadership Framework**.",
+      hours: "12 Hours",
+    },
   },
   {
     slug: "hr-edge",
@@ -61,6 +86,11 @@ export const COURSES: Course[] = [
     img: "/assets/students-group.png", status: "waitlist",
     feePaise: null, priceNote: "institutional pricing available",
     modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Parichita Kotnala",
+    certificate: {
+      name: "HR Edge Certification",
+      closing: "in integrated **DEI, POSH & Workplace Wellbeing** facilitation.",
+      hours: "12 Hours",
+    },
   },
 ];
 

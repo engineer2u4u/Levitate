@@ -64,6 +64,15 @@ export type Course = {
   modulesLabel: string;
   hoursLabel: string;
   facilitator: string;
+  /** What this course's certificates say. Every programme awards both. */
+  certificate: {
+    /** The programme name as printed — not always the catalogue title. */
+    name: string;
+    /** Trailing clause on the Award certificate; `**…**` sets bold. */
+    closing: string;
+    /** Printed in the completion chip. */
+    hours: string;
+  };
 };
 
 /** The full teaching content for a course. Only published for courses whose

@@ -12,6 +12,7 @@ import SiteHeader from "@/components/site/SiteHeader";
 import AnnouncementBar from "@/components/site/AnnouncementBar";
 import TrustedBy from "@/components/site/TrustedBy";
 import Accreditations from "@/components/site/Accreditations";
+import ConsultationBand from "@/components/site/ConsultationBand";
 // import CredentialsStrip from "@/components/site/CredentialsStrip";
 import YouTubeEmbed from "@/components/site/YouTubeEmbed";
 import { contact, services, blueprintSteps, certs, whyPoints, impactStats, tickerA, tickerB, gallery, founders } from "@/lib/homeData";
@@ -515,6 +516,10 @@ export default function HomePage() {
       </div>
 
       {/* ACCREDITATIONS */}
+      {/* The homepage does not use SiteFooter, so it places its own. This is
+          the mid-page ask; the CTA panel further down is the second. */}
+      <ConsultationBand background="#fff" padding="0 48px 64px" />
+
       <Accreditations />
 
       {/* BLUEPRINT */}

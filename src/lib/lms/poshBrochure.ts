@@ -18,9 +18,6 @@ export type ProgramBrochure = {
     body: string;
     blocks: { title: string; body: string; chips?: string[] }[];
   };
-  accreditation: { title: string; body: string; note: string; badges: string[] };
-  /** Sample certificates a participant earns. Images live in /public. */
-  certificates: { title: string; caption: string; src: string }[];
   /** Downloadable PDF, served from /public. */
   brochure: { href: string; label: string; meta: string };
 };
@@ -67,28 +64,6 @@ export const POSH_BROCHURE: ProgramBrochure = {
     ],
   },
 
-  accreditation: {
-    title: "SHRM Professional Development Credits",
-    body:
-      "Levitate PeopleSoft is recognised by SHRM to offer Professional Development Credits (PDCs), applicable toward SHRM-CP® and SHRM-SCP® recertification, for participants who successfully complete our certification programmes.",
-    note:
-      "This accreditation reflects Levitate PeopleSoft's commitment to delivering globally benchmarked, practice-led learning that stands up to professional and institutional scrutiny — giving participants a credential that is recognised well beyond the classroom.",
-    badges: ["ISO 9001:2015 Certified", "DPIIT Recognised", "Udyam Registration"],
-  },
-
-  certificates: [
-    {
-      title: "SHRM Certificate of Completion",
-      caption: "Issued with the PDCs earned toward SHRM-CP® and SHRM-SCP® recertification.",
-      src: "/assets/certificates/posh-ttt-shrm-certificate.jpg",
-    },
-    {
-      title: "Levitate PeopleSoft Certificate of Training Completion",
-      caption: "Carries a verifiable certificate ID, the completion date and the programme hours.",
-      src: "/assets/certificates/posh-ttt-levitate-certificate.png",
-    },
-  ],
-
   brochure: {
     href: "/assets/brochures/levitate-posh-ttt-brochure.pdf",
     label: "Download the programme brochure",
@@ -97,15 +72,12 @@ export const POSH_BROCHURE: ProgramBrochure = {
 };
 
 /**
- * Whether the brochure PDF and the two certificate images are in /public.
+ * Whether the brochure PDF is in /public.
  *
- * The download link and the certificate images are hidden while this is false,
- * so a programme whose copy is written but whose files have not arrived does
- * not ship a 404 and two broken images. The files this guards:
+ * The download link is hidden while this is false, so a programme whose copy
+ * is written but whose PDF has not arrived does not ship a 404. Guards:
  *
  *   public/assets/brochures/levitate-posh-ttt-brochure.pdf
- *   public/assets/certificates/posh-ttt-shrm-certificate.jpg
- *   public/assets/certificates/posh-ttt-levitate-certificate.png
  */
 export const BROCHURE_ASSETS_READY = true;
 
