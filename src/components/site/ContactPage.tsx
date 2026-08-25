@@ -337,7 +337,7 @@ export default function ContactPage() {
                   borderRadius: 999,
                 }}
               >
-                Book a Discovery Call
+                Book a Consultation
               </a>
             </Reveal>
 

@@ -22,7 +22,7 @@ const OG_IMAGE = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Levitate PeopleSoft — Elevating Trainers. Transforming Workplaces.",
+    default: "Levitate PeopleSoft — Workplace Facilitator & Corporate Trainer Certification",
     template: "%s · Levitate PeopleSoft",
   },
   description:

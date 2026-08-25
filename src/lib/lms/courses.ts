@@ -20,7 +20,7 @@ export const COURSES: Course[] = [
     desc: "Facilitate child-safety awareness with sensitivity, legal clarity and responsible communication.",
     img: "/assets/school-group.jpeg", status: "enrolling",
     feePaise: 2000000, priceNote: "incl. taxes · from 18 Sep",
-    modulesLabel: "Curriculum on request", hoursLabel: "6 hours", facilitator: "Levitate faculty",
+    modulesLabel: "8 modules", hoursLabel: "8 hours", facilitator: "Levitate faculty",
   },
   {
     slug: "inclusive-workplace",

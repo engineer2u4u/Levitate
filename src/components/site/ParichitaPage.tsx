@@ -333,7 +333,7 @@ export default function ParichitaPage() {
               className="lp-btn-grad"
               style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999 }}
             >
-              Book a Discovery Call
+              Book a Consultation
             </Link>
             <Link
               href="/certifications"

@@ -110,7 +110,7 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
               onClick={() => setCertOpen((o) => !o)}
               style={{ ...(active === "certifications" ? topActive : topIdle), display: "inline-flex", alignItems: "center", gap: 8, border: "none", background: "transparent", padding: 0, cursor: "pointer", font: "inherit" }}
             >
-              Certifications<NewBadge />
+              TTT Certification<NewBadge />
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
             </button>
             <div style={{ position: "absolute", top: "100%", left: -16, paddingTop: 16, minWidth: 300, display: certOpen ? "block" : "none" }}>
@@ -140,7 +140,7 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
             transition: "padding .28s ease, font-size .28s ease",
           }}
         >
-          Book a Discovery Call
+          Book a Consultation
         </Link>
 
         {/* Hamburger */}
@@ -177,7 +177,7 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
               <Link key={s.key} href={s.href} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064" }}>{s.short}</Link>
             ))}
             <div style={{ padding: "12px 6px 4px", font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", letterSpacing: ".14em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 8 }}>
-              Certifications<NewBadge />
+              TTT Certification<NewBadge />
             </div>
             {COURSES.map((c) => (
               <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064" }}>{c.short}</Link>
@@ -186,7 +186,7 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
             <Link href="/about-us" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "about" ? "#1b8f88" : "#0a1b33" }}>About Us</Link>
             <Link href="/parichita-kotnala" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "parichita" ? "#1b8f88" : "#0a1b33" }}>Parichita Kotnala</Link>
             <Link href="/contact" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "contact" ? "#1b8f88" : "#0a1b33" }}>Contact</Link>
-            <Link href="/contact" onClick={() => setMenuOpen(false)} className="lp-btn-grad" style={{ marginTop: 12, textAlign: "center", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "13px 22px", borderRadius: 999 }}>Book a Discovery Call</Link>
+            <Link href="/contact" onClick={() => setMenuOpen(false)} className="lp-btn-grad" style={{ marginTop: 12, textAlign: "center", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "13px 22px", borderRadius: 999 }}>Book a Consultation</Link>
           </div>
         )}
       </div>

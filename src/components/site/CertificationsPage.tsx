@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState, type CSSProperties } from "react";
 import Reveal from "@/components/home/Reveal";
 import { batches } from "@/lib/site";
+import { POCSO_OUTLINE, type ProgramOutline } from "@/lib/programOutlines";
 
 const included = ["Facilitation practice & feedback", "Trainer toolkit: templates, guides, FAQs", "Workplace case studies & scenarios", "Assessment-linked certification"];
 
@@ -17,34 +18,32 @@ const why = [
 ];
 
 type Program = {
-  id: string; num: string; tag: string; short: string; title: string; sub: string;
+  id: string;
+  /** Matches the course slug, so a card can open that program's own page. */
+  slug: string;
+  num: string; tag: string; short: string; title: string; sub: string;
   p1: string; p2: string; ideal: string; pillarTitle: string; pillars: { k: string; v: string }[];
   /** Full curriculum breakdown. Only published for programs whose syllabus is finalised. */
-  curriculum?: {
-    intro: string;
-    facts: { k: string; v: string }[];
-    modules: string[];
-    closing: string;
-  };
+  curriculum?: ProgramOutline;
 };
 
 const programs: Program[] = [
-  { id: "leadership", num: "01", tag: "Flagship", short: "Corporate Leadership Facilitator", title: "Certified Corporate Leadership Facilitator Program", sub: "Powered by the HUMAN Leadership Framework",
+  { id: "leadership", slug: "leadership-facilitator", num: "01", tag: "Flagship", short: "Corporate Leadership Facilitator", title: "Certified Corporate Leadership Facilitator Program", sub: "Powered by the HUMAN Leadership Framework",
     p1: "A flagship Train-the-Trainer certification for professionals who want to facilitate leadership conversations around trust, coaching, feedback, accountability, productivity, prioritization and team growth.",
     p2: "The program equips facilitators to run leadership sessions that managers actually apply — grounded in five essential workplace leadership behaviours.",
     ideal: "HR professionals, L&D leaders, managers, coaches, consultants, trainers and aspiring leadership facilitators.",
     pillarTitle: "The HUMAN Leadership Framework", pillars: [{ k: "H", v: "High-Trust Conversations" }, { k: "U", v: "Understanding Through Coaching" }, { k: "M", v: "Meaningful Feedback" }, { k: "A", v: "Accountability & Prioritization" }, { k: "N", v: "Nurturing Team Growth" }] },
-  { id: "dei", num: "02", tag: "DEI · TTT", short: "Inclusive Workplace Facilitator", title: "Certified Inclusive Workplace Facilitator Program", sub: "Diversity, Equity & Inclusion Train-the-Trainer Certification",
+  { id: "dei", slug: "inclusive-workplace", num: "02", tag: "DEI · TTT", short: "Inclusive Workplace Facilitator", title: "Certified Inclusive Workplace Facilitator Program", sub: "Diversity, Equity & Inclusion Train-the-Trainer Certification",
     p1: "A Train-the-Trainer certification for professionals who want to facilitate meaningful conversations on diversity, equity, inclusion and belonging in the workplace. Participants build understanding of core DEI concepts, unconscious bias, inclusive language, psychological safety and inclusive leadership practices.",
     p2: "It also prepares trainers to design DEI sessions, handle sensitive questions, manage resistance, use case studies and facilitate conversations that encourage reflection, awareness and behaviour change.",
     ideal: "HR professionals, DEI champions, L&D teams, managers, consultants, workplace trainers and aspiring facilitators.",
     pillarTitle: "The BRIDGE Inclusion Framework", pillars: [{ k: "B", v: "Bias Made Visible" }, { k: "R", v: "Respectful Language" }, { k: "I", v: "Inclusive Decisions" }, { k: "D", v: "Dialogue Over Debate" }, { k: "G", v: "Growing Belonging" }, { k: "E", v: "Everyday Allyship" }] },
-  { id: "wellbeing", num: "03", tag: "Wellbeing", short: "Workplace Wellbeing Facilitator", title: "Certified Workplace Wellbeing Facilitator Program", sub: "Applied Mental Health & Wellbeing Train-the-Trainer Certification",
+  { id: "wellbeing", slug: "workplace-wellbeing", num: "03", tag: "Wellbeing", short: "Workplace Wellbeing Facilitator", title: "Certified Workplace Wellbeing Facilitator Program", sub: "Applied Mental Health & Wellbeing Train-the-Trainer Certification",
     p1: "A Train-the-Trainer certification that prepares professionals to facilitate workplace mental health and wellbeing conversations with confidence, sensitivity and ethical responsibility.",
     p2: "Participants learn to design wellbeing sessions, discuss stress and burnout with sensitivity, promote psychological safety, reduce stigma, strengthen manager awareness and facilitate supportive conversations within a responsible workplace context.",
     ideal: "HR and L&D professionals, wellness practitioners, psychologists, counsellors, coaches, managers, workplace trainers and aspiring facilitators.",
     pillarTitle: "The CARES Wellbeing Framework", pillars: [{ k: "C", v: "Check-In Conversations" }, { k: "A", v: "Awareness of Signals" }, { k: "R", v: "Reducing Stigma" }, { k: "E", v: "Ethical Boundaries" }, { k: "S", v: "Safe Escalation" }] },
-  { id: "posh", num: "04", tag: "POSH", short: "POSH & Workplace Dignity", title: "Certified POSH & Workplace Dignity Facilitator Program", sub: "POSH Train-the-Trainer Certification",
+  { id: "posh", slug: "posh-trainer", num: "04", tag: "POSH", short: "POSH & Workplace Dignity", title: "Certified POSH & Workplace Dignity Facilitator Program", sub: "POSH Train-the-Trainer Certification",
     p1: "A Train-the-Trainer certification for professionals who want to facilitate POSH awareness, workplace dignity, respectful behaviour and harassment-prevention conversations with legal clarity and facilitation maturity.",
     p2: "Participants learn to explain key POSH concepts, design awareness sessions, use workplace case studies, support manager sensitisation, strengthen IC capability-building conversations and respond to difficult participant questions with sensitivity and responsibility.",
     ideal: "HR professionals, IC members, external members, legal professionals, compliance teams, consultants, workplace trainers and aspiring POSH facilitators.",
@@ -67,12 +66,13 @@ const programs: Program[] = [
       ],
       closing: "Learn the law. Navigate sensitive situations. Facilitate with confidence.",
     } },
-  { id: "pocso", num: "05", tag: "POCSO", short: "POCSO & Child Safety", title: "Certified POCSO & Child Safety Facilitator Program", sub: "POCSO Train-the-Trainer Certification",
+  { id: "pocso", slug: "pocso-child-safety", num: "05", tag: "POCSO", short: "POCSO & Child Safety", title: "Certified POCSO & Child Safety Facilitator Program", sub: "POCSO Train-the-Trainer Certification",
     p1: "A Train-the-Trainer certification for professionals who want to facilitate child-safety and POCSO awareness sessions with sensitivity, legal clarity and responsible communication.",
     p2: "Participants learn to explain child protection concepts, create age-appropriate and institution-sensitive awareness sessions, use case-based discussions, respond to sensitive questions, build awareness around safe and unsafe behaviours and support responsible reporting conversations.",
     ideal: "Educators, school counsellors, child-safety professionals, NGOs, HR professionals, trainers, institutional leaders and professionals working in child-facing environments.",
-    pillarTitle: "The GUARD Child Safety Framework", pillars: [{ k: "G", v: "Ground Rules for Safety" }, { k: "U", v: "Understanding the Law" }, { k: "A", v: "Age-Appropriate Language" }, { k: "R", v: "Recognising Signals" }, { k: "D", v: "Disclosure & Reporting" }] },
-  { id: "hredge", num: "06", tag: "For Students", short: "HR Edge Certification", title: "HR Edge Certification", sub: "Integrated DEI, POSH & Workplace Wellbeing Trainer Certification for Future HR Professionals",
+    pillarTitle: "The GUARD Child Safety Framework", pillars: [{ k: "G", v: "Ground Rules for Safety" }, { k: "U", v: "Understanding the Law" }, { k: "A", v: "Age-Appropriate Language" }, { k: "R", v: "Recognising Signals" }, { k: "D", v: "Disclosure & Reporting" }],
+    curriculum: POCSO_OUTLINE },
+  { id: "hredge", slug: "hr-edge", num: "06", tag: "For Students", short: "HR Edge Certification", title: "HR Edge Certification", sub: "Integrated DEI, POSH & Workplace Wellbeing Trainer Certification for Future HR Professionals",
     p1: "A uniquely Levitate-designed certification for MBA-HR, PGDM-HR, HR postgraduate students and early-career HR professionals who want to enter the workplace with applied capability beyond their academic degree.",
     p2: "The integrated program builds practical understanding of inclusion, respectful workplaces, POSH awareness, employee wellbeing, psychological safety and responsible HR response — strengthening interview readiness and helping participants stand out as future-ready HR professionals.",
     ideal: "MBA-HR and PGDM-HR students, HR postgraduates, early-career HR professionals, campus-to-corporate learners and students preparing for HR roles.",
@@ -118,14 +118,14 @@ export default function CertificationsPage() {
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 90, background: "linear-gradient(180deg,transparent,#f7fafc)" }} />
         <div style={{ position: "relative", maxWidth: 1240, margin: "0 auto" }}>
           <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 18 }}>
-            <Link href="/" style={{ color: "#8296a9" }}>Home</Link> / <span style={{ color: "#1b8f88" }}>Certifications</span>
+            <Link href="/" style={{ color: "#8296a9" }}>Home</Link> / <span style={{ color: "#1b8f88" }}>TTT Certification</span>
           </div>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, border: "1px solid rgba(27,143,136,.45)", color: "#1b8f88", font: "600 12px 'Plus Jakarta Sans',sans-serif", letterSpacing: ".16em", textTransform: "uppercase", padding: "8px 16px", borderRadius: 999, background: "rgba(255,255,255,.6)", marginBottom: 24 }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#2fc4bc" }} />Certification Programs
+            <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#2fc4bc" }} />TTT Certification
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 40, flexWrap: "wrap" }}>
             <div style={{ flex: 1, minWidth: 320 }}>
-              <h1 style={{ font: "700 clamp(34px,4vw,54px)/1.12 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 20px", letterSpacing: "-.02em", maxWidth: 820 }}>Choose Your Certification Pathway</h1>
+              <h1 style={{ font: "700 clamp(34px,4vw,54px)/1.12 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 20px", letterSpacing: "-.02em", maxWidth: 820 }}>Choose Your TTT Certification Pathway</h1>
               <p style={{ font: "400 16.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 740, margin: 0, textWrap: "pretty" } as CSSProperties}>Whether you are an HR professional, L&amp;D leader, educator, consultant, coach, manager or aspiring corporate trainer, Levitate PeopleSoft helps you build facilitation capability for the workplace conversations that matter most.</p>
             </div>
             <a href="#upcoming" className="lp-btn-grad" style={{ display: "inline-flex", alignItems: "center", gap: 14, background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", borderRadius: 999, padding: "22px 38px", font: "800 18px/1.25 'Plus Jakarta Sans',sans-serif", color: "#fff", maxWidth: 340, animation: "pulse 2.4s infinite", boxShadow: "0 16px 36px rgba(27,143,136,.36)" }}>
@@ -141,11 +141,14 @@ export default function CertificationsPage() {
       {/* QUICK NAV */}
       <div className="site-page-sec" style={{ background: "#f4f7f9", padding: "24px 48px 60px" }}>
         <div className="site-grid-6" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(6,1fr)", gap: 12 }}>
+          {/* Each card opens that program's own page rather than scrolling to
+              an anchor on this one. */}
           {programs.map((p) => (
-            <a key={p.id} href={`#${p.id}`} onClick={() => setOpenId(p.id)} className="site-card" style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 16px", display: "flex", flexDirection: "column", gap: 6, boxShadow: "0 2px 6px rgba(10,27,51,.05)" }}>
+            <Link key={p.id} href={`/lms/course/${p.slug}`} className="site-card" style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 16px", display: "flex", flexDirection: "column", gap: 6, boxShadow: "0 2px 6px rgba(10,27,51,.05)" }}>
               <div style={{ font: "700 10.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".13em", textTransform: "uppercase" }}>{p.tag}</div>
               <div style={{ font: "700 13px/1.35 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{p.short}</div>
-            </a>
+              <div style={{ marginTop: "auto", paddingTop: 6, font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88" }}>View program →</div>
+            </Link>
           ))}
         </div>
       </div>
@@ -173,7 +176,12 @@ export default function CertificationsPage() {
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" style={{ transform: collapsed ? "rotate(0deg)" : "rotate(180deg)", transition: "transform .3s ease" }}><path d="M6 9l6 6 6-6" /></svg>
                       </span>
                     </div>
-                    <h2 style={{ font: "700 clamp(24px,2.5vw,32px)/1.2 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 6px", letterSpacing: "-.02em" }}>{p.title}</h2>
+                    {/* The name opens the program's page. Not on mobile, where
+                        this same block is the accordion's toggle — a tap there
+                        has to expand the card, not navigate away from it. */}
+                    <h2 style={{ font: "700 clamp(24px,2.5vw,32px)/1.2 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 6px", letterSpacing: "-.02em" }}>
+                      {isMobile ? p.title : <Link href={`/lms/course/${p.slug}`} style={{ color: "inherit" }}>{p.title}</Link>}
+                    </h2>
                     <div style={{ font: "600 14px 'Plus Jakarta Sans',sans-serif", color: "#2f7fd6", marginBottom: collapsed ? 0 : 18 }}>{p.sub}</div>
                   </div>
                   {!collapsed && (
@@ -232,7 +240,10 @@ export default function CertificationsPage() {
                       </div>
                     ))}
                   </div>
-                  <Link href="/contact" className="lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "14px 22px", borderRadius: 999, textAlign: "center", marginTop: "auto" }}>Enquire about this program</Link>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: "auto" }}>
+                    <Link href={`/lms/course/${p.slug}`} className="lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "14px 22px", borderRadius: 999, textAlign: "center" }}>View full program page →</Link>
+                    <Link href="/contact" className="lp-btn-outline" style={{ border: "1.5px solid rgba(10,27,51,.28)", color: "#0a1b33", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "13px 22px", borderRadius: 999, textAlign: "center", background: "#fff" }}>Book a Consultation</Link>
+                  </div>
                 </div>
                 )}
               </div>
@@ -360,7 +371,7 @@ export default function CertificationsPage() {
           <h2 style={{ position: "relative", font: "700 clamp(26px,3vw,40px)/1.2 'Plus Jakarta Sans',sans-serif", color: "#f2f7fb", margin: "0 0 16px", letterSpacing: "-.02em" }}>Not sure which pathway fits you?</h2>
           <p style={{ position: "relative", font: "400 16px/1.7 'Plus Jakarta Sans',sans-serif", color: "#a9bcd0", maxWidth: 600, margin: "0 auto 32px" }}>Book a short discovery call and we&apos;ll map your experience and goals to the right certification.</p>
           <div style={{ position: "relative", display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-            <Link href="/contact" className="lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999 }}>Book a Discovery Call</Link>
+            <Link href="/contact" className="lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999 }}>Book a Consultation</Link>
             <Link href="/services/train-the-trainer" className="lp-btn-outline-light" style={{ border: "1.5px solid rgba(255,255,255,.25)", color: "#e8f1f8", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999 }}>Explore All Services</Link>
           </div>
         </Reveal>

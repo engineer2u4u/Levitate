@@ -441,6 +441,10 @@ body {
   .lms-grid-3 { grid-template-columns: 1fr !important; }
   .lms-split { grid-template-columns: 1fr !important; gap: 24px !important; }
   .lms-tabs { gap: 0 !important; }
+  /* Consultation band: stack the copy above full-width buttons */
+  .lms-cta-band { padding: 28px 24px !important; }
+  .lms-cta-band > div:last-child { width: 100%; flex-direction: column; }
+  .lms-cta-band > div:last-child > * { text-align: center; }
 }
 /* Tab strip scrolls rather than wrapping on narrow screens */
 .lms-tabs { scrollbar-width: none; }

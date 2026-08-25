@@ -37,7 +37,7 @@ export default function SiteFooter() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 30, display: "block" }} />
             </div>
-            <p style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 320, margin: 0 }}>Elevating trainers, transforming workplaces and enabling human-centred change through practice-led certification and training.</p>
+            <p style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 320, margin: 0 }}>We elevate professionals into confident workplace facilitators and corporate trainers, and partner with organisations and institutions to build capability that shows up in real workplace behaviour.</p>
           </div>
           <div>
             <div style={head}>Services</div>
@@ -51,7 +51,7 @@ export default function SiteFooter() {
             <div style={head}>Company</div>
             <div style={col}>
               <Link href="/about-us" className="site-footlink">About Us</Link>
-              <Link href="/certifications" className="site-footlink">Certification Programs</Link>
+              <Link href="/certifications" className="site-footlink">TTT Certification Programs</Link>
               <Link href="/" className="site-footlink">Home</Link>
               <Link href="/contact" className="site-footlink">Contact</Link>
             </div>

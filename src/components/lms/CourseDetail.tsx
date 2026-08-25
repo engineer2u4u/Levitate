@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ENROLMENT_OPEN, courseBySlug, formatFee } from "@/lib/lms/courses";
 import { contact } from "@/lib/site";
+import { outlineBySlug } from "@/lib/programOutlines";
 import { curriculumBySlug } from "@/lib/lms/poshCurriculum";
 import { useSession } from "./useSession";
 
@@ -17,6 +18,7 @@ const Lock = () => (
 export default function CourseDetail({ slug }: { slug: string }) {
   const course = courseBySlug(slug);
   const curriculum = curriculumBySlug(slug);
+  const outline = outlineBySlug(slug);
   const { user, enrolments, openAuth } = useSession();
   const router = useRouter();
 
@@ -187,10 +189,44 @@ export default function CourseDetail({ slug }: { slug: string }) {
             ) : (
               <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
                 <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 12 }}>About this programme</div>
-                <p style={{ font: "400 14.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 18px" }}>{course.desc}</p>
+                <p style={{ font: "400 14.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 18px" }}>{outline?.intro ?? course.desc}</p>
+
+                {/* A published module list, for programs whose syllabus is
+                    settled even though the staged LMS content is not built. */}
+                {outline ? (
+                  <>
+                    <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 22 }}>
+                      {outline.facts.map((f) => (
+                        <div key={f.k} style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 999, padding: "8px 15px", font: "600 11.5px 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>
+                          <span style={{ color: "#8296a9" }}>{f.k}:</span> {f.v}
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 14 }}>Programme modules</div>
+                    <ol style={{ listStyle: "none", counterReset: "mod", margin: "0 0 22px", padding: 0, display: "flex", flexDirection: "column", gap: 10 }}>
+                      {outline.modules.map((m, i) => (
+                        <li key={m} style={{ display: "flex", gap: 14, alignItems: "flex-start", background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 13, padding: "14px 16px" }}>
+                          <span aria-hidden style={{ flex: "none", width: 27, height: 27, borderRadius: 9, background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 12px 'Plus Jakarta Sans',sans-serif", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            {i + 1}
+                          </span>
+                          <span style={{ font: "600 13.5px/1.55 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>
+                            <span style={{ color: "#8296a9", fontWeight: 700 }}>Module {i + 1} · </span>{m}
+                          </span>
+                        </li>
+                      ))}
+                    </ol>
+                    <div style={{ font: "700 14px/1.6 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", marginBottom: 18 }}>{outline.closing}</div>
+                  </>
+                ) : null}
+
                 <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 14, padding: "18px 20px", font: "500 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>
-                  The detailed curriculum and batch dates for this programme are being finalised.{" "}
-                  <Link href="/contact" style={{ fontWeight: 700 }}>Talk to us</Link> and we will share the outline and hold you a place.
+                  {outline ? (
+                    <>Batch dates for this programme are confirmed on request.{" "}
+                    <Link href="/contact" style={{ fontWeight: 700 }}>Book a consultation</Link> and we will hold you a place.</>
+                  ) : (
+                    <>The detailed curriculum and batch dates for this programme are being finalised.{" "}
+                    <Link href="/contact" style={{ fontWeight: 700 }}>Book a consultation</Link> and we will share the outline and hold you a place.</>
+                  )}
                 </div>
               </div>
             )}
@@ -225,6 +261,32 @@ export default function CourseDetail({ slug }: { slug: string }) {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      </div>
+
+      {/* CONSULTATION BAND — the header's CTA is hidden on phones, so a program
+          page needs its own way to book without opening the menu. */}
+      <div className="site-page-sec" style={{ background: "#f4f7f9", padding: "0 48px 72px" }}>
+        <div style={{ maxWidth: 1240, margin: "0 auto" }}>
+          <div className="lms-cta-band" style={{ background: "linear-gradient(120deg,#0c2a45,#0a1f38)", borderRadius: 22, padding: "36px 40px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 28, flexWrap: "wrap" }}>
+            <div style={{ flex: 1, minWidth: 260 }}>
+              <div style={{ font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#7fe3dc", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 10 }}>Not sure if this is the right fit?</div>
+              <div style={{ font: "700 22px/1.3 'Plus Jakarta Sans',sans-serif", color: "#fff", letterSpacing: "-.01em" }}>
+                Talk it through with us before you decide.
+              </div>
+              <p style={{ font: "400 14px/1.7 'Plus Jakarta Sans',sans-serif", color: "rgba(255,255,255,.72)", margin: "8px 0 0", maxWidth: 520 }}>
+                We will walk you through the curriculum, the batch dates and whether {course.short} suits where you are heading.
+              </p>
+            </div>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <Link href="/contact" className="lp-btn-white" style={{ background: "#fff", color: "#0a1b33", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999, whiteSpace: "nowrap" }}>
+                Book a Consultation
+              </Link>
+              <a href={`tel:${contact.tel}`} className="lp-btn-outline-light" style={{ border: "1.5px solid rgba(255,255,255,.45)", color: "#fff", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 26px", borderRadius: 999, whiteSpace: "nowrap" }}>
+                {contact.phone}
+              </a>
+            </div>
           </div>
         </div>
       </div>

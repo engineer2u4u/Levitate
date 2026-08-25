@@ -18,7 +18,8 @@ import { contact, services, blueprintSteps, certs, whyPoints, impactStats, ticke
 
 // Home section links → routes (indexes align with homeData.services / homeData.certs)
 const SERVICE_HREFS = ["/services/train-the-trainer", "/corporate-soft-skills-training-service", "/services/institutional", "/hr-consulting-services"];
-const CERT_HREFS = ["/certifications#leadership", "/certifications#dei", "/certifications#wellbeing", "/certifications#posh", "/certifications#pocso", "/certifications#hredge"];
+// Each home-page certification card opens that program's own page.
+const CERT_HREFS = ["/lms/course/leadership-facilitator", "/lms/course/inclusive-workplace", "/lms/course/workplace-wellbeing", "/lms/course/posh-trainer", "/lms/course/pocso-child-safety", "/lms/course/hr-edge"];
 const FOOTER_SERVICES: [string, string][] = [
   ["Train-the-Trainer Certifications", "/services/train-the-trainer"],
   ["Corporate Training Solutions", "/corporate-soft-skills-training-service"],
@@ -27,7 +28,7 @@ const FOOTER_SERVICES: [string, string][] = [
 ];
 const FOOTER_COMPANY: [string, string][] = [
   ["About Us", "/about-us"],
-  ["Certification Programs", "/certifications"],
+  ["TTT Certification Programs", "/certifications"],
   ["Testimonials", "#testimonials"],
   ["Contact", "/contact"],
 ];
@@ -215,17 +216,16 @@ export default function HomePage() {
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#2fc4bc" }} />
               Workplace Capability · Certification · Reskilling
             </div> */}
-            <h1 style={{ font: "700 clamp(40px,4.6vw,45px)/1.08 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 24px", letterSpacing: "-.02em" }}>
-              Elevating Trainers.
-              <br />
-              Transforming Workplaces.
-              <br />
-              <span style={{ background: "linear-gradient(120deg,#1b8f88,#2f7fd6)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>Leading Human Change.</span>
+            {/* The client's brand statement, verbatim: sentence one carries the
+                headline, sentence two the paragraph. Set smaller than a normal
+                hero line — thirty words at 45px fill the screen. */}
+            <h1 style={{ font: "700 clamp(26px,2.7vw,34px)/1.28 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 22px", letterSpacing: "-.015em", maxWidth: 620, textWrap: "balance" } as CSSProperties}>
+              We elevate professionals into{" "}
+              <span style={{ background: "linear-gradient(120deg,#1b8f88,#2f7fd6)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>confident workplace facilitators and corporate trainers</span>{" "}
+              who can lead meaningful learning experiences with credibility and practical skill.
             </h1>
-            <p style={{ font: "400 17px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 560, margin: "0 0 36px", textWrap: "pretty" } as CSSProperties}>
-              <strong style={{ color: "#000" }}>Global content | Practical facilitation | Real workplace application.</strong>
-              <br />
-              We design certification programs, corporate learning interventions and institutional training solutions that build high-trust, inclusive and human-centred workplaces.
+            <p style={{ font: "400 17px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 580, margin: "0 0 36px", textWrap: "pretty" } as CSSProperties}>
+              We also partner with organisations and institutions to design practical learning interventions that build capability, strengthen workplace behaviours and create real-world impact.
             </p>
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
               <Link
@@ -244,7 +244,7 @@ export default function HomePage() {
                   boxShadow: "0 12px 28px rgba(27,143,136,.28)",
                 }}
               >
-                Explore Certification Programs <span>→</span>
+                Explore TTT Certification Programs <span>→</span>
               </Link>
               <Link
                 href="/contact"
@@ -259,7 +259,7 @@ export default function HomePage() {
                   background: "rgba(255,255,255,.6)",
                 }}
               >
-                Book a Discovery Call
+                Book a Consultation
               </Link>
             </div>
             <div className="lp-hero-stats" style={{ display: "flex", gap: 40, marginTop: 48 }}>
@@ -739,7 +739,7 @@ export default function HomePage() {
         <div style={{ position: "relative", maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 32, flexWrap: "wrap", marginBottom: 52 }}>
             <div>
-              <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Certification Programs</div>
+              <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>TTT Certification Programs</div>
               <h2 style={{ font: "700 clamp(30px,3.2vw,44px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em", maxWidth: 620 }}>
                 Choose your certification pathway
               </h2>
@@ -1080,7 +1080,7 @@ export default function HomePage() {
               className="lp-btn-outline-light"
               style={{ border: "1.5px solid rgba(255,255,255,.25)", color: "#e8f1f8", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999 }}
             >
-              Book a Discovery Call
+              Book a Consultation
             </Link>
           </div>
         </Reveal>
@@ -1095,7 +1095,7 @@ export default function HomePage() {
                 <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 30, display: "block" }} />
               </Link>
               <p style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 320, margin: 0 }}>
-                Elevating trainers, transforming workplaces and enabling human-centred change through practice-led certification and training.
+                We elevate professionals into confident workplace facilitators and corporate trainers, and partner with organisations and institutions to build capability that shows up in real workplace behaviour.
               </p>
             </div>
             <div>
