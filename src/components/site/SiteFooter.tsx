@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { contact, services } from "@/lib/site";
+import Accreditations from "@/components/site/Accreditations";
 
 function MailIcon() {
   return (
@@ -29,6 +30,11 @@ const col = { display: "flex", flexDirection: "column" as const, gap: 10, font: 
 
 export default function SiteFooter() {
   return (
+    <>
+    {/* Accreditations run above the footer, so every page carries them. The
+        homepage is the one exception — it places the same section mid-page,
+        and rendering it here too would show it twice. */}
+    <Accreditations />
     <div className="site-sec" style={{ background: "#eef3f7", borderTop: "1px solid #dbe5ec", padding: "64px 48px 32px" }}>
       <div style={{ maxWidth: 1240, margin: "0 auto" }}>
         <div className="site-footer-grid" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1.2fr", gap: 48, marginBottom: 48 }}>
@@ -77,5 +83,6 @@ export default function SiteFooter() {
         </div>
       </div>
     </div>
+    </>
   );
 }

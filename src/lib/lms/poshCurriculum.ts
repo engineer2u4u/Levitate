@@ -7,21 +7,26 @@ export const POSH_CURRICULUM: Curriculum = {
   eyebrow: "POSH Train-the-Trainer · Live cohort",
   blurb:
     "An intensive, practice-led certification designed to build legal understanding, inquiry competence and effective POSH facilitation skills.",
-  meta: ["Duration: 12 Hours", "Tenure: 3 Weeks (Weekend Batch)", "Curriculum: 11 Modules", "6 live Zoom sessions", "Certificate on completion"],
+  // The four figures the brochure leads with, in the brochure's order.
+  meta: ["12 Hours · Learning Duration", "6 Live Sessions · Format", "3 Weeks · Weekend Schedule", "11 Modules · Curriculum"],
   included: [
-    "Trainer toolkit: session plans, case studies, FAQs",
-    "Recorded modules with secure streaming",
-    "6 live sessions with Q&A and practice",
-    "Final reading kit on completion",
-    "PDF certificate with verifiable ID",
+    "Assessment-Based Certification",
+    "Trainer Toolkit Included",
+    "SHRM PDC Eligible",
+    "Practice-Led Learning",
+    "Verifiable Certificate ID",
+    "Dedicated LMS Access",
+    "Workplace Case Laboratories",
   ],
+  // "On successful completion of the programme, participants will be able to:"
   objectives: [
-    "Explain the POSH Act with legal accuracy and plain language",
-    "Run awareness sessions for employees, managers and leadership",
-    "Support IC capability building and inquiry practice",
-    "Handle sensitive questions and resistance in the room",
-    "Design session plans using the CLEAR POSH framework",
-    "Facilitate applied case discussions with confidence",
+    "Confidently design and deliver POSH awareness and sensitisation sessions",
+    "Apply the Levitate CLEAR POSH Framework™ to practical workplace situations",
+    "Explain complaint intake, inquiry principles and the role of the Internal Committee with clarity",
+    "Navigate key legal definitions, coverage, jurisdiction and compliance requirements",
+    "Facilitate sensitive POSH conversations with confidence, care and legal grounding",
+    "Handle participant questions, resistance and difficult conversations responsibly",
+    "Use case studies, facilitation tools and structured session plans to deliver workplace-ready POSH learning and build a credible career path as a certified workplace facilitator",
   ],
   stages: [
     {
@@ -37,7 +42,7 @@ export const POSH_CURRICULUM: Curriculum = {
       lessons: [
         { id: "l1-1", kind: "VID", title: "M1 · Purpose, Culture and the Certification Journey", meta: "Video · 22 min", desc: "Why POSH facilitation is a culture role before it is a compliance role, and what the certification journey asks of you." },
         { id: "l1-2", kind: "VID", title: "M2 · India's Evolving POSH Landscape", meta: "Video · 26 min", desc: "How expectations, judgments and workplace practice have shifted since 2013 — and what that means for trainers." },
-        { id: "l1-3", kind: "VID", title: "M3 · The CLEAR POSH Framework", meta: "Video · 24 min", desc: "Clarity on the law, listening without judgment, evidence-based inquiry, action with fairness and a respectful workplace culture." },
+        { id: "l1-3", kind: "VID", title: "M3 · Levitate CLEAR POSH Framework™", meta: "Video · 24 min", desc: "Clarity on the law, listening without judgment, evidence-based inquiry, action with fairness and a respectful workplace culture." },
         { id: "l1-4", kind: "PDF", title: "M4 · Genesis and Legal Foundation", meta: "Reading · 18 pages", desc: "Vishaka to the 2013 Act — the legal lineage every POSH facilitator should be able to explain from memory." },
       ],
     },

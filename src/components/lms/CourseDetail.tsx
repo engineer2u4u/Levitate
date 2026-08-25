@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { ENROLMENT_OPEN, courseBySlug, formatFee } from "@/lib/lms/courses";
 import { contact } from "@/lib/site";
 import { outlineBySlug } from "@/lib/programOutlines";
+import { BROCHURE_ASSETS_READY, brochureBySlug } from "@/lib/lms/poshBrochure";
+import UpcomingBatches from "@/components/site/UpcomingBatches";
 import { curriculumBySlug } from "@/lib/lms/poshCurriculum";
 import { useSession } from "./useSession";
 
@@ -19,6 +21,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
   const course = courseBySlug(slug);
   const curriculum = curriculumBySlug(slug);
   const outline = outlineBySlug(slug);
+  const brochure = brochureBySlug(slug);
   const { user, enrolments, openAuth } = useSession();
   const router = useRouter();
 
@@ -110,6 +113,27 @@ export default function CourseDetail({ slug }: { slug: string }) {
                     <span>Or call us on <a href={`tel:${contact.tel}`} style={{ fontWeight: 700 }}>{contact.phone}</a></span>
                   )}
                 </div>
+              )}
+
+              {/* The brochure is the thing a prospect forwards to whoever
+                  approves the spend, so it sits with the price, not buried
+                  further down the page. */}
+              {brochure && BROCHURE_ASSETS_READY && (
+                <a
+                  href={brochure.brochure.href}
+                  download
+                  style={{ display: "flex", alignItems: "center", gap: 11, marginTop: 14, background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 13, padding: "13px 15px" }}
+                >
+                  <span aria-hidden style={{ flex: "none", width: 32, height: 32, borderRadius: 9, background: "rgba(47,127,214,.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2f7fd6" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 3v12" /><path d="M7 12l5 5 5-5" /><path d="M4 20h16" />
+                    </svg>
+                  </span>
+                  <span>
+                    <span style={{ display: "block", font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{brochure.brochure.label}</span>
+                    <span style={{ display: "block", font: "500 11px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 2 }}>{brochure.brochure.meta}</span>
+                  </span>
+                </a>
               )}
 
               <div style={{ height: 1, background: "#eef2f6", margin: "18px 0" }} />
@@ -230,6 +254,92 @@ export default function CourseDetail({ slug }: { slug: string }) {
                 </div>
               </div>
             )}
+
+            {/* ---- Brochure content: the copy the client hands to prospects ---- */}
+            {brochure && (
+              <>
+                <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
+                  <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 12 }}>Programme overview</div>
+                  <div style={{ font: "700 18px/1.45 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 12 }}>{brochure.strapline}</div>
+                  <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 26px" }}>{brochure.about}</p>
+                  <div className="site-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12 }}>
+                    {brochure.stats.map((s) => (
+                      <div key={s.label} style={{ background: "linear-gradient(120deg,#0c2a45,#0a1f38)", borderRadius: 14, padding: "18px 18px" }}>
+                        <div style={{ font: "700 22px 'Plus Jakarta Sans',sans-serif", color: "#7fe3dc" }}>{s.n}</div>
+                        <div style={{ font: "500 11.5px/1.45 'Plus Jakarta Sans',sans-serif", color: "rgba(255,255,255,.72)", marginTop: 4 }}>{s.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
+                  <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 18 }}>Who should attend</div>
+                  <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px 26px" }}>
+                    {brochure.audience.map((a) => (
+                      <div key={a} style={{ display: "flex", gap: 11, alignItems: "flex-start" }}>
+                        <span aria-hidden style={{ flex: "none", width: 18, height: 18, borderRadius: "50%", background: "rgba(47,196,188,.16)", display: "flex", alignItems: "center", justifyContent: "center", marginTop: 1 }}>
+                          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#1b8f88" }} />
+                        </span>
+                        <div style={{ font: "600 13.5px/1.55 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{a}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
+                  <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 18 }}>Training methodology</div>
+                  <div style={{ display: "flex", gap: 9, flexWrap: "wrap", marginBottom: 20 }}>
+                    {brochure.methodology.tags.map((t) => (
+                      <span key={t} style={{ background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 999, padding: "9px 16px", font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{t}</span>
+                    ))}
+                  </div>
+                  <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 22px" }}>{brochure.methodology.body}</p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                    {brochure.methodology.blocks.map((bl) => (
+                      <div key={bl.title} style={{ background: "#f7fafc", borderLeft: "3px solid #1b8f88", borderRadius: "0 13px 13px 0", padding: "18px 20px" }}>
+                        <div style={{ font: "700 14px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 7 }}>{bl.title}</div>
+                        <p style={{ font: "400 13.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: 0 }}>{bl.body}</p>
+                        {bl.chips && (
+                          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 13 }}>
+                            {bl.chips.map((c) => (
+                              <span key={c} style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 8, padding: "6px 11px", font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#136f6a" }}>{c}</span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
+                  <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 18 }}>Certification &amp; recognition</div>
+                  <div style={{ background: "#f7fafc", borderLeft: "3px solid #1b8f88", borderRadius: "0 13px 13px 0", padding: "20px 22px", marginBottom: 18 }}>
+                    <div style={{ font: "700 14px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 8 }}>{brochure.accreditation.title}</div>
+                    <p style={{ font: "400 13.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 12px" }}>{brochure.accreditation.body}</p>
+                    <p style={{ font: "400 13px/1.75 'Plus Jakarta Sans',sans-serif", color: "#8296a9", margin: 0 }}>{brochure.accreditation.note}</p>
+                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 14 }}>
+                      {brochure.accreditation.badges.map((bd) => (
+                        <span key={bd} style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 999, padding: "7px 14px", font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#136f6a" }}>{bd}</span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {BROCHURE_ASSETS_READY && (
+                    <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+                      {brochure.certificates.map((c) => (
+                        <figure key={c.title} style={{ margin: 0 }}>
+                          <img src={c.src} alt={`Sample ${c.title}`} style={{ width: "100%", display: "block", borderRadius: 12, border: "1px solid #e3eaf0", background: "#f7fafc" }} />
+                          <figcaption style={{ marginTop: 10 }}>
+                            <div style={{ font: "700 13px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{c.title}</div>
+                            <div style={{ font: "400 12px/1.6 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 3 }}>{c.caption}</div>
+                          </figcaption>
+                        </figure>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
@@ -264,6 +374,10 @@ export default function CourseDetail({ slug }: { slug: string }) {
           </div>
         </div>
       </div>
+
+      {/* Batch dates and fees sit on every program page, not only on the
+          certifications page — this is where a visitor decides. */}
+      <UpcomingBatches background="#eef4f7" />
 
       {/* CONSULTATION BAND — the header's CTA is hidden on phones, so a program
           page needs its own way to book without opening the menu. */}
