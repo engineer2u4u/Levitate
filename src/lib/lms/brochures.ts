@@ -35,10 +35,10 @@ export type ProgramBrochure = {
 };
 
 export const POSH_BROCHURE: ProgramBrochure = {
-  eyebrow: "Certified POSH & Workplace Dignity Facilitator Programme",
+  eyebrow: "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
   strapline: "Learn the law. Navigate sensitive situations. Facilitate with confidence.",
   about:
-    "The Certified POSH Trainer Programme is an intensive, practice-led certification built to take participants beyond theory — equipping them with legal understanding, inquiry competence and the facilitation skill to run POSH sessions and support Internal Committees with confidence.",
+    "The PoSH & Workplace Dignity Facilitator Program (PoSH TTT) is an intensive, practice-led certification built to take participants beyond theory — equipping them with legal understanding, inquiry competence and the facilitation skill to run POSH sessions and support Internal Committees with confidence.",
 
   stats: [
     { n: "2,000+", label: "Professionals Trained" },
@@ -94,11 +94,11 @@ export const POSH_BROCHURE: ProgramBrochure = {
 export const BROCHURE_ASSETS_READY = true;
 
 export const POCSO_BROCHURE: ProgramBrochure = {
-  eyebrow: "Certified POCSO & Child Safety Facilitator Programme",
+  eyebrow: "POCSO & Child Safety Facilitator Program (POCSO TTT)",
   strapline: "Protect with knowledge. Respond with responsibility. Facilitate with care.",
   meta: ["9 Hours · Duration", "3 Days · Format", "3 Hrs / Day · Session", "8 Modules · Curriculum"],
   about:
-    "The Certified POCSO & Child Safety Facilitator Programme is an intensive, practice-led Train-the-Trainer certification designed to help professionals facilitate child-safety and POCSO awareness with legal clarity, age-appropriate communication and responsible reporting.",
+    "The POCSO & Child Safety Facilitator Program (POCSO TTT) is an intensive, practice-led Train-the-Trainer certification designed to help professionals facilitate child-safety and POCSO awareness with legal clarity, age-appropriate communication and responsible reporting.",
 
   stats: [
     { n: "2,000+", label: "Professionals Trained" },

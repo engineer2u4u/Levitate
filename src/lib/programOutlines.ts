@@ -30,8 +30,29 @@ export const POCSO_OUTLINE: ProgramOutline = {
   closing: "Understand the law. Speak to children safely. Facilitate with responsibility.",
 };
 
+export const POSH_OUTLINE: ProgramOutline = {
+  intro:
+    "An intensive, practice-led certification designed to build legal understanding, inquiry competence and effective POSH facilitation skills.",
+  facts: [{ k: "Duration", v: "12 Hours" }, { k: "Format", v: "6 Days" }, { k: "Schedule", v: "3 Weeks" }, { k: "Curriculum", v: "11 Modules" }],
+  modules: [
+    "Purpose, Culture and the Certification Journey",
+    "India's Evolving POSH Landscape",
+    "Levitate CLEAR POSH Framework™",
+    "Genesis and Legal Foundation",
+    "Recognising Sexual Harassment",
+    "Coverage, Definitions and Jurisdiction",
+    "Prevention and Internal Committee Governance",
+    "Complaint Intake and Fair Inquiry",
+    "Compliance, Governance and Accountability",
+    "Applied Case Laboratory",
+    "Trainer Craft and Certification",
+  ],
+  closing: "Learn the law. Navigate sensitive situations. Facilitate with confidence.",
+};
+
 /** Keyed by course slug — the same slug the certifications cards link to. */
 export const OUTLINES: Record<string, ProgramOutline> = {
+  "posh-trainer": POSH_OUTLINE,
   "pocso-child-safety": POCSO_OUTLINE,
 };
 

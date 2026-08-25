@@ -157,11 +157,21 @@ export default function ServicePage({
                   flexDirection: "column",
                   gap: 10,
                   boxShadow: "0 2px 6px rgba(10,27,51,.05)",
+                  position: "relative",
                 }}
               >
                 <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "rgba(10,27,51,.22)" }}>{it.num}</div>
                 <div style={{ font: "700 17px/1.32 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{it.t}</div>
                 <div style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>{it.d}</div>
+                {/* A certification pathway opens its own program page. The link
+                    covers the whole card, so the click target is the card
+                    rather than a few words at the bottom of it. */}
+                {it.href && (
+                  <Link href={it.href} style={{ position: "absolute", inset: 0, borderRadius: 18 }} aria-label={`Open the ${it.t} page`} />
+                )}
+                {it.href && (
+                  <div aria-hidden style={{ marginTop: "auto", paddingTop: 4, font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88" }}>View program →</div>
+                )}
               </Reveal>
             ))}
           </div>

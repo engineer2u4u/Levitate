@@ -12,7 +12,9 @@ import { contact } from "@/lib/site";
 export default function ConsultationBand({
   subject,
   background = "#f4f7f9",
-  padding = "0 48px 72px",
+  // Breathing room above and below by default: the band butts against whatever
+  // section precedes it otherwise, wherever it is dropped in.
+  padding = "72px 48px",
 }: {
   /** What the conversation would be about — the programme, or the work. */
   subject?: string;

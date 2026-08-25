@@ -213,8 +213,11 @@ export default function CourseDetail({ slug }: { slug: string }) {
               </div>
             )}
 
-            {curriculum ? (
-              <>
+            {/* Objectives come from the staged LMS curriculum where there is
+                one. The module list is rendered by the outline block below,
+                for every programme alike — the staged, lesson-by-lesson view
+                belongs in the LMS, not on a public programme page. */}
+            {curriculum && (
                 <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
                   <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 16 }}>What you will be able to do</div>
                   <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px 26px" }}>
@@ -227,49 +230,9 @@ export default function CourseDetail({ slug }: { slug: string }) {
                   </div>
                 </div>
 
-                <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
-                  <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 20, marginBottom: 6, flexWrap: "wrap" }}>
-                    <div>
-                      <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 8 }}>Curriculum · staged release</div>
-                      <div style={{ font: "700 21px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>
-                        {curriculum.stages.reduce((a, s) => a + s.lessons.length, 0)} lessons across {curriculum.stages.length} stages
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, font: "600 11.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9" }}>
-                      <Lock /> Content unlocks after each live session
-                    </div>
-                  </div>
+            )}
 
-                  <div style={{ marginTop: 24, display: "flex", flexDirection: "column" }}>
-                    {curriculum.stages.map((s, si) => (
-                      <div key={s.id} style={{ display: "grid", gridTemplateColumns: "34px 1fr", gap: 18 }}>
-                        <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                          <div style={{ width: 30, height: 30, flex: "none", borderRadius: "50%", background: "#f4f7f9", border: "2px solid #dbe5ec", display: "flex", alignItems: "center", justifyContent: "center", font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#a9b8c6", zIndex: 2 }}>{s.num}</div>
-                          {si < curriculum.stages.length - 1 && <div style={{ flex: 1, width: 2, background: "#e3eaf0", margin: "2px 0" }} />}
-                        </div>
-                        <div style={{ paddingBottom: 22 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-                            <div style={{ font: "700 15.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{s.title}</div>
-                          </div>
-                          <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 6 }}>{s.release}</div>
-                          <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 8 }}>
-                            {s.lessons.map((it) => (
-                              <div key={it.id} style={{ display: "flex", alignItems: "center", gap: 12, background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 11, padding: "11px 14px" }}>
-                                <div style={{ width: 22, height: 22, flex: "none", borderRadius: 7, background: it.kind === "VID" ? "rgba(47,196,188,.15)" : "rgba(47,127,214,.12)", display: "flex", alignItems: "center", justifyContent: "center", font: "800 9px 'Plus Jakarta Sans',sans-serif", color: it.kind === "VID" ? "#136f6a" : "#2f7fd6" }}>{it.kind}</div>
-                                <div style={{ font: "600 13px 'Plus Jakarta Sans',sans-serif", color: "#3d5064", flex: 1 }}>{it.title}</div>
-                                <div style={{ font: "500 11.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9" }}>{it.meta}</div>
-                                <Lock />
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{ font: "600 13.5px 'Plus Jakarta Sans',sans-serif", color: "#136f6a", marginTop: 4 }}>Learn the law. Navigate sensitive situations. Facilitate with confidence.</div>
-                </div>
-              </>
-            ) : (
+            {(
               <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
                 <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 12 }}>About this programme</div>
                 <p style={{ font: "400 14.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 18px" }}>{outline?.intro ?? course.desc}</p>
@@ -487,7 +450,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
 
       {/* A programme page is long. This is the mid-page ask; the one above the
           footer, which every page carries, is the second. */}
-      <ConsultationBand subject={course.short} background="#f7fafc" padding="0 48px 72px" />
+      <ConsultationBand subject={course.short} background="#f7fafc" />
 
       {/* Batch dates and fees sit on every program page, not only on the
           certifications page — this is where a visitor decides. */}

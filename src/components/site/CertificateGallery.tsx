@@ -12,7 +12,7 @@ import type { CertificateCard } from "@/lib/certificateArt";
  * scaled up, which stays sharp at any size instead of blurring the way a
  * bitmap would.
  */
-export default function CertificateGallery({ cards }: { cards: CertificateCard[] }) {
+export default function CertificateGallery({ cards, columns = 2 }: { cards: CertificateCard[]; columns?: 1 | 2 }) {
   const [open, setOpen] = useState<number | null>(null);
   const shown = open === null ? null : cards[open];
 
@@ -32,7 +32,7 @@ export default function CertificateGallery({ cards }: { cards: CertificateCard[]
 
   return (
     <>
-      <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+      <div className={columns === 2 ? "site-grid-2" : undefined} style={{ display: "grid", gridTemplateColumns: columns === 2 ? "1fr 1fr" : "1fr", gap: 18 }}>
         {cards.map((c, i) => (
           <figure key={c.title} style={{ margin: 0 }}>
             <button

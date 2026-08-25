@@ -35,7 +35,7 @@ export default function SiteFooter() {
     {/* Both of these run above the footer, so every page carries them. The
         homepage is the one exception — it does not use SiteFooter and places
         its own copies, so nothing is shown twice. */}
-    <ConsultationBand background="#f7fafc" padding="64px 48px 0" />
+    <ConsultationBand background="#f7fafc" />
     <Accreditations spaceBelow />
     <div className="site-sec" style={{ background: "#eef3f7", borderTop: "1px solid #dbe5ec", padding: "64px 48px 32px" }}>
       <div style={{ maxWidth: 1240, margin: "0 auto" }}>

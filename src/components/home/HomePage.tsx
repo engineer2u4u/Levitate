@@ -13,6 +13,9 @@ import AnnouncementBar from "@/components/site/AnnouncementBar";
 import TrustedBy from "@/components/site/TrustedBy";
 import Accreditations from "@/components/site/Accreditations";
 import ConsultationBand from "@/components/site/ConsultationBand";
+import CertificateGallery from "@/components/site/CertificateGallery";
+import { certificateCards } from "@/lib/certificateArt";
+import { COURSES } from "@/lib/lms/courses";
 // import CredentialsStrip from "@/components/site/CredentialsStrip";
 import YouTubeEmbed from "@/components/site/YouTubeEmbed";
 import { contact, services, blueprintSteps, certs, whyPoints, impactStats, tickerA, tickerB, gallery, founders } from "@/lib/homeData";
@@ -21,6 +24,11 @@ import { contact, services, blueprintSteps, certs, whyPoints, impactStats, ticke
 const SERVICE_HREFS = ["/services/train-the-trainer", "/corporate-soft-skills-training-service", "/services/institutional", "/hr-consulting-services"];
 // Each home-page certification card opens that program's own page.
 const CERT_HREFS = ["/lms/course/leadership-facilitator", "/lms/course/inclusive-workplace", "/lms/course/workplace-wellbeing", "/lms/course/posh-trainer", "/lms/course/pocso-child-safety", "/lms/course/hr-edge"];
+/** The flagship programme stands in for all six here — every certification
+ *  awards the same two certificates, only the name printed on them differs. */
+const HOME_CERTIFICATE =
+  (COURSES.find((c) => c.slug === "leadership-facilitator") ?? COURSES[0]).certificate;
+
 const FOOTER_SERVICES: [string, string][] = [
   ["Train-the-Trainer Certifications", "/services/train-the-trainer"],
   ["Corporate Training Solutions", "/corporate-soft-skills-training-service"],
@@ -521,7 +529,7 @@ export default function HomePage() {
       {/* ACCREDITATIONS */}
       {/* The homepage does not use SiteFooter, so it places its own. This is
           the mid-page ask; the CTA panel further down is the second. */}
-      <ConsultationBand background="#fff" padding="0 48px 64px" />
+      <ConsultationBand background="#fff" />
 
       <Accreditations />
 
@@ -842,60 +850,10 @@ export default function HomePage() {
           </Reveal>
           <Reveal style={{ position: "relative" }}>
             <div className="site-glow" style={{ position: "absolute", inset: -30, background: "radial-gradient(circle at 50% 40%,rgba(47,196,188,.18),transparent 70%)" }} />
-            <div
-              onMouseMove={tiltMove}
-              onMouseLeave={tiltLeave}
-              style={{
-                position: "relative",
-                background: "#fdfefe",
-                border: "1px solid #dbe5ec",
-                borderRadius: 6,
-                boxShadow: "0 30px 70px rgba(10,27,51,.18)",
-                padding: "38px 42px",
-                transition: "transform .25s ease",
-              }}
-            >
-              <div style={{ border: "2px solid #0a1b33", outline: "1px solid #2fc4bc", outlineOffset: 5, padding: "34px 30px", textAlign: "center" }}>
-                <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 34, margin: "0 auto 18px", display: "block" }} />
-                <div style={{ font: "600 10.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".3em", textTransform: "uppercase", marginBottom: 14 }}>
-                  Certificate of Completion
-                </div>
-                <div style={{ font: "400 12.5px 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>This certifies that</div>
-                <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", borderBottom: "1px solid #cfdbe4", padding: "8px 0", margin: "6px 24px 12px" }}>Participant Name</div>
-                <div style={{ font: "400 12.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginBottom: 18 }}>
-                  has successfully completed the
-                  <br />
-                  <strong style={{ color: "#0a1b33" }}>Certified Corporate Leadership Facilitator Program</strong>
-                  <br />
-                  including participation, practice and assessment
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 26, padding: "0 8px" }}>
-                  <div style={{ textAlign: "left" }}>
-                    <div style={{ font: "600 13px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", borderTop: "1px solid #cfdbe4", paddingTop: 6 }}>Parichita Kotnala</div>
-                    <div style={{ font: "400 10.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9" }}>Founder &amp; Managing Partner</div>
-                  </div>
-                  <div
-                    style={{
-                      width: 58,
-                      height: 58,
-                      borderRadius: "50%",
-                      border: "2px solid #2fc4bc",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      font: "700 9px 'Plus Jakarta Sans',sans-serif",
-                      color: "#1b8f88",
-                      textAlign: "center",
-                      letterSpacing: ".08em",
-                    }}
-                  >
-                    LPS
-                    <br />
-                    SEAL
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* The two certificates a participant actually receives, drawn
+                from the real artwork rather than the approximation that used
+                to stand in here. Select either to enlarge it. */}
+            <CertificateGallery cards={certificateCards(HOME_CERTIFICATE)} columns={1} />
             <div className="lp-cert-features" style={{ position: "relative", display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14, marginTop: 20 }}>
               <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 14px", textAlign: "center" }}>
                 <svg
