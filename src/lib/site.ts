@@ -51,11 +51,11 @@ export const trustedLogos: { name: string; src: string }[] = [
  * the reply mail always names a program the team recognises.
  */
 export const enquiryTopics: string[] = [
+    "Certified POSH & Workplace Dignity Facilitator Program",
+  "Certified POCSO & Child Safety Facilitator Program",
   "Certified Corporate Leadership Facilitator Program",
   "Certified Inclusive Workplace Facilitator Program (DEI)",
   "Certified Workplace Wellbeing Facilitator Program",
-  "Certified POSH & Workplace Dignity Facilitator Program",
-  "Certified POCSO & Child Safety Facilitator Program",
   "HR Edge Certification (for students)",
   "Corporate Training",
 ];

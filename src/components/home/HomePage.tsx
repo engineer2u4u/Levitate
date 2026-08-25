@@ -217,16 +217,17 @@ export default function HomePage() {
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#2fc4bc" }} />
               Workplace Capability · Certification · Reskilling
             </div> */}
-            {/* The client's brand statement, verbatim: sentence one carries the
-                headline, sentence two the paragraph. Set smaller than a normal
-                hero line — thirty words at 45px fill the screen. */}
-            <h1 style={{ font: "700 clamp(26px,2.7vw,34px)/1.28 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 22px", letterSpacing: "-.015em", maxWidth: 620, textWrap: "balance" } as CSSProperties}>
-              We elevate professionals into{" "}
-              <span style={{ background: "linear-gradient(120deg,#1b8f88,#2f7fd6)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>confident workplace facilitators and corporate trainers</span>{" "}
-              who can lead meaningful learning experiences with credibility and practical skill.
+            <h1 style={{ font: "700 clamp(40px,4.6vw,45px)/1.08 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 24px", letterSpacing: "-.02em" }}>
+              Elevating Trainers.
+              <br />
+              Transforming Workplaces.
+              <br />
+              <span style={{ background: "linear-gradient(120deg,#1b8f88,#2f7fd6)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>Leading Human Change.</span>
             </h1>
-            <p style={{ font: "400 17px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 580, margin: "0 0 36px", textWrap: "pretty" } as CSSProperties}>
-              We also partner with organisations and institutions to design practical learning interventions that build capability, strengthen workplace behaviours and create real-world impact.
+            {/* The client's brand statement, verbatim, in place of the tagline
+                and description that used to sit here. */}
+            <p style={{ font: "400 16px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 600, margin: "0 0 36px", textWrap: "pretty" } as CSSProperties}>
+              We elevate professionals into confident workplace facilitators and corporate trainers who can lead meaningful learning experiences with credibility and practical skill. We also partner with organisations and institutions to design practical learning interventions that build capability, strengthen workplace behaviours and create real-world impact.
             </p>
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
               <Link
