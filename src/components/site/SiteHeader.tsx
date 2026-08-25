@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { contact, services, type NavKey } from "@/lib/site";
+import { COURSES } from "@/lib/lms/courses";
 
 function MailIcon({ size = 13 }: { size?: number }) {
   return (
@@ -33,6 +34,7 @@ function NewBadge() {
 
 export default function SiteHeader({ active }: { active?: NavKey }) {
   const [svcOpen, setSvcOpen] = useState(false);
+  const [certOpen, setCertOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   // Header starts large and compacts once the page is scrolled.
   const [shrunk, setShrunk] = useState(false);
@@ -95,9 +97,30 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
               </div>
             </div>
           </div>
-          <Link href="/certifications" className="site-navlink" style={{ ...(active === "certifications" ? topActive : topIdle), display: "inline-flex", alignItems: "center", gap: 8 }}>
-            Certifications<NewBadge />
-          </Link>
+          {/* Certifications does not navigate anywhere itself — the programs
+              are the destinations, so this only opens the list. It is a button
+              rather than a link so a keyboard or a tablet tap can open it too;
+              hover alone would strand both. */}
+          <div onMouseEnter={() => setCertOpen(true)} onMouseLeave={() => setCertOpen(false)} style={{ position: "relative", display: "flex", alignItems: "center" }}>
+            <button
+              type="button"
+              className="site-navlink"
+              aria-expanded={certOpen}
+              aria-haspopup="true"
+              onClick={() => setCertOpen((o) => !o)}
+              style={{ ...(active === "certifications" ? topActive : topIdle), display: "inline-flex", alignItems: "center", gap: 8, border: "none", background: "transparent", padding: 0, cursor: "pointer", font: "inherit" }}
+            >
+              Certifications<NewBadge />
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
+            </button>
+            <div style={{ position: "absolute", top: "100%", left: -16, paddingTop: 16, minWidth: 300, display: certOpen ? "block" : "none" }}>
+              <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: 8, boxShadow: "0 22px 48px rgba(10,27,51,.16)", display: "flex", flexDirection: "column", gap: 2 }}>
+                {COURSES.map((c) => (
+                  <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setCertOpen(false)} className="site-dropitem" style={{ padding: "11px 14px", borderRadius: 10, font: "600 13.5px/1.35 'Plus Jakarta Sans',sans-serif", display: "block", color: "#0a1b33" }}>{c.short}</Link>
+                ))}
+              </div>
+            </div>
+          </div>
           <Link href="/lms" className="site-navlink" style={active === "lms" ? topActive : { color: "#1b8f88" }}>LMS</Link>
           <Link href="/about-us" className="site-navlink" style={active === "about" ? topActive : topIdle}>About Us</Link>
           <Link href="/parichita-kotnala" className="site-navlink" style={{ ...(active === "parichita" ? topActive : topIdle), whiteSpace: "nowrap" }}>Parichita Kotnala</Link>
@@ -153,9 +176,12 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
             {services.map((s) => (
               <Link key={s.key} href={s.href} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064" }}>{s.short}</Link>
             ))}
-            <Link href="/certifications" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "certifications" ? "#1b8f88" : "#0a1b33", display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ padding: "12px 6px 4px", font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", letterSpacing: ".14em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 8 }}>
               Certifications<NewBadge />
-            </Link>
+            </div>
+            {COURSES.map((c) => (
+              <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064" }}>{c.short}</Link>
+            ))}
             <Link href="/lms" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: "#1b8f88" }}>LMS · Levitate Learning</Link>
             <Link href="/about-us" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "about" ? "#1b8f88" : "#0a1b33" }}>About Us</Link>
             <Link href="/parichita-kotnala" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "parichita" ? "#1b8f88" : "#0a1b33" }}>Parichita Kotnala</Link>

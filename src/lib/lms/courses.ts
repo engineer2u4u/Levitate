@@ -9,7 +9,7 @@ export const COURSES: Course[] = [
     short: "POSH Train-the-Trainer",
     desc: "Build legal understanding, inquiry competence and POSH facilitation skills across 11 practice-led modules.",
     img: "/assets/workshop-tables.jpeg", status: "enrolling",
-    feePaise: 1500000, priceNote: "incl. taxes · from 26 Sep",
+    feePaise: 2500000, priceNote: "incl. taxes · from 26 Sep",
     modulesLabel: "11 modules", hoursLabel: "12 hours", facilitator: "Parichita Kotnala",
   },
   {
@@ -19,7 +19,7 @@ export const COURSES: Course[] = [
     short: "POCSO & Child Safety",
     desc: "Facilitate child-safety awareness with sensitivity, legal clarity and responsible communication.",
     img: "/assets/school-group.jpeg", status: "enrolling",
-    feePaise: 1300000, priceNote: "incl. taxes · from 18 Sep",
+    feePaise: 2000000, priceNote: "incl. taxes · from 18 Sep",
     modulesLabel: "Curriculum on request", hoursLabel: "6 hours", facilitator: "Levitate faculty",
   },
   {
@@ -63,6 +63,16 @@ export const COURSES: Course[] = [
     modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Levitate faculty",
   },
 ];
+
+/**
+ * Whether the public course pages may offer enrolment.
+ *
+ * These pages are linked from the site's Certifications menu, so they are the
+ * first LMS surface a visitor meets — and payment is not live yet. While this
+ * is false they ask for an enquiry instead of taking money. Flip it to true
+ * once the gateway is wired and the button comes back on its own.
+ */
+export const ENROLMENT_OPEN = false;
 
 export const courseBySlug = (slug: string) => COURSES.find((c) => c.slug === slug);
 

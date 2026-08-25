@@ -3,7 +3,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { courseBySlug, formatFee } from "@/lib/lms/courses";
+import { ENROLMENT_OPEN, courseBySlug, formatFee } from "@/lib/lms/courses";
+import { contact } from "@/lib/site";
 import { curriculumBySlug } from "@/lib/lms/poshCurriculum";
 import { useSession } from "./useSession";
 
@@ -46,7 +47,17 @@ export default function CourseDetail({ slug }: { slug: string }) {
     goCheckout();
   };
 
-  const ctaLabel = enrolled ? "Go to my course →" : waitlist ? "Join the waitlist" : "Enrol · Pay securely";
+  // Anyone who already enrolled keeps their way in; everybody else is sent to
+  // the enquiry desk until payment goes live.
+  const canPay = ENROLMENT_OPEN && !waitlist;
+  const ctaLabel = enrolled
+    ? "Go to my course →"
+    : canPay
+      ? "Enrol · Pay securely"
+      : waitlist
+        ? "Join the waitlist"
+        : "Enquire about this program →";
+  const onCta = enrolled || canPay ? onEnrol : () => router.push("/contact");
 
   return (
     <>
@@ -82,16 +93,20 @@ export default function CourseDetail({ slug }: { slug: string }) {
 
               <button
                 type="button"
-                onClick={waitlist && !enrolled ? () => router.push("/contact") : onEnrol}
+                onClick={onCta}
                 className="lp-btn-grad"
                 style={{ width: "100%", cursor: "pointer", border: "none", textAlign: "center", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "14px 20px", borderRadius: 999 }}
               >
                 {ctaLabel}
               </button>
 
-              {!waitlist && !enrolled && (
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, font: "600 10.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 10 }}>
-                  <Lock /> Payments secured by Razorpay
+              {!enrolled && (
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, font: "600 10.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 10, textAlign: "center" }}>
+                  {canPay ? (
+                    <><Lock /> Payments secured by Razorpay</>
+                  ) : (
+                    <span>Or call us on <a href={`tel:${contact.tel}`} style={{ fontWeight: 700 }}>{contact.phone}</a></span>
+                  )}
                 </div>
               )}
 
