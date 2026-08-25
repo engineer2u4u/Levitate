@@ -16,7 +16,7 @@ export type ProgramOutline = {
 export const POCSO_OUTLINE: ProgramOutline = {
   intro:
     "A practice-led certification that builds legal clarity, facilitation sensitivity and the confidence to lead child-safety conversations responsibly.",
-  facts: [{ k: "Duration", v: "8 Hours" }, { k: "Tenure", v: "3 Days" }, { k: "Curriculum", v: "8 Modules" }],
+  facts: [{ k: "Duration", v: "9 Hours" }, { k: "Format", v: "3 Days" }, { k: "Session", v: "3 Hrs / Day" }, { k: "Curriculum", v: "8 Modules" }],
   modules: [
     "Foundations of POCSO & the Levitate GUARD Child Safety Framework™",
     "Ground Rules for Safe & Sensitive Facilitation",

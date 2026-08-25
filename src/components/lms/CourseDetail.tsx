@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { ENROLMENT_OPEN, courseBySlug, formatFee } from "@/lib/lms/courses";
 import { contact } from "@/lib/site";
 import { outlineBySlug } from "@/lib/programOutlines";
-import { BROCHURE_ASSETS_READY, brochureBySlug } from "@/lib/lms/poshBrochure";
+import { BROCHURE_ASSETS_READY, brochureBySlug } from "@/lib/lms/brochures";
 import { SHRM_ACCREDITATION, certificateCards } from "@/lib/certificateArt";
 import { included, programBySlug } from "@/lib/programs";
 import CertificateGallery from "@/components/site/CertificateGallery";
@@ -80,7 +80,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
       {/* HERO */}
       <div style={{ background: "linear-gradient(120deg,#0c2a45,#0a1f38)", padding: "46px 48px" }} className="site-page-sec">
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
-          <Link href="/lms" style={{ font: "600 12px 'Plus Jakarta Sans',sans-serif", color: "#7fe3dc", display: "inline-block", marginBottom: 18 }}>← All courses</Link>
+          <Link href="/certifications" style={{ font: "600 12px 'Plus Jakarta Sans',sans-serif", color: "#7fe3dc", display: "inline-block", marginBottom: 18 }}>← All certifications</Link>
           <div className="lms-split" style={{ display: "grid", gridTemplateColumns: "1fr 330px", gap: 44, alignItems: "start" }}>
             <div>
               <div style={{ font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#7fe3dc", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 12 }}>
@@ -91,7 +91,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
                 {curriculum?.blurb ?? course.desc}
               </p>
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                {(curriculum?.meta ?? [course.modulesLabel, course.hoursLabel, course.mode]).map((m) => (
+                {(curriculum?.meta ?? brochure?.meta ?? [course.modulesLabel, course.hoursLabel, course.mode]).map((m) => (
                   <div key={m} style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#e6f6f4", background: "rgba(255,255,255,.08)", border: "1px solid rgba(127,227,220,.35)", borderRadius: 999, padding: "8px 15px" }}>{m}</div>
                 ))}
               </div>
@@ -329,7 +329,54 @@ export default function CourseDetail({ slug }: { slug: string }) {
                       </div>
                     ))}
                   </div>
+
+                  {/* Programmes with no staged LMS curriculum carry their
+                      objectives here instead — POSH takes its own from the
+                      curriculum block above. */}
+                  {brochure.objectives && (
+                    <>
+                      <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", margin: "28px 0 16px" }}>What you will be able to do</div>
+                      <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px 26px" }}>
+                        {brochure.objectives.map((o) => (
+                          <div key={o} style={{ display: "flex", gap: 11, alignItems: "flex-start" }}>
+                            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#2fc4bc", flex: "none", marginTop: 8 }} />
+                            <div style={{ font: "500 13.5px/1.65 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>{o}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  {brochure.beyond && (
+                    <div style={{ background: "#f7fafc", borderLeft: "3px solid #1b8f88", borderRadius: "0 13px 13px 0", padding: "20px 22px", marginTop: 26 }}>
+                      <div style={{ font: "700 15px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 8 }}>{brochure.beyond.title}</div>
+                      <p style={{ font: "400 13.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 12px" }}>{brochure.beyond.intro}</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+                        {brochure.beyond.points.map((pt) => (
+                          <div key={pt} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                            <span aria-hidden style={{ font: "700 13px 'Plus Jakarta Sans',sans-serif", color: "#2f7fd6", flex: "none" }}>→</span>
+                            <div style={{ font: "600 13px/1.6 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{pt}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+                {brochure.practiceLed && (
+                  <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
+                    <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 12 }}>{brochure.practiceLed.title}</div>
+                    <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 20px" }}>{brochure.practiceLed.intro}</p>
+                    <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px 26px" }}>
+                      {brochure.practiceLed.items.map((it) => (
+                        <div key={it} style={{ display: "flex", gap: 11, alignItems: "flex-start" }}>
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none", marginTop: 3 }}><path d="M5 13l4 4 10-10" /></svg>
+                          <div style={{ font: "500 13.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>{it}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
                   <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 18 }}>Who should attend</div>

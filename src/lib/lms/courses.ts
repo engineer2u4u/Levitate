@@ -25,11 +25,11 @@ export const COURSES: Course[] = [
     desc: "Facilitate child-safety awareness with sensitivity, legal clarity and responsible communication.",
     img: "/assets/school-group.jpeg", status: "enrolling",
     feePaise: 2000000, priceNote: "incl. taxes · from 18 Sep",
-    modulesLabel: "8 modules", hoursLabel: "8 hours", facilitator: "Parichita Kotnala",
+    modulesLabel: "8 modules", hoursLabel: "9 hours", facilitator: "Parichita Kotnala",
     certificate: {
       name: "Certified POCSO & Child Safety Facilitator Program (POCSO TTT)",
       closing: "under the **Protection of Children from Sexual Offences** (POCSO Act, 2012).",
-      hours: "8 Hours",
+      hours: "9 Hours",
     },
   },
   {

@@ -26,8 +26,18 @@ export default function LmsChrome() {
   const active = (href: string) =>
     href === "/lms" ? pathname === "/lms" || pathname.startsWith("/lms/course") : pathname.startsWith(href);
 
+  /**
+   * Programme pages are public marketing pages reached from the Certifications
+   * menu, so they do not show the learner bar — a visitor reading about a
+   * certification should not meet "My Learning" tabs and a sign-in button for
+   * an LMS that is not open yet. The component still mounts, because it owns
+   * the auth modal every LMS screen routes through.
+   */
+  const publicPage = pathname.startsWith("/lms/course");
+
   return (
     <>
+      {!publicPage && (
       <div style={{ background: "#fff", borderBottom: "1px solid #e3eaf0", padding: "12px 48px" }} className="site-page-sec">
         <div style={{ maxWidth: 1240, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
           <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase" }}>
@@ -65,8 +75,9 @@ export default function LmsChrome() {
           )}
         </div>
       </div>
+      )}
 
-      {user && (
+      {user && !publicPage && (
         <div style={{ background: "#fff", borderBottom: "1px solid #e3eaf0", padding: "0 48px" }} className="site-page-sec">
           <div className="lms-tabs" style={{ maxWidth: 1240, margin: "0 auto", display: "flex", gap: 4, overflowX: "auto" }}>
             {TABS.map((t) => {

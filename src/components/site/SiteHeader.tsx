@@ -121,7 +121,8 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
               </div>
             </div>
           </div>
-          <Link href="/lms" className="site-navlink" style={active === "lms" ? topActive : { color: "#1b8f88" }}>LMS</Link>
+          {/* The LMS is not open to the public yet, so it is not advertised in
+              the nav. The routes still resolve for anyone working on it. */}
           <Link href="/about-us" className="site-navlink" style={active === "about" ? topActive : topIdle}>About Us</Link>
           <Link href="/parichita-kotnala" className="site-navlink" style={{ ...(active === "parichita" ? topActive : topIdle), whiteSpace: "nowrap" }}>Parichita Kotnala</Link>
           <Link href="/contact" className="site-navlink" style={active === "contact" ? topActive : topIdle}>Contact</Link>
@@ -182,7 +183,6 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
             {COURSES.map((c) => (
               <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064" }}>{c.short}</Link>
             ))}
-            <Link href="/lms" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: "#1b8f88" }}>LMS · Levitate Learning</Link>
             <Link href="/about-us" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "about" ? "#1b8f88" : "#0a1b33" }}>About Us</Link>
             <Link href="/parichita-kotnala" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "parichita" ? "#1b8f88" : "#0a1b33" }}>Parichita Kotnala</Link>
             <Link href="/contact" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "contact" ? "#1b8f88" : "#0a1b33" }}>Contact</Link>
