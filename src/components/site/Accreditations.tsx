@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { Fragment } from "react";
 import Reveal from "@/components/home/Reveal";
 import { byKey, CredentialIcon } from "./credentialIcons";
 
@@ -68,9 +69,12 @@ export default function Accreditations({ spaceBelow = false }: { spaceBelow?: bo
         {/* SHRM and CPD sit on their own line: they are issued badges, each
             with its own recognition statement, not monoline registration
             marks like the three above. */}
-        <Reveal className="site-accred-badges" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 44, marginTop: 48, alignItems: "start" }}>
-          {BADGES.map((badge) => (
-            <div key={badge.src} style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
+        <Reveal className="site-accred-badges" style={{ display: "grid", gridTemplateColumns: "1fr 1px 1fr", gap: 44, marginTop: 48, alignItems: "stretch" }}>
+          {BADGES.map((badge, i) => (
+            <Fragment key={badge.src}>
+              {/* Fades at both ends rather than butting into the whitespace. */}
+              {i > 0 && <div className="site-accred-rule" aria-hidden />}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
               {/* Both marks set to the same width and vertically centred in a
                   common box, so two different proportions still read as a
                   matched pair. Explicit width, not a percentage: the marks
@@ -82,6 +86,7 @@ export default function Accreditations({ spaceBelow = false }: { spaceBelow?: bo
                 {badge.statement}
               </p>
             </div>
+            </Fragment>
           ))}
         </Reveal>
       </div>

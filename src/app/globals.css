@@ -516,3 +516,15 @@ body {
 @media (max-width: 640px) {
   .site-accred-badges { grid-template-columns: 1fr !important; gap: 36px !important; }
 }
+
+/* Divider between the two issued badges. Fades at both ends so it reads as a
+   separator rather than a hard edge cutting the section in two. */
+.site-accred-rule {
+  width: 1px;
+  background: linear-gradient(180deg, transparent, #dbe5ec 18%, #dbe5ec 82%, transparent);
+}
+
+/* Stacked, the divider lies on its side. */
+@media (max-width: 640px) {
+  .site-accred-rule { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, #dbe5ec 18%, #dbe5ec 82%, transparent); }
+}
