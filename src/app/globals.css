@@ -510,3 +510,9 @@ body {
 @media (max-width: 560px) {
   .lms-pillars { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 }
+
+/* The two issued badges stack on phones, where side by side leaves each mark
+   too small to read. */
+@media (max-width: 640px) {
+  .site-accred-badges { grid-template-columns: 1fr !important; gap: 36px !important; }
+}

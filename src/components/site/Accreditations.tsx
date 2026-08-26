@@ -7,6 +7,24 @@ import { byKey, CredentialIcon } from "./credentialIcons";
 /** Accreditations — official registrations and certifications. */
 const SHOWN = ["iso", "dpiit", "udyam"].map(byKey);
 
+/** Issued badges, each shown with the statement its awarding body allows. */
+const BADGES = [
+  {
+    src: "/assets/accreditations/shrm.png",
+    alt: "SHRM Recertification Provider — SHRM-CP and SHRM-SCP",
+    width: 215,
+    statement:
+      "Levitate PeopleSoft is recognised by SHRM to offer Professional Development Credits for SHRM-CP and SHRM-SCP.",
+  },
+  {
+    src: "/assets/accreditations/cpd-member.png",
+    alt: "CPD Member — The CPD Certification Service",
+    width: 215,
+    statement:
+      "Levitate PeopleSoft is a recognised CPD Provider, with eligible programmes offering approved CPD hours and participant certificates.",
+  },
+];
+
 /**
  * `spaceBelow` adds the bottom padding the section normally goes without.
  * The homepage runs straight into the next section and wants the gap closed;
@@ -47,19 +65,24 @@ export default function Accreditations({ spaceBelow = false }: { spaceBelow?: bo
           ))}
         </div>
 
-        {/* SHRM sits on its own line: it is an issued badge with its own
-            recognition statement, not one of the monoline registration marks. */}
-        <Reveal style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", marginTop: 44 }}>
-          <img
-            src="/assets/accreditations/shrm.png"
-            alt="SHRM Recertification Provider — SHRM-CP and SHRM-SCP"
-            width={120}
-            height={121}
-            style={{ display: "block", width: 215, height: "auto" }}
-          />
-          <p style={{ font: "italic 400 14.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 620, margin: "16px 0 0" }}>
-            Levitate PeopleSoft is recognised by SHRM to offer Professional Development Credits for SHRM-CP and SHRM-SCP.
-          </p>
+        {/* SHRM and CPD sit on their own line: they are issued badges, each
+            with its own recognition statement, not monoline registration
+            marks like the three above. */}
+        <Reveal className="site-accred-badges" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 44, marginTop: 48, alignItems: "start" }}>
+          {BADGES.map((badge) => (
+            <div key={badge.src} style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
+              {/* Both marks set to the same width and vertically centred in a
+                  common box, so two different proportions still read as a
+                  matched pair. Explicit width, not a percentage: the marks
+                  should not grow with the column. */}
+              <div style={{ height: 220, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <img src={badge.src} alt={badge.alt} style={{ display: "block", width: badge.width, maxWidth: "100%", height: "auto" }} />
+              </div>
+              <p style={{ font: "italic 400 14.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", maxWidth: 480, margin: "18px 0 0" }}>
+                {badge.statement}
+              </p>
+            </div>
+          ))}
         </Reveal>
       </div>
     </div>
