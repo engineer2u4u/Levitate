@@ -7,37 +7,61 @@ import { videoTestimonials } from "@/lib/homeData";
 
 export type PlayableClip = { id: string; title: string; portrait?: boolean };
 
-/** Below 760px the row is a snap carousel (see .lp-vt-grid in globals.css). */
-const CAROUSEL_QUERY = "(max-width: 760px)";
 const ADVANCE_MS = 4500;
 /** How long auto-advance stays paused after the visitor takes over. */
 const RESUME_MS = 9000;
 
+/**
+ * The clips are rendered twice.
+ *
+ * That is what makes the loop endless rather than a rewind: advancing past the
+ * last clip carries on into the second copy, and once it lands there the
+ * scroll position is reset to the matching card in the first copy without an
+ * animation. The two are identical, so the jump is invisible.
+ */
+const LOOP = [...videoTestimonials, ...videoTestimonials];
+const COUNT = videoTestimonials.length;
+
 export default function VideoTestimonials({ onPlay }: { onPlay: (clip: PlayableClip) => void }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
-  // Auto-advance only runs where the carousel exists, while it is on screen,
-  // and while the visitor is not driving it themselves.
-  const [isCarousel, setIsCarousel] = useState(false);
+  // Auto-advance runs while the row is on screen and the visitor is not
+  // driving it — by swiping, or just by hovering a card they mean to click.
   const [onScreen, setOnScreen] = useState(false);
   const [held, setHeld] = useState(false);
+  const [hovering, setHovering] = useState(false);
+  /** Position within the duplicated run; `active` is this modulo the clip count. */
+  const cursor = useRef(0);
+
+  /**
+   * Cards align to the start of the track, not its centre.
+   *
+   * Centring clamps at scrollLeft 0 for every card that fits in the first
+   * screenful, so the wrap-around could not land on an identical position and
+   * the reset showed as a jump. Start alignment makes card N's offset exact,
+   * which is what lets the loop close invisibly.
+   */
+  const offsetOf = (track: HTMLElement, i: number) => {
+    const first = track.children[0] as HTMLElement | undefined;
+    const card = track.children[i] as HTMLElement | undefined;
+    return first && card ? card.offsetLeft - first.offsetLeft : null;
+  };
 
   const scrollToCard = useCallback((i: number, smooth = true) => {
     const track = trackRef.current;
-    const card = track?.children[i] as HTMLElement | undefined;
-    if (!track || !card) return;
-    track.scrollTo({
-      left: card.offsetLeft - (track.clientWidth - card.clientWidth) / 2,
-      behavior: smooth ? "smooth" : "auto",
-    });
+    if (!track) return;
+    const left = offsetOf(track, i);
+    if (left === null) return;
+    track.scrollTo({ left, behavior: smooth ? "smooth" : "auto" });
   }, []);
 
-  useEffect(() => {
-    const mq = window.matchMedia(CAROUSEL_QUERY);
-    const apply = () => setIsCarousel(mq.matches);
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
+  /** Steps back exactly one copy — same cards, same place, no animation. */
+  const rewindOneCopy = useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const copyWidth = offsetOf(track, COUNT);
+    if (copyWidth === null) return;
+    track.scrollTo({ left: track.scrollLeft - copyWidth, behavior: "auto" });
   }, []);
 
   // Track which card is centred, so the dots follow a manual swipe too.
@@ -47,18 +71,19 @@ export default function VideoTestimonials({ onPlay }: { onPlay: (clip: PlayableC
     let frame = 0;
     const measure = () => {
       frame = 0;
-      const centre = track.scrollLeft + track.clientWidth / 2;
       let nearest = 0;
       let best = Infinity;
-      Array.from(track.children).forEach((child, i) => {
-        const el = child as HTMLElement;
-        const d = Math.abs(el.offsetLeft + el.clientWidth / 2 - centre);
+      Array.from(track.children).forEach((_, i) => {
+        const left = offsetOf(track, i);
+        if (left === null) return;
+        const d = Math.abs(left - track.scrollLeft);
         if (d < best) {
           best = d;
           nearest = i;
         }
       });
-      setActive(nearest);
+      // Dots index the real clips, not the duplicated run.
+      setActive(nearest % COUNT);
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(measure);
@@ -90,27 +115,45 @@ export default function VideoTestimonials({ onPlay }: { onPlay: (clip: PlayableC
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
+    const enter = () => setHovering(true);
+    const leave = () => setHovering(false);
     track.addEventListener("pointerdown", hold, { passive: true });
     track.addEventListener("wheel", hold, { passive: true });
+    track.addEventListener("mouseenter", enter);
+    track.addEventListener("mouseleave", leave);
     return () => {
       track.removeEventListener("pointerdown", hold);
       track.removeEventListener("wheel", hold);
+      track.removeEventListener("mouseenter", enter);
+      track.removeEventListener("mouseleave", leave);
       if (holdTimer.current) clearTimeout(holdTimer.current);
     };
   }, [hold]);
 
   useEffect(() => {
-    if (!isCarousel || !onScreen || held) return;
+    if (!onScreen || held || hovering) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let rewind: ReturnType<typeof setTimeout> | null = null;
     const timer = setInterval(() => {
-      setActive((i) => {
-        const next = (i + 1) % videoTestimonials.length;
-        scrollToCard(next);
-        return next;
-      });
+      const next = cursor.current + 1;
+      scrollToCard(next);
+      cursor.current = next;
+      setActive(next % COUNT);
+      // Just scrolled into the duplicated run. Once the smooth scroll has
+      // settled, step back one whole copy: the cards on screen are the same
+      // ones in the same places, so the row simply keeps moving forwards.
+      if (next >= COUNT) {
+        rewind = setTimeout(() => {
+          rewindOneCopy();
+          cursor.current = next - COUNT;
+        }, 700);
+      }
     }, ADVANCE_MS);
-    return () => clearInterval(timer);
-  }, [isCarousel, onScreen, held, scrollToCard]);
+    return () => {
+      clearInterval(timer);
+      if (rewind) clearTimeout(rewind);
+    };
+  }, [onScreen, held, hovering, scrollToCard, rewindOneCopy]);
 
   return (
     <div className="lp-sec" style={{ background: "#fff", padding: "72px 48px 80px" }}>
@@ -124,10 +167,10 @@ export default function VideoTestimonials({ onPlay }: { onPlay: (clip: PlayableC
           <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9" }}>{videoTestimonials.length} short clips · tap to play</div>
         </Reveal>
 
-        {/* Grid on desktop; a swipeable snap carousel below 760px */}
+        {/* A swipeable, auto-advancing snap carousel at every width */}
         <div className="lp-vt-grid" ref={trackRef}>
-          {videoTestimonials.map((v) => (
-            <Reveal key={v.id} className="lp-vt-card" style={{ position: "relative", borderRadius: 18, overflow: "hidden", isolation: "isolate", border: "1px solid #e3eaf0", background: "#eef4f7", minHeight: 300, boxShadow: "0 2px 8px rgba(10,27,51,.06)" }}>
+          {LOOP.map((v, i) => (
+            <Reveal key={`${v.id}-${i}`} className="lp-vt-card" aria-hidden={i >= COUNT ? true : undefined} style={{ position: "relative", borderRadius: 18, overflow: "hidden", isolation: "isolate", border: "1px solid #e3eaf0", background: "#eef4f7", minHeight: 300, boxShadow: "0 2px 8px rgba(10,27,51,.06)" }}>
               <button
                 type="button"
                 onClick={() => onPlay({ id: v.id, title: v.title, portrait: v.portrait })}
@@ -172,6 +215,7 @@ export default function VideoTestimonials({ onPlay }: { onPlay: (clip: PlayableC
               aria-label={`Show clip ${i + 1} of ${videoTestimonials.length}`}
               onClick={() => {
                 hold();
+                cursor.current = i;
                 setActive(i);
                 scrollToCard(i);
               }}
