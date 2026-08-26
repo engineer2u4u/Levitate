@@ -180,6 +180,8 @@ export const videoTestimonials: VideoTestimonial[] = [
   { id: "omuq1o5ZNLk", title: "Poonam Bharkat Shares Her Experience with Parichitta | Client Testimonial" },
   { id: "ZQ4Sc2QetDM", title: "Priyanka Pawar Shares Her Experience with Parichita's Training Sessions | Client Testimonial" },
   { id: "n_86rMA9hPM", title: "Archana Malhotra Shares Her Experience with Parichita | POCSO Training Testimonial", portrait: true },
+  { id: "AT4ugM8vFDw", title: "Vidhi Vashistha Shares Her Experience with Parichita | PoSH Compliance Testimonial" },
+  { id: "cHIlftznV4k", title: "Simran Dhingra Shares Her Experience with Parichita | Unconscious Bias Workshop" },
 ];
 
 export type Testimonial = {
