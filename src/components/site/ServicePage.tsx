@@ -178,7 +178,7 @@ export default function ServicePage({
         </div>
       </div>
 
-      {/* POSH */}
+      {/* PoSH */}
       {showPosh && <PoshSection />}
 
       {/* PROCESS */}

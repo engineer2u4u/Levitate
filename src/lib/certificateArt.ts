@@ -175,7 +175,7 @@ export type CertificateIssue = {
   hours: string;
   pdcs: string;
   certificateId: string;
-  /** Trailing clause on the Award certificate; falls back to the POSH line. */
+  /** Trailing clause on the Award certificate; falls back to the PoSH line. */
   closing?: string;
 };
 
@@ -183,7 +183,7 @@ export const ORG_NAME = "Levitate PeopleSoft";
 
 /** `**…**` marks what the artwork sets in bold. */
 export const CLOSING_NOTE =
-  "under the **Prevention of Sexual Harassment at Workplace** (POSH Act, 2013).";
+  "under the **Prevention of Sexual Harassment at Workplace** (PoSH Act, 2013).";
 
 /**
  * The SHRM recognition statement, shown with the certificates on every

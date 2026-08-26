@@ -56,7 +56,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     crumb: "Train-the-Trainer",
     eyebrow: "01 · Train-the-Trainer Certifications",
     title: "Train-the-Trainer Certification Programs",
-    lede: "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, POSH and POCSO — along with HR Edge certification for future HR professionals.",
+    lede: "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, PoSH and POCSO — along with HR Edge certification for future HR professionals.",
     img: "/assets/students-group.png",
     facts: [
       { k: "Format", v: "Online and Weekend Batches" },
@@ -65,7 +65,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     ],
     introHeading: "Our Certification Approach",
     intro: [
-      "Our certification programs are designed to help professionals build practical understanding, facilitation confidence and workplace-ready knowledge across six key areas: Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, POSH, POCSO and HR Edge certification.",
+      "Our certification programs are designed to help professionals build practical understanding, facilitation confidence and workplace-ready knowledge across six key areas: Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, PoSH, POCSO and HR Edge certification.",
       "Each program is built with global workplace content, practical HR insights and real-world application. The learning combines structured live sessions, practical examples, case discussions, workplace scenarios and guided learning material to help participants understand both the concept and its application in modern workplaces.",
       "Participants receive access to session recordings, presentation decks, reading material, templates and relevant trainer resources to support continued learning beyond the live sessions.",
       "The focus is on helping participants understand the subject clearly, connect it with real workplace situations and build the confidence to facilitate awareness or learning conversations in their respective professional contexts.",
@@ -107,7 +107,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
         num: "04",
         t: "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
         href: "/lms/course/posh-trainer",
-        d: "Powered by the CLEAR POSH Framework Train-the-Trainer Certification — awareness sessions, manager sensitisation and IC capability building with legal clarity and facilitation maturity.",
+        d: "Powered by the CLEAR PoSH Framework Train-the-Trainer Certification — awareness sessions, manager sensitisation and IC capability building with legal clarity and facilitation maturity.",
       },
       {
         num: "05",
@@ -119,7 +119,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
         num: "06",
         t: "HR Edge certification (HR Students)",
         href: "/lms/course/hr-edge",
-        d: "Powered by the EDGE Rediness Framework Train-the-Trainer Certification Integrated DEI, POSH & Workplace Wellbeing for MBA-HR, PGDM-HR students and early-career HR professionals.",
+        d: "Powered by the EDGE Rediness Framework Train-the-Trainer Certification Integrated DEI, PoSH & Workplace Wellbeing for MBA-HR, PGDM-HR students and early-career HR professionals.",
       },
     ],
     processEyebrow: "How certification runs",
@@ -149,7 +149,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     orgLabel: "Organization (optional)",
     orgPlaceholder: "Where you work",
     pickLabel: "Which pathway interests you most? *",
-    options: ["Corporate Leadership", "DEI", "Wellbeing", "POSH", "POCSO", "HR Edge", "Not sure yet"],
+    options: ["Corporate Leadership", "DEI", "Wellbeing", "PoSH", "POCSO", "HR Edge", "Not sure yet"],
     msgPlaceholder: "Your facilitation experience so far, and what you want to be able to run",
     formButton: "Send certification enquiry",
     hideFormMode: true,
@@ -203,7 +203,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     listHeading: "Seven capability areas we deliver against",
     listGrid: "repeat(4,1fr)",
     items: [
-      { num: "01", t: "POSH & Workplace Dignity", d: "POSH awareness, manager sensitisation, Internal Committee capability building and respectful workplace behaviour programs with legal clarity." },
+      { num: "01", t: "PoSH & Workplace Dignity", d: "PoSH awareness, manager sensitisation, Internal Committee capability building and respectful workplace behaviour programs with legal clarity." },
       { num: "02", t: "Leadership & Manager Capability", d: "Delegation, coaching skills, feedback conversations, accountability, prioritization, one-on-ones, decision-making and team development." },
       {
         num: "03",
@@ -257,7 +257,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     orgLabel: "Organization *",
     orgPlaceholder: "Company name",
     pickLabel: "Primary capability area *",
-    options: ["Leadership & managers", "Communication", "Collaboration & culture", "Wellbeing", "DEI", "POSH", "Multiple areas"],
+    options: ["Leadership & managers", "Communication", "Collaboration & culture", "Wellbeing", "DEI", "PoSH", "Multiple areas"],
     msgPlaceholder: "Team profile, capability gaps, timelines and any internal drivers behind this",
     formButton: "Request a proposal",
     faqs: [
@@ -318,7 +318,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
       { num: "02", t: "Communication & Corporate Etiquette", d: "Email writing, presentation skills, group discussions, professional communication and business etiquette." },
       { num: "03", t: "Interview & Career Readiness", d: "Resume building, personal introduction, HR interview preparation, mock interviews with feedback and job-search confidence." },
       { num: "04", t: "Professional Skills for the Workplace", d: "Time management, teamwork, problem-solving, critical thinking, adaptability, ownership and workplace discipline." },
-      { num: "05", t: "HR Edge certification (HR Students)", d: "An integrated certification for MBA-HR, PGDM-HR and HR postgraduate students combining DEI, POSH and workplace wellbeing." },
+      { num: "05", t: "HR Edge certification (HR Students)", d: "An integrated certification for MBA-HR, PGDM-HR and HR postgraduate students combining DEI, PoSH and workplace wellbeing." },
     ],
     processEyebrow: "How we work with institutions",
     processHeading: "Built around your placement calendar, not ours",
@@ -331,12 +331,12 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     certEyebrow: "Student credential",
     certHeading: "A credential that means something to a recruiter",
     certBody:
-      "Students receive a certificate naming the program completed. For MBA-HR and PGDM-HR cohorts, the HR Edge certification records an applied, assessment-based credential in DEI, POSH and workplace wellbeing — a genuine differentiator in HR interviews.",
+      "Students receive a certificate naming the program completed. For MBA-HR and PGDM-HR cohorts, the HR Edge certification records an applied, assessment-based credential in DEI, PoSH and workplace wellbeing — a genuine differentiator in HR interviews.",
     certLabel: "HR Edge certification (HR Students)",
     certName: "Student Name",
     certLine1: "This certifies that",
     certLine2: "has successfully completed the",
-    certLine3: "integrated DEI, POSH and workplace wellbeing curriculum with assessment",
+    certLine3: "integrated DEI, PoSH and workplace wellbeing curriculum with assessment",
     certProgram: "HR Edge Certification for Future HR Professionals",
     audience: [
       "Final-year UG students",
@@ -386,14 +386,14 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     ],
     outcomes: [
       "A clear picture of current-state risk",
-      "POSH and IC readiness you can evidence",
+      "PoSH and IC readiness you can evidence",
       "Policies people can actually follow",
       "Managers equipped for hard conversations",
       "Performance and feedback rhythms that hold",
       "Capability planning ahead of growth",
     ],
     bestFor:
-      "Growing organizations, founder-led businesses, HR teams needing practical advisory support, organizations strengthening POSH and workplace compliance, leadership teams building manager capability, and businesses undergoing growth, restructuring or culture change.",
+      "Growing organizations, founder-led businesses, HR teams needing practical advisory support, organizations strengthening PoSH and workplace compliance, leadership teams building manager capability, and businesses undergoing growth, restructuring or culture change.",
     deliverTitle: "Typical deliverables",
     deliverables: [
       "Diagnostic note with prioritised recommendations",
@@ -406,7 +406,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     listHeading: "Seven areas where we support HR and leadership teams",
     listGrid: "repeat(3,1fr)",
     items: [
-      { num: "01", t: "POSH compliance and Internal Committee readiness", d: "Internal Committee formation, capability building, process readiness and compliance support with legal clarity." },
+      { num: "01", t: "PoSH compliance and Internal Committee readiness", d: "Internal Committee formation, capability building, process readiness and compliance support with legal clarity." },
       { num: "02", t: "HR policy review and practical process support", d: "Reviewing and strengthening policies, workplace processes and documentation for clarity, consistency and usability." },
       { num: "03", t: "Manager capability and people-practice guidance", d: "Building the everyday manager practices that drive trust, performance and retention." },
       { num: "04", t: "Employee relations and workplace sensitivity support", d: "Practical guidance on sensitive workplace situations, employee relations and responsible HR response." },
@@ -425,18 +425,18 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     certEyebrow: "Engagement record",
     certHeading: "Documentation you can put in front of a board or auditor",
     certBody:
-      "Advisory engagements close with a written record of the work completed — scope, recommendations, actions taken and the review cadence agreed. For POSH and IC work, documentation is structured to support your compliance file.",
+      "Advisory engagements close with a written record of the work completed — scope, recommendations, actions taken and the review cadence agreed. For PoSH and IC work, documentation is structured to support your compliance file.",
     certLabel: "Engagement Completion Record",
     certName: "Organization Name",
     certLine1: "This confirms that",
     certLine2: "completed an advisory engagement covering",
     certLine3: "with recommendations, actions and review cadence documented",
-    certProgram: "POSH Compliance & Internal Committee Advisory",
+    certProgram: "PoSH Compliance & Internal Committee Advisory",
     audience: [
       "Growing organizations",
       "Founder-led businesses",
       "HR teams needing practical advisory support",
-      "Organizations strengthening POSH and workplace compliance",
+      "Organizations strengthening PoSH and workplace compliance",
       "Leadership teams building manager capability",
       "Businesses undergoing growth, restructuring or culture change",
     ],
@@ -445,7 +445,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     orgLabel: "Organization *",
     orgPlaceholder: "Company or institution name",
     pickLabel: "Where do you need support first? *",
-    options: ["POSH & IC advisory", "Policy review", "Manager capability", "Employee relations", "Performance frameworks", "Culture & experience", "Not sure yet"],
+    options: ["PoSH & IC advisory", "Policy review", "Manager capability", "Employee relations", "Performance frameworks", "Culture & experience", "Not sure yet"],
     msgPlaceholder: "Headcount, current HR setup and what prompted this conversation",
     formButton: "Book an HR Advisory Discussion",
     faqs: [

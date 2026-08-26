@@ -23,7 +23,7 @@ export type ProgramBrochure = {
   };
   /**
    * What a participant leaves able to do. Only set for programmes with no
-   * staged LMS curriculum — POSH takes its objectives from that instead.
+   * staged LMS curriculum — PoSH takes its objectives from that instead.
    */
   objectives?: string[];
   /** An extra pitch the brochure makes in its own words. */
@@ -38,7 +38,7 @@ export const POSH_BROCHURE: ProgramBrochure = {
   eyebrow: "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
   strapline: "Learn the law. Navigate sensitive situations. Facilitate with confidence.",
   about:
-    "The PoSH & Workplace Dignity Facilitator Program (PoSH TTT) is an intensive, practice-led certification built to take participants beyond theory — equipping them with legal understanding, inquiry competence and the facilitation skill to run POSH sessions and support Internal Committees with confidence.",
+    "The PoSH & Workplace Dignity Facilitator Program (PoSH TTT) is an intensive, practice-led certification built to take participants beyond theory — equipping them with legal understanding, inquiry competence and the facilitation skill to run PoSH sessions and support Internal Committees with confidence.",
 
   stats: [
     { n: "2,000+", label: "Professionals Trained" },
@@ -54,14 +54,14 @@ export const POSH_BROCHURE: ProgramBrochure = {
     "Legal & Compliance Professionals",
     "Workplace Trainers & Facilitators",
     "HR Consultants & Independent Professionals",
-    "Aspiring POSH Trainers and Workplace Facilitators",
+    "Aspiring PoSH Trainers and Workplace Facilitators",
     "New Potential Trainers (freelance and/or corporate)",
   ],
 
   methodology: {
     tags: ["Audio-Video", "Interactive Presentation", "Case Studies", "Roleplay", "Activity Sheets", "Reflection & Group Discussion"],
     body:
-      "Every session combines legal grounding with practical HR insight and facilitator practice — using workplace cases, role plays, reflection, discussion and applied facilitation rather than theory alone. Participants leave equipped to lead POSH conversations, not simply understand the legislation.",
+      "Every session combines legal grounding with practical HR insight and facilitator practice — using workplace cases, role plays, reflection, discussion and applied facilitation rather than theory alone. Participants leave equipped to lead PoSH conversations, not simply understand the legislation.",
     blocks: [
       {
         title: "Study Material",

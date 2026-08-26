@@ -11,6 +11,7 @@ import { SHRM_ACCREDITATION, certificateCards } from "@/lib/certificateArt";
 import { included, programBySlug } from "@/lib/programs";
 import CertificateGallery from "@/components/site/CertificateGallery";
 import ConsultationBand from "@/components/site/ConsultationBand";
+import BrandText from "@/components/site/BrandText";
 import UpcomingBatches from "@/components/site/UpcomingBatches";
 import FaqAccordion from "@/components/site/FaqAccordion";
 import { faqsBySlug } from "@/lib/lms/poshFaqs";
@@ -84,7 +85,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
           <div className="lms-split" style={{ display: "grid", gridTemplateColumns: "1fr 330px", gap: 44, alignItems: "start" }}>
             <div>
               <div style={{ font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#7fe3dc", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 12 }}>
-                {curriculum?.eyebrow ?? `${course.tag} · ${course.mode}`}
+                <BrandText>{curriculum?.eyebrow ?? `${course.tag} · ${course.mode}`}</BrandText>
               </div>
               <h1 style={{ font: "700 clamp(26px,2.8vw,38px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#fff", margin: "0 0 12px", letterSpacing: "-.02em" }}>{course.title}</h1>
               <p style={{ font: "400 15px/1.75 'Plus Jakarta Sans',sans-serif", color: "rgba(255,255,255,.75)", margin: "0 0 22px", maxWidth: 620 }}>
@@ -184,7 +185,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
                 <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 24px" }}>{program.p2}</p>
 
                 <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 16, padding: "22px 24px", marginBottom: 22 }}>
-                  <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 16 }}>{program.pillarTitle}</div>
+                  <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 16 }}><BrandText>{program.pillarTitle}</BrandText></div>
                   <div className="lms-pillars" style={{ display: "grid", gridTemplateColumns: `repeat(${program.pillars.length}, minmax(0,1fr))`, gap: 12 }}>
                     {program.pillars.map((p, i) => (
                       <div key={`${p.k}-${i}`} style={{ background: "#fff", border: "1px solid #e3eaf0", borderTop: "3px solid #2f7fd6", borderRadius: 12, padding: "14px 14px" }}>
@@ -294,7 +295,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
                   </div>
 
                   {/* Programmes with no staged LMS curriculum carry their
-                      objectives here instead — POSH takes its own from the
+                      objectives here instead — PoSH takes its own from the
                       curriculum block above. */}
                   {brochure.objectives && (
                     <>

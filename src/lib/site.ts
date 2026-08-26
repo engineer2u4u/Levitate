@@ -74,7 +74,7 @@ export type Batch = {
  * a batch is only pencilled in.
  */
 export const batches: Batch[] = [
-  { tag: "POSH Train-the-Trainer", title: "POSH TTT Certification", status: "Enrolling", open: true, short: "POSH TTT", starts: "26 September",
+  { tag: "PoSH Train-the-Trainer", title: "PoSH TTT Certification", status: "Enrolling", open: true, short: "PoSH TTT", starts: "26 September",
     rows: [{ k: "Batch starts", v: "26 September" }, { k: "Duration", v: "3 weeks" }, { k: "Batch type", v: "Weekend batch" }, { k: "Daily", v: "2 hours per day" }, { k: "Timing", v: "6:00 – 8:00 PM" }, { k: "Mode", v: "Live online" }],
     fee: "₹25,000", feeNote: "inclusive of taxes", cta: "Enrol for this batch" },
   { tag: "POCSO Train-the-Trainer", title: "POCSO TTT Certification", status: "Enrolling", open: true, short: "POCSO TTT", starts: "18 September",

@@ -80,7 +80,7 @@ export default function Dashboard() {
     );
   }
 
-  // The primary course drives the hero panels; today only POSH has content.
+  // The primary course drives the hero panels; today only PoSH has content.
   const primary = enrolments.find((e) => curriculumBySlug(e.courseSlug)) ?? null;
   const curriculum = primary ? curriculumBySlug(primary.courseSlug) : null;
   const course = primary ? courseBySlug(primary.courseSlug) : null;

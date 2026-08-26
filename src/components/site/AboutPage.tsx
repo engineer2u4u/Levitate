@@ -16,13 +16,13 @@ const highlights = [
   { v: "6", l: "Certification pathways" },
 ];
 const hpills = ["Flexible Training Modes", "Delivered By Industry Experts", "Hands-On Learning", "Assessment-Based Certification"];
-const pkTags = ["Leadership enablement", "Workplace culture", "DEI", "POSH & POCSO", "Wellbeing", "People advisory"];
+const pkTags = ["Leadership enablement", "Workplace culture", "DEI", "PoSH & POCSO", "Wellbeing", "People advisory"];
 const rpnTags = ["ONGC · Chief Manager HR", "Employee relations", "HR governance", "Workforce capability", "Organizational learning"];
 const accred = [
   { badge: "ISO", t: "ISO Certified", d: "Quality-assured training organization." },
   { badge: "TTT", t: "Train-the-Trainer Framework", d: "Practice-led facilitator development with assessment-linked certification." },
-  { badge: "POSH", t: "POSH & IC Advisory", d: "Programs designed with legal clarity and facilitation sensitivity." },
-  { badge: "HR EDGE", t: "HR Edge Curriculum", d: "Integrated DEI, POSH and wellbeing certification for future HR professionals." },
+  { badge: "PoSH", t: "PoSH & IC Advisory", d: "Programs designed with legal clarity and facilitation sensitivity." },
+  { badge: "HR EDGE", t: "HR Edge Curriculum", d: "Integrated DEI, PoSH and wellbeing certification for future HR professionals." },
 ];
 const gallery = [
   "/assets/founder-speaking.jpeg",
@@ -118,7 +118,7 @@ export default function AboutPage() {
               </p>
               <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                 We specialize in Train-the-Trainer certification programs, workplace facilitator development, corporate training and HR capability-building solutions across leadership, DEI, workplace
-                mental health and wellbeing, POSH, POCSO, people culture and professional readiness.
+                mental health and wellbeing, PoSH, POCSO, people culture and professional readiness.
               </p>
             </div>
             <div style={{ marginTop: 28, background: "#f4f7f9", border: "1px solid rgba(27,143,136,.35)", borderRadius: 16, padding: "28px 30px" }}>
@@ -193,7 +193,7 @@ export default function AboutPage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, font: "400 14.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
                   <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                     Parichita brings over 15 years of global HR, leadership development and workplace culture experience across diverse teams and business environments. Her work spans HR business
-                    partnering, leadership enablement, performance, employee relations, workplace compliance, POSH, POCSO, wellbeing, DEI and people advisory.
+                    partnering, leadership enablement, performance, employee relations, workplace compliance, PoSH, POCSO, wellbeing, DEI and people advisory.
                   </p>
                   <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                     Having worked across global workplace contexts, she brings practical insight into how organizations build leadership capability, psychological safety, inclusive cultures, safe

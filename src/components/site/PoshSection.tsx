@@ -17,21 +17,21 @@ export default function PoshSection() {
   const [playing, setPlaying] = useState(false);
 
   return (
-    <div id="POSH" className="site-page-sec" style={{ background: "#fff", padding: "80px 48px" }}>
+    <div id="PoSH" className="site-page-sec" style={{ background: "#fff", padding: "80px 48px" }}>
       <div className="site-stack" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "center" }}>
         {/* Content — left */}
         <Reveal>
-          <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>POSH &amp; Workplace Dignity</div>
+          <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>PoSH &amp; Workplace Dignity</div>
           <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.18 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 18px", letterSpacing: "-.02em" }}>
-            POSH programs delivered with legal clarity and facilitation maturity
+            PoSH programs delivered with legal clarity and facilitation maturity
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 14, font: "400 15.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
             <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
-              Prevention of Sexual Harassment is not a tick-box session. Our POSH programs help organizations meet their obligations while genuinely shifting how people behave — combining accurate
+              Prevention of Sexual Harassment is not a tick-box session. Our PoSH programs help organizations meet their obligations while genuinely shifting how people behave — combining accurate
               legal grounding with the sensitivity these conversations demand.
             </p>
             <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
-              Sessions are led by an internationally certified POSH educator and trainer, empanelled on the SHe-Box portal of the Ministry of Women and Child Development, Government of India.
+              Sessions are led by an internationally certified PoSH educator and trainer, empanelled on the SHe-Box portal of the Ministry of Women and Child Development, Government of India.
             </p>
           </div>
 
@@ -52,14 +52,14 @@ export default function PoshSection() {
               className="lp-btn-grad"
               style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14.5px 'Plus Jakarta Sans',sans-serif", padding: "14px 26px", borderRadius: 999 }}
             >
-              Discuss a POSH program
+              Discuss a PoSH program
             </Link>
             <Link
               href="/hr-consulting-services"
               className="lp-btn-outline"
               style={{ border: "1.5px solid rgba(10,27,51,.24)", color: "#0a1b33", font: "700 14.5px 'Plus Jakarta Sans',sans-serif", padding: "14px 26px", borderRadius: 999 }}
             >
-              POSH &amp; IC advisory
+              PoSH &amp; IC advisory
             </Link>
           </div>
         </Reveal>
@@ -70,7 +70,7 @@ export default function PoshSection() {
           <button
             type="button"
             onClick={() => setPlaying(true)}
-            aria-label="Play the POSH programme video"
+            aria-label="Play the PoSH programme video"
             className="lp-posh-play"
             style={{
               position: "relative",
@@ -109,7 +109,7 @@ export default function PoshSection() {
             >
               <span style={{ width: 0, height: 0, borderLeft: "22px solid #fff", borderTop: "13px solid transparent", borderBottom: "13px solid transparent", marginLeft: 6 }} />
             </span>
-            <span style={{ position: "relative", font: "700 16px 'Plus Jakarta Sans',sans-serif", color: "#fff", textShadow: "0 2px 12px rgba(10,27,51,.5)" }}>Watch a POSH session</span>
+            <span style={{ position: "relative", font: "700 16px 'Plus Jakarta Sans',sans-serif", color: "#fff", textShadow: "0 2px 12px rgba(10,27,51,.5)" }}>Watch a PoSH session</span>
           </button>
         </Reveal>
       </div>
@@ -144,7 +144,7 @@ export default function PoshSection() {
               boxShadow: "0 40px 120px rgba(10,27,51,.45)",
             }}
           >
-            <YouTubeEmbed id="wfGzTNtutXs" title="POSH &amp; Workplace Dignity — Levitate PeopleSoft" />
+            <YouTubeEmbed id="wfGzTNtutXs" title="PoSH &amp; Workplace Dignity — Levitate PeopleSoft" />
             <div
               onClick={() => setPlaying(false)}
               className="lp-close-btn"

@@ -32,12 +32,12 @@ export const POCSO_OUTLINE: ProgramOutline = {
 
 export const POSH_OUTLINE: ProgramOutline = {
   intro:
-    "An intensive, practice-led certification designed to build legal understanding, inquiry competence and effective POSH facilitation skills.",
+    "An intensive, practice-led certification designed to build legal understanding, inquiry competence and effective PoSH facilitation skills.",
   facts: [{ k: "Duration", v: "12 Hours" }, { k: "Format", v: "6 Days" }, { k: "Schedule", v: "3 Weeks" }, { k: "Curriculum", v: "11 Modules" }],
   modules: [
     "Purpose, Culture and the Certification Journey",
-    "India's Evolving POSH Landscape",
-    "Levitate CLEAR POSH Framework™",
+    "India's Evolving PoSH Landscape",
+    "Levitate CLEAR PoSH Framework™",
     "Genesis and Legal Foundation",
     "Recognising Sexual Harassment",
     "Coverage, Definitions and Jurisdiction",

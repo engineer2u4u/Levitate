@@ -9,42 +9,42 @@ export type Faq = { q: string; a: string[] };
 
 export const POSH_FAQS: Faq[] = [
   {
-    q: "What is the POSH Train-the-Trainer Certification Programme?",
+    q: "What is the PoSH Train-the-Trainer Certification Programme?",
     a: [
-      "The POSH Train-the-Trainer Certification Programme is an intensive, practice-led programme designed to build the legal understanding, practical judgement and facilitation capability required to confidently deliver POSH awareness and sensitisation sessions in workplace settings.",
+      "The PoSH Train-the-Trainer Certification Programme is an intensive, practice-led programme designed to build the legal understanding, practical judgement and facilitation capability required to confidently deliver PoSH awareness and sensitisation sessions in workplace settings.",
     ],
   },
   {
     q: "Who can enrol in the programme?",
     a: [
-      "The programme is suitable for HR and L&D professionals, Internal Committee members, legal and compliance professionals, consultants, trainers, educators, corporate professionals, independent facilitators and aspiring POSH trainers.",
+      "The programme is suitable for HR and L&D professionals, Internal Committee members, legal and compliance professionals, consultants, trainers, educators, corporate professionals, independent facilitators and aspiring PoSH trainers.",
       "You do not need to come from an HR background to participate.",
     ],
   },
   {
-    q: "Do I need prior experience in POSH or training?",
+    q: "Do I need prior experience in PoSH or training?",
     a: [
-      "No. Prior POSH or facilitation experience is not mandatory. The programme takes participants through the foundations of POSH while progressively building practical application and trainer capability.",
+      "No. Prior PoSH or facilitation experience is not mandatory. The programme takes participants through the foundations of PoSH while progressively building practical application and trainer capability.",
     ],
   },
   {
     q: "What does TTT mean?",
     a: [
-      "TTT stands for Train-the-Trainer. This means the programme goes beyond understanding POSH law and focuses on helping participants develop the skills required to facilitate POSH learning effectively for workplace audiences.",
+      "TTT stands for Train-the-Trainer. This means the programme goes beyond understanding PoSH law and focuses on helping participants develop the skills required to facilitate PoSH learning effectively for workplace audiences.",
     ],
   },
   {
     q: "What will I learn during the programme?",
     a: [
-      "You will learn the core POSH law, workplace sexual harassment, Internal Committee responsibilities, complaint and inquiry processes, compliance requirements and practical case application.",
-      "The programme also introduces Levitate PeopleSoft's CLEAR POSH Framework™, while building the facilitation, training-design and delivery skills needed to conduct effective POSH sessions confidently.",
+      "You will learn the core PoSH law, workplace sexual harassment, Internal Committee responsibilities, complaint and inquiry processes, compliance requirements and practical case application.",
+      "The programme also introduces Levitate PeopleSoft's CLEAR PoSH Framework™, while building the facilitation, training-design and delivery skills needed to conduct effective PoSH sessions confidently.",
     ],
   },
   {
     q: "Is the programme theoretical or practical?",
     a: [
       "The programme follows a practice-led learning approach using workplace scenarios, case studies, discussions, role plays, trainer exercises, applied case laboratories and knowledge checks.",
-      "The objective is not only to understand POSH, but to learn how to interpret, apply and facilitate it in real workplace situations.",
+      "The objective is not only to understand PoSH, but to learn how to interpret, apply and facilitate it in real workplace situations.",
     ],
   },
   {
@@ -55,22 +55,22 @@ export const POSH_FAQS: Faq[] = [
     ],
   },
   {
-    q: "Will I learn how to conduct POSH awareness and sensitisation sessions?",
+    q: "Will I learn how to conduct PoSH awareness and sensitisation sessions?",
     a: [
-      "Yes. A significant part of the programme focuses on trainer craft — how to structure a POSH session, communicate legal concepts simply, facilitate sensitive conversations, use cases and activities, respond to participant questions and handle difficult or resistant audiences.",
+      "Yes. A significant part of the programme focuses on trainer craft — how to structure a PoSH session, communicate legal concepts simply, facilitate sensitive conversations, use cases and activities, respond to participant questions and handle difficult or resistant audiences.",
     ],
   },
   {
-    q: "Can I conduct POSH training professionally after completing the programme?",
+    q: "Can I conduct PoSH training professionally after completing the programme?",
     a: [
-      "The programme is designed to build the knowledge and facilitation competencies required to deliver POSH awareness and sensitisation sessions.",
-      "Participants wishing to offer POSH training or consulting as a professional service should also continue building relevant workplace experience, legal understanding and professional capability, and ensure that their services and representations comply with applicable requirements.",
+      "The programme is designed to build the knowledge and facilitation competencies required to deliver PoSH awareness and sensitisation sessions.",
+      "Participants wishing to offer PoSH training or consulting as a professional service should also continue building relevant workplace experience, legal understanding and professional capability, and ensure that their services and representations comply with applicable requirements.",
     ],
   },
   {
     q: "Will there be practical activities and assessments?",
     a: [
-      "Yes. The programme includes case-based activities, facilitation exercises, module-wise knowledge checks and assessment components designed to reinforce both POSH understanding and trainer capability.",
+      "Yes. The programme includes case-based activities, facilitation exercises, module-wise knowledge checks and assessment components designed to reinforce both PoSH understanding and trainer capability.",
       "Successful completion of the prescribed programme and assessment requirements is necessary for certification.",
     ],
   },
@@ -97,14 +97,14 @@ export const POSH_FAQS: Faq[] = [
   {
     q: "Will I receive a certificate after completing the programme?",
     a: [
-      "Yes. Participants who successfully meet the programme's completion and assessment requirements will receive a POSH Train-the-Trainer Certificate from Levitate PeopleSoft.",
+      "Yes. Participants who successfully meet the programme's completion and assessment requirements will receive a PoSH Train-the-Trainer Certificate from Levitate PeopleSoft.",
       "Levitate PeopleSoft is an SHRM Recertification Provider, authorised to offer eligible learning programmes for SHRM Professional Development Credits (PDCs). Participants who successfully complete this eligible programme may earn the applicable PDCs toward SHRM-CP® or SHRM-SCP® recertification.",
     ],
   },
   {
     q: "Does the Levitate PeopleSoft certification expire?",
     a: [
-      "No. The Levitate PeopleSoft POSH Train-the-Trainer Certificate does not carry an expiry date once the participant has successfully completed the programme and certification requirements.",
+      "No. The Levitate PeopleSoft PoSH Train-the-Trainer Certificate does not carry an expiry date once the participant has successfully completed the programme and certification requirements.",
     ],
   },
   {

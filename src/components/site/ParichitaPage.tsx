@@ -45,7 +45,7 @@ const education = [
 
 const certifications = [
   {
-    t: "POSH & POCSO Educator and Trainer",
+    t: "PoSH & POCSO Educator and Trainer",
     d: "Internationally certified",
   },
   {
@@ -178,7 +178,7 @@ export default function ParichitaPage() {
                 Training and Development recognised by the Department of Personnel and Training (DoPT), Government of India.
               </p>
               <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
-                She is an internationally certified POSH and POCSO Educator and Trainer. She is also a certified soft-skills trainer through LifeLabs Learning, USA, and a certified Workplace Mental
+                She is an internationally certified PoSH and POCSO Educator and Trainer. She is also a certified soft-skills trainer through LifeLabs Learning, USA, and a certified Workplace Mental
                 Health and Wellbeing Trainer, with specialised training in Adult Mental Health First Aid from MHFA England.
               </p>
               <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>

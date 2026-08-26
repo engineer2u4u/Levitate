@@ -1,12 +1,12 @@
 import type { Curriculum } from "./types";
 
-/** Teaching content for the POSH programme — the one course with a finalised
+/** Teaching content for the PoSH programme — the one course with a finalised
  *  syllabus. Stages release in order as their live sessions are completed. */
 export const POSH_CURRICULUM: Curriculum = {
   slug: "posh-trainer",
-  eyebrow: "POSH Train-the-Trainer · Live cohort",
+  eyebrow: "PoSH Train-the-Trainer · Live cohort",
   blurb:
-    "An intensive, practice-led certification designed to build legal understanding, inquiry competence and effective POSH facilitation skills.",
+    "An intensive, practice-led certification designed to build legal understanding, inquiry competence and effective PoSH facilitation skills.",
   // The four figures the brochure leads with, in the brochure's order.
   meta: ["12 Hours · Learning Duration", "6 Live Sessions · Format", "3 Weeks · Weekend Schedule", "11 Modules · Curriculum"],
   included: [
@@ -20,13 +20,13 @@ export const POSH_CURRICULUM: Curriculum = {
   ],
   // "On successful completion of the programme, participants will be able to:"
   objectives: [
-    "Confidently design and deliver POSH awareness and sensitisation sessions",
-    "Apply the Levitate CLEAR POSH Framework™ to practical workplace situations",
+    "Confidently design and deliver PoSH awareness and sensitisation sessions",
+    "Apply the Levitate CLEAR PoSH Framework™ to practical workplace situations",
     "Explain complaint intake, inquiry principles and the role of the Internal Committee with clarity",
     "Navigate key legal definitions, coverage, jurisdiction and compliance requirements",
-    "Facilitate sensitive POSH conversations with confidence, care and legal grounding",
+    "Facilitate sensitive PoSH conversations with confidence, care and legal grounding",
     "Handle participant questions, resistance and difficult conversations responsibly",
-    "Use case studies, facilitation tools and structured session plans to deliver workplace-ready POSH learning and build a credible career path as a certified workplace facilitator",
+    "Use case studies, facilitation tools and structured session plans to deliver workplace-ready PoSH learning and build a credible career path as a certified workplace facilitator",
   ],
   stages: [
     {
@@ -34,16 +34,16 @@ export const POSH_CURRICULUM: Curriculum = {
       lessons: [
         { id: "l0-1", kind: "VID", title: "Welcome & how this certification works", meta: "Video · 9 min", desc: "How the cohort runs, what is expected of you between sessions, and how assessment and certification work." },
         { id: "l0-2", kind: "PDF", title: "Programme handbook & assessment criteria", meta: "PDF · 14 pages", desc: "Your handbook covering the schedule, assessment criteria, facilitation practice expectations and certification rules." },
-        { id: "l0-3", kind: "PDF", title: "Pre-reading: the POSH Act 2013 at a glance", meta: "PDF · 8 pages", desc: "A short primer on the Act so the first live session can move straight to application." },
+        { id: "l0-3", kind: "PDF", title: "Pre-reading: the PoSH Act 2013 at a glance", meta: "PDF · 8 pages", desc: "A short primer on the Act so the first live session can move straight to application." },
       ],
     },
     {
       id: "s1", num: "01", title: "Week 1 · Legal Foundations", release: "Unlocks after Live Session 1 · 26 September",
       lessons: [
-        { id: "l1-1", kind: "VID", title: "M1 · Purpose, Culture and the Certification Journey", meta: "Video · 22 min", desc: "Why POSH facilitation is a culture role before it is a compliance role, and what the certification journey asks of you." },
-        { id: "l1-2", kind: "VID", title: "M2 · India's Evolving POSH Landscape", meta: "Video · 26 min", desc: "How expectations, judgments and workplace practice have shifted since 2013 — and what that means for trainers." },
-        { id: "l1-3", kind: "VID", title: "M3 · Levitate CLEAR POSH Framework™", meta: "Video · 24 min", desc: "Clarity on the law, listening without judgment, evidence-based inquiry, action with fairness and a respectful workplace culture." },
-        { id: "l1-4", kind: "PDF", title: "M4 · Genesis and Legal Foundation", meta: "Reading · 18 pages", desc: "Vishaka to the 2013 Act — the legal lineage every POSH facilitator should be able to explain from memory." },
+        { id: "l1-1", kind: "VID", title: "M1 · Purpose, Culture and the Certification Journey", meta: "Video · 22 min", desc: "Why PoSH facilitation is a culture role before it is a compliance role, and what the certification journey asks of you." },
+        { id: "l1-2", kind: "VID", title: "M2 · India's Evolving PoSH Landscape", meta: "Video · 26 min", desc: "How expectations, judgments and workplace practice have shifted since 2013 — and what that means for trainers." },
+        { id: "l1-3", kind: "VID", title: "M3 · Levitate CLEAR PoSH Framework™", meta: "Video · 24 min", desc: "Clarity on the law, listening without judgment, evidence-based inquiry, action with fairness and a respectful workplace culture." },
+        { id: "l1-4", kind: "PDF", title: "M4 · Genesis and Legal Foundation", meta: "Reading · 18 pages", desc: "Vishaka to the 2013 Act — the legal lineage every PoSH facilitator should be able to explain from memory." },
       ],
     },
     {
@@ -77,7 +77,7 @@ export const POSH_CURRICULUM: Curriculum = {
       stage: "00", title: "Orientation check", badge: "Orientation Ready", glyph: "✦",
       questions: [
         {
-          q: "What does the CLEAR POSH framework mainly give a trainer?",
+          q: "What does the CLEAR PoSH framework mainly give a trainer?",
           options: ["A structured way to move from the letter of the law to lived workplace practice", "A checklist for filing the annual return", "A template for writing IC minutes", "A legal defence strategy for the employer"],
           answer: 0,
           explanation: "CLEAR is a facilitation framework — Clarity on the law, Listening without judgment, Evidence-based inquiry, Action with fairness, and a Respectful culture.",
@@ -106,7 +106,7 @@ export const POSH_CURRICULUM: Curriculum = {
           explanation: "Vishaka (1997) laid down binding guidelines in the absence of legislation — the direct legal ancestor of the 2013 Act.",
         },
         {
-          q: "The POSH Act 2013 draws its constitutional basis primarily from…",
+          q: "The PoSH Act 2013 draws its constitutional basis primarily from…",
           options: ["Articles 14, 15, 19(1)(g) and 21", "Articles 32 and 226", "Articles 246 and 254", "Article 370"],
           answer: 0,
           explanation: "Equality, non-discrimination, the right to practise any profession and the right to life with dignity together form the constitutional foundation.",
@@ -191,7 +191,7 @@ export const POSH_CURRICULUM: Curriculum = {
     },
   ],
   finalKit: [
-    { title: "POSH trainer session plans (employee, manager, IC)", meta: "PDF · 34 pages" },
+    { title: "PoSH trainer session plans (employee, manager, IC)", meta: "PDF · 34 pages" },
     { title: "Case study pack with facilitator notes", meta: "PDF · 26 pages" },
     { title: "IC inquiry templates and report formats", meta: "PDF · 18 pages" },
     { title: "Handling difficult questions — trainer FAQ", meta: "PDF · 12 pages" },

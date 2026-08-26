@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     "Train-the-Trainer certification",
     "corporate training",
     "HR advisory",
-    "POSH training",
+    "PoSH training",
     "POCSO training",
     "DEI facilitation",
     "workplace wellbeing",

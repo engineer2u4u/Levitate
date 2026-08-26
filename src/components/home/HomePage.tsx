@@ -13,6 +13,7 @@ import AnnouncementBar from "@/components/site/AnnouncementBar";
 import TrustedBy from "@/components/site/TrustedBy";
 import Accreditations from "@/components/site/Accreditations";
 import ConsultationBand from "@/components/site/ConsultationBand";
+import BrandText from "@/components/site/BrandText";
 import CertificateGallery from "@/components/site/CertificateGallery";
 import { certificateCards } from "@/lib/certificateArt";
 import { COURSES } from "@/lib/lms/courses";
@@ -794,7 +795,7 @@ export default function HomePage() {
                       padding: "5px 12px",
                     }}
                   >
-                    {c.tag}
+                    <BrandText>{c.tag}</BrandText>
                   </div>
                   <div style={{ font: "700 15px 'Plus Jakarta Sans',sans-serif", color: "rgba(10,27,51,.2)" }}>{c.num}</div>
                 </div>

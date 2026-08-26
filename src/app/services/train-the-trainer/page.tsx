@@ -8,7 +8,7 @@ import ServicePage from "@/components/site/ServicePage";
 export const metadata: Metadata = {
   title: "Train-the-Trainer Certification Programs",
   description:
-    "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, POSH and POCSO — along with HR Edge Certification for future HR professionals., POSH, POCSO and HR Edge — built for professionals who want to become credible workplace facilitators.",
+    "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, PoSH and POCSO — along with HR Edge Certification for future HR professionals., PoSH, POCSO and HR Edge — built for professionals who want to become credible workplace facilitators.",
 };
 
 export default function Page() {

@@ -8,7 +8,7 @@ import ServicePage from "@/components/site/ServicePage";
 export const metadata: Metadata = {
   title: "HR Advisory & Workplace Culture Consulting",
   description:
-    "Practical HR advisory and workplace culture support — POSH & IC readiness, policy review, manager capability and employee experience — from decades of institutional and global HR practice.",
+    "Practical HR advisory and workplace culture support — PoSH & IC readiness, policy review, manager capability and employee experience — from decades of institutional and global HR practice.",
 };
 
 export default function Page() {

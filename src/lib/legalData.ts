@@ -76,7 +76,7 @@ export const privacyPolicy: LegalDoc = {
     {
       h: "Confidentiality in training and advisory work",
       p: [
-        "Information shared with us during training programs, assessments, facilitation practice or HR advisory engagements is treated as confidential. Sensitive workplace matters discussed in POSH, POCSO, wellbeing or advisory contexts are handled with professional discretion and are not disclosed except where required by law.",
+        "Information shared with us during training programs, assessments, facilitation practice or HR advisory engagements is treated as confidential. Sensitive workplace matters discussed in PoSH, POCSO, wellbeing or advisory contexts are handled with professional discretion and are not disclosed except where required by law.",
       ],
     },
     {
@@ -106,7 +106,7 @@ export const disclaimer: LegalDoc = {
     {
       h: "Not legal or professional advice",
       p: [
-        "Our programs and website content cover subjects that intersect with law and regulation, including the Prevention of Sexual Harassment (POSH) framework, POCSO and related workplace compliance matters. This content is educational and is not legal advice.",
+        "Our programs and website content cover subjects that intersect with law and regulation, including the Prevention of Sexual Harassment (PoSH) framework, POCSO and related workplace compliance matters. This content is educational and is not legal advice.",
         "Nothing on this website, and nothing delivered in an awareness or training session, creates a lawyer-client or other professional advisory relationship. Organizations should obtain independent legal counsel for specific compliance obligations, investigations or decisions.",
       ],
     },

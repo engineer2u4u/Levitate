@@ -354,7 +354,7 @@ body {
   .lp-play-btn, .lp-play-tri { animation: none; }
 }
 
-/* POSH video cover — subtle zoom on hover */
+/* PoSH video cover — subtle zoom on hover */
 .lp-posh-play { transition: background-size 0.4s ease; background-size: cover; }
 .lp-posh-play:hover { background-size: 106%; }
 

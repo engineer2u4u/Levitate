@@ -89,7 +89,7 @@ export default function Certificates() {
 
               <div style={{ position: "absolute", left: "70.35%", top: "7.87%", width: "13.71%", height: "6.26%", background: "#F4F8FC", border: "1px solid #DDE6EE", borderRadius: 6 }} />
               <div style={{ position: "absolute", left: "71.44%", top: "9.25%", font: "500 0.78cqw 'Plus Jakarta Sans',sans-serif", color: "#16324F", lineHeight: 1, whiteSpace: "nowrap" }}>
-                {issued ? "ID — LVT-POSH-2026-0148" : "ID — pending"}
+                {issued ? "ID — LVT-PoSH-2026-0148" : "ID — pending"}
               </div>
               <div style={{ position: "absolute", left: "71.44%", top: "11.36%", font: "500 0.78cqw 'Plus Jakarta Sans',sans-serif", color: "#16324F", lineHeight: 1, whiteSpace: "nowrap" }}>
                 {issued ? "Issued — Oct 2026" : "Issued — on completion"}

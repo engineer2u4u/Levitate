@@ -6,11 +6,12 @@ import { useEffect, useState, type CSSProperties } from "react";
 import Reveal from "@/components/home/Reveal";
 import { included, programs } from "@/lib/programs";
 import UpcomingBatches from "@/components/site/UpcomingBatches";
+import BrandText from "@/components/site/BrandText";
 
 const why = [
   { t: "Global content with workplace relevance", d: "Global workplace content, practical HR insights and real-world application for evolving workplace realities." },
   { t: "Practice-led learning", d: "Cases, reflection, discussion, role plays and facilitation practice — not only theory." },
-  { t: "Designed for sensitive conversations", d: "Leadership, DEI, wellbeing, POSH and POCSO facilitated with confidence, clarity and care." },
+  { t: "Designed for sensitive conversations", d: "Leadership, DEI, wellbeing, PoSH and POCSO facilitated with confidence, clarity and care." },
   { t: "Trainer toolkits included", d: "Templates, case studies, facilitation guides, sample session plans, FAQs and workplace-ready tools." },
   { t: "Assessment-based certification", d: "Linked to participation, practice, reflection and assessment — not just attendance." },
 ];
@@ -81,7 +82,7 @@ export default function CertificationsPage() {
               an anchor on this one. */}
           {programs.map((p) => (
             <Link key={p.id} href={`/lms/course/${p.slug}`} className="site-card" style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 16px", display: "flex", flexDirection: "column", gap: 6, boxShadow: "0 2px 6px rgba(10,27,51,.05)" }}>
-              <div style={{ font: "700 10.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".13em", textTransform: "uppercase" }}>{p.tag}</div>
+              <div style={{ font: "700 10.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".13em", textTransform: "uppercase" }}><BrandText>{p.tag}</BrandText></div>
               <div style={{ font: "700 13px/1.35 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{p.short}</div>
               <div style={{ marginTop: "auto", paddingTop: 6, font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88" }}>View program →</div>
             </Link>
@@ -107,7 +108,7 @@ export default function CertificationsPage() {
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
                       <div style={{ width: 46, height: 46, flex: "none", borderRadius: 13, background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 16px 'Plus Jakarta Sans',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 10px 22px rgba(27,143,136,.3)" }}>{p.num}</div>
-                      <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", border: "1px solid rgba(27,143,136,.4)", borderRadius: 999, padding: "6px 14px" }}>{p.tag}</div>
+                      <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", border: "1px solid rgba(27,143,136,.4)", borderRadius: 999, padding: "6px 14px" }}><BrandText>{p.tag}</BrandText></div>
                       <span className="site-cert-chev" style={{ marginLeft: "auto", flex: "none", width: 30, height: 30, borderRadius: "50%", background: collapsed ? "#eef3f7" : "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: collapsed ? "#5b6e82" : "#fff", alignItems: "center", justifyContent: "center" }}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" style={{ transform: collapsed ? "rotate(0deg)" : "rotate(180deg)", transition: "transform .3s ease" }}><path d="M6 9l6 6 6-6" /></svg>
                       </span>
@@ -125,7 +126,7 @@ export default function CertificationsPage() {
                   <p style={{ font: "400 15px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 14px", maxWidth: 640, textWrap: "pretty" } as CSSProperties}>{p.p1}</p>
                   <p style={{ font: "400 15px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: 0, maxWidth: 640, textWrap: "pretty" } as CSSProperties}>{p.p2}</p>
                   <div style={{ marginTop: 24, background: "#fff", border: "1px solid rgba(27,143,136,.35)", borderRadius: 16, padding: "24px 26px" }}>
-                    <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 16 }}>{p.pillarTitle}</div>
+                    <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 16 }}><BrandText>{p.pillarTitle}</BrandText></div>
                     <div className="site-pillars" style={{ display: "grid", gridTemplateColumns: `repeat(${p.pillars.length},minmax(0,1fr))`, gap: 12 }}>
                       {p.pillars.map((h, i) => (
                         <div key={i} style={{ position: "relative", background: "linear-gradient(165deg,#f7fafc,#eef4f7)", border: "1px solid #e3eaf0", borderRadius: 12, padding: "16px 13px 14px", overflow: "hidden" }}>
