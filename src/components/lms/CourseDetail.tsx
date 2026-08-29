@@ -428,22 +428,6 @@ export default function CourseDetail({ slug }: { slug: string }) {
               </div>
             </div>
 
-            {curriculum && (
-              <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 18, padding: 22 }}>
-                <div style={{ font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 14 }}>Live session schedule</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {curriculum.sessions.map((s) => (
-                    <div key={s.n} style={{ display: "flex", alignItems: "center", gap: 12, borderBottom: "1px solid #eef2f6", paddingBottom: 9 }}>
-                      <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#2f7fd6", minWidth: 16 }}>{s.n}</div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ font: "600 12.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{s.date}</div>
-                        <div style={{ font: "500 11px 'Plus Jakarta Sans',sans-serif", color: "#8296a9" }}>{s.time} · {s.topic}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
           </div>
         </div>
