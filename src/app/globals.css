@@ -536,8 +536,27 @@ body {
    columns scroll independently the way a course reader should. dvh rather
    than vh so a mobile browser's collapsing toolbar does not clip the last
    item off the contents list. */
-.lms-player {
+.lms-player-shell {
   height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: #f7fafc;
+}
+.lms-player-top {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #fff;
+  border-bottom: 1px solid #e3eaf0;
+  padding: 10px 24px;
+}
+/* min-height:0 or the grid refuses to shrink and the columns scroll the
+   window instead of themselves. */
+.lms-player {
+  flex: 1;
+  min-height: 0;
 }
 .lms-player-side {
   background: #fff;
@@ -547,7 +566,25 @@ body {
 }
 .lms-player > main {
   height: 100%;
+  overflow: hidden;
+}
+.lms-player-scroll {
+  flex: 1;
   overflow-y: auto;
+  padding: 34px 48px 40px;
+}
+/* The one control that moves the course on, parked where the eye ends up
+   after the material rather than below it — it stays put while the reading
+   column scrolls. */
+.lms-player-foot {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  background: #fff;
+  border-top: 1px solid #e3eaf0;
+  padding: 14px 48px;
 }
 .lms-item-row { transition: background 0.18s ease; }
 .lms-item-row:not(:disabled):hover { background: #f4f7f9 !important; }
@@ -559,11 +596,17 @@ body {
      reading column leaves neither enough room. */
   /* One column, and the page scrolls as a whole again — a fixed-height grid
      would trap the contents panel when it is toggled open. */
-  .lms-player { grid-template-columns: 1fr !important; height: auto; }
+  .lms-player-shell { height: auto; min-height: 100dvh; }
+  .lms-player-top { padding: 10px 20px; }
+  .lms-player-who { display: none; }
+  .lms-player { grid-template-columns: 1fr !important; }
   .lms-player-side { display: none; height: auto; overflow-y: visible; border-right: none; border-bottom: 1px solid #e3eaf0; }
-  .lms-player > main { height: auto; overflow-y: visible; }
   .lms-player-side.is-open { display: block; }
-  .lms-player main { padding: 20px !important; }
+  .lms-player > main { height: auto; overflow: visible; }
+  .lms-player-scroll { overflow-y: visible; padding: 20px; }
+  /* Nothing scrolls independently here, so the bar sticks to the viewport
+     bottom instead of the column's. */
+  .lms-player-foot { position: sticky; bottom: 0; padding: 12px 20px; flex-wrap: wrap; }
   .lms-player-toggle {
     display: inline-flex;
     cursor: pointer;

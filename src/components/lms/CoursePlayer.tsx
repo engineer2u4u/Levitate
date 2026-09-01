@@ -7,8 +7,10 @@ import {
   completeItem,
   courseStats,
   currentIndex,
+  frontierIndex,
   isShared,
   itemState,
+  type ItemState,
   kitReleased,
   startCourse,
   uncompleteItem,
@@ -68,11 +70,10 @@ export default function CoursePlayer({ slug }: { slug: string }) {
       try {
         const next = await completeItem(user.id, course, item.id, attempt);
         setProgress(next);
-        // Move on automatically — the next item is open the instant this one
-        // is done, and stopping to click it again is friction with no purpose.
-        const all = flatItems(course);
-        const idx = all.findIndex((i) => i.id === item.id);
-        if (idx >= 0 && idx + 1 < all.length) setActive(idx + 1);
+        // Deliberately stays put. Moving between items is the Next button's
+        // job and nothing else's, so a quiz can show its score before the
+        // learner leaves it and nobody is carried somewhere they did not ask
+        // to go.
       } catch (e) {
         setError((e as Error).message);
       }
@@ -146,15 +147,30 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   const stats = courseStats(course, progress);
   const done = new Set(progress?.completedItems ?? []);
   const kit = kitReleased(course, progress);
+  // Where the learner actually stands. The list is freely navigable up to
+  // here; one item past it can be previewed; the rest is locked.
+  const frontier = frontierIndex(items, progress);
+  const isLast = active === items.length - 1;
+  const advance = () => setActive((i) => Math.min(i + 1, items.length - 1));
 
   return (
-    <div style={{ background: "#f7fafc" }}>
+    <div className="lms-player-shell">
+      <PlayerTop name={user.name} email={user.email} />
       <div className="lms-player" style={{ display: "grid", gridTemplateColumns: "360px 1fr" }}>
         {/* ---------------------------- CONTENTS ---------------------------- */}
         <aside className={`lms-player-side${menuOpen ? " is-open" : ""}`}>
-          <div style={{ padding: "24px 22px 18px", borderBottom: "1px solid #e3eaf0" }}>
-            <Link href={`/lms/course/${course.slug}`} style={{ font: `600 12px ${SANS}`, color: "#1b8f88" }}>← Course page</Link>
-            <h1 style={{ font: `700 17px/1.35 ${SANS}`, color: "#0a1b33", margin: "12px 0 0" }}>{course.title}</h1>
+          <div style={{ padding: "22px 22px 18px", borderBottom: "1px solid #e3eaf0" }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+              <h1 style={{ font: `700 17px/1.35 ${SANS}`, color: "#0a1b33", margin: 0, flex: 1 }}>{course.title}</h1>
+              <Link
+                href={`/lms/course/${course.slug}`}
+                aria-label="Leave the course"
+                title="Leave the course"
+                style={{ flex: "none", display: "flex", alignItems: "center", justifyContent: "center", width: 28, height: 28, borderRadius: 8, color: "#8296a9", font: `400 17px ${SANS}` }}
+              >
+                ✕
+              </Link>
+            </div>
             <div style={{ font: `500 12px ${SANS}`, color: "#8296a9", marginTop: 6 }}>
               {stats.total} items · {totalMinutes(course)} min
             </div>
@@ -197,6 +213,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                           key={it.id}
                           type="button"
                           disabled={st === "locked"}
+                          title={st === "preview" ? "Look ahead — you cannot complete it from here" : undefined}
                           onClick={() => {
                             setActive(idx);
                             setMenuOpen(false);
@@ -208,17 +225,19 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                             background: isActive ? "#eef4f7" : "transparent",
                             cursor: st === "locked" ? "not-allowed" : "pointer",
                             opacity: st === "locked" ? 0.55 : 1,
+                            outline: st === "preview" && isActive ? "1.5px dashed #a9b8c6" : "none",
+                            outlineOffset: -2,
                           }}
                         >
                           <span style={{ flex: "none", marginTop: 1 }}>
-                            {st === "done" ? <Tick /> : st === "locked" ? <LockIcon /> : <Dot />}
+                            {st === "done" ? <Tick /> : st === "locked" ? <LockIcon /> : st === "preview" ? <PeekIcon /> : <Dot />}
                           </span>
                           <span style={{ flex: 1 }}>
                             <span style={{ display: "block", font: `${isActive ? 700 : 600} 13px/1.4 ${SANS}`, color: st === "locked" ? "#8296a9" : "#0a1b33" }}>
                               {it.title}
                             </span>
                             <span style={{ display: "block", font: `500 11px ${SANS}`, color: "#8296a9", marginTop: 3 }}>
-                              {KIND_LABEL[it.kind]} · {it.minutes} min
+                              {KIND_LABEL[it.kind]} · {it.minutes} min{st === "preview" ? " · look ahead" : ""}
                             </span>
                           </span>
                         </button>
@@ -244,7 +263,8 @@ export default function CoursePlayer({ slug }: { slug: string }) {
         </aside>
 
         {/* ----------------------------- CONTENT ---------------------------- */}
-        <main style={{ padding: "34px 48px 72px", minWidth: 0 }}>
+        <main style={{ minWidth: 0, display: "flex", flexDirection: "column" }}>
+          <div className="lms-player-scroll">
           <button type="button" className="lms-player-toggle" onClick={() => setMenuOpen((o) => !o)}>
             {menuOpen ? "Hide contents" : "Show contents"}
           </button>
@@ -268,8 +288,44 @@ export default function CoursePlayer({ slug }: { slug: string }) {
             state={state}
             attempt={progress?.quizAttempts[item.id] ?? null}
             onComplete={onComplete}
-            onUndo={onUndo}
           />
+          </div>
+
+          {/* The one control that moves the course forward. Everything the
+              learner has already passed is reachable from the list on the
+              left; going further than they have been is this button. */}
+          <div className="lms-player-foot">
+            {state === "preview" ? (
+              <>
+                <span style={{ font: `500 12.5px/1.5 ${SANS}`, color: "#8296a9" }}>
+                  You are looking ahead. Finish “{items[frontier]?.title}” to continue from here.
+                </span>
+                <button type="button" onClick={() => setActive(frontier)} className="lp-btn-outline" style={FOOT_GHOST}>
+                  Back to where you were →
+                </button>
+              </>
+            ) : state === "done" ? (
+              <>
+                <button type="button" onClick={() => onUndo(item)} style={{ cursor: "pointer", border: "none", background: "transparent", font: `600 12.5px ${SANS}`, color: "#8296a9" }}>
+                  Mark as not complete
+                </button>
+                <button type="button" onClick={advance} disabled={isLast} className="lp-btn-grad" style={{ ...FOOT_PRIMARY, opacity: isLast ? 0.45 : 1, cursor: isLast ? "default" : "pointer" }}>
+                  {isLast ? "Course complete" : "Go to next item →"}
+                </button>
+              </>
+            ) : item.kind === "quiz" ? (
+              <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>Submit the quiz to continue.</span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => { void onComplete(item).then(advance); }}
+                className="lp-btn-grad"
+                style={FOOT_PRIMARY}
+              >
+                Mark complete &amp; go to next item →
+              </button>
+            )}
+          </div>
         </main>
       </div>
     </div>
@@ -285,13 +341,12 @@ const KIND_LABEL: Record<CourseItem["kind"], string> = {
 };
 
 function ItemView({
-  item, state, attempt, onComplete, onUndo,
+  item, state, attempt, onComplete,
 }: {
   item: CourseItem;
-  state: "done" | "open" | "locked";
+  state: ItemState;
   attempt: { score: number; total: number } | null;
   onComplete: (item: CourseItem, attempt?: { score: number; total: number }) => void;
-  onUndo: (item: CourseItem) => void;
 }) {
   if (state === "locked") {
     return (
@@ -307,6 +362,12 @@ function ItemView({
 
   return (
     <>
+      {state === "preview" && (
+        <div style={{ font: `600 12px/1.6 ${SANS}`, color: "#5b6e82", background: "#eef2f6", border: "1px dashed #c4d2de", borderRadius: 12, padding: "10px 14px", marginBottom: 18 }}>
+          A look ahead at what is coming — read it now if you like. It counts once you reach it.
+        </div>
+      )}
+
       <div style={{ font: `700 11px ${SANS}`, color: "#1b8f88", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 10 }}>
         {KIND_LABEL[item.kind]} · {item.minutes} min
       </div>
@@ -336,30 +397,27 @@ function ItemView({
         </div>
       )}
 
-      {item.kind === "quiz" && item.questions ? (
-        <QuizView item={item} attempt={attempt} onSubmit={(a) => onComplete(item, a)} />
-      ) : (
-        <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
-          {state === "done" ? (
-            <>
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 8, font: `700 13px ${SANS}`, color: "#136f6a", background: "rgba(47,196,188,.12)", border: "1px solid rgba(27,143,136,.35)", borderRadius: 999, padding: "10px 18px" }}>
-                <Tick /> Completed
-              </span>
-              <button type="button" onClick={() => onUndo(item)} style={{ cursor: "pointer", border: "none", background: "transparent", font: `600 12.5px ${SANS}`, color: "#8296a9" }}>
-                Mark as not complete
-              </button>
-            </>
-          ) : (
-            <button
-              type="button"
-              onClick={() => onComplete(item)}
-              className="lp-btn-grad"
-              style={{ cursor: "pointer", border: "none", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `700 14px ${SANS}`, padding: "14px 28px", borderRadius: 999 }}
-            >
-              Mark complete &amp; continue →
-            </button>
-          )}
-        </div>
+      {/* Completing and moving on live in the footer bar, so the reading
+          column ends with the material rather than with controls. */}
+      {item.kind === "quiz" && item.questions && (
+        state === "preview" ? (
+          <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "28px 32px" }}>
+            <div style={{ font: `700 15px ${SANS}`, color: "#0a1b33", marginBottom: 8 }}>
+              {item.questions.length} questions
+            </div>
+            <p style={{ font: `400 14px/1.7 ${SANS}`, color: "#5b6e82", margin: 0 }}>
+              The questions open once you reach this item. Your score is recorded for the team, but it never blocks you from continuing.
+            </p>
+          </div>
+        ) : (
+          <QuizView item={item} attempt={attempt} onSubmit={(a) => onComplete(item, a)} />
+        )
+      )}
+
+      {state === "done" && item.kind !== "quiz" && (
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 8, font: `700 13px ${SANS}`, color: "#136f6a", background: "rgba(47,196,188,.12)", border: "1px solid rgba(27,143,136,.35)", borderRadius: 999, padding: "10px 18px" }}>
+          <Tick /> Completed
+        </span>
       )}
     </>
   );
@@ -439,7 +497,7 @@ function QuizView({
           opacity: answered < questions.length ? 0.5 : 1,
         }}
       >
-        Submit &amp; continue →
+        Submit answers
       </button>
       {answered < questions.length && (
         <div style={{ font: `500 12px ${SANS}`, color: "#8296a9", marginTop: 10 }}>
@@ -475,7 +533,71 @@ function KitBanner({ course }: { course: { readingKit: { title: string; meta: st
   );
 }
 
+/* ------------------------------------------------------------- top bar */
+
+/**
+ * The player replaces the site chrome entirely, so this is the only thing on
+ * screen that says whose site this is and who is signed in. Deliberately thin:
+ * it carries identity and a way home, and nothing that invites the learner to
+ * wander off mid-item.
+ */
+function PlayerTop({ name, email }: { name: string; email: string }) {
+  const initials =
+    name.split(" ").filter(Boolean).map((w) => w[0]).slice(0, 2).join("").toUpperCase() || "?";
+  return (
+    <header className="lms-player-top">
+      <Link href="/" aria-label="Levitate PeopleSoft home" style={{ display: "flex", alignItems: "center" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/assets/logo.png" alt="Levitate PeopleSoft" style={{ height: 34, display: "block" }} />
+      </Link>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
+        <div className="lms-player-who" style={{ textAlign: "right" }}>
+          <div style={{ font: `700 12.5px ${SANS}`, color: "#0a1b33" }}>{name}</div>
+          <div style={{ font: `500 11px ${SANS}`, color: "#8296a9" }}>{email}</div>
+        </div>
+        <div
+          aria-hidden
+          title={name}
+          style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `700 13px ${SANS}`, display: "flex", alignItems: "center", justifyContent: "center", flex: "none" }}
+        >
+          {initials}
+        </div>
+      </div>
+    </header>
+  );
+}
+
 /* ----------------------------------------------------------------- atoms */
+
+const FOOT_PRIMARY: React.CSSProperties = {
+  cursor: "pointer",
+  border: "none",
+  background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)",
+  color: "#fff",
+  font: `700 13.5px ${SANS}`,
+  padding: "13px 26px",
+  borderRadius: 999,
+  whiteSpace: "nowrap",
+};
+
+const FOOT_GHOST: React.CSSProperties = {
+  cursor: "pointer",
+  background: "#fff",
+  border: "1.5px solid rgba(10,27,51,.24)",
+  color: "#0a1b33",
+  font: `700 13px ${SANS}`,
+  padding: "12px 22px",
+  borderRadius: 999,
+  whiteSpace: "nowrap",
+};
+
+/** An item that can be read ahead of turn but not completed from there. */
+const PeekIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden style={{ flex: "none" }}>
+    <circle cx="12" cy="12" r="10.5" fill="#fff" stroke="#a9b8c6" strokeWidth={2} strokeDasharray="3.4 3" />
+  </svg>
+);
 
 // The player takes over the window, so these interstitials carry the only way
 // back out — there is no site header above them.

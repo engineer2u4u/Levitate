@@ -36,7 +36,7 @@ const EMPTY = (slug: string): CourseProgress => ({
 
 /* ------------------------------------------------------------- unlocking */
 
-export type ItemState = "done" | "open" | "locked";
+export type ItemState = "done" | "open" | "preview" | "locked";
 
 /**
  * Strictly sequential: an item opens when the one before it is done.
@@ -44,12 +44,30 @@ export type ItemState = "done" | "open" | "locked";
  * Deliberately derived rather than stored. A stored "unlocked up to N" drifts
  * the moment the syllabus changes — insert a module and every learner's cursor
  * points at the wrong item. Recomputing from what they have finished cannot.
+ *
+ * "preview" is the one item past the frontier. It can be opened and read, so
+ * nobody has to finish an item to find out what comes after it, but it cannot
+ * be completed from there — the order still has to be walked. Everything
+ * beyond it stays locked, otherwise previewing the preview would step the
+ * frontier forward one item at a time and the sequence would mean nothing.
  */
 export function itemState(items: FlatItem[], index: number, p: CourseProgress | null): ItemState {
   const done = new Set(p?.completedItems ?? []);
   if (done.has(items[index].id)) return "done";
   if (index === 0) return "open";
-  return done.has(items[index - 1].id) ? "open" : "locked";
+  if (done.has(items[index - 1].id)) return "open";
+  return index === frontierIndex(items, p) + 1 ? "preview" : "locked";
+}
+
+/**
+ * The first item not yet finished — where the learner actually stands. The
+ * list on the left is freely navigable up to here, and the Next button is what
+ * moves it.
+ */
+export function frontierIndex(items: FlatItem[], p: CourseProgress | null): number {
+  const done = new Set(p?.completedItems ?? []);
+  const next = items.findIndex((it) => !done.has(it.id));
+  return next === -1 ? items.length : next;
 }
 
 /** The item the learner should land on: the first one not yet finished. */
