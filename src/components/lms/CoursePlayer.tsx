@@ -15,6 +15,7 @@ import {
   type CourseProgress,
 } from "@/lib/lms/courseProgress";
 import { useSession } from "./useSession";
+import { courseBySlug } from "@/lib/lms/courses";
 
 const SANS = "'Plus Jakarta Sans',sans-serif";
 
@@ -27,7 +28,11 @@ const SANS = "'Plus Jakarta Sans',sans-serif";
  */
 export default function CoursePlayer({ slug }: { slug: string }) {
   const course = contentBySlug(slug);
-  const { user, loading, openAuth } = useSession();
+  const { user, loading, openAuth, enrolments } = useSession();
+  // The catalogue entry is what carries the price; the content module only
+  // knows the syllabus. A course with no catalogue row is treated as free.
+  const fee = courseBySlug(slug)?.feePaise ?? 0;
+  const enrolled = enrolments.some((e) => e.courseSlug === slug);
   const [progress, setProgress] = useState<CourseProgress | null>(null);
   const [ready, setReady] = useState(false);
   const [active, setActive] = useState(0);
@@ -113,6 +118,23 @@ export default function CoursePlayer({ slug }: { slug: string }) {
         >
           Sign in to start
         </button>
+      </Shell>
+    );
+  }
+
+  // Content is for people who have paid for it. The check is a courtesy, not a
+  // wall: this is a static export, so the item text ships in the bundle either
+  // way. Real gating needs signed URLs and content fetched per request.
+  if (fee > 0 && !enrolled) {
+    return (
+      <Shell>
+        <h1 style={{ font: `700 24px ${SANS}`, color: "#0a1b33", margin: "0 0 10px" }}>{course.title}</h1>
+        <p style={{ font: `400 14.5px/1.75 ${SANS}`, color: "#5b6e82", maxWidth: 560, margin: "0 0 22px" }}>
+          This course is open to enrolled learners. Enrol on the course page and it opens straight away.
+        </p>
+        <Link href={`/lms/course/${course.slug}`} className="lp-btn-grad" style={{ display: "inline-block", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `700 14px ${SANS}`, padding: "13px 26px", borderRadius: 999 }}>
+          Go to the course page
+        </Link>
       </Shell>
     );
   }

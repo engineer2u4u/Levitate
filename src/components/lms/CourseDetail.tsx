@@ -71,7 +71,10 @@ export default function CourseDetail({ slug }: { slug: string }) {
   // Anyone who already enrolled keeps their way in; everybody else is sent to
   // the enquiry desk until payment goes live.
   const canPay = ENROLMENT_OPEN && !waitlist;
-  const ctaLabel = selfPaced
+  // Self-paced content opens once it is paid for — or straight away when it
+  // carries no fee. Otherwise the normal enrol path runs first.
+  const canStart = Boolean(selfPaced) && (enrolled || !course.feePaise);
+  const ctaLabel = canStart
     ? "Start course →"
     : enrolled
     ? "Go to my course →"
@@ -80,7 +83,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
       : waitlist
         ? "Join the waitlist"
         : "Enquire about this program →";
-  const onCta = selfPaced
+  const onCta = canStart
     ? () => router.push(`/lms/learn/${slug}`)
     : enrolled || canPay
       ? onEnrol

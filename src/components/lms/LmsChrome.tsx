@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "./useSession";
+import { LMS_TESTING } from "@/lib/lms/testMode";
 
 const TABS = [
   { href: "/lms", label: "Courses" },
@@ -33,7 +34,8 @@ export default function LmsChrome() {
    * an LMS that is not open yet. The component still mounts, because it owns
    * the auth modal every LMS screen routes through.
    */
-  const publicPage = pathname.startsWith("/lms/course");
+  // Testing builds keep the bar everywhere: signing in is how the flow starts.
+  const publicPage = !LMS_TESTING && pathname.startsWith("/lms/course");
 
   return (
     <>

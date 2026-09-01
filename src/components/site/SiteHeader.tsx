@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { contact, services, type NavKey } from "@/lib/site";
 import { VISIBLE_COURSES as COURSES } from "@/lib/lms/courses";
+import { LMS_TESTING } from "@/lib/lms/testMode";
 
 function MailIcon({ size = 13 }: { size?: number }) {
   return (
@@ -122,7 +123,9 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
             </div>
           </div>
           {/* The LMS is not open to the public yet, so it is not advertised in
-              the nav. The routes still resolve for anyone working on it. */}
+              the nav. The routes still resolve for anyone working on it, and a
+              testing build puts the link back. */}
+          {LMS_TESTING && <Link href="/lms" className="site-navlink" style={active === "lms" ? topActive : { color: "#1b8f88" }}>LMS</Link>}
           <Link href="/about-us" className="site-navlink" style={active === "about" ? topActive : topIdle}>About Us</Link>
           <Link href="/parichita-kotnala" className="site-navlink" style={{ ...(active === "parichita" ? topActive : topIdle), whiteSpace: "nowrap" }}>Parichita Kotnala</Link>
           <Link href="/contact" className="site-navlink" style={active === "contact" ? topActive : topIdle}>Contact</Link>

@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { COURSES, formatFee } from "@/lib/lms/courses";
+import { LMS_TESTING } from "@/lib/lms/testMode";
 import { useSession } from "./useSession";
 
 const FILTERS = ["All courses", "Train-the-Trainer", "Live cohorts", "For students"] as const;
@@ -20,7 +21,9 @@ export default function Catalogue() {
   const { enrolments } = useSession();
   const [filter, setFilter] = useState<Filter>("All courses");
   const enrolledSlugs = new Set(enrolments.map((e) => e.courseSlug));
-  const shown = COURSES.filter((c) => matches(filter, c.tag, c.mode));
+  // Test fixtures are catalogued so their routes build, but they only appear
+  // in the listing on a testing build.
+  const shown = COURSES.filter((c) => (LMS_TESTING || !c.hidden) && matches(filter, c.tag, c.mode));
 
   return (
     <>
