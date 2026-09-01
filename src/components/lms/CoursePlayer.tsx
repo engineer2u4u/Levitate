@@ -201,7 +201,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                     {moduleDone && <Tick />}
                     {moduleLocked && <LockIcon />}
                   </div>
-                  <div style={{ font: `500 11.5px/1.5 ${SANS}`, color: "#8296a9", marginBottom: 8 }}>{m.summary}</div>
+                  {m.summary && <div style={{ font: `500 11.5px/1.5 ${SANS}`, color: "#8296a9", marginBottom: 8 }}>{m.summary}</div>}
 
                   <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     {m.items.map((it) => {
@@ -237,7 +237,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                               {it.title}
                             </span>
                             <span style={{ display: "block", font: `500 11px ${SANS}`, color: "#8296a9", marginTop: 3 }}>
-                              {KIND_LABEL[it.kind]} · {it.minutes} min{st === "preview" ? " · look ahead" : ""}
+                              {itemMeta(it)}{st === "preview" ? " · look ahead" : ""}
                             </span>
                           </span>
                         </button>
@@ -265,6 +265,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
         {/* ----------------------------- CONTENT ---------------------------- */}
         <main style={{ minWidth: 0, display: "flex", flexDirection: "column" }}>
           <div className="lms-player-scroll">
+          <div className="lms-player-col">
           <button type="button" className="lms-player-toggle" onClick={() => setMenuOpen((o) => !o)}>
             {menuOpen ? "Hide contents" : "Show contents"}
           </button>
@@ -289,6 +290,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
             attempt={progress?.quizAttempts[item.id] ?? null}
             onComplete={onComplete}
           />
+          </div>
           </div>
 
           {/* The one control that moves the course forward. Everything the
@@ -340,6 +342,9 @@ const KIND_LABEL: Record<CourseItem["kind"], string> = {
   quiz: "Quiz",
 };
 
+/** Content measured in pages or questions carries its own wording. */
+const itemMeta = (it: CourseItem) => it.meta ?? `${KIND_LABEL[it.kind]} · ${it.minutes} min`;
+
 function ItemView({
   item, state, attempt, onComplete,
 }: {
@@ -369,19 +374,28 @@ function ItemView({
       )}
 
       <div style={{ font: `700 11px ${SANS}`, color: "#1b8f88", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 10 }}>
-        {KIND_LABEL[item.kind]} · {item.minutes} min
+        {itemMeta(item)}
       </div>
       <h2 style={{ font: `700 clamp(24px,2.6vw,32px)/1.2 ${SANS}`, color: "#0a1b33", margin: "0 0 24px", letterSpacing: "-.02em" }}>{item.title}</h2>
 
-      {item.kind === "video" && item.videoId && (
+      {item.kind === "video" && (
         <div style={{ position: "relative", paddingTop: "56.25%", borderRadius: 16, overflow: "hidden", background: "#0a1b33", marginBottom: 26 }}>
-          <iframe
-            src={`https://www.youtube-nocookie.com/embed/${item.videoId}`}
-            title={item.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
-          />
+          {item.videoId ? (
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${item.videoId}`}
+              title={item.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
+            />
+          ) : (
+            /* Course footage is not hosted yet. A placeholder that says so
+               beats an empty frame the learner reads as broken. */
+            <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, color: "rgba(255,255,255,.72)" }}>
+              <div aria-hidden style={{ width: 62, height: 62, borderRadius: "50%", background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", display: "flex", alignItems: "center", justifyContent: "center", font: `400 22px ${SANS}`, color: "#fff", paddingLeft: 4 }}>▶</div>
+              <div style={{ font: `600 12.5px ${SANS}` }}>Video is not published yet</div>
+            </div>
+          )}
         </div>
       )}
 

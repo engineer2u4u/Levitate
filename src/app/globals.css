@@ -573,6 +573,12 @@ body {
   overflow-y: auto;
   padding: 34px 48px 40px;
 }
+/* The pane is as wide as the window allows; the reading column is not. Line
+   lengths past roughly this get tiring, and a 16:9 video fills the screen. */
+.lms-player-col {
+  max-width: 940px;
+  margin: 0 auto;
+}
 /* The one control that moves the course on, parked where the eye ends up
    after the material rather than below it — it stays put while the reading
    column scrolls. */

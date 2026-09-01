@@ -8,6 +8,10 @@
  * questions — cohort pacing versus self-paced progression.
  */
 
+import { POSH_CURRICULUM } from "./poshCurriculum";
+import { curriculumToContent } from "./curriculumContent";
+import { courseBySlug } from "./courses";
+
 export type ItemKind = "reading" | "video" | "quiz";
 
 export type QuizQuestion = {
@@ -24,6 +28,9 @@ export type CourseItem = {
   kind: ItemKind;
   title: string;
   minutes: number;
+  /** Overrides the "Kind · N min" label — some content is measured in pages
+   *  or questions, and inventing a duration for it would be a lie. */
+  meta?: string;
   /** Reading: paragraphs. A heading is a line that starts with "## ". */
   body?: string[];
   /** Video: a YouTube id, plus the same body rendered underneath. */
@@ -273,7 +280,15 @@ export const DEMO_COURSE: CourseContent = {
   ],
 };
 
+/* The staged curricula, mapped onto this shape so every course opens in the
+   same player. See curriculumContent.ts for what the mapping drops. */
+const FROM_CURRICULA = [POSH_CURRICULUM].reduce<Record<string, CourseContent>>((acc, c) => {
+  acc[c.slug] = curriculumToContent(c, courseBySlug(c.slug)?.title ?? c.slug);
+  return acc;
+}, {});
+
 export const COURSE_CONTENT: Record<string, CourseContent> = {
+  ...FROM_CURRICULA,
   [DEMO_COURSE.slug]: DEMO_COURSE,
 };
 
