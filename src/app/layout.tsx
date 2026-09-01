@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import ShrmMarquee from "@/components/site/ShrmMarquee";
 import EnquiryPopup from "@/components/site/EnquiryPopup";
+import ChromeGate from "@/components/site/ChromeGate";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -78,9 +79,13 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <ShrmMarquee />
+        <ChromeGate>
+          <ShrmMarquee />
+        </ChromeGate>
         {children}
-        <EnquiryPopup />
+        <ChromeGate>
+          <EnquiryPopup />
+        </ChromeGate>
       </body>
     </html>
   );

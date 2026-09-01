@@ -532,13 +532,21 @@ body {
 /* ================================================================== */
 /*  Self-paced course player                                          */
 /* ================================================================== */
+/* The player owns the whole window: no site chrome above it, and the two
+   columns scroll independently the way a course reader should. dvh rather
+   than vh so a mobile browser's collapsing toolbar does not clip the last
+   item off the contents list. */
+.lms-player {
+  height: 100dvh;
+}
 .lms-player-side {
   background: #fff;
   border-right: 1px solid #e3eaf0;
-  align-self: stretch;
-  position: sticky;
-  top: 0;
-  max-height: 100vh;
+  height: 100%;
+  overflow-y: auto;
+}
+.lms-player > main {
+  height: 100%;
   overflow-y: auto;
 }
 .lms-item-row { transition: background 0.18s ease; }
@@ -549,8 +557,11 @@ body {
 @media (max-width: 900px) {
   /* Below this the contents collapse behind a toggle: a 360px rail beside the
      reading column leaves neither enough room. */
-  .lms-player { grid-template-columns: 1fr !important; }
-  .lms-player-side { display: none; position: static; max-height: none; border-right: none; border-bottom: 1px solid #e3eaf0; }
+  /* One column, and the page scrolls as a whole again — a fixed-height grid
+     would trap the contents panel when it is toggled open. */
+  .lms-player { grid-template-columns: 1fr !important; height: auto; }
+  .lms-player-side { display: none; height: auto; overflow-y: visible; border-right: none; border-bottom: 1px solid #e3eaf0; }
+  .lms-player > main { height: auto; overflow-y: visible; }
   .lms-player-side.is-open { display: block; }
   .lms-player main { padding: 20px !important; }
   .lms-player-toggle {

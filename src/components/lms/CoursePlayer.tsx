@@ -148,8 +148,8 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   const kit = kitReleased(course, progress);
 
   return (
-    <div style={{ background: "#f7fafc", minHeight: "70vh" }}>
-      <div className="lms-player" style={{ display: "grid", gridTemplateColumns: "360px 1fr", alignItems: "start" }}>
+    <div style={{ background: "#f7fafc" }}>
+      <div className="lms-player" style={{ display: "grid", gridTemplateColumns: "360px 1fr" }}>
         {/* ---------------------------- CONTENTS ---------------------------- */}
         <aside className={`lms-player-side${menuOpen ? " is-open" : ""}`}>
           <div style={{ padding: "24px 22px 18px", borderBottom: "1px solid #e3eaf0" }}>
@@ -477,9 +477,16 @@ function KitBanner({ course }: { course: { readingKit: { title: string; meta: st
 
 /* ----------------------------------------------------------------- atoms */
 
+// The player takes over the window, so these interstitials carry the only way
+// back out — there is no site header above them.
 const Shell = ({ children }: { children: React.ReactNode }) => (
-  <div className="site-page-sec" style={{ background: "#f7fafc", padding: "72px 48px", minHeight: "50vh" }}>
-    <div style={{ maxWidth: 720, margin: "0 auto" }}>{children}</div>
+  <div className="site-page-sec" style={{ background: "#f7fafc", padding: "48px 48px 72px", minHeight: "100dvh" }}>
+    <div style={{ maxWidth: 720, margin: "0 auto" }}>
+      <Link href="/lms/" style={{ display: "inline-block", font: `600 12px ${SANS}`, color: "#1b8f88", marginBottom: 28 }}>
+        ← Levitate Learning
+      </Link>
+      {children}
+    </div>
   </div>
 );
 

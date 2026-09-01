@@ -17,8 +17,8 @@ const initialsOf = (name: string) =>
 
 /**
  * The learner-facing bar under the site header: account state on the right,
- * section tabs beneath. Also owns the auth modal, since every screen that needs
- * a signed-in learner routes through here.
+ * section tabs beneath. Purely presentational — the auth modal lives in
+ * SessionProvider, so screens that hide this bar can still open sign-in.
  */
 export default function LmsChrome() {
   const { user, loading, signOut, openAuth } = useSession();
