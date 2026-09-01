@@ -64,6 +64,9 @@ export type Course = {
   modulesLabel: string;
   hoursLabel: string;
   facilitator: string;
+  /** Kept out of the public nav, the sitemap and the certifications cards.
+   *  Test fixtures live in the catalogue without being advertised. */
+  hidden?: boolean;
   /** What this course's certificates say. Every programme awards both. */
   certificate: {
     /** The programme name as printed — not always the catalogue title. */

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ENROLMENT_OPEN, courseBySlug, formatFee } from "@/lib/lms/courses";
 import { contact } from "@/lib/site";
 import { outlineBySlug } from "@/lib/programOutlines";
+import { contentBySlug } from "@/lib/lms/courseContent";
 import { BROCHURE_ASSETS_READY, brochureBySlug } from "@/lib/lms/brochures";
 import { SHRM_ACCREDITATION, certificateCards } from "@/lib/certificateArt";
 import { included, programBySlug } from "@/lib/programs";
@@ -32,6 +33,9 @@ export default function CourseDetail({ slug }: { slug: string }) {
   const brochure = brochureBySlug(slug);
   const faqs = faqsBySlug(slug);
   const program = programBySlug(slug);
+  // A course authored as modules and submodules can simply be started —
+  // there is nothing to pay for and nothing to wait for.
+  const selfPaced = contentBySlug(slug);
   // Every certification is led by the founder; her card matches the homepage.
   const facilitator = founders[0];
   const { user, enrolments, openAuth } = useSession();
@@ -67,14 +71,20 @@ export default function CourseDetail({ slug }: { slug: string }) {
   // Anyone who already enrolled keeps their way in; everybody else is sent to
   // the enquiry desk until payment goes live.
   const canPay = ENROLMENT_OPEN && !waitlist;
-  const ctaLabel = enrolled
+  const ctaLabel = selfPaced
+    ? "Start course →"
+    : enrolled
     ? "Go to my course →"
     : canPay
       ? "Enrol · Pay securely"
       : waitlist
         ? "Join the waitlist"
         : "Enquire about this program →";
-  const onCta = enrolled || canPay ? onEnrol : () => router.push("/contact");
+  const onCta = selfPaced
+    ? () => router.push(`/lms/learn/${slug}`)
+    : enrolled || canPay
+      ? onEnrol
+      : () => router.push("/contact");
 
   return (
     <>

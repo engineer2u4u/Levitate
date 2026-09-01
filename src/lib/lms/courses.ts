@@ -92,6 +92,22 @@ export const COURSES: Course[] = [
       hours: "12 Hours",
     },
   },
+  {
+    slug: "demo-course",
+    tag: "Demo", mode: "Self-paced · unlocks in order",
+    title: "Demo · Workplace Facilitation Essentials",
+    short: "Demo course",
+    desc: "A sample course for exercising the learning flow: sequential unlocking, progress tracking and the reading kit released on completion.",
+    img: "/assets/workshop-tables.jpeg", status: "enrolling",
+    feePaise: 0, priceNote: "free · for testing",
+    modulesLabel: "3 modules", hoursLabel: "45 min", facilitator: "Parichita Kotnala",
+    hidden: true,
+    certificate: {
+      name: "Demo · Workplace Facilitation Essentials",
+      closing: "in **workplace facilitation essentials**.",
+      hours: "45 Minutes",
+    },
+  },
 ];
 
 /**
@@ -103,6 +119,9 @@ export const COURSES: Course[] = [
  * once the gateway is wired and the button comes back on its own.
  */
 export const ENROLMENT_OPEN = false;
+
+/** Everything the public should see — the nav, sitemap and cards use this. */
+export const VISIBLE_COURSES = COURSES.filter((c) => !c.hidden);
 
 export const courseBySlug = (slug: string) => COURSES.find((c) => c.slug === slug);
 

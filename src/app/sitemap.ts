@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { COURSES } from "@/lib/lms/courses";
+import { VISIBLE_COURSES as COURSES } from "@/lib/lms/courses";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://levitatepeoplesoft.com";
 

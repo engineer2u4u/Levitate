@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { contact, services, type NavKey } from "@/lib/site";
-import { COURSES } from "@/lib/lms/courses";
+import { VISIBLE_COURSES as COURSES } from "@/lib/lms/courses";
 
 function MailIcon({ size = 13 }: { size?: number }) {
   return (

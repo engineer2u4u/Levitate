@@ -528,3 +528,40 @@ body {
 @media (max-width: 640px) {
   .site-accred-rule { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, #dbe5ec 18%, #dbe5ec 82%, transparent); }
 }
+
+/* ================================================================== */
+/*  Self-paced course player                                          */
+/* ================================================================== */
+.lms-player-side {
+  background: #fff;
+  border-right: 1px solid #e3eaf0;
+  align-self: stretch;
+  position: sticky;
+  top: 0;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+.lms-item-row { transition: background 0.18s ease; }
+.lms-item-row:not(:disabled):hover { background: #f4f7f9 !important; }
+/* The contents panel is always shown on desktop, so the toggle is not. */
+.lms-player-toggle { display: none; }
+
+@media (max-width: 900px) {
+  /* Below this the contents collapse behind a toggle: a 360px rail beside the
+     reading column leaves neither enough room. */
+  .lms-player { grid-template-columns: 1fr !important; }
+  .lms-player-side { display: none; position: static; max-height: none; border-right: none; border-bottom: 1px solid #e3eaf0; }
+  .lms-player-side.is-open { display: block; }
+  .lms-player main { padding: 20px !important; }
+  .lms-player-toggle {
+    display: inline-flex;
+    cursor: pointer;
+    border: 1px solid #e3eaf0;
+    background: #fff;
+    color: #0a1b33;
+    font: 700 13px "Plus Jakarta Sans", sans-serif;
+    padding: 11px 18px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+}
