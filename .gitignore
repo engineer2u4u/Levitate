@@ -63,3 +63,7 @@ next-env.d.ts
 # Static export output
 /out/
 
+# Real Razorpay credentials, staged here for upload to the server. Only the
+# .sample.php beside it belongs in git — the secret must never be committed,
+# because git history is forever and rotating a leaked key is the only fix.
+/razorpay-config.php
