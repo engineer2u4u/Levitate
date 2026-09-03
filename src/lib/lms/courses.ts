@@ -1,5 +1,6 @@
 import type { Course } from "./types";
 import { LMS_TESTING } from "./testMode";
+import { PAYMENT_OFF } from "./payment";
 
 /** Catalogue. Fees are in paise; `null` means "On request" until dates firm up. */
 export const COURSES: Course[] = [
@@ -121,7 +122,7 @@ export const COURSES: Course[] = [
  * Testing builds turn it on, which routes through the simulated gateway — no
  * real money moves until a server-verified Razorpay flow replaces it.
  */
-export const ENROLMENT_OPEN = LMS_TESTING;
+export const ENROLMENT_OPEN = LMS_TESTING || PAYMENT_OFF;
 
 /** Everything the public should see — the nav, sitemap and cards use this. */
 export const VISIBLE_COURSES = COURSES.filter((c) => !c.hidden);

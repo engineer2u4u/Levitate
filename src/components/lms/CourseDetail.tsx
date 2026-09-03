@@ -2,8 +2,11 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ENROLMENT_OPEN, courseBySlug, formatFee } from "@/lib/lms/courses";
+import { PAYMENT_OFF } from "@/lib/lms/payment";
+import { enrol } from "@/lib/lms/enrolments";
 import { contact } from "@/lib/site";
 import { outlineBySlug } from "@/lib/programOutlines";
 import { contentBySlug } from "@/lib/lms/courseContent";
@@ -40,6 +43,18 @@ export default function CourseDetail({ slug }: { slug: string }) {
   const facilitator = founders[0];
   const { user, enrolments, openAuth } = useSession();
   const router = useRouter();
+  // Raised when somebody signs up in order to enrol. The account does not
+  // exist while the modal is open, so the enrolment cannot be written there —
+  // it waits here for the new user to arrive. A ref rather than state: this
+  // is a one-shot intent, and nothing renders differently for it.
+  const enrolOnSignIn = useRef(false);
+
+  useEffect(() => {
+    if (!enrolOnSignIn.current || !user) return;
+    enrolOnSignIn.current = false;
+    enrol(user.id, slug, null);
+    router.push(contentBySlug(slug) ? `/lms/learn/${slug}` : `/lms/course/${slug}`);
+  }, [user, slug, router]);
 
   if (!course) {
     return (
@@ -56,21 +71,32 @@ export default function CourseDetail({ slug }: { slug: string }) {
   const waitlist = course.status === "waitlist" || course.feePaise === null;
 
   const goCheckout = () => router.push(`/lms/checkout/${slug}`);
+
   const onEnrol = () => {
     if (enrolled) return router.push(`/lms/learn/${slug}`);
     if (!user) {
+      // Signing up first, because there is nobody to enrol until then.
       return openAuth({
         mode: "signup",
-        reason: "Create an account to enrol — you will land straight back on checkout.",
-        onDone: goCheckout,
+        reason: PAYMENT_OFF
+          ? "Create an account to enrol — there is nothing to pay."
+          : "Create an account to enrol — you will land straight back on checkout.",
+        onDone: PAYMENT_OFF ? () => { enrolOnSignIn.current = true; } : goCheckout,
       });
     }
-    goCheckout();
+    // Nothing to pay means nothing to check out: enrol and open the course.
+    if (PAYMENT_OFF) {
+      enrol(user.id, slug, null);
+      return router.push(selfPaced ? `/lms/learn/${slug}` : `/lms/course/${slug}`);
+    }
+    return goCheckout();
   };
 
   // Anyone who already enrolled keeps their way in; everybody else is sent to
   // the enquiry desk until payment goes live.
   const canPay = ENROLMENT_OPEN && !waitlist;
+  // A free course nobody can click into is just a closed course.
+  const freeEntry = PAYMENT_OFF && canPay;
   // Self-paced content opens once it is paid for — or straight away when it
   // carries no fee. Otherwise the normal enrol path runs first.
   const canStart = Boolean(selfPaced) && (enrolled || !course.feePaise);
@@ -78,6 +104,8 @@ export default function CourseDetail({ slug }: { slug: string }) {
     ? "Start course →"
     : enrolled
     ? "Go to my course →"
+    : freeEntry
+      ? "Enrol now →"
     : canPay
       ? "Enrol · Pay securely"
       : waitlist

@@ -163,11 +163,35 @@ export const razorpayGateway: PaymentGateway = {
 /** True while the configured key is a Razorpay test key. */
 export const isTestKey = KEY_ID.startsWith("rzp_test_");
 
+/* ---------------------------------------------------------- free entry */
+
 /**
- * Real Razorpay the moment a key id is configured; the simulation until then.
- * There is no separate switch to forget: a build with no key cannot take money
- * and a build with one does not pretend to.
+ * Enrolment without payment. Set NEXT_PUBLIC_PAYMENT_MODE=off.
+ *
+ * For running the courses while payment is deliberately out of the way —
+ * pilots, a cohort already paid for elsewhere, or simply walking the learning
+ * flow without a card. It short-circuits the gateway rather than faking a
+ * payment: the receipt records nothing collected and no amount, so nothing
+ * downstream can mistake it for money that arrived.
  */
-export const gateway: PaymentGateway = KEY_ID ? razorpayGateway : simulatedGateway;
+export const PAYMENT_OFF = process.env.NEXT_PUBLIC_PAYMENT_MODE === "off";
+
+const freeGateway: PaymentGateway = {
+  kind: "simulated",
+  async pay() {
+    return { ok: true, orderId: ref("FREE"), paymentId: ref("free"), amountPaise: 0, at: new Date().toISOString() };
+  },
+};
+
+/**
+ * Free entry wins where it is set. Otherwise real Razorpay the moment a key id
+ * is configured, and the simulation until then — a build with no key cannot
+ * take money and a build with one does not pretend to.
+ */
+export const gateway: PaymentGateway = PAYMENT_OFF
+  ? freeGateway
+  : KEY_ID
+    ? razorpayGateway
+    : simulatedGateway;
 
 export const formatPaise = (paise: number) => "₹" + (paise / 100).toLocaleString("en-IN");

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, type CSSProperties } from "react";
 import { courseBySlug, feeBreakdown } from "@/lib/lms/courses";
 import { enrol } from "@/lib/lms/enrolments";
-import { formatPaise, gateway, isTestKey } from "@/lib/lms/payment";
+import { PAYMENT_OFF, formatPaise, gateway, isTestKey } from "@/lib/lms/payment";
 import { useSession } from "./useSession";
 
 const fieldLabel: CSSProperties = {
@@ -262,15 +262,19 @@ export default function Checkout({ slug }: { slug: string }) {
               className="lp-btn-grad"
               style={{ width: "100%", cursor: paying ? "wait" : "pointer", border: "none", textAlign: "center", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "14px 20px", borderRadius: 999, opacity: paying ? 0.8 : 1 }}
             >
-              {paying ? "Processing payment…" : `Pay ${formatPaise(fee.totalPaise)} securely`}
+              {paying
+                ? PAYMENT_OFF ? "Enrolling…" : "Processing payment…"
+                : PAYMENT_OFF ? "Complete enrolment →" : `Pay ${formatPaise(fee.totalPaise)} securely`}
             </button>
 
             {/* Nobody should ever be unsure whether real money is moving. */}
-            {(gateway.kind === "simulated" || isTestKey) && (
+            {(PAYMENT_OFF || gateway.kind === "simulated" || isTestKey) && (
               <div style={{ font: "600 10.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#9a7415", background: "rgba(240,160,44,.1)", border: "1px solid rgba(212,166,52,.4)", borderRadius: 10, padding: "9px 11px", marginTop: 12, textAlign: "center" }}>
-                {gateway.kind === "simulated"
-                  ? "Demo checkout — no payment is taken and no card details are collected."
-                  : "Razorpay test mode — use a test card. No real money is taken."}
+                {PAYMENT_OFF
+                  ? "Enrolment is open without payment — nothing is charged and no card details are collected."
+                  : gateway.kind === "simulated"
+                    ? "Demo checkout — no payment is taken and no card details are collected."
+                    : "Razorpay test mode — use a test card. No real money is taken."}
               </div>
             )}
             <div style={{ font: "500 10.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 10, textAlign: "center" }}>
