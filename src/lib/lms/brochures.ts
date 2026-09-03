@@ -30,8 +30,9 @@ export type ProgramBrochure = {
   beyond?: { title: string; intro: string; points: string[] };
   /** How the practice-led half of the programme is actually delivered. */
   practiceLed?: { title: string; intro: string; items: string[] };
-  /** Downloadable PDF, served from /public. */
-  brochure: { href: string; label: string; meta: string };
+  /** Downloadable PDF, served from /public. Omitted where the copy has
+   *  arrived but the PDF has not — the link is simply not offered. */
+  brochure?: { href: string; label: string; meta: string };
 };
 
 export const POSH_BROCHURE: ProgramBrochure = {
@@ -183,9 +184,70 @@ export const POCSO_BROCHURE: ProgramBrochure = {
   },
 };
 
+export const DEI_BROCHURE: ProgramBrochure = {
+  eyebrow: "Certified DEI Train-the-Trainer",
+  strapline: "Understand. Reflect. Apply. Facilitate. Transform.",
+  meta: ["20 Hours · Total Certification", "13 Modules · Curriculum", "BRIDGE · Inclusion Framework", "Applied TTT · Format"],
+  about:
+    "The Inclusive Workplace Facilitator Program (DEI TTT) is a 20-hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, translating inclusion from concept into everyday workplace behaviour while building the capability to design and facilitate practical DEI learning experiences.",
+
+  stats: [
+    { n: "2,000+", label: "Professionals Trained" },
+    { n: "15+ Yrs", label: "Global HR Leadership Experience" },
+    { n: "35+ Yrs", label: "Institutional HR Legacy (ONGC)" },
+    { n: "6", label: "Certification Pathways" },
+  ],
+
+  objectives: [
+    "Explain core DEI concepts, identity, intersectionality, privilege, power and the global inclusion landscape",
+    "Recognise and interrupt bias, stereotypes, microaggressions and exclusion in everyday workplace decisions and communication",
+    "Strengthen psychological safety, belonging, allyship, inclusive leadership and culturally intelligent collaboration",
+    "Apply an inclusion lens across the employee lifecycle, DEI strategy, governance, measurement and organisational change",
+    "Design and facilitate engaging, workplace-relevant DEI learning experiences using adult-learning principles",
+    "Navigate sensitive conversations, resistance, difficult questions and emotionally charged moments with confidence",
+    "Use cases, structured debriefing and audience adaptation to translate DEI learning into practical workplace application",
+  ],
+
+  audience: [
+    "HR & L&D Professionals",
+    "DEI, Culture & Employee Experience Professionals",
+    "People Managers & Inclusive Leaders",
+    "Employee Resource Group & Inclusion Leads",
+    "Workplace Trainers & Facilitators",
+    "HR Consultants & Independent Professionals",
+    "Aspiring DEI Facilitators",
+    "New Potential Trainers (freelance and/or corporate)",
+  ],
+
+  methodology: {
+    tags: ["Audio-Video", "Interactive Presentation", "Case Studies", "Roleplay", "Activity Sheets", "Reflection & Group Discussion"],
+    // The printed brochure reuses the PoSH wording here and ends on "lead POSH
+    // conversations", which is a copy-paste left in the PDF. Saying that on the
+    // DEI page would be plainly wrong, so the sentence names DEI instead.
+    body:
+      "Every session combines inclusion knowledge with practical HR insight and facilitator practice — using workplace cases, role plays, reflection, discussion and applied facilitation rather than theory alone. Participants leave equipped to lead DEI conversations, not simply understand the concepts.",
+    blocks: [
+      {
+        title: "Study Material",
+        body: "Presentation deck, case studies, templates, facilitation guides, session plans and a complete trainer toolkit.",
+      },
+      {
+        title: "Learning Management System (LMS)",
+        body:
+          "Every participant receives access to Levitate PeopleSoft's dedicated LMS — a central learning and resource hub supporting the live certification programme throughout the learning journey. Module-wise quizzes and knowledge checks help participants reinforce key concepts, track progress and prepare for the programme's assessment-based certification.",
+        chips: ["Recorded Session Access", "Trainer Toolkit", "Module Resources", "Downloadable Templates", "Quizzes", "Progress Tracking"],
+      },
+    ],
+  },
+
+  // No `brochure` key: the copy is here, the PDF has not been supplied. Add one
+  // pointing at /assets/brochures/ once it has, and the download appears.
+};
+
 export const BROCHURES: Record<string, ProgramBrochure> = {
   "posh-trainer": POSH_BROCHURE,
   "pocso-child-safety": POCSO_BROCHURE,
+  "inclusive-workplace": DEI_BROCHURE,
 };
 
 export const brochureBySlug = (slug: string): ProgramBrochure | undefined => BROCHURES[slug];

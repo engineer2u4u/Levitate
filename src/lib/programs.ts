@@ -5,7 +5,7 @@
  * cannot describe the same programme differently — the individual page is the
  * one a visitor now lands on from the menu.
  */
-import { POCSO_OUTLINE, type ProgramOutline } from "@/lib/programOutlines";
+import { DEI_OUTLINE, POCSO_OUTLINE, type ProgramOutline } from "@/lib/programOutlines";
 
 /** What every programme includes, whichever one it is. */
 export const included = ["Facilitation practice & feedback", "Trainer toolkit: templates, guides, FAQs", "Workplace case studies & scenarios", "Assessment-linked certification"];
@@ -30,7 +30,8 @@ export const programs: Program[] = [
     p1: "A Train-the-Trainer certification for professionals who want to facilitate meaningful conversations on diversity, equity, inclusion and belonging in the workplace. Participants build understanding of core DEI concepts, unconscious bias, inclusive language, psychological safety and inclusive leadership practices.",
     p2: "It also prepares trainers to design DEI sessions, handle sensitive questions, manage resistance, use case studies and facilitate conversations that encourage reflection, awareness and behaviour change.",
     ideal: "HR professionals, DEI champions, L&D teams, managers, consultants, workplace trainers and aspiring facilitators.",
-    pillarTitle: "The BRIDGE Inclusion Framework", pillars: [{ k: "B", v: "Bias Made Visible" }, { k: "R", v: "Respectful Language" }, { k: "I", v: "Inclusive Decisions" }, { k: "D", v: "Dialogue Over Debate" }, { k: "G", v: "Growing Belonging" }, { k: "E", v: "Everyday Allyship" }] },
+    pillarTitle: "The BRIDGE Inclusion Framework", pillars: [{ k: "B", v: "Bias Visible" }, { k: "R", v: "Respectful Language" }, { k: "I", v: "Inclusive Decisions" }, { k: "D", v: "Dialogue Over Debate" }, { k: "G", v: "Growing Belonging" }, { k: "E", v: "Everyday Allyship" }],
+    curriculum: DEI_OUTLINE },
   { id: "wellbeing", slug: "workplace-wellbeing", num: "03", tag: "Wellbeing", short: "Workplace Wellbeing Facilitator", title: "Workplace Wellbeing Facilitator Program (Mental Health & Wellbeing TTT)", sub: "Applied Mental Health & Wellbeing Train-the-Trainer Certification",
     p1: "A Train-the-Trainer certification that prepares professionals to facilitate workplace mental health and wellbeing conversations with confidence, sensitivity and ethical responsibility.",
     p2: "Participants learn to design wellbeing sessions, discuss stress and burnout with sensitivity, promote psychological safety, reduce stigma, strengthen manager awareness and facilitate supportive conversations within a responsible workplace context.",

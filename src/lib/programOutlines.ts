@@ -50,10 +50,39 @@ export const POSH_OUTLINE: ProgramOutline = {
   closing: "Learn the law. Navigate sensitive situations. Facilitate with confidence.",
 };
 
+export const DEI_OUTLINE: ProgramOutline = {
+  intro:
+    "A 20-hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, equipping participants to translate inclusion from concept into everyday workplace behaviour and facilitate DEI learning with confidence.",
+  facts: [
+    { k: "Duration", v: "20 Hours" },
+    { k: "Format", v: "Applied TTT" },
+    { k: "Framework", v: "BRIDGE Inclusion" },
+    { k: "Curriculum", v: "13 Modules" },
+  ],
+  modules: [
+    "DEI Foundations & the Global Inclusion Landscape",
+    "Identity, Intersectionality, Privilege & Power",
+    "Bias, Stereotypes & Inclusive Decision-Making",
+    "Inclusive Communication, Microaggressions & Constructive Dialogue",
+    "Dimensions of Diversity & Intersectional Inclusion",
+    "Cultural Intelligence & Working Across Difference",
+    "Psychological Safety, Belonging & Inclusive Teams",
+    "Allyship, Bystander Intervention & Inclusive Leadership",
+    "Inclusive Employee Lifecycle & Organisational DEI",
+    "Designing Powerful DEI Learning Experiences",
+    "Facilitating Sensitive & Difficult DEI Conversations",
+    "Managing Resistance, Hot Moments & Challenging Questions",
+    "Case Facilitation, Debriefing & Audience Adaptation",
+  ],
+  closing:
+    "Build the inclusion knowledge, practical judgement and facilitation capability to lead meaningful workplace conversations across difference.",
+};
+
 /** Keyed by course slug — the same slug the certifications cards link to. */
 export const OUTLINES: Record<string, ProgramOutline> = {
   "posh-trainer": POSH_OUTLINE,
   "pocso-child-safety": POCSO_OUTLINE,
+  "inclusive-workplace": DEI_OUTLINE,
 };
 
 export const outlineBySlug = (slug: string): ProgramOutline | undefined => OUTLINES[slug];

@@ -34,6 +34,8 @@ export default function CourseDetail({ slug }: { slug: string }) {
   const curriculum = curriculumBySlug(slug);
   const outline = outlineBySlug(slug);
   const brochure = brochureBySlug(slug);
+  // Undefined where the brochure copy exists but its PDF has not arrived.
+  const brochurePdf = brochure?.brochure;
   const faqs = faqsBySlug(slug);
   const program = programBySlug(slug);
   // A course authored as modules and submodules can simply be started —
@@ -141,9 +143,9 @@ export default function CourseDetail({ slug }: { slug: string }) {
               {/* Sits with the programme detail rather than in the price card —
                   a prospect reaches for the brochure while reading, before
                   they get as far as the fee. */}
-              {brochure && BROCHURE_ASSETS_READY && (
+              {brochurePdf && BROCHURE_ASSETS_READY && (
                 <a
-                  href={brochure.brochure.href}
+                  href={brochurePdf.href}
                   download
                   className="lms-brochure-dl"
                   style={{ display: "inline-flex", alignItems: "center", gap: 12, marginTop: 24, background: "rgba(255,255,255,.08)", border: "1px solid rgba(127,227,220,.4)", borderRadius: 14, padding: "13px 20px 13px 15px" }}
@@ -154,8 +156,8 @@ export default function CourseDetail({ slug }: { slug: string }) {
                     </svg>
                   </span>
                   <span>
-                    <span style={{ display: "block", font: "700 13px 'Plus Jakarta Sans',sans-serif", color: "#fff" }}>{brochure.brochure.label}</span>
-                    <span style={{ display: "block", font: "500 11px 'Plus Jakarta Sans',sans-serif", color: "rgba(255,255,255,.6)", marginTop: 2 }}>{brochure.brochure.meta}</span>
+                    <span style={{ display: "block", font: "700 13px 'Plus Jakarta Sans',sans-serif", color: "#fff" }}>{brochurePdf.label}</span>
+                    <span style={{ display: "block", font: "500 11px 'Plus Jakarta Sans',sans-serif", color: "rgba(255,255,255,.6)", marginTop: 2 }}>{brochurePdf.meta}</span>
                   </span>
                 </a>
               )}
