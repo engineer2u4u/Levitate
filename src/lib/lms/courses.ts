@@ -40,8 +40,8 @@ export const COURSES: Course[] = [
     title: "Inclusive Workplace Facilitator Program (DEI TTT)",
     short: "Inclusive Workplace",
     desc: "A 20-hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, translating inclusion from concept into everyday workplace behaviour.",
-    img: "/assets/workshop-handsup.jpeg", status: "waitlist",
-    feePaise: null, priceNote: "confirmed with batch dates",
+    img: "/assets/workshop-handsup.jpeg", status: "enrolling",
+    feePaise: 4000000, priceNote: "incl. taxes · dates announced soon",
     modulesLabel: "13 Modules", hoursLabel: "20 Hours", facilitator: "Parichita Kotnala",
     certificate: {
       name: "Inclusive Workplace Facilitator Program (DEI TTT)",

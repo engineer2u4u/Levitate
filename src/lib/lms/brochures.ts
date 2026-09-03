@@ -240,8 +240,11 @@ export const DEI_BROCHURE: ProgramBrochure = {
     ],
   },
 
-  // No `brochure` key: the copy is here, the PDF has not been supplied. Add one
-  // pointing at /assets/brochures/ once it has, and the download appears.
+  brochure: {
+    href: "/assets/brochures/levitate-dei-ttt-brochure.pdf",
+    label: "Download the programme brochure",
+    meta: "PDF · 14 pages · 10 MB",
+  },
 };
 
 export const BROCHURES: Record<string, ProgramBrochure> = {

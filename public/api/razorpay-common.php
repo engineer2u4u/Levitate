@@ -64,9 +64,10 @@ function rzp_is_test_mode(): bool
  * it. A course absent here cannot be paid for at all.
  */
 const RZP_PRICES_PAISE = [
-    'posh-trainer'       => 2500000,
-    'pocso-child-safety' => 2000000,
-    'demo-course'        => 100000,
+    'posh-trainer'        => 2500000,
+    'pocso-child-safety'  => 2000000,
+    'inclusive-workplace' => 4000000,
+    'demo-course'         => 100000,
 ];
 
 function rzp_price_for(string $slug): ?int
