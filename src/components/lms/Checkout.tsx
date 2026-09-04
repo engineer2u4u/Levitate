@@ -274,7 +274,7 @@ export default function Checkout({ slug }: { slug: string }) {
                   ? "Enrolment is open without payment — nothing is charged and no card details are collected."
                   : gateway.kind === "simulated"
                     ? "Demo checkout — no payment is taken and no card details are collected."
-                    : "Razorpay test mode — no real money is taken. Use card 4111 1111 1111 1111, any future expiry and any CVV."}
+                    : "Razorpay test mode — no real money is taken. Use card 4100 2800 0000 1007, any future expiry and any CVV."}
               </div>
             )}
             <div style={{ font: "500 10.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 10, textAlign: "center" }}>
