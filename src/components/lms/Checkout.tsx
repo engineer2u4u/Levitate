@@ -166,6 +166,8 @@ export default function Checkout({ slug }: { slug: string }) {
       courseTitle: course.title,
       amountPaise: course.feePaise as number,
       customer: { name: user.name, email: user.email, contact },
+      // Collected on this form and, until now, discarded when it unmounted.
+      billing: { gstin: gst.trim().toUpperCase(), address: address.trim(), designation: designation.trim() },
     });
     setPaying(false);
     if (!res.ok) {

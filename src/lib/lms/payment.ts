@@ -13,6 +13,10 @@ export type PaymentRequest = {
   courseTitle: string;
   amountPaise: number;
   customer: { name: string; email: string; contact?: string };
+  /** Everything the checkout form collects that an invoice needs. Carried
+   *  to Razorpay as order notes, so the payment record holds what the
+   *  invoice must say rather than leaving it in a browser that has closed. */
+  billing?: { gstin?: string; address?: string; designation?: string };
 };
 
 export type PaymentResult =
@@ -68,6 +72,14 @@ const API = RAW_API.endsWith("/") ? RAW_API.slice(0, -1) : RAW_API;
 
 const CHECKOUT_JS = "https://checkout.razorpay.com/v1/checkout.js";
 
+/** "+91 98110 24567" -> "+919811024567". Razorpay will not text a number it
+ *  cannot parse, and the receipt SMS is the point of collecting it. */
+const tidyPhone = (raw: string) => {
+  const digits = raw.replace(/[^0-9]/g, "");
+  if (!digits) return "";
+  return raw.trim().startsWith("+") ? `+${digits}` : digits;
+};
+
 type RazorpaySuccess = { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string };
 type RazorpayOptions = Record<string, unknown>;
 type RazorpayInstance = { open: () => void; on: (event: string, cb: (e: unknown) => void) => void };
@@ -113,7 +125,13 @@ export const razorpayGateway: PaymentGateway = {
         loadCheckout(),
         post<{ orderId: string; amountPaise: number; currency: string; keyId: string }>(
           "/api/razorpay-order.php",
-          { courseSlug: req.courseSlug },
+          {
+            courseSlug: req.courseSlug,
+            // The server decides the amount; these only ever describe who is
+            // paying and how they should be invoiced.
+            customer: { ...req.customer, contact: tidyPhone(req.customer.contact ?? "") },
+            billing: req.billing ?? {},
+          },
         ),
       ]);
 
@@ -126,8 +144,15 @@ export const razorpayGateway: PaymentGateway = {
           name: "Levitate PeopleSoft",
           description: req.courseTitle,
           image: "/assets/logo.png",
-          prefill: { name: req.customer.name, email: req.customer.email, contact: req.customer.contact ?? "" },
-          notes: { course_slug: req.courseSlug },
+          // Razorpay sends its payment receipt to whatever it holds here, so
+          // the phone has to be in a shape it can actually text.
+          prefill: { name: req.customer.name, email: req.customer.email, contact: tidyPhone(req.customer.contact ?? "") },
+          // The order already carries the full set; this keeps them on the
+          // payment too, where the dashboard shows them beside the receipt.
+          notes: {
+            course_slug: req.courseSlug,
+            ...(req.billing?.gstin ? { customer_gstin: req.billing.gstin } : {}),
+          },
           theme: { color: "#1b8f88" },
           handler: (r: RazorpaySuccess) => resolve(r),
           // Closing the sheet is a cancellation, not a failure — the two read
