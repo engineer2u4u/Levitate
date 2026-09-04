@@ -50,6 +50,7 @@ foreach ([
     'customer_email'     => $customer['email'] ?? '',
     'customer_contact'   => $customer['contact'] ?? '',
     'customer_gstin'     => $billing['gstin'] ?? '',
+    'customer_state'     => $billing['stateCode'] ?? '',
     'customer_address'   => $billing['address'] ?? '',
     'customer_role'      => $billing['designation'] ?? '',
 ] as $k => $v) {

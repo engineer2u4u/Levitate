@@ -16,7 +16,7 @@ export type PaymentRequest = {
   /** Everything the checkout form collects that an invoice needs. Carried
    *  to Razorpay as order notes, so the payment record holds what the
    *  invoice must say rather than leaving it in a browser that has closed. */
-  billing?: { gstin?: string; address?: string; designation?: string };
+  billing?: { gstin?: string; address?: string; designation?: string; stateCode?: string };
 };
 
 export type PaymentResult =

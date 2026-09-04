@@ -17,6 +17,7 @@
 declare(strict_types=1);
 
 require __DIR__ . '/razorpay-common.php';
+require __DIR__ . '/invoice.php';
 
 $body = rzp_begin();
 
@@ -44,11 +45,14 @@ if ((string) ($payment['order_id'] ?? '') !== $orderId) {
     rzp_fail('This payment belongs to a different order.', 400);
 }
 
-// The order's notes are the server's own record of what was being bought.
-$paidFor = (string) ($payment['notes']['course_slug'] ?? '');
+// The order's notes are the server's own record of what was being bought,
+// and of everything the invoice has to say about the buyer.
+$notes   = is_array($payment['notes'] ?? null) ? $payment['notes'] : [];
+$paidFor = (string) ($notes['course_slug'] ?? '');
 if ($paidFor === '') {
     $order   = rzp_api('GET', '/v1/orders/' . rawurlencode($orderId));
-    $paidFor = (string) ($order['notes']['course_slug'] ?? '');
+    $notes   = is_array($order['notes'] ?? null) ? $order['notes'] : [];
+    $paidFor = (string) ($notes['course_slug'] ?? '');
 }
 if ($slug !== '' && $paidFor !== '' && $slug !== $paidFor) {
     rzp_fail('This payment was for a different course.', 400);
@@ -59,10 +63,20 @@ if ($expectedAmount === null || (int) ($payment['amount'] ?? 0) !== $expectedAmo
     rzp_fail('The amount paid does not match the course fee.', 400);
 }
 
+$slugPaid = $paidFor !== '' ? $paidFor : $slug;
+
+// Issued only now, on the far side of every check above. Failure here is
+// reported, never fatal: the learner has paid and must not be told the
+// payment failed because an invoice could not be numbered or emailed.
+$invoice = lvt_issue_invoice($paymentId, $orderId, $expectedAmount, rzp_title_for($slugPaid), $notes);
+$emailed = $invoice !== null && lvt_send_invoice($invoice);
+
 echo json_encode([
     'ok'          => true,
     'verified'    => true,
-    'courseSlug'  => $paidFor !== '' ? $paidFor : $slug,
+    'invoiceNo'   => $invoice['invoice_no'] ?? null,
+    'invoiceSent' => $emailed,
+    'courseSlug'  => $slugPaid,
     'orderId'     => $orderId,
     'paymentId'   => $paymentId,
     'amountPaise' => $expectedAmount,

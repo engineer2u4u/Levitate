@@ -5,6 +5,7 @@ import { useEffect, useState, type CSSProperties } from "react";
 import { courseBySlug, feeBreakdown } from "@/lib/lms/courses";
 import { enrol } from "@/lib/lms/enrolments";
 import { PAYMENT_OFF, formatPaise, gateway, isTestKey } from "@/lib/lms/payment";
+import { HOME_STATE_CODE, INDIA_STATES, stateCodeOfGstin } from "@/lib/lms/indiaStates";
 import { useSession } from "./useSession";
 
 const fieldLabel: CSSProperties = {
@@ -45,6 +46,10 @@ export default function Checkout({ slug }: { slug: string }) {
   const [designation, setDesignation] = useState("");
   const [gst, setGst] = useState("");
   const [address, setAddress] = useState("");
+  // Decides CGST + SGST versus IGST on the invoice, so it is asked rather
+  // than guessed. A GST number states it outright; without one the buyer
+  // picks, defaulting to home so the common case needs no thought.
+  const [state, setState] = useState(HOME_STATE_CODE);
 
   const alreadyEnrolled = enrolments.some((e) => e.courseSlug === slug);
 
@@ -82,6 +87,8 @@ export default function Checkout({ slug }: { slug: string }) {
   }
 
   const fee = feeBreakdown(course.feePaise);
+  const gstinState = stateCodeOfGstin(gst);
+  const placeOfSupply = gstinState || state;
 
   /* ---------------- success ---------------- */
   if (receipt) {
@@ -167,7 +174,7 @@ export default function Checkout({ slug }: { slug: string }) {
       amountPaise: course.feePaise as number,
       customer: { name: user.name, email: user.email, contact },
       // Collected on this form and, until now, discarded when it unmounted.
-      billing: { gstin: gst.trim().toUpperCase(), address: address.trim(), designation: designation.trim() },
+      billing: { gstin: gst.trim().toUpperCase(), address: address.trim(), designation: designation.trim(), stateCode: placeOfSupply },
     });
     setPaying(false);
     if (!res.ok) {
@@ -207,7 +214,25 @@ export default function Checkout({ slug }: { slug: string }) {
               <div><div style={fieldLabel}>Organisation</div><input readOnly value={user.org || "—"} style={{ ...fieldInput, color: "#5b6e82" }} /></div>
               <div><div style={fieldLabel}>Designation</div><input value={designation} onChange={(e) => setDesignation(e.target.value)} placeholder="HR Manager" style={fieldInput} /></div>
               <div><div style={fieldLabel}>GST number (optional)</div><input value={gst} onChange={(e) => setGst(e.target.value)} placeholder="22AAAAA0000A1Z5" style={fieldInput} /></div>
-              <div style={{ gridColumn: "span 2" }}><div style={fieldLabel}>Billing address</div><input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Street, city, state, PIN" style={fieldInput} /></div>
+              <div>
+                <div style={fieldLabel}>Billing state</div>
+                <select
+                  value={placeOfSupply}
+                  onChange={(e) => setState(e.target.value)}
+                  disabled={Boolean(gstinState)}
+                  style={{ ...fieldInput, color: gstinState ? "#5b6e82" : undefined, cursor: gstinState ? "not-allowed" : "pointer" }}
+                >
+                  {INDIA_STATES.map((st) => (
+                    <option key={st.code} value={st.code}>{st.name}</option>
+                  ))}
+                </select>
+                {gstinState && (
+                  <div style={{ font: "500 10.5px/1.5 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 5 }}>
+                    Taken from your GST number.
+                  </div>
+                )}
+              </div>
+              <div style={{ gridColumn: "span 2" }}><div style={fieldLabel}>Billing address</div><input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Street, city, PIN" style={fieldInput} /></div>
             </div>
 
             <div style={{ height: 1, background: "#eef2f6", margin: "28px 0 24px" }} />
@@ -245,7 +270,16 @@ export default function Checkout({ slug }: { slug: string }) {
 
             <div style={{ display: "flex", flexDirection: "column", gap: 10, font: "500 13px 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
               <div style={{ display: "flex", justifyContent: "space-between" }}><span>Programme fee</span><span style={{ color: "#0a1b33", fontWeight: 700 }}>{formatPaise(fee.basePaise)}</span></div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}><span>GST (18%)</span><span style={{ color: "#0a1b33", fontWeight: 700 }}>{formatPaise(fee.gstPaise)}</span></div>
+              {/* Same 18% either way; the split is what the invoice must show,
+                  and a buyer claiming input credit reads these lines. */}
+              {placeOfSupply === HOME_STATE_CODE ? (
+                <>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}><span>CGST (9%)</span><span style={{ color: "#0a1b33", fontWeight: 700 }}>{formatPaise(Math.round(fee.gstPaise / 2))}</span></div>
+                  <div style={{ display: "flex", justifyContent: "space-between" }}><span>SGST (9%)</span><span style={{ color: "#0a1b33", fontWeight: 700 }}>{formatPaise(fee.gstPaise - Math.round(fee.gstPaise / 2))}</span></div>
+                </>
+              ) : (
+                <div style={{ display: "flex", justifyContent: "space-between" }}><span>IGST (18%)</span><span style={{ color: "#0a1b33", fontWeight: 700 }}>{formatPaise(fee.gstPaise)}</span></div>
+              )}
             </div>
             <div style={{ height: 1, background: "#eef2f6", margin: "16px 0" }} />
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 20 }}>

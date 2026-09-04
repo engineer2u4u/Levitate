@@ -75,6 +75,19 @@ function rzp_price_for(string $slug): ?int
     return RZP_PRICES_PAISE[$slug] ?? null;
 }
 
+/** Printed on the invoice, so it comes from here rather than from the client. */
+const RZP_COURSE_TITLES = [
+    'posh-trainer'        => 'PoSH & Workplace Dignity Facilitator Program (PoSH TTT)',
+    'pocso-child-safety'  => 'POCSO & Child Safety Facilitator Program (POCSO TTT)',
+    'inclusive-workplace' => 'Inclusive Workplace Facilitator Program (DEI TTT)',
+    'demo-course'         => 'Demo · Workplace Facilitation Essentials',
+];
+
+function rzp_title_for(string $slug): string
+{
+    return RZP_COURSE_TITLES[$slug] ?? $slug;
+}
+
 /* ------------------------------------------------------------------ */
 /* Request plumbing                                                    */
 /* ------------------------------------------------------------------ */
