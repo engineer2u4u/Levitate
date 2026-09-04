@@ -163,6 +163,13 @@ export const razorpayGateway: PaymentGateway = {
 /** True while the configured key is a Razorpay test key. */
 export const isTestKey = KEY_ID.startsWith("rzp_test_");
 
+/**
+ * Whether this build can actually take money. Enrolment opens on the back of
+ * it, so a build with no key never shows a pay button it cannot honour, and
+ * configuring the key is the whole of going live rather than half of it.
+ */
+export const PAYMENT_READY = Boolean(KEY_ID);
+
 /* ---------------------------------------------------------- free entry */
 
 /**

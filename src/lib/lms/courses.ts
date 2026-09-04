@@ -1,6 +1,6 @@
 import type { Course } from "./types";
 import { LMS_TESTING } from "./testMode";
-import { PAYMENT_OFF } from "./payment";
+import { PAYMENT_OFF, PAYMENT_READY } from "./payment";
 
 /** Catalogue. Fees are in paise; `null` means "On request" until dates firm up. */
 export const COURSES: Course[] = [
@@ -116,13 +116,15 @@ export const COURSES: Course[] = [
  * Whether the public course pages may offer enrolment.
  *
  * These pages are linked from the site's Certifications menu, so they are the
- * first LMS surface a visitor meets — and payment is not live yet. While this
- * is false they ask for an enquiry instead of taking money.
+ * first LMS surface a visitor meets. While this is false they ask for an
+ * enquiry instead of taking money.
  *
- * Testing builds turn it on, which routes through the simulated gateway — no
- * real money moves until a server-verified Razorpay flow replaces it.
+ * It follows the payment configuration rather than being set by hand: a
+ * Razorpay key means money can be taken, PAYMENT_MODE=off means enrolment is
+ * deliberately free, and a testing build means neither. A button that cannot
+ * be honoured is worse than no button, so none of the three is optional.
  */
-export const ENROLMENT_OPEN = LMS_TESTING || PAYMENT_OFF;
+export const ENROLMENT_OPEN = LMS_TESTING || PAYMENT_OFF || PAYMENT_READY;
 
 /** Everything the public should see — the nav, sitemap and cards use this. */
 export const VISIBLE_COURSES = COURSES.filter((c) => !c.hidden);

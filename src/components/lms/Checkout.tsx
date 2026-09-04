@@ -113,7 +113,7 @@ export default function Checkout({ slug }: { slug: string }) {
           <div style={{ background: "rgba(47,196,188,.09)", border: "1px solid rgba(27,143,136,.3)", borderRadius: 14, padding: "18px 20px", textAlign: "left", marginBottom: 26 }}>
             <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#136f6a", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 8 }}>Released now</div>
             <div style={{ font: "500 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>
-              Your orientation material is already in the course area. Later stages unlock as each live session is completed.
+              Your first module is open in the course area. Each item unlocks as you finish the one before it.
             </div>
           </div>
 
