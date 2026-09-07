@@ -151,28 +151,28 @@ export default function EnquiryPopup() {
 
               <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <div>
-                  <div style={label}>Name</div>
+                  <div style={label}>Name *</div>
                   <input name="name" required autoComplete="name" placeholder="Your name" style={field} />
                 </div>
                 <div>
                   <div style={label}>Organisation</div>
-                  <input name="organization" required autoComplete="organization" placeholder="Where you work" style={field} />
+                  <input name="organization" autoComplete="organization" placeholder="Where you work" style={field} />
                 </div>
               </div>
               {/* Paired rather than stacked: the pop-up is a modal, and every
                   extra full-width row pushes the submit button further down. */}
               <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <div>
-                  <div style={label}>Email</div>
+                  <div style={label}>Email *</div>
                   <input name="email" type="email" required autoComplete="email" placeholder="you@company.com" style={field} />
                 </div>
                 <div>
-                  <div style={label}>Phone / WhatsApp</div>
+                  <div style={label}>Phone / WhatsApp *</div>
                   <input name="phone" type="tel" required autoComplete="tel" placeholder="+91 98110 24567" style={field} />
                 </div>
               </div>
               <div>
-                <div style={label}>What are you interested in?</div>
+                <div style={label}>What are you interested in? *</div>
                 {/* Starts unselected on purpose: a pre-picked first option would
                     file every untouched form against the leadership program. */}
                 <select name="intent" required defaultValue="" style={{ ...field, cursor: "pointer" }}>
