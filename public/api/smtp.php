@@ -11,6 +11,14 @@
 
 declare(strict_types=1);
 
+// Defines a class and nothing else. A direct hit returns an empty 200, which
+// leaks nothing while PHP is executing — but the siblings all 404 and this
+// should too, so a misconfigured server cannot start serving it as text.
+if (basename($_SERVER['SCRIPT_FILENAME'] ?? '') === basename(__FILE__)) {
+    http_response_code(404);
+    exit;
+}
+
 class Smtp
 {
     /** @var resource */
