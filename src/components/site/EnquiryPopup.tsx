@@ -159,9 +159,17 @@ export default function EnquiryPopup() {
                   <input name="organization" required autoComplete="organization" placeholder="Where you work" style={field} />
                 </div>
               </div>
-              <div>
-                <div style={label}>Email</div>
-                <input name="email" type="email" required autoComplete="email" placeholder="you@company.com" style={field} />
+              {/* Paired rather than stacked: the pop-up is a modal, and every
+                  extra full-width row pushes the submit button further down. */}
+              <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <div>
+                  <div style={label}>Email</div>
+                  <input name="email" type="email" required autoComplete="email" placeholder="you@company.com" style={field} />
+                </div>
+                <div>
+                  <div style={label}>Phone / WhatsApp</div>
+                  <input name="phone" type="tel" required autoComplete="tel" placeholder="+91 98110 24567" style={field} />
+                </div>
               </div>
               <div>
                 <div style={label}>What are you interested in?</div>
