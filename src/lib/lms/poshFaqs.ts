@@ -116,8 +116,73 @@ export const POSH_FAQS: Faq[] = [
   },
 ];
 
+/**
+ * POCSO FAQs, drafted from the programme's own brochure — the schedule, the
+ * eight modules, the audience and the inclusions all come from there. Nothing
+ * here claims anything the brochure does not.
+ */
+export const POCSO_FAQS: Faq[] = [
+  {
+    q: "What is the POCSO & Child Safety Facilitator Programme?",
+    a: [
+      "It is a practice-led Train-the-Trainer certification that prepares professionals to facilitate child-safety and POCSO awareness sessions with legal clarity, age-appropriate communication and responsible reporting.",
+      "It is designed around what a facilitator has to do in the room, not only what the law says — how to explain it, how to adapt it for an audience, how to handle difficult questions, and how to respond if a child discloses.",
+    ],
+  },
+  {
+    q: "Who should attend?",
+    a: [
+      "Educators, teachers, principals and school leaders; school counsellors and child-safety professionals; NGO and social-sector professionals; HR and L&D professionals; corporate and independent trainers; institutional leaders in child-facing environments; consultants and aspiring POCSO facilitators; psychologists, child psychologists and special educators.",
+    ],
+  },
+  {
+    q: "When does the next batch run?",
+    a: [
+      "18, 19 and 20 September — three evenings, two hours a day, 6:00 to 8:00 PM, live online. Nine hours in total across eight modules.",
+    ],
+  },
+  {
+    q: "Do I need a legal background?",
+    a: [
+      "No. The programme builds the legal understanding you need from the ground up, and spends most of its time on applying it — recognising signals, using age-appropriate language, responding to a disclosure and knowing the reporting pathway.",
+    ],
+  },
+  {
+    q: "What does the curriculum cover?",
+    a: [
+      "Eight modules: foundations of POCSO and the Levitate GUARD Child Safety Framework™; ground rules for safe and sensitive facilitation; the law, offences and the child-protection ecosystem; age-appropriate child-safety communication; recognising signals, grooming and vulnerability; disclosure, response and responsible reporting; prevention and institutional child-safety systems; and a trainer mastery and certification practicum.",
+    ],
+  },
+  {
+    q: "What certificate do I receive?",
+    a: [
+      "Two: a Levitate PeopleSoft Certificate of Training Completion carrying a verifiable certificate ID, the completion date and the programme hours, and a SHRM Certificate of Completion showing the Professional Development Credits earned toward SHRM-CP® and SHRM-SCP® recertification.",
+      "Levitate PeopleSoft is a SHRM Recertification Provider and a CPD-accredited, ISO 9001:2015 certified organisation.",
+    ],
+  },
+  {
+    q: "What do I get to run my own sessions?",
+    a: [
+      "A complete trainer toolkit: presentation deck, case studies, templates, facilitation guides and session plans, alongside dedicated LMS access with recorded sessions, module resources, downloadable templates and knowledge checks.",
+    ],
+  },
+  {
+    q: "What if I miss a session?",
+    a: [
+      "Sessions are recorded and available through the LMS, so a missed evening can be caught up before the next one. The facilitation practice is live, though, so attending is worth arranging where you can.",
+    ],
+  },
+  {
+    q: "Can my school or organisation enrol a group?",
+    a: [
+      "Yes. Institutional cohorts and group enrolments are arranged directly — write to contactus@levitatepeoplesoft.com or message us on WhatsApp and we will set it up.",
+    ],
+  },
+];
+
 export const FAQS: Record<string, Faq[]> = {
   "posh-trainer": POSH_FAQS,
+  "pocso-child-safety": POCSO_FAQS,
 };
 
 export const faqsBySlug = (slug: string): Faq[] | undefined => FAQS[slug];
