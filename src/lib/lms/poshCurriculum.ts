@@ -42,7 +42,7 @@ export const POSH_CURRICULUM: Curriculum = {
       lessons: [
         { id: "l1-1", kind: "VID", title: "M1 · Purpose, Culture and the Certification Journey", meta: "Video · 22 min", desc: "Why PoSH facilitation is a culture role before it is a compliance role, and what the certification journey asks of you." },
         { id: "l1-2", kind: "VID", title: "M2 · India's Evolving PoSH Landscape", meta: "Video · 26 min", desc: "How expectations, judgments and workplace practice have shifted since 2013 — and what that means for trainers." },
-        { id: "l1-3", kind: "VID", title: "M3 · The CLEAR PoSH Framework", meta: "Video · 24 min", desc: "Clarity on the law, listening without judgment, evidence-based inquiry, action with fairness and a respectful workplace culture." },
+        { id: "l1-3", kind: "VID", title: "M3 · The CLEAR PoSH Framework", meta: "Video · 24 min", desc: "Clarity on the law, listening without judgment, explaining boundaries, addressing resistance and responsible reporting — as set out in the CLEAR handout." },
         { id: "l1-4", kind: "PDF", title: "M4 · Genesis and Legal Foundation", meta: "Reading · 18 pages", desc: "Vishaka to the 2013 Act — the legal lineage every PoSH facilitator should be able to explain from memory." },
       ],
     },

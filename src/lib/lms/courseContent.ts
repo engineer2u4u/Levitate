@@ -37,8 +37,11 @@ export type CourseItem = {
   /** Video: a YouTube id, plus the same body rendered underneath. */
   videoId?: string;
   questions?: QuizQuestion[];
-  /** Handouts and worksheets attached to the item, offered as downloads. */
-  files?: KitFile[];
+  /**
+   * Material the learner must agree to, not merely read. Renders a name field
+   * and a tick box after the body; the item cannot complete until both are in.
+   */
+  acknowledgement?: { statement: string };
 };
 
 export type CourseModule = {

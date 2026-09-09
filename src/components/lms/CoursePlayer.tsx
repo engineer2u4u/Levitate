@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { contentBySlug, flatItems, totalMinutes, type CourseItem } from "@/lib/lms/courseContent";
 import {
@@ -18,6 +18,7 @@ import {
 } from "@/lib/lms/courseProgress";
 import { useSession } from "./useSession";
 import { courseBySlug } from "@/lib/lms/courses";
+import { submitEnquiry } from "@/lib/submitEnquiry";
 
 const SANS = "'Plus Jakarta Sans',sans-serif";
 
@@ -315,6 +316,8 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                   {isLast ? "Course complete" : "Go to next item →"}
                 </button>
               </>
+            ) : item.acknowledgement ? (
+              <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>Sign the acknowledgement above to continue.</span>
             ) : item.kind === "quiz" ? (
               <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>Submit the quiz to continue.</span>
             ) : (
@@ -401,45 +404,17 @@ function ItemView({
 
       {item.body && (
         <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px", marginBottom: 24 }}>
-          {item.body.map((para) =>
-            para.startsWith("## ") ? (
-              <h3 key={para} style={{ font: `700 17px ${SANS}`, color: "#0a1b33", margin: "22px 0 10px" }}>{para.slice(3)}</h3>
-            ) : (
-              <p key={para} style={{ font: `400 14.5px/1.85 ${SANS}`, color: "#5b6e82", margin: "0 0 14px" }}>{para}</p>
-            ),
-          )}
+          {item.body.map((para, i) => <Para key={i} text={para} />)}
         </div>
       )}
 
-      {/* Handouts. Opened in a new tab rather than downloaded outright — a
-          learner mid-item should not lose the page they are on. */}
-      {item.files && item.files.length > 0 && (
-        <div style={{ marginBottom: 24 }}>
-          <div style={{ font: `700 11px ${SANS}`, color: "#1b8f88", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 12 }}>
-            {item.files.length > 1 ? "Materials" : "Material"}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {item.files.map((f) => (
-              <a
-                key={f.title}
-                href={f.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ display: "flex", alignItems: "center", gap: 14, background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "15px 18px" }}
-              >
-                <span aria-hidden style={{ flex: "none", width: 34, height: 34, borderRadius: 10, background: "rgba(47,196,188,.13)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 3v12M7 11l5 5 5-5M4 21h16" />
-                  </svg>
-                </span>
-                <span style={{ flex: 1 }}>
-                  <span style={{ display: "block", font: `700 13.5px/1.4 ${SANS}`, color: "#0a1b33" }}>{f.title}</span>
-                  <span style={{ display: "block", font: `500 11.5px ${SANS}`, color: "#8296a9", marginTop: 2 }}>{f.meta}</span>
-                </span>
-              </a>
-            ))}
-          </div>
-        </div>
+      {item.acknowledgement && state !== "preview" && (
+        <Acknowledgement
+          statement={item.acknowledgement.statement}
+          item={item}
+          signed={state === "done"}
+          onSign={onComplete}
+        />
       )}
 
       {/* Completing and moving on live in the footer bar, so the reading
@@ -575,6 +550,163 @@ function KitBanner({ course }: { course: { readingKit: { title: string; meta: st
         ))}
       </div>
     </div>
+  );
+}
+
+/**
+ * One line of course text. Supports "## " for a heading, "- " for a bullet,
+ * and **bold** inside either — enough to lay out a handout without pulling in
+ * a markdown renderer for six characters of syntax.
+ */
+function Para({ text }: { text: string }) {
+  if (text.startsWith("## "))
+    return <h3 style={{ font: `700 17px ${SANS}`, color: "#0a1b33", margin: "26px 0 12px" }}>{bold(text.slice(3))}</h3>;
+
+  if (text.startsWith("- "))
+    return (
+      <div style={{ display: "flex", gap: 11, margin: "0 0 9px" }}>
+        <span aria-hidden style={{ flex: "none", width: 5, height: 5, borderRadius: "50%", background: "#2fc4bc", marginTop: 9 }} />
+        <span style={{ font: `400 14.5px/1.75 ${SANS}`, color: "#5b6e82" }}>{bold(text.slice(2))}</span>
+      </div>
+    );
+
+  return <p style={{ font: `400 14.5px/1.85 ${SANS}`, color: "#5b6e82", margin: "0 0 14px" }}>{bold(text)}</p>;
+}
+
+/** Splits on **…** so a term can be emphasised without a markdown dependency. */
+function bold(text: string) {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.startsWith("**") && part.endsWith("**") ? (
+      <strong key={i} style={{ color: "#0a1b33", fontWeight: 700 }}>{part.slice(2, -2)}</strong>
+    ) : (
+      part
+    ),
+  );
+}
+
+/**
+ * A signed acknowledgement.
+ *
+ * Some material has to be agreed to rather than merely read — the learning-room
+ * agreement is the example. The learner types their name, ticks the box and
+ * signs; the name, the moment and the item are recorded, and only then does the
+ * item complete. The footer refuses to advance until it is done, so nobody can
+ * click past an agreement they have not made.
+ *
+ * The record goes out through the same EmailJS path as every other form on the
+ * site, so there is one integration to keep working rather than two. Completion
+ * is not held hostage to that send: a learner who has signed has signed, and a
+ * mail outage is not their problem.
+ */
+function Acknowledgement({
+  statement,
+  item,
+  signed,
+  onSign,
+}: {
+  statement: string;
+  item: CourseItem;
+  signed: boolean;
+  onSign: (item: CourseItem) => void;
+}) {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [name, setName] = useState("");
+  const [agreed, setAgreed] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [at, setAt] = useState("");
+
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (busy || !name.trim() || !agreed) return;
+    setBusy(true);
+    const when = new Date();
+    await submitEnquiry(e.currentTarget, {
+      intent: `Acknowledgement — ${item.title}`,
+      source: typeof window !== "undefined" ? window.location.pathname : "",
+    });
+    setAt(when.toLocaleString("en-IN", { dateStyle: "full", timeStyle: "short" }));
+    setBusy(false);
+    onSign(item);
+  };
+
+  if (signed) {
+    return (
+      <div style={{ background: "rgba(47,196,188,.09)", border: "1px solid rgba(27,143,136,.3)", borderRadius: 18, padding: "24px 26px", marginBottom: 24 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+          <Tick />
+          <span style={{ font: `700 14.5px ${SANS}`, color: "#136f6a" }}>Acknowledgement signed</span>
+        </div>
+        <div style={{ font: `500 13px/1.7 ${SANS}`, color: "#3d5064" }}>
+          {at ? `Signed ${at}.` : "Recorded against your account."}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <form
+      ref={formRef}
+      onSubmit={submit}
+      style={{ background: "#fff", border: "1.5px solid #2fc4bc", borderRadius: 18, padding: "26px 28px", marginBottom: 24 }}
+    >
+      <div style={{ font: `700 11px ${SANS}`, color: "#1b8f88", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 12 }}>
+        Participant acknowledgement
+      </div>
+      <p style={{ font: `400 14px/1.8 ${SANS}`, color: "#5b6e82", margin: "0 0 20px" }}>{statement}</p>
+
+      {/* Honeypot — a checkbox, because autofill fills hidden text inputs. */}
+      <label style={{ position: "absolute", left: -9999, width: 1, height: 1, overflow: "hidden" }}>
+        Leave this box unchecked
+        <input type="checkbox" name="hp_zx" tabIndex={-1} autoComplete="off" />
+      </label>
+
+      <label style={{ display: "block", font: `700 11.5px ${SANS}`, color: "#0a1b33", marginBottom: 7 }}>
+        Full name
+        <input
+          name="name"
+          required
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          autoComplete="name"
+          placeholder="Type your full name"
+          style={{ display: "block", width: "100%", marginTop: 7, background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 11, padding: "13px 15px", font: `500 14px ${SANS}`, color: "#0a1b33", outline: "none" }}
+        />
+      </label>
+
+      <label style={{ display: "flex", gap: 11, alignItems: "flex-start", margin: "16px 0 20px", cursor: "pointer" }}>
+        <input
+          type="checkbox"
+          name="agreed"
+          checked={agreed}
+          onChange={(e) => setAgreed(e.target.checked)}
+          style={{ marginTop: 3, width: 17, height: 17, accentColor: "#1b8f88", flex: "none", cursor: "pointer" }}
+        />
+        <span style={{ font: `500 13.5px/1.65 ${SANS}`, color: "#3d5064" }}>
+          I have read and understood the above, and I agree to it.
+        </span>
+      </label>
+
+      <button
+        type="submit"
+        disabled={busy || !name.trim() || !agreed}
+        className="lp-btn-grad"
+        style={{
+          cursor: busy || !name.trim() || !agreed ? "not-allowed" : "pointer",
+          border: "none",
+          background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)",
+          color: "#fff",
+          font: `700 14px ${SANS}`,
+          padding: "13px 26px",
+          borderRadius: 999,
+          opacity: busy || !name.trim() || !agreed ? 0.5 : 1,
+        }}
+      >
+        {busy ? "Signing…" : "Sign and continue →"}
+      </button>
+      <div style={{ font: `500 11.5px ${SANS}`, color: "#8296a9", marginTop: 11 }}>
+        Your name and the date and time are recorded with your acknowledgement.
+      </div>
+    </form>
   );
 }
 
