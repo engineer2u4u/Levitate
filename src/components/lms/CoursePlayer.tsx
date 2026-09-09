@@ -411,6 +411,37 @@ function ItemView({
         </div>
       )}
 
+      {/* Handouts. Opened in a new tab rather than downloaded outright — a
+          learner mid-item should not lose the page they are on. */}
+      {item.files && item.files.length > 0 && (
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ font: `700 11px ${SANS}`, color: "#1b8f88", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 12 }}>
+            {item.files.length > 1 ? "Materials" : "Material"}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {item.files.map((f) => (
+              <a
+                key={f.title}
+                href={f.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: "flex", alignItems: "center", gap: 14, background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "15px 18px" }}
+              >
+                <span aria-hidden style={{ flex: "none", width: 34, height: 34, borderRadius: 10, background: "rgba(47,196,188,.13)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 3v12M7 11l5 5 5-5M4 21h16" />
+                  </svg>
+                </span>
+                <span style={{ flex: 1 }}>
+                  <span style={{ display: "block", font: `700 13.5px/1.4 ${SANS}`, color: "#0a1b33" }}>{f.title}</span>
+                  <span style={{ display: "block", font: `500 11.5px ${SANS}`, color: "#8296a9", marginTop: 2 }}>{f.meta}</span>
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Completing and moving on live in the footer bar, so the reading
           column ends with the material rather than with controls. */}
       {item.kind === "quiz" && item.questions && (

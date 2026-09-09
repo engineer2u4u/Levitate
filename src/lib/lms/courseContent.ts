@@ -10,6 +10,7 @@
 
 import { POSH_CURRICULUM } from "./poshCurriculum";
 import { curriculumToContent } from "./curriculumContent";
+import { POSH_CONTENT } from "./poshContent";
 import { courseBySlug } from "./courses";
 
 export type ItemKind = "reading" | "video" | "quiz";
@@ -36,6 +37,8 @@ export type CourseItem = {
   /** Video: a YouTube id, plus the same body rendered underneath. */
   videoId?: string;
   questions?: QuizQuestion[];
+  /** Handouts and worksheets attached to the item, offered as downloads. */
+  files?: KitFile[];
 };
 
 export type CourseModule = {
@@ -289,6 +292,9 @@ const FROM_CURRICULA = [POSH_CURRICULUM].reduce<Record<string, CourseContent>>((
 
 export const COURSE_CONTENT: Record<string, CourseContent> = {
   ...FROM_CURRICULA,
+  // Authored content wins over the syllabus-derived kind: the curriculum
+  // says what the programme covers, this says what the learner works through.
+  [POSH_CONTENT.slug]: POSH_CONTENT,
   [DEMO_COURSE.slug]: DEMO_COURSE,
 };
 
