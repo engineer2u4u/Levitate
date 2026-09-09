@@ -4,6 +4,7 @@ import { useCallback, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Accreditations from "@/components/site/Accreditations";
+import BrandText from "@/components/site/BrandText";
 import CertificateGallery from "@/components/site/CertificateGallery";
 import FaqAccordion from "@/components/site/FaqAccordion";
 import TrustedBy from "@/components/site/TrustedBy";
@@ -72,7 +73,7 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
         <div style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gridTemplateColumns: "1.05fr .95fr", gap: 44, alignItems: "center" }} className="lp-hero-grid">
           <div>
             <div style={{ font: `700 11.5px ${SANS}`, color: "#5fe0d6", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>
-              {offer.eyebrow}
+              <BrandText>{offer.eyebrow}</BrandText>
             </div>
             <h1 style={{ font: `800 clamp(30px,3.6vw,46px)/1.12 ${SANS}`, color: "#fff", margin: "0 0 16px", letterSpacing: "-.02em" }}>
               {headline}
