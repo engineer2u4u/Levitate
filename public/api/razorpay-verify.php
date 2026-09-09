@@ -11,7 +11,7 @@
  *      pair is genuine; it does not say the money was captured, that the
  *      amount was right, or that the order was for the course now being
  *      unlocked. Someone who pays ₹1,000 for the demo would otherwise hold a
- *      signature that unlocks a ₹25,000 programme.
+ *      signature that unlocks a ₹32,000 programme.
  */
 
 declare(strict_types=1);

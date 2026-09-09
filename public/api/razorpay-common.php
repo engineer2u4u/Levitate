@@ -7,7 +7,7 @@
  * live here and must never move to the client:
  *
  *   1. What a course costs. If the browser sent the amount, anyone could pay
- *      ₹1 for a ₹25,000 programme.
+ *      ₹1 for a ₹32,000 programme.
  *   2. Whether a payment happened. The browser's word for it is worthless —
  *      the success handler can be called by hand from the console.
  *
@@ -64,7 +64,7 @@ function rzp_is_test_mode(): bool
  * it. A course absent here cannot be paid for at all.
  */
 const RZP_PRICES_PAISE = [
-    'posh-trainer'        => 2500000,
+    'posh-trainer'        => 3200000,
     'pocso-child-safety'  => 2000000,
     'inclusive-workplace' => 4000000,
     'demo-course'         => 100000,

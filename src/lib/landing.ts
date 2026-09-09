@@ -80,7 +80,7 @@ export const POSH_LANDING: LandingOffer = {
       { k: "Mode", v: "Live online" },
     ],
   },
-  price: { amount: "₹25,000", note: "inclusive of taxes" },
+  price: { amount: "₹32,000", note: "inclusive of taxes" },
 
   why: [
     { k: "15 learning hours", v: "Twelve hours live across six sessions and three weekends, plus three guided hours in the LMS — long enough to practise facilitating, not just to be told about it." },
