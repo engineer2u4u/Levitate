@@ -573,15 +573,21 @@ function Para({ text }: { text: string }) {
   return <p style={{ font: `400 14.5px/1.85 ${SANS}`, color: "#5b6e82", margin: "0 0 14px" }}>{bold(text)}</p>;
 }
 
-/** Splits on **…** so a term can be emphasised without a markdown dependency. */
+/**
+ * Inline emphasis: **bold** and *italic*.
+ *
+ * The bold-only version printed the asterisks around *Trainer pause:* rather
+ * than styling it, which is worse than having no syntax at all — the reader
+ * ends up seeing the markup instead of the emphasis.
+ */
 function bold(text: string) {
-  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
-    part.startsWith("**") && part.endsWith("**") ? (
-      <strong key={i} style={{ color: "#0a1b33", fontWeight: 700 }}>{part.slice(2, -2)}</strong>
-    ) : (
-      part
-    ),
-  );
+  return text.split(/(\*\*[^*]+\*\*|\*[^*\s][^*]*\*)/g).map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**"))
+      return <strong key={i} style={{ color: "#0a1b33", fontWeight: 700 }}>{part.slice(2, -2)}</strong>;
+    if (part.startsWith("*") && part.endsWith("*") && part.length > 2)
+      return <em key={i} style={{ color: "#3d5064" }}>{part.slice(1, -1)}</em>;
+    return part;
+  });
 }
 
 /**
