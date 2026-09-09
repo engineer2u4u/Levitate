@@ -8,7 +8,7 @@ export const POSH_CURRICULUM: Curriculum = {
   blurb:
     "An intensive, practice-led certification designed to build legal understanding, inquiry competence and effective PoSH facilitation skills.",
   // The four figures the brochure leads with, in the brochure's order.
-  meta: ["12 Hours · Learning Duration", "6 Live Sessions · Format", "3 Weeks · Weekend Schedule", "11 Modules · Curriculum"],
+  meta: ["15 Learning Hours · Duration", "12 Hours Live · Facilitated", "3 Hours · Guided LMS", "15 Modules · Curriculum"],
   included: [
     "Assessment-Based Certification",
     "Trainer Toolkit Included",
@@ -42,7 +42,7 @@ export const POSH_CURRICULUM: Curriculum = {
       lessons: [
         { id: "l1-1", kind: "VID", title: "M1 · Purpose, Culture and the Certification Journey", meta: "Video · 22 min", desc: "Why PoSH facilitation is a culture role before it is a compliance role, and what the certification journey asks of you." },
         { id: "l1-2", kind: "VID", title: "M2 · India's Evolving PoSH Landscape", meta: "Video · 26 min", desc: "How expectations, judgments and workplace practice have shifted since 2013 — and what that means for trainers." },
-        { id: "l1-3", kind: "VID", title: "M3 · Levitate CLEAR PoSH Framework™", meta: "Video · 24 min", desc: "Clarity on the law, listening without judgment, evidence-based inquiry, action with fairness and a respectful workplace culture." },
+        { id: "l1-3", kind: "VID", title: "M3 · The CLEAR PoSH Framework", meta: "Video · 24 min", desc: "Clarity on the law, listening without judgment, evidence-based inquiry, action with fairness and a respectful workplace culture." },
         { id: "l1-4", kind: "PDF", title: "M4 · Genesis and Legal Foundation", meta: "Reading · 18 pages", desc: "Vishaka to the 2013 Act — the legal lineage every PoSH facilitator should be able to explain from memory." },
       ],
     },
@@ -53,14 +53,18 @@ export const POSH_CURRICULUM: Curriculum = {
         { id: "l2-2", kind: "VID", title: "M6 · Coverage, Definitions and Jurisdiction", meta: "Video · 21 min", desc: "Who is covered, what counts as a workplace today, and where jurisdiction begins and ends." },
         { id: "l2-3", kind: "VID", title: "M7 · Prevention and Internal Committee Governance", meta: "Video · 25 min", desc: "Constituting a credible IC, governance hygiene and the prevention work that reduces complaints." },
         { id: "l2-4", kind: "PDF", title: "M8 · Complaint Intake and Fair Inquiry", meta: "Reading · 22 pages", desc: "Intake, natural justice, evidence handling, witness conduct and writing a defensible inquiry report." },
+        { id: "l2-5", kind: "VID", title: "M9 · Compliance, Governance and Accountability", meta: "Video · 20 min", desc: "Annual reporting, policy hygiene, leadership accountability and the audit trail an organisation must keep." },
       ],
     },
     {
       id: "s3", num: "03", title: "Week 3 · Practice & Certification", release: "Unlocks after Live Session 5 · 10 October",
       lessons: [
-        { id: "l3-1", kind: "VID", title: "M9 · Compliance, Governance and Accountability", meta: "Video · 20 min", desc: "Annual reporting, policy hygiene, leadership accountability and the audit trail an organisation must keep." },
-        { id: "l3-2", kind: "VID", title: "M10 · Applied Case Laboratory", meta: "Video · 32 min", desc: "Six real-shape cases worked end to end — the practice that separates a certified trainer from an informed one." },
-        { id: "l3-3", kind: "VID", title: "M11 · Trainer Craft and Certification", meta: "Video · 27 min", desc: "Room management, handling resistance and hostile questions, and your final facilitation assessment brief." },
+        { id: "l3-1", kind: "VID", title: "M10 · Digital, Virtual and Evolving Workplace Scenarios", meta: "Video · 24 min", desc: "Remote teams, messaging groups and after-hours contact — where the workplace now extends to, and how conduct is judged there." },
+        { id: "l3-2", kind: "VID", title: "M11 · Power Dynamics, Retaliation and Complex Situations", meta: "Video · 26 min", desc: "Hierarchy, dependence and the fear of consequences; recognising retaliation and handling complaints that are not straightforward." },
+        { id: "l3-3", kind: "VID", title: "M12 · AI × PoSH: Assist, Never Adjudicate", meta: "Video · 22 min", desc: "Where automated tools can support intake, tracking and awareness — and the line past which a human committee must decide." },
+        { id: "l3-4", kind: "PDF", title: "M13 · Recent Judicial, Regulatory and Compliance Developments", meta: "Reading · 16 pages", desc: "Recent judgments and regulatory movement, and what a facilitator should be able to speak to with confidence." },
+        { id: "l3-5", kind: "VID", title: "M14 · Applied Case Laboratory", meta: "Video · 32 min", desc: "Real-shape cases worked end to end — the practice that separates a certified trainer from an informed one." },
+        { id: "l3-6", kind: "VID", title: "M15 · Trainer Craft, Assessment and Certification", meta: "Video · 27 min", desc: "Room management, handling resistance and hostile questions, and your final facilitation assessment brief." },
       ],
     },
   ],

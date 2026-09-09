@@ -65,14 +65,16 @@ export const POSH_LANDING: LandingOffer = {
     hr: "Add PoSH facilitation to your HR practice",
   },
   sub:
-    "A 12-hour, practice-led certification that takes you past knowing the law to facilitating it — running awareness sessions, supporting an Internal Committee, and handling the questions a room actually asks.",
+    "Fifteen learning hours — twelve live with the founder, three guided in the LMS — that take you past knowing the law to facilitating it: running awareness sessions, supporting an Internal Committee, and handling the questions a room actually asks.",
 
   batch: {
     starts: "26 September",
     rows: [
       { k: "Batch starts", v: "26 September" },
-      { k: "Duration", v: "12 hours" },
-      { k: "Format", v: "6 live sessions" },
+      { k: "Duration", v: "15 learning hours" },
+      { k: "Live", v: "12 hours across 6 sessions" },
+      { k: "Guided LMS", v: "3 hours" },
+      { k: "Curriculum", v: "15 modules" },
       { k: "Schedule", v: "3 weekends" },
       { k: "Timing", v: "6:00 – 8:00 PM" },
       { k: "Mode", v: "Live online" },
@@ -81,7 +83,7 @@ export const POSH_LANDING: LandingOffer = {
   price: { amount: "₹25,000", note: "inclusive of taxes" },
 
   why: [
-    { k: "12 hours, live", v: "Six sessions across three weekends — long enough to practise facilitating, not just to be told about it." },
+    { k: "15 learning hours", v: "Twelve hours live across six sessions and three weekends, plus three guided hours in the LMS — long enough to practise facilitating, not just to be told about it." },
     { k: "SHRM PDCs", v: "Levitate PeopleSoft is a SHRM Recertification Provider. The programme earns Professional Development Credits toward SHRM-CP® and SHRM-SCP® recertification." },
     { k: "The founder teaches it", v: "Every session is led by Parichita Kotnala — a certified PoSH and POCSO educator with 15+ years of global HR experience, not a rotating panel." },
     { k: "Dedicated LMS access", v: "Recorded sessions, module resources, the trainer toolkit, downloadable templates and knowledge checks, in one place." },
@@ -161,7 +163,7 @@ export const POCSO_LANDING: LandingOffer = {
   bundle: {
     title: "Also running: PoSH & Workplace Dignity",
     body:
-      "The PoSH Train-the-Trainer certification starts 26 September — 12 hours across three weekends. Ask us about taking both.",
+      "The PoSH Train-the-Trainer certification starts 26 September — fifteen learning hours across three weekends. Ask us about taking both.",
     href: "/posh-train-the-trainer-certification/",
   },
 

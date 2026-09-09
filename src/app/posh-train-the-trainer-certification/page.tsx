@@ -10,7 +10,7 @@ import { faqsBySlug } from "@/lib/lms/poshFaqs";
 export const metadata: Metadata = {
   title: "PoSH Train-the-Trainer Certification",
   description:
-    "A 12-hour, founder-led PoSH Train-the-Trainer certification with SHRM PDCs. Six live sessions across three weekends, batch from 26 September. Learn to facilitate PoSH awareness and support an Internal Committee.",
+    "A founder-led PoSH Train-the-Trainer certification with SHRM PDCs — 15 learning hours across 15 modules, 12 of them live over three weekends. Batch from 26 September. Learn to facilitate PoSH awareness and support an Internal Committee.",
   alternates: { canonical: "/posh-train-the-trainer-certification/" },
 };
 

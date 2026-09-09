@@ -5,7 +5,7 @@
  * cannot describe the same programme differently — the individual page is the
  * one a visitor now lands on from the menu.
  */
-import { DEI_OUTLINE, POCSO_OUTLINE, type ProgramOutline } from "@/lib/programOutlines";
+import { DEI_OUTLINE, POCSO_OUTLINE, POSH_OUTLINE, type ProgramOutline } from "@/lib/programOutlines";
 
 /** What every programme includes, whichever one it is. */
 export const included = ["Facilitation practice & feedback", "Trainer toolkit: templates, guides, FAQs", "Workplace case studies & scenarios", "Assessment-linked certification"];
@@ -42,24 +42,7 @@ export const programs: Program[] = [
     p2: "Participants learn to explain key PoSH concepts, design awareness sessions, use workplace case studies, support manager sensitisation, strengthen IC capability-building conversations and respond to difficult participant questions with sensitivity and responsibility.",
     ideal: "HR professionals, IC members, external members, legal professionals, compliance teams, consultants, workplace trainers and aspiring PoSH facilitators.",
     pillarTitle: "Levitate CLEAR PoSH Framework™", pillars: [{ k: "C", v: "Clarity on the Law" }, { k: "L", v: "Listening Without Judgment" }, { k: "E", v: "Explaining Boundaries" }, { k: "A", v: "Addressing Resistance" }, { k: "R", v: "Responsible Reporting" }],
-    curriculum: {
-      intro: "An intensive, practice-led certification designed to build legal understanding, inquiry competence and effective PoSH facilitation skills.",
-      facts: [{ k: "Duration", v: "12 Hours" }, { k: "Tenure", v: "3 Weeks (Weekend Batch)" }, { k: "Curriculum", v: "11 Modules" }],
-      modules: [
-        "Purpose, Culture and the Certification Journey",
-        "India's Evolving PoSH Landscape",
-        "Levitate CLEAR PoSH Framework™",
-        "Genesis and Legal Foundation",
-        "Recognising Sexual Harassment",
-        "Coverage, Definitions and Jurisdiction",
-        "Prevention and Internal Committee Governance",
-        "Complaint Intake and Fair Inquiry",
-        "Compliance, Governance and Accountability",
-        "Applied Case Laboratory",
-        "Trainer Craft and Certification",
-      ],
-      closing: "Learn the law. Navigate sensitive situations. Facilitate with confidence.",
-    } },
+    curriculum: POSH_OUTLINE },
   { id: "pocso", slug: "pocso-child-safety", num: "05", tag: "POCSO", short: "POCSO & Child Safety", title: "POCSO & Child Safety Facilitator Program (POCSO TTT)", sub: "POCSO Train-the-Trainer Certification",
     p1: "A Train-the-Trainer certification for professionals who want to facilitate child-safety and POCSO awareness sessions with sensitivity, legal clarity and responsible communication.",
     p2: "Participants learn to explain child protection concepts, create age-appropriate and institution-sensitive awareness sessions, use case-based discussions, respond to sensitive questions, build awareness around safe and unsafe behaviours and support responsible reporting conversations.",

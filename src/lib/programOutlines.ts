@@ -33,19 +33,28 @@ export const POCSO_OUTLINE: ProgramOutline = {
 export const POSH_OUTLINE: ProgramOutline = {
   intro:
     "An intensive, practice-led certification designed to build legal understanding, inquiry competence and effective PoSH facilitation skills.",
-  facts: [{ k: "Duration", v: "12 Hours" }, { k: "Format", v: "6 Days" }, { k: "Schedule", v: "3 Weeks" }, { k: "Curriculum", v: "11 Modules" }],
+  facts: [
+    { k: "Duration", v: "15 Learning Hours" },
+    { k: "Live", v: "12 Hours Facilitated" },
+    { k: "Guided LMS", v: "3 Hours" },
+    { k: "Curriculum", v: "15 Modules" },
+  ],
   modules: [
     "Purpose, Culture and the Certification Journey",
     "India's Evolving PoSH Landscape",
-    "Levitate CLEAR PoSH Framework™",
+    "The CLEAR PoSH Framework",
     "Genesis and Legal Foundation",
     "Recognising Sexual Harassment",
     "Coverage, Definitions and Jurisdiction",
     "Prevention and Internal Committee Governance",
     "Complaint Intake and Fair Inquiry",
     "Compliance, Governance and Accountability",
+    "Digital, Virtual and Evolving Workplace Scenarios",
+    "Power Dynamics, Retaliation and Complex Situations",
+    "AI × PoSH: Assist, Never Adjudicate",
+    "Recent Judicial, Regulatory and Compliance Developments",
     "Applied Case Laboratory",
-    "Trainer Craft and Certification",
+    "Trainer Craft, Assessment and Certification",
   ],
   closing: "Learn the law. Navigate sensitive situations. Facilitate with confidence.",
 };
