@@ -144,7 +144,7 @@ export const POCSO_LANDING: LandingOffer = {
   why: [
     { k: "Built for child-facing work", v: "Schools, NGOs, hospitals, sport and hospitality — settings where a disclosure is a real possibility and the response has to be right first time." },
     { k: "SHRM PDCs", v: "Levitate PeopleSoft is a SHRM Recertification Provider. The programme earns Professional Development Credits toward SHRM-CP® and SHRM-SCP® recertification." },
-    { k: "The founder teaches it", v: "Every session is led by Parichita Kotnala, a certified POSH and POCSO educator and trainer." },
+    { k: "The founder teaches it", v: "Every session is led by Parichita Kotnala, a certified PoSH and POCSO educator and trainer." },
     { k: "Dedicated LMS access", v: "Recorded sessions, module resources, the trainer toolkit, templates and knowledge checks, in one place." },
   ],
 
