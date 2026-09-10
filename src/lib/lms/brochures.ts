@@ -80,7 +80,7 @@ export const POSH_BROCHURE: ProgramBrochure = {
   brochure: {
     href: "/assets/brochures/levitate-posh-ttt-brochure.pdf",
     label: "Download the programme brochure",
-    meta: "PDF · 13 pages · 5 MB",
+    meta: "PDF · 14 pages · 4 MB",
   },
 };
 
