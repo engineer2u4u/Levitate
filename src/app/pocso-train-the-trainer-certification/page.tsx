@@ -10,7 +10,7 @@ import { faqsBySlug } from "@/lib/lms/poshFaqs";
 export const metadata: Metadata = {
   title: "POCSO Train-the-Trainer Certification",
   description:
-    "A founder-led POCSO and Child Safety Facilitator certification for schools, NGOs and child-facing organisations. Three evenings, 18–20 September, with SHRM PDCs and a trainer toolkit.",
+    "A founder-led POCSO and Child Safety Facilitator certification for schools, NGOs and child-facing organisations. Three evenings from 24 October, with SHRM PDCs and a trainer toolkit.",
   alternates: { canonical: "/pocso-train-the-trainer-certification/" },
 };
 

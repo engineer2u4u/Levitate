@@ -11,7 +11,7 @@ export const COURSES: Course[] = [
     short: "PoSH Train-the-Trainer",
     desc: "Build legal understanding, inquiry competence and PoSH facilitation skills across 11 practice-led modules.",
     img: "/assets/workshop-tables.jpeg", status: "enrolling",
-    feePaise: 3200000, priceNote: "incl. taxes · from 26 Sep",
+    feePaise: 3200000, priceNote: "incl. taxes · from 3 Oct",
     modulesLabel: "15 modules", hoursLabel: "15 learning hours", facilitator: "Parichita Kotnala",
     certificate: {
       name: "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
@@ -26,7 +26,7 @@ export const COURSES: Course[] = [
     short: "POCSO & Child Safety",
     desc: "Facilitate child-safety awareness with sensitivity, legal clarity and responsible communication.",
     img: "/assets/school-group.jpeg", status: "enrolling",
-    feePaise: 2000000, priceNote: "incl. taxes · from 18 Sep",
+    feePaise: 2000000, priceNote: "incl. taxes · from 24 Oct",
     modulesLabel: "8 modules", hoursLabel: "9 hours", facilitator: "Parichita Kotnala",
     certificate: {
       name: "POCSO & Child Safety Facilitator Program (POCSO TTT)",
@@ -36,12 +36,12 @@ export const COURSES: Course[] = [
   },
   {
     slug: "inclusive-workplace",
-    tag: "DEI · TTT", mode: "Live online · from 3 October",
+    tag: "DEI · TTT", mode: "Live online · from 10 October",
     title: "Inclusive Workplace Facilitator Program (DEI TTT)",
     short: "Inclusive Workplace",
     desc: "A 20-hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, translating inclusion from concept into everyday workplace behaviour.",
     img: "/assets/workshop-handsup.jpeg", status: "enrolling",
-    feePaise: 4000000, priceNote: "incl. taxes · from 3 October",
+    feePaise: 4000000, priceNote: "incl. taxes · from 10 October",
     modulesLabel: "13 Modules", hoursLabel: "20 Hours", facilitator: "Parichita Kotnala",
     certificate: {
       name: "Inclusive Workplace Facilitator Program (DEI TTT)",

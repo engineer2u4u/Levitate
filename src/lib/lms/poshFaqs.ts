@@ -138,7 +138,7 @@ export const POCSO_FAQS: Faq[] = [
   {
     q: "When does the next batch run?",
     a: [
-      "18, 19 and 20 September — three evenings, two hours a day, 6:00 to 8:00 PM, live online. Nine hours in total across eight modules.",
+      "From 24 October — three evenings, two hours a day, 6:00 to 8:00 PM, live online. Nine hours in total across eight modules.",
     ],
   },
   {

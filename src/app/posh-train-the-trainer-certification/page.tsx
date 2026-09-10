@@ -10,7 +10,7 @@ import { faqsBySlug } from "@/lib/lms/poshFaqs";
 export const metadata: Metadata = {
   title: "PoSH Train-the-Trainer Certification",
   description:
-    "A founder-led PoSH Train-the-Trainer certification with SHRM PDCs — 15 learning hours across 15 modules, 12 of them live over three weekends. Batch from 26 September. Learn to facilitate PoSH awareness and support an Internal Committee.",
+    "A founder-led PoSH Train-the-Trainer certification with SHRM PDCs — 15 learning hours across 15 modules, 12 of them live over three weekends. Batch from 3 October. Learn to facilitate PoSH awareness and support an Internal Committee.",
   // The ad campaigns bid on these; the page should be recognisably about
    // them to anyone — a crawler included — who arrives from that search.
   keywords: [

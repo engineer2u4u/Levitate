@@ -80,9 +80,9 @@ export const POSH_LANDING: LandingOffer = {
     "Fifteen learning hours — twelve live with the founder, three guided in the LMS — that take you past knowing the law to facilitating it: running awareness sessions, supporting an Internal Committee, and handling the questions a room actually asks.",
 
   batch: {
-    starts: "26 September",
+    starts: "3 October",
     rows: [
-      { k: "Batch starts", v: "26 September" },
+      { k: "Batch starts", v: "3 October" },
       { k: "Duration", v: "15 learning hours" },
       { k: "Live", v: "12 hours across 6 sessions" },
       { k: "Guided LMS", v: "3 hours" },
@@ -117,12 +117,12 @@ export const POSH_LANDING: LandingOffer = {
   bundle: {
     title: "Also running: POCSO & Child Safety",
     body:
-      "The POCSO Facilitator certification runs 18–20 September, three evenings, for professionals in child-facing organisations. Ask us about taking both.",
+      "The POCSO Facilitator certification starts 24 October, three evenings, for professionals in child-facing organisations. Ask us about taking both.",
     href: "/pocso-train-the-trainer-certification/",
   },
 
   faqs: [],
-  whatsapp: "Hi, I'd like to know more about the PoSH Train-the-Trainer certification starting 26 September.",
+  whatsapp: "Hi, I'd like to know more about the PoSH Train-the-Trainer certification starting 3 October.",
 };
 
 /* ----------------------------------------------------------------- POCSO */
@@ -141,9 +141,9 @@ export const POCSO_LANDING: LandingOffer = {
     "A practice-led certification for people in child-facing organisations: the law, age-appropriate language, recognising signals, and how to respond responsibly when a child discloses.",
 
   batch: {
-    starts: "18 September",
+    starts: "24 October",
     rows: [
-      { k: "Batch dates", v: "18, 19 & 20 September" },
+      { k: "Batch starts", v: "24 October" },
       { k: "Duration", v: "9 hours" },
       { k: "Format", v: "3 evenings" },
       { k: "Daily", v: "2 hours per day" },
@@ -175,10 +175,10 @@ export const POCSO_LANDING: LandingOffer = {
   bundle: {
     title: "Also running: PoSH & Workplace Dignity",
     body:
-      "The PoSH Train-the-Trainer certification starts 26 September — fifteen learning hours across three weekends. Ask us about taking both.",
+      "The PoSH Train-the-Trainer certification starts 3 October — fifteen learning hours across three weekends. Ask us about taking both.",
     href: "/posh-train-the-trainer-certification/",
   },
 
   faqs: [],
-  whatsapp: "Hi, I'd like to know more about the POCSO Facilitator certification running 18–20 September.",
+  whatsapp: "Hi, I'd like to know more about the POCSO Facilitator certification starting 24 October.",
 };

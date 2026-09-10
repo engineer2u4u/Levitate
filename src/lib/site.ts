@@ -72,17 +72,20 @@ export type Batch = {
  * homepage announcement bar so batch dates are edited in exactly one place.
  * `open` drives the card accents: teal while enrolment is on, muted grey once
  * a batch is only pencilled in.
+ *
+ * Kept in date order: the homepage bar announces them in array order, and a
+ * list that jumps about reads as a mistake.
  */
 export const batches: Batch[] = [
-  { tag: "PoSH Train-the-Trainer", title: "PoSH TTT Certification", status: "Enrolling", open: true, short: "PoSH TTT", starts: "26 September",
-    rows: [{ k: "Batch starts", v: "26 September" }, { k: "Duration", v: "3 weeks" }, { k: "Batch type", v: "Weekend batch" }, { k: "Daily", v: "2 hours per day" }, { k: "Timing", v: "6:00 – 8:00 PM" }, { k: "Mode", v: "Live online" }],
+  { tag: "PoSH Train-the-Trainer", title: "PoSH TTT Certification", status: "Enrolling", open: true, short: "PoSH TTT", starts: "3 October",
+    rows: [{ k: "Batch starts", v: "3 October" }, { k: "Duration", v: "3 weeks" }, { k: "Batch type", v: "Weekend batch" }, { k: "Daily", v: "2 hours per day" }, { k: "Timing", v: "6:00 – 8:00 PM" }, { k: "Mode", v: "Live online" }],
     fee: "₹32,000", feeNote: "inclusive of taxes", cta: "Enrol for this batch" },
-  { tag: "POCSO Train-the-Trainer", title: "POCSO TTT Certification", status: "Enrolling", open: true, short: "POCSO TTT", starts: "18 September",
-    rows: [{ k: "Batch dates", v: "18, 19 & 20 September" }, { k: "Duration", v: "3 days" }, { k: "Daily", v: "2 hours per day" }, { k: "Timing", v: "6:00 – 8:00 PM" }, { k: "Mode", v: "Live online" }, { k: "Seats", v: "Limited cohort" }],
-    fee: "₹20,000", feeNote: "inclusive of taxes", cta: "Enrol for this batch" },
-  { tag: "DEI Train-the-Trainer", title: "Diversity, Equity & Inclusion Batch", status: "Enrolling", open: true, short: "DEI TTT", starts: "3 October",
-    rows: [{ k: "Batch starts", v: "3 October" }, { k: "Duration", v: "20 hours" }, { k: "Curriculum", v: "13 modules" }, { k: "Timing", v: "To be confirmed" }, { k: "Mode", v: "Live online" }],
+  { tag: "DEI Train-the-Trainer", title: "Diversity, Equity & Inclusion Batch", status: "Enrolling", open: true, short: "DEI TTT", starts: "10 October",
+    rows: [{ k: "Batch starts", v: "10 October" }, { k: "Duration", v: "20 hours" }, { k: "Curriculum", v: "13 modules" }, { k: "Timing", v: "To be confirmed" }, { k: "Mode", v: "Live online" }],
     fee: "₹40,000", feeNote: "inclusive of taxes", cta: "Enrol for this batch" },
+  { tag: "POCSO Train-the-Trainer", title: "POCSO TTT Certification", status: "Enrolling", open: true, short: "POCSO TTT", starts: "24 October",
+    rows: [{ k: "Batch starts", v: "24 October" }, { k: "Duration", v: "3 days" }, { k: "Daily", v: "2 hours per day" }, { k: "Timing", v: "6:00 – 8:00 PM" }, { k: "Mode", v: "Live online" }, { k: "Seats", v: "Limited cohort" }],
+    fee: "₹20,000", feeNote: "inclusive of taxes", cta: "Enrol for this batch" },
   { tag: "Wellbeing Train-the-Trainer", title: "Mental Health & Well-being Batch", status: "Dates coming soon", open: false,
     rows: [{ k: "Batch month", v: "October 2026" }, { k: "Exact dates", v: "To be announced" }, { k: "Timing", v: "To be confirmed" }, { k: "Mode", v: "Live online" }],
     fee: "On request", feeNote: "confirmed with batch dates", cta: "Join the waitlist" },

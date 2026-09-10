@@ -38,7 +38,7 @@ export const POSH_CURRICULUM: Curriculum = {
       ],
     },
     {
-      id: "s1", num: "01", title: "Week 1 · Legal Foundations", release: "Unlocks after Live Session 1 · 26 September",
+      id: "s1", num: "01", title: "Week 1 · Legal Foundations", release: "Unlocks after Live Session 1 · 3 October",
       lessons: [
         { id: "l1-1", kind: "VID", title: "M1 · Purpose, Culture and the Certification Journey", meta: "Video · 22 min", desc: "Why PoSH facilitation is a culture role before it is a compliance role, and what the certification journey asks of you." },
         { id: "l1-2", kind: "VID", title: "M2 · India's Evolving PoSH Landscape", meta: "Video · 26 min", desc: "How expectations, judgments and workplace practice have shifted since 2013 — and what that means for trainers." },
@@ -47,7 +47,7 @@ export const POSH_CURRICULUM: Curriculum = {
       ],
     },
     {
-      id: "s2", num: "02", title: "Week 2 · Recognition & Inquiry", release: "Unlocks after Live Session 3 · 3 October",
+      id: "s2", num: "02", title: "Week 2 · Recognition & Inquiry", release: "Unlocks after Live Session 3 · 10 October",
       lessons: [
         { id: "l2-1", kind: "VID", title: "M5 · Recognising Sexual Harassment", meta: "Video · 28 min", desc: "Behaviour patterns, grey areas and the language to use when describing them in a training room." },
         { id: "l2-2", kind: "VID", title: "M6 · Coverage, Definitions and Jurisdiction", meta: "Video · 21 min", desc: "Who is covered, what counts as a workplace today, and where jurisdiction begins and ends." },
@@ -57,7 +57,7 @@ export const POSH_CURRICULUM: Curriculum = {
       ],
     },
     {
-      id: "s3", num: "03", title: "Week 3 · Practice & Certification", release: "Unlocks after Live Session 5 · 10 October",
+      id: "s3", num: "03", title: "Week 3 · Practice & Certification", release: "Unlocks after Live Session 5 · 17 October",
       lessons: [
         { id: "l3-1", kind: "VID", title: "M10 · Digital, Virtual and Evolving Workplace Scenarios", meta: "Video · 24 min", desc: "Remote teams, messaging groups and after-hours contact — where the workplace now extends to, and how conduct is judged there." },
         { id: "l3-2", kind: "VID", title: "M11 · Power Dynamics, Retaliation and Complex Situations", meta: "Video · 26 min", desc: "Hierarchy, dependence and the fear of consequences; recognising retaliation and handling complaints that are not straightforward." },
@@ -69,12 +69,12 @@ export const POSH_CURRICULUM: Curriculum = {
     },
   ],
   sessions: [
-    { n: 1, day: "26", month: "Sep", date: "Sat 26 September", time: "6:00 – 8:00 PM", topic: "Foundations & the CLEAR framework" },
-    { n: 2, day: "27", month: "Sep", date: "Sun 27 September", time: "6:00 – 8:00 PM", topic: "Legal genesis & applied definitions" },
-    { n: 3, day: "03", month: "Oct", date: "Sat 3 October", time: "6:00 – 8:00 PM", topic: "Recognition, coverage & jurisdiction" },
-    { n: 4, day: "04", month: "Oct", date: "Sun 4 October", time: "6:00 – 8:00 PM", topic: "IC governance & fair inquiry practice" },
-    { n: 5, day: "10", month: "Oct", date: "Sat 10 October", time: "6:00 – 8:00 PM", topic: "Case laboratory · live inquiry simulation" },
-    { n: 6, day: "11", month: "Oct", date: "Sun 11 October", time: "6:00 – 8:00 PM", topic: "Trainer craft & facilitation assessment" },
+    { n: 1, day: "03", month: "Oct", date: "Sat 3 October", time: "6:00 – 8:00 PM", topic: "Foundations & the CLEAR framework" },
+    { n: 2, day: "04", month: "Oct", date: "Sun 4 October", time: "6:00 – 8:00 PM", topic: "Legal genesis & applied definitions" },
+    { n: 3, day: "10", month: "Oct", date: "Sat 10 October", time: "6:00 – 8:00 PM", topic: "Recognition, coverage & jurisdiction" },
+    { n: 4, day: "11", month: "Oct", date: "Sun 11 October", time: "6:00 – 8:00 PM", topic: "IC governance & fair inquiry practice" },
+    { n: 5, day: "17", month: "Oct", date: "Sat 17 October", time: "6:00 – 8:00 PM", topic: "Case laboratory · live inquiry simulation" },
+    { n: 6, day: "18", month: "Oct", date: "Sun 18 October", time: "6:00 – 8:00 PM", topic: "Trainer craft & facilitation assessment" },
   ],
   quizzes: [
     {
