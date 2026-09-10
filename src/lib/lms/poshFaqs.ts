@@ -180,9 +180,75 @@ export const POCSO_FAQS: Faq[] = [
   },
 ];
 
+/**
+ * DEI FAQs, drafted from the programme's own brochure — the twenty hours, the
+ * thirteen modules, the BRIDGE framework, the audience and the inclusions all
+ * come from there. Nothing here claims anything the brochure does not.
+ */
+export const DEI_FAQS: Faq[] = [
+  {
+    q: "What is the Inclusive Workplace Facilitator Programme (DEI TTT)?",
+    a: [
+      "It is a 20-hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, built to translate inclusion from concept into everyday workplace behaviour.",
+      "It is a facilitator certification rather than an awareness course: as much of it is about designing and running DEI sessions as about the content of them.",
+    ],
+  },
+  {
+    q: "Who should attend?",
+    a: [
+      "HR and L&D professionals; DEI, culture and employee-experience professionals; people managers and inclusive leaders; employee resource group and inclusion leads; workplace trainers and facilitators; HR consultants and independent professionals; aspiring DEI facilitators; and new trainers, freelance or corporate.",
+    ],
+  },
+  {
+    q: "When does the next batch run?",
+    a: [
+      "The batch starts 10 October, live online, across 20 learning hours and thirteen modules. Session timings are being confirmed and will be shared before the batch opens.",
+    ],
+  },
+  {
+    q: "What is the BRIDGE Inclusion Framework?",
+    a: [
+      "The structure the programme facilitates with: Bias visible, Respectful language, Inclusive decisions, Dialogue over debate, Growing belonging, Everyday allyship.",
+      "It exists to give a facilitator something to hold on to in a live room — when a conversation turns difficult, it tells you which move you are making and why.",
+    ],
+  },
+  {
+    q: "What does the curriculum cover?",
+    a: [
+      "Thirteen modules: DEI foundations and the global inclusion landscape; identity, intersectionality, privilege and power; bias, stereotypes and inclusive decision-making; inclusive communication, microaggressions and constructive dialogue; dimensions of diversity and intersectional inclusion; cultural intelligence; psychological safety, belonging and inclusive teams; allyship, bystander intervention and inclusive leadership; the inclusive employee lifecycle and organisational DEI; designing powerful DEI learning experiences; facilitating sensitive and difficult conversations; managing resistance, hot moments and challenging questions; and case facilitation, debriefing and audience adaptation.",
+    ],
+  },
+  {
+    q: "Do I need a DEI background to enrol?",
+    a: [
+      "No. The programme builds the concepts from the ground up and then spends its time on application — designing sessions, handling resistance and facilitating conversations across difference.",
+    ],
+  },
+  {
+    q: "What certificate do I receive?",
+    a: [
+      "Two: a Levitate PeopleSoft Certificate of Training Completion carrying a verifiable certificate ID, the completion date and the programme hours, and a SHRM Certificate of Completion showing the Professional Development Credits earned toward SHRM-CP® and SHRM-SCP® recertification.",
+      "Levitate PeopleSoft is a SHRM Recertification Provider and a CPD-accredited, ISO 9001:2015 certified organisation.",
+    ],
+  },
+  {
+    q: "What do I get to run my own sessions?",
+    a: [
+      "A trainer toolkit: presentation deck, case studies, templates, facilitation guides and session plans, alongside dedicated LMS access with recorded sessions, module resources, downloadable templates and knowledge checks.",
+    ],
+  },
+  {
+    q: "Can my organisation enrol a group?",
+    a: [
+      "Yes. Group and in-house cohorts are arranged directly — write to contactus@levitatepeoplesoft.com or message us on WhatsApp and we will set it up.",
+    ],
+  },
+];
+
 export const FAQS: Record<string, Faq[]> = {
   "posh-trainer": POSH_FAQS,
   "pocso-child-safety": POCSO_FAQS,
+  "inclusive-workplace": DEI_FAQS,
 };
 
 export const faqsBySlug = (slug: string): Faq[] | undefined => FAQS[slug];

@@ -184,3 +184,68 @@ export const POCSO_LANDING: LandingOffer = {
   faqs: [],
   whatsapp: "Hi, I'd like to know more about the POCSO Facilitator certification starting 24 October.",
 };
+
+/* ------------------------------------------------------------------- DEI */
+
+export const DEI_LANDING: LandingOffer = {
+  slug: "inclusive-workplace",
+  eyebrow: "Certified DEI Train-the-Trainer",
+  headline: "Become a certified DEI facilitator",
+  headlines: {
+    ttt: "Become a certified DEI Train-the-Trainer",
+    facilitator: "DEI Facilitator Certification",
+    certification: "DEI Certification for HR and people leaders",
+    course: "DEI Certification Course — live, and founder-led",
+    diversity: "Diversity, Equity and Inclusion Certification",
+    inclusion: "Inclusion training you can go on to deliver yourself",
+    bias: "Learn to facilitate unconscious bias training, credibly",
+    belonging: "Build psychological safety and belonging that holds",
+    hr: "Add DEI facilitation to your HR practice",
+    erg: "For ERG and inclusion leads who have to run the sessions",
+  },
+  sub:
+    "Twenty applied hours anchored in the BRIDGE Inclusion Framework — turning inclusion from a value statement into everyday workplace behaviour, and giving you the capability to design and facilitate the sessions yourself.",
+
+  batch: {
+    starts: "10 October",
+    rows: [
+      { k: "Batch starts", v: "10 October" },
+      { k: "Duration", v: "20 hours" },
+      { k: "Curriculum", v: "13 modules" },
+      { k: "Framework", v: "BRIDGE Inclusion" },
+      { k: "Timing", v: "To be confirmed" },
+      { k: "Mode", v: "Live online" },
+    ],
+  },
+  price: { amount: "₹40,000", note: "inclusive of taxes" },
+
+  why: [
+    { k: "20 applied hours", v: "Long enough to practise facilitating rather than to be told about inclusion — thirteen modules, from the global landscape through to running the room." },
+    { k: "The BRIDGE Framework", v: "Bias visible, respectful language, inclusive decisions, dialogue over debate, growing belonging, everyday allyship. A structure to facilitate with, not a slide to admire." },
+    { k: "SHRM PDCs", v: "Levitate PeopleSoft is a SHRM Recertification Provider. The programme earns Professional Development Credits toward SHRM-CP® and SHRM-SCP® recertification." },
+    { k: "The founder teaches it", v: "Every session is led by Parichita Kotnala — 15+ years of global HR across India, the UK, Europe, the US and Canada, not a rotating panel." },
+  ],
+
+  career: {
+    title: "What the certification opens up",
+    intro: "It is a facilitator certification, so what it changes is what you can be asked to do:",
+    points: [
+      "Design and deliver DEI learning that lands as behaviour rather than as a policy briefing",
+      "Facilitate identity-sensitive conversations, disagreement and hot moments without losing the room",
+      "Interrupt bias, stereotypes and microaggressions in everyday decisions and communication — and teach others to",
+      "Apply an inclusion lens across the employee lifecycle, DEI strategy, governance and measurement",
+      "Lead an ERG or inclusion council with something more durable than good intentions",
+      "Carry a verifiable certificate ID and the PDCs on your professional profile",
+    ],
+  },
+
+  bundle: {
+    title: "Also running: PoSH & Workplace Dignity",
+    body:
+      "The PoSH Train-the-Trainer certification starts 3 October — fifteen learning hours across three weekends. Ask us about taking both.",
+    href: "/posh-train-the-trainer-certification/",
+  },
+
+  faqs: [],
+  whatsapp: "Hi, I'd like to know more about the DEI Train-the-Trainer certification starting 10 October.",
+};
