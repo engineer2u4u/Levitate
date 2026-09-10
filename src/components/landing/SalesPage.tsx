@@ -11,7 +11,7 @@ import TrustedBy from "@/components/site/TrustedBy";
 import YouTubeEmbed from "@/components/site/YouTubeEmbed";
 import VideoTestimonials, { type PlayableClip } from "@/components/home/VideoTestimonials";
 import { certificateCards } from "@/lib/certificateArt";
-import { ENROLMENT_OPEN, courseBySlug, formatFee } from "@/lib/lms/courses";
+import { ENROLMENT_OPEN, courseBySlug } from "@/lib/lms/courses";
 import { outlineBySlug } from "@/lib/programOutlines";
 import { contact } from "@/lib/site";
 import { track } from "@/lib/track";
@@ -26,10 +26,11 @@ const SANS = "'Plus Jakarta Sans',sans-serif";
  * Different from the programme pages on purpose. Those are for someone
  * browsing the catalogue; this is for someone who just clicked an ad for one
  * specific thing and will leave in seconds if the page does not obviously
- * answer the search. So: one programme, one price, one date, two buttons, and
+ * answer the search. So: one programme, one date, two buttons, and
  * every section below the fold earning its place as a reason to click them.
  */
 export default function SalesPage({ offer }: { offer: LandingOffer }) {
+  // Only for the certificate artwork now — the fee is no longer shown here.
   const course = courseBySlug(offer.slug);
   const outline = outlineBySlug(offer.slug);
   const router = useRouter();
@@ -85,7 +86,6 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
             {/* The three facts that decide whether to keep reading. */}
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 28 }}>
               <Fact k="Batch starts" v={offer.batch.starts} />
-              <Fact k="Fee" v={`${offer.price.amount} · ${offer.price.note}`} />
               {typeof offer.seatsLeft === "number" && <Fact k="Seats left" v={String(offer.seatsLeft)} accent />}
               {offer.offerClosesOn && <Fact k="Offer closes" v={offer.offerClosesOn} accent />}
             </div>
@@ -141,12 +141,6 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
                     <span style={{ font: `700 13px ${SANS}`, color: "#fff", textAlign: "right" }}>{r.v}</span>
                   </div>
                 ))}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", paddingTop: 16 }}>
-                  <span style={{ font: `500 13px ${SANS}`, color: "rgba(255,255,255,.62)" }}>Fee</span>
-                  <span style={{ font: `800 24px ${SANS}`, color: "#fff" }}>
-                    {formatFee(course?.feePaise ?? null)}
-                  </span>
-                </div>
               </div>
             )}
           </div>
@@ -252,7 +246,7 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
       <section className="site-page-sec" style={{ background: "linear-gradient(120deg,#0c2a45,#0a1f38)", padding: "64px 48px" }}>
         <div style={{ maxWidth: 780, margin: "0 auto", textAlign: "center" }}>
           <h2 style={{ font: `800 clamp(24px,2.6vw,34px)/1.2 ${SANS}`, color: "#fff", margin: "0 0 12px", letterSpacing: "-.02em" }}>
-            {offer.batch.starts} — {offer.price.amount}
+            Next batch starts {offer.batch.starts}
           </h2>
           <p style={{ font: `400 15px/1.7 ${SANS}`, color: "rgba(255,255,255,.78)", margin: "0 0 26px" }}>
             Seats are limited per batch so that everyone gets facilitation practice and feedback. Reserve yours, or message us first — either is fine.

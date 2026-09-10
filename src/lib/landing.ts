@@ -31,6 +31,12 @@ export type LandingOffer = {
   sub: string;
   /** Batch facts. Shown as the page's proof that this is a real, dated cohort. */
   batch: { starts: string; rows: { k: string; v: string }[] };
+  /**
+   * No longer shown on the page — the fee was taken off the landing pages
+   * deliberately, so the conversation about money happens with a person.
+   * It stays here because the reserve_seat_click event still reports it,
+   * and an ad platform optimising on that value needs it to be right.
+   */
   price: { amount: string; note: string };
   /** Unset until the seat count is being tracked honestly. */
   seatsLeft?: number;
@@ -218,6 +224,7 @@ export const DEI_LANDING: LandingOffer = {
     ],
   },
   price: { amount: "₹40,000", note: "inclusive of taxes" },
+  founderVideoId: "4pf99e4AKBU",
 
   why: [
     { k: "20 applied hours", v: "Long enough to practise facilitating rather than to be told about inclusion — thirteen modules, from the global landscape through to running the room." },
