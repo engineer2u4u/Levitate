@@ -58,11 +58,23 @@ export const POSH_LANDING: LandingOffer = {
   eyebrow: "PoSH Train-the-Trainer Certification",
   headline: "Become a certified PoSH trainer",
   headlines: {
+    // PoSH intent
     ttt: "Become a certified PoSH Train-the-Trainer",
-    trainer: "PoSH Trainer Certification, taught by the founder",
+    trainer: "Become a PoSH Certified Trainer",
     certification: "PoSH Certification for HR professionals",
+    course: "PoSH Certification Course — live, and founder-led",
+    training: "PoSH Training Certification",
+    certificate: "PoSH Certificate Course for HR and IC members",
+    online: "PoSH Certification Online — live sessions, not recordings",
     ic: "Training for Internal Committee members and external members",
+    // HR intent, where PoSH is the answer rather than the search
     hr: "Add PoSH facilitation to your HR practice",
+    hrtrainer: "An HR trainer course that certifies you to facilitate PoSH",
+    compliance: "HR compliance training you can go on to deliver yourself",
+    hrtraining: "Human resources training with a credential at the end of it",
+    hrcert: "An HR certification that earns SHRM PDCs",
+    hrprogram: "An HR certificate programme in PoSH facilitation",
+    business: "Business trainer PoSH certification",
   },
   sub:
     "Fifteen learning hours — twelve live with the founder, three guided in the LMS — that take you past knowing the law to facilitating it: running awareness sessions, supporting an Internal Committee, and handling the questions a room actually asks.",
