@@ -28,24 +28,44 @@ export default function YouTubeEmbed({
     const frame = ref.current;
     if (!frame) return;
 
-    const send = (func: string, args: unknown[] = []) => {
-      frame.contentWindow?.postMessage(JSON.stringify({ event: "command", func, args }), "*");
+    const send = (msg: Record<string, unknown>) => {
+      frame.contentWindow?.postMessage(JSON.stringify(msg), "*");
     };
 
-    const killCaptions = () => {
+    /**
+     * Wait for the player to say it is ready before commanding it.
+     *
+     * Firing `unloadModule` on a timer used to make the player throw
+     * `isExternalMethodAvailable is not a function` into the console — it was
+     * being asked to do something before it had finished wiring up its own
+     * API. Harmless, but a real error on the page, and on a landing page that
+     * loads a video immediately it happened on every visit.
+     */
+    const onMessage = (e: MessageEvent) => {
+      if (!/youtube(-nocookie)?\.com$/.test(new URL(e.origin).hostname.replace(/^www\./, ""))) return;
+      if (e.source !== frame.contentWindow) return;
+      let data: { event?: string };
+      try {
+        data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
+      } catch {
+        return;
+      }
+      if (data?.event !== "onReady" && data?.event !== "initialDelivery") return;
       // "captions" is the legacy module name, "cc" the HTML5 one — send both.
-      send("unloadModule", ["captions"]);
-      send("unloadModule", ["cc"]);
+      send({ event: "command", func: "unloadModule", args: ["captions"] });
+      send({ event: "command", func: "unloadModule", args: ["cc"] });
     };
 
-    // The player becomes responsive shortly after the iframe loads; retry
-    // briefly so the command lands whenever that happens.
-    const timers = [300, 800, 1500, 2500, 4000].map((ms) => setTimeout(killCaptions, ms));
-    frame.addEventListener("load", killCaptions);
+    window.addEventListener("message", onMessage);
+    // Opens the handshake: the player only talks back once asked to.
+    const hello = () => send({ event: "listening" });
+    frame.addEventListener("load", hello);
+    const timers = [300, 900, 2000].map((ms) => setTimeout(hello, ms));
 
     return () => {
+      window.removeEventListener("message", onMessage);
+      frame.removeEventListener("load", hello);
       timers.forEach(clearTimeout);
-      frame.removeEventListener("load", killCaptions);
     };
   }, []);
 

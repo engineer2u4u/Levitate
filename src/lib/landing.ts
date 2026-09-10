@@ -93,6 +93,7 @@ export const POSH_LANDING: LandingOffer = {
     ],
   },
   price: { amount: "₹32,000", note: "inclusive of taxes" },
+  founderVideoId: "wfGzTNtutXs",
 
   why: [
     { k: "15 learning hours", v: "Twelve hours live across six sessions and three weekends, plus three guided hours in the LMS — long enough to practise facilitating, not just to be told about it." },
@@ -152,6 +153,7 @@ export const POCSO_LANDING: LandingOffer = {
     ],
   },
   price: { amount: "₹20,000", note: "inclusive of taxes" },
+  founderVideoId: "4pf99e4AKBU",
 
   why: [
     { k: "Built for child-facing work", v: "Schools, NGOs, hospitals, sport and hospitality — settings where a disclosure is a real possibility and the response has to be right first time." },

@@ -105,9 +105,29 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
 
           <div>
             {offer.founderVideoId ? (
-              <div style={{ borderRadius: 18, overflow: "hidden", border: "1px solid rgba(255,255,255,.14)" }}>
-                <YouTubeEmbed id={offer.founderVideoId} title={`${offer.eyebrow} — a message from Parichita Kotnala`} autoplay={false} controls />
-              </div>
+              /* Video first, then the same facts in a strip beneath it. The
+                 batch card was carrying the dates and the fee, and a video
+                 that simply replaced it would take them off the fold. */
+              <>
+                <div style={{ position: "relative", paddingTop: "56.25%", borderRadius: 18, overflow: "hidden", border: "1px solid rgba(255,255,255,.14)", background: "#000", marginBottom: 14 }}>
+                  <div style={{ position: "absolute", inset: 0 }}>
+                  <YouTubeEmbed
+                    id={offer.founderVideoId}
+                    title={`${offer.eyebrow} — a message from Parichita Kotnala`}
+                    autoplay={false}
+                    controls
+                  />
+                  </div>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 18px", background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.16)", borderRadius: 14, padding: "16px 18px" }}>
+                  {offer.batch.rows.map((r) => (
+                    <div key={r.k} style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+                      <span style={{ font: `500 12px ${SANS}`, color: "rgba(255,255,255,.6)" }}>{r.k}</span>
+                      <span style={{ font: `700 12px ${SANS}`, color: "#fff", textAlign: "right" }}>{r.v}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
             ) : (
               /* No founder video yet. The batch card is a better placeholder
                  than an empty frame: it repeats the facts that close the sale. */
