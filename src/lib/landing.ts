@@ -44,6 +44,8 @@ export type LandingOffer = {
   offerClosesOn?: string;
   /** YouTube id. Unset until the founder video is shot. */
   founderVideoId?: string;
+  /** Caption under the play control on the poster. */
+  posterLabel?: string;
   /** The four reasons this programme, not a cheaper one. */
   why: { k: string; v: string }[];
   /** What the certification opens up afterwards. */
@@ -100,6 +102,7 @@ export const POSH_LANDING: LandingOffer = {
   },
   price: { amount: "₹32,000", note: "inclusive of taxes" },
   founderVideoId: "wfGzTNtutXs",
+  posterLabel: "Watch a PoSH session",
 
   why: [
     { k: "15 learning hours", v: "Twelve hours live across six sessions and three weekends, plus three guided hours in the LMS — long enough to practise facilitating, not just to be told about it." },
@@ -160,6 +163,7 @@ export const POCSO_LANDING: LandingOffer = {
   },
   price: { amount: "₹20,000", note: "inclusive of taxes" },
   founderVideoId: "4pf99e4AKBU",
+  posterLabel: "Watch a POCSO session",
 
   why: [
     { k: "Built for child-facing work", v: "Schools, NGOs, hospitals, sport and hospitality — settings where a disclosure is a real possibility and the response has to be right first time." },
@@ -225,6 +229,7 @@ export const DEI_LANDING: LandingOffer = {
   },
   price: { amount: "₹40,000", note: "inclusive of taxes" },
   founderVideoId: "4pf99e4AKBU",
+  posterLabel: "Watch a DEI session",
 
   why: [
     { k: "20 applied hours", v: "Long enough to practise facilitating rather than to be told about inclusion — thirteen modules, from the global landscape through to running the room." },

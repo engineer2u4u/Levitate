@@ -116,6 +116,8 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
                     title={`${offer.eyebrow} — a message from Parichita Kotnala`}
                     autoplay={false}
                     controls
+                    facade
+                    posterLabel={offer.posterLabel}
                   />
                   </div>
                 </div>

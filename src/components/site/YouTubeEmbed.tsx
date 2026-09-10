@@ -1,32 +1,54 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
- * YouTube embed with captions forcibly switched off.
+ * YouTube embed with captions switched off, and an optional poster facade.
  *
- * `cc_load_policy=0` alone only means "respect the viewer's preference", so a
- * viewer with captions enabled globally still gets them. Passing
- * `enablejsapi=1` lets us postMessage the player directly and unload its
- * caption modules, which overrides that preference. The player reports ready
- * asynchronously, so the command is repeated a few times after load.
+ * Captions: `cc_load_policy=0` only means "respect the viewer's preference",
+ * so a viewer with captions on globally still gets them. `enablejsapi=1` lets
+ * us postMessage the player and unload its caption modules once it reports
+ * ready, which overrides that preference.
+ *
+ * `facade` shows a poster and play control in the house style — the same
+ * treatment the PoSH section uses — and loads the player only when it is
+ * clicked.
+ *
+ * YouTube's own branding on a playing embed, the title bar and the
+ * "Watch on YouTube" button, cannot be removed: modestbranding was retired
+ * in 2023 and covering the chrome would breach YouTube's terms. What the
+ * facade can do is keep it off screen until somebody has asked to watch,
+ * which is the state a visitor spends nearly all their time looking at. It
+ * also keeps YouTube's scripts and cookies off the page until then.
  */
 export default function YouTubeEmbed({
   id,
   title,
   autoplay = true,
   controls = false,
+  facade = false,
+  posterLabel,
+  poster,
 }: {
   id: string;
   title: string;
   autoplay?: boolean;
   controls?: boolean;
+  /** Show a poster and load the player only on click. */
+  facade?: boolean;
+  /** Caption under the play control, as on the PoSH section. */
+  posterLabel?: string;
+  /** Override the still. Defaults to the video's own thumbnail. */
+  poster?: string;
 }) {
   const ref = useRef<HTMLIFrameElement>(null);
+  // A facade starts unplayed; every other use is already past the click.
+  const [playing, setPlaying] = useState(!facade);
 
   useEffect(() => {
     const frame = ref.current;
-    if (!frame) return;
+    if (!frame || !playing) return;
 
     const send = (msg: Record<string, unknown>) => {
       frame.contentWindow?.postMessage(JSON.stringify(msg), "*");
@@ -67,10 +89,64 @@ export default function YouTubeEmbed({
       frame.removeEventListener("load", hello);
       timers.forEach(clearTimeout);
     };
-  }, []);
+  }, [playing]);
+
+  if (!playing) {
+    return (
+      <button
+        type="button"
+        onClick={() => setPlaying(true)}
+        aria-label={`Play: ${title}`}
+        style={{
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 14,
+          width: "100%",
+          height: "100%",
+          padding: 0,
+          border: "none",
+          cursor: "pointer",
+          background: "#0a1b33",
+          overflow: "hidden",
+        }}
+      >
+        <img
+          src={poster ?? `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`}
+          alt=""
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+        />
+        {/* scrim keeps the play control legible over the frame */}
+        <span style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg,rgba(10,27,51,.18),rgba(10,27,51,.52))" }} />
+        <span
+          style={{
+            position: "relative",
+            width: 78,
+            height: 78,
+            borderRadius: "50%",
+            background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 14px 34px rgba(10,27,51,.45)",
+          }}
+        >
+          <span style={{ width: 0, height: 0, borderLeft: "22px solid #fff", borderTop: "13px solid transparent", borderBottom: "13px solid transparent", marginLeft: 6 }} />
+        </span>
+        {posterLabel && (
+          <span style={{ position: "relative", font: "700 16px 'Plus Jakarta Sans',sans-serif", color: "#fff", textShadow: "0 2px 12px rgba(10,27,51,.5)" }}>
+            {posterLabel}
+          </span>
+        )}
+      </button>
+    );
+  }
 
   const params = new URLSearchParams({
-    autoplay: autoplay ? "1" : "0",
+    // Arriving at the player through the poster is itself the request to play.
+    autoplay: autoplay || facade ? "1" : "0",
     rel: "0",
     modestbranding: "1",
     cc_load_policy: "0",
