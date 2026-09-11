@@ -18,7 +18,7 @@ import { track } from "@/lib/track";
 import type { LandingOffer, WhyIcon } from "@/lib/landing";
 import LeadGate from "./LeadGate";
 
-const SANS = "'Plus Jakarta Sans',sans-serif";
+export const SANS = "'Plus Jakarta Sans',sans-serif";
 
 /**
  * One content width for every section on the page.
@@ -28,8 +28,8 @@ const SANS = "'Plus Jakarta Sans',sans-serif";
  * scrolled. Every section now shares one edge. Paragraphs keep a readable
  * measure inside it, so text does not run the full width; the boxes do.
  */
-const MAX = 1180;
-const MEASURE = 760;
+export const MAX = 1180;
+export const MEASURE = 760;
 
 /**
  * One type scale.
@@ -39,7 +39,7 @@ const MEASURE = 760;
  * embeds — accreditations, testimonials, client logos — so the page reads as
  * one document rather than several stitched together.
  */
-const T = {
+export const T = {
   eyebrow: `700 12px ${SANS}`,
   h2: `700 clamp(26px,2.8vw,36px)/1.15 ${SANS}`,
   lead: `400 16px/1.75 ${SANS}`,
@@ -324,7 +324,7 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
 /* ------------------------------------------------------------------ bits */
 
 /** A full-width band with its content held to the page's one width. */
-function Section({ children, tone, flush = false }: { children: React.ReactNode; tone?: "soft"; flush?: boolean }) {
+export function Section({ children, tone, flush = false }: { children: React.ReactNode; tone?: "soft"; flush?: boolean }) {
   return (
     <section className="site-page-sec" style={{ padding: flush ? "0 48px 80px" : "80px 48px", background: tone === "soft" ? "#f7fafc" : "#fff" }}>
       <div style={{ maxWidth: MAX, margin: "0 auto" }}>{children}</div>
@@ -332,7 +332,7 @@ function Section({ children, tone, flush = false }: { children: React.ReactNode;
   );
 }
 
-const ctaPrimary: React.CSSProperties = {
+export const ctaPrimary: React.CSSProperties = {
   cursor: "pointer",
   border: "none",
   background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)",
@@ -342,7 +342,7 @@ const ctaPrimary: React.CSSProperties = {
   borderRadius: 999,
 };
 
-const ctaGhost: React.CSSProperties = {
+export const ctaGhost: React.CSSProperties = {
   display: "inline-block",
   background: "transparent",
   border: "1.5px solid rgba(255,255,255,.4)",
@@ -368,7 +368,7 @@ function Fact({ k, v, accent = false }: { k: string; v: string; accent?: boolean
   );
 }
 
-function H2({ eyebrow, children }: { eyebrow: string; children: React.ReactNode }) {
+export function H2({ eyebrow, children }: { eyebrow: string; children: React.ReactNode }) {
   return (
     <>
       <div style={{ font: T.eyebrow, color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>{eyebrow}</div>
@@ -377,7 +377,7 @@ function H2({ eyebrow, children }: { eyebrow: string; children: React.ReactNode 
   );
 }
 
-const Tick = () => (
+export const Tick = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden style={{ flex: "none", marginTop: 2 }}>
     <circle cx="12" cy="12" r="11" fill="#1b8f88" />
     <path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" />

@@ -80,5 +80,6 @@ echo json_encode([
     'orderId'     => $orderId,
     'paymentId'   => $paymentId,
     'amountPaise' => $expectedAmount,
+    'live'        => !rzp_is_test_mode(),
     'at'          => gmdate('c'),
 ]);

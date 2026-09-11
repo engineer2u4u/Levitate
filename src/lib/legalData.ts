@@ -160,7 +160,66 @@ export const disclaimer: LegalDoc = {
   ],
 };
 
+export const refundPolicy: LegalDoc = {
+  slug: "refund-policy",
+  title: "Refund & Cancellation Policy",
+  intro: `This policy explains when fees paid to ${ORG} are refundable, how to cancel a registration and how refunds are paid. It applies to payments made on this website through Razorpay. Last updated 11 September 2026.`,
+  sections: [
+    {
+      h: "Masterclasses and short live sessions",
+      list: [
+        "Cancel at least 7 days before the session and we will refund your fee in full.",
+        "If you cancel less than 7 days before the session, the fee is not refundable — but you may transfer your seat to a colleague at no charge. Send us their name and email before the session starts.",
+        "If you do not attend and have not cancelled, the fee is not refundable.",
+      ],
+    },
+    {
+      h: "Certification programmes",
+      list: [
+        "Cancel at least 14 days before your batch starts and we will refund your fee in full.",
+        "If you cancel less than 14 days before the batch starts, the fee is not refundable. You may instead move once to a later batch, subject to seats being available, or transfer your place to a colleague.",
+        "Once a programme has started, or its course materials have been accessed, the fee is not refundable.",
+      ],
+    },
+    {
+      h: "If we cancel or reschedule",
+      p: [
+        "If we cancel a session or programme, we will refund your fee in full. If we move it to a new date and the new date does not suit you, tell us and we will refund your fee in full.",
+      ],
+    },
+    {
+      h: "Duplicate or failed payments",
+      p: [
+        "If you are charged twice, or money leaves your account but your registration is not confirmed, contact us with your payment details and we will refund the extra or unconfirmed amount in full.",
+      ],
+    },
+    {
+      h: "How to cancel or request a refund",
+      p: [
+        `Email ${contact.email} with your name, the session or programme you registered for, and the Razorpay payment ID from your payment receipt. We will confirm within 2 working days.`,
+      ],
+    },
+    {
+      h: "How refunds are paid",
+      p: [
+        "Approved refunds are paid to the original payment method through Razorpay, and include any GST you paid. We start the refund within 5 working days of approving it; your bank usually takes a further 5 to 7 working days to show it in your account.",
+      ],
+    },
+    {
+      h: "Group and corporate bookings",
+      p: [
+        "Bookings made against an invoice, or under a separate agreement with your organisation, follow the cancellation terms of that agreement.",
+      ],
+    },
+    {
+      h: "Contact us",
+      p: [`For questions about this policy, contact us at ${contact.email} or ${contact.phone}. ${ORG}, ${contact.address}.`],
+    },
+  ],
+};
+
 export const legalDocs: Record<string, LegalDoc> = {
   [privacyPolicy.slug]: privacyPolicy,
   [disclaimer.slug]: disclaimer,
+  [refundPolicy.slug]: refundPolicy,
 };

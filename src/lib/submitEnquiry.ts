@@ -30,7 +30,7 @@ const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "565sP1Y5l58ASC
 export type EnquiryResult = { ok: true } | { ok: false; error: string };
 
 /** Which form an enquiry came from. Matches the check constraint on the table. */
-export type EnquiryForm = "popup" | "contact" | "service" | "kit" | "other";
+export type EnquiryForm = "popup" | "contact" | "service" | "kit" | "masterclass" | "other";
 
 const val = (data: FormData, key: string) => {
   const v = data.get(key);
@@ -62,7 +62,13 @@ async function record(row: Record<string, string>): Promise<boolean> {
     const client = await db();
     // return=minimal: the anon role may insert but not read, so asking for
     // the row back would fail the whole request.
-    const { error } = await client.from("enquiries").insert(row);
+    let { error } = await client.from("enquiries").insert(row);
+    // 23514 is a check violation: a form name newer than the database's list
+    // of them. The row is kept under "other" rather than lost while the
+    // migration that adds the name is still to be run.
+    if (error?.code === "23514" && row.form !== "other") {
+      ({ error } = await client.from("enquiries").insert({ ...row, form: "other" }));
+    }
     if (error) console.error("[enquiry] could not record:", error.message);
     return !error;
   } catch (err) {
@@ -113,6 +119,7 @@ export async function submitEnquiry(
 
   const page = extra.source || (typeof window !== "undefined" ? window.location.pathname : "");
   const intent = extra.intent || val(data, "intent");
+  const message = extra.message || val(data, "message");
 
   // Keys here must match the {{variables}} used in the EmailJS template.
   const params: Record<string, string> = {
@@ -123,7 +130,7 @@ export async function submitEnquiry(
     intent: intent || "—",
     participants: val(data, "participants") || "—",
     mode: val(data, "mode") || "—",
-    message: val(data, "message") || "—",
+    message: message || "—",
     // A form may name where it came from; otherwise the page it sits on.
     source: page,
     subject: `Website enquiry: ${intent || "General"}`,
@@ -142,7 +149,7 @@ export async function submitEnquiry(
           intent: cap(intent, 300),
           participants: cap(val(data, "participants"), 60),
           mode: cap(val(data, "mode"), 60),
-          message: cap(val(data, "message"), 5000),
+          message: cap(message, 5000),
           page: cap(page, 300),
         }),
   ]);

@@ -16,11 +16,15 @@ export type PaymentRequest = {
   /** Everything the checkout form collects that an invoice needs. Carried
    *  to Razorpay as order notes, so the payment record holds what the
    *  invoice must say rather than leaving it in a browser that has closed. */
-  billing?: { gstin?: string; address?: string; designation?: string; stateCode?: string };
+  billing?: { gstin?: string; address?: string; designation?: string; stateCode?: string; organisation?: string };
+  /** Refuse to open a checkout unless the server holds live keys. Set by
+   *  public pages, so a server still on test keys cannot take a test card
+   *  as a real registration. */
+  requireLive?: boolean;
 };
 
 export type PaymentResult =
-  | { ok: true; orderId: string; paymentId: string; amountPaise: number; at: string }
+  | { ok: true; orderId: string; paymentId: string; amountPaise: number; at: string; invoiceNo?: string | null; live?: boolean }
   | { ok: false; error: string; cancelled?: boolean };
 
 export type PaymentGateway = {
@@ -131,6 +135,7 @@ export const razorpayGateway: PaymentGateway = {
             // paying and how they should be invoiced.
             customer: { ...req.customer, contact: tidyPhone(req.customer.contact ?? "") },
             billing: req.billing ?? {},
+            requireLive: req.requireLive === true,
           },
         ),
       ]);
@@ -143,7 +148,9 @@ export const razorpayGateway: PaymentGateway = {
           currency: order.currency,
           name: "Levitate PeopleSoft",
           description: req.courseTitle,
-          image: "/assets/logo.png",
+          // Absolute: the sheet runs on Razorpay's origin, where a bare path
+          // points at nothing and the logo falls back to a letter.
+          image: `${window.location.origin}/assets/logo.png`,
           // Razorpay sends its payment receipt to whatever it holds here, so
           // the phone has to be in a shape it can actually text.
           prefill: { name: req.customer.name, email: req.customer.email, contact: tidyPhone(req.customer.contact ?? "") },
@@ -165,7 +172,7 @@ export const razorpayGateway: PaymentGateway = {
 
       if (!success) return { ok: false, error: "Payment was cancelled.", cancelled: true };
 
-      const verified = await post<{ amountPaise: number; at: string }>("/api/razorpay-verify.php", {
+      const verified = await post<{ amountPaise: number; at: string; invoiceNo?: string | null; live?: boolean }>("/api/razorpay-verify.php", {
         orderId: success.razorpay_order_id,
         paymentId: success.razorpay_payment_id,
         signature: success.razorpay_signature,
@@ -178,6 +185,8 @@ export const razorpayGateway: PaymentGateway = {
         paymentId: success.razorpay_payment_id,
         amountPaise: verified.amountPaise,
         at: verified.at,
+        invoiceNo: verified.invoiceNo ?? null,
+        live: verified.live === true,
       };
     } catch (e) {
       return { ok: false, error: (e as Error).message };

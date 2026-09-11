@@ -93,6 +93,7 @@ export default function SiteFooter({
           <span style={{ display: "inline-flex", gap: 18, flexWrap: "wrap" }}>
             <Link href="/privacy-policy" className="site-footlink">Privacy Policy</Link>
             <Link href="/disclaimer" className="site-footlink">Disclaimer</Link>
+            <Link href="/refund-policy" className="site-footlink">Refund Policy</Link>
           </span>
         </div>
       </div>

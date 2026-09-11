@@ -24,6 +24,18 @@ $amount = rzp_price_for($slug);
 if ($amount === null) {
     rzp_fail('This course is not open for payment.');
 }
+if (rzp_is_closed($slug)) {
+    rzp_fail('Registrations for this session have closed.');
+}
+
+/**
+ * A public page asks for live payments only. While the server still holds
+ * test keys, it is turned away here rather than being handed a checkout that
+ * would accept a test card — a "registration" nobody paid for.
+ */
+if (($body['requireLive'] ?? false) === true && rzp_is_test_mode()) {
+    rzp_fail('Online payment is not open yet. Please call or WhatsApp us to reserve your seat.', 503);
+}
 
 /**
  * Everything the checkout form collects, carried onto the order.
@@ -53,6 +65,7 @@ foreach ([
     'customer_state'     => $billing['stateCode'] ?? '',
     'customer_address'   => $billing['address'] ?? '',
     'customer_role'      => $billing['designation'] ?? '',
+    'customer_org'       => $billing['organisation'] ?? '',
 ] as $k => $v) {
     $v = $note(is_string($v) ? $v : '');
     if ($v !== '') {
@@ -74,4 +87,5 @@ echo json_encode([
     'amountPaise' => $amount,
     'currency'    => 'INR',
     'keyId'       => rzp_cfg('RAZORPAY_KEY_ID'),
+    'live'        => !rzp_is_test_mode(),
 ]);

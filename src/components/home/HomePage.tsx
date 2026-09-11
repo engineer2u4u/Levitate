@@ -1130,6 +1130,9 @@ export default function HomePage() {
               <Link href="/disclaimer" className="lp-footlink">
                 Disclaimer
               </Link>
+              <Link href="/refund-policy" className="lp-footlink">
+                Refund Policy
+              </Link>
             </span>
           </div>
         </div>

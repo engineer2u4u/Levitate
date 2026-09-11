@@ -1,20 +1,16 @@
 /**
- * Named conversion events, pushed to the GTM data layer.
+ * Named conversion events, sent through the Google tag to GA4 and Ads.
  *
- * The site carries no tag manager yet. This exists so the pages that generate
- * conversions are already emitting the events the ad platforms will need —
- * when the container goes in, the history of what fires where does not have to
- * be reconstructed from memory. Until then every call is a no-op.
- *
- * Names match the strategy deck so the tag configuration can be written
+ * Names match the strategy deck so the conversion setup can be written
  * against them directly.
  */
 
-type Payload = Record<string, string | number | boolean | undefined>;
+type Payload = Record<string, unknown>;
 
 declare global {
   interface Window {
     dataLayer?: Record<string, unknown>[];
+    gtag?: (...args: unknown[]) => void;
   }
 }
 
@@ -25,12 +21,21 @@ export type TrackEvent =
   | "kit_download"
   | "kit_form_open"
   | "brochure_download"
-  | "payment_success";
+  | "payment_success"
+  // GA4's own ecommerce names, so its purchase reports and revenue fill in
+  // without mapping — and a GA4 purchase can be imported into Ads as-is.
+  | "begin_checkout"
+  | "purchase";
 
 export function track(event: TrackEvent, data: Payload = {}) {
   if (typeof window === "undefined") return;
   try {
-    (window.dataLayer ??= []).push({ event, ...data });
+    // gtag.js sends only what arrives through gtag() — an object pushed onto
+    // the data layer is read by a Tag Manager container, and this site runs
+    // the plain Google tag, not a container. Fall back to the push when the
+    // tag is absent (a build with analytics off), where it does no harm.
+    if (typeof window.gtag === "function") window.gtag("event", event, data);
+    else (window.dataLayer ??= []).push({ event, ...data });
   } catch {
     // Analytics must never be able to break a page it only observes.
   }

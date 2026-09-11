@@ -68,11 +68,30 @@ const RZP_PRICES_PAISE = [
     'pocso-child-safety'  => 2000000,
     'inclusive-workplace' => 4000000,
     'demo-course'         => 100000,
+    // The early-bird fee, open until the session starts. The ₹2,999 standard
+    // fee on the page is shown struck through and is never charged.
+    'posh-masterclass-2026' => 199900,
 ];
 
 function rzp_price_for(string $slug): ?int
 {
     return RZP_PRICES_PAISE[$slug] ?? null;
+}
+
+/**
+ * When a one-off session stops taking payment: the moment it starts. Courses
+ * are absent here and stay open. Checked when an order is created, not at
+ * verification — someone who opened checkout at 5:59 and paid at 6:01 has
+ * paid for a seat, not for nothing.
+ */
+const RZP_CLOSES_AT = [
+    'posh-masterclass-2026' => '2026-09-25T18:00:00+05:30',
+];
+
+function rzp_is_closed(string $slug): bool
+{
+    $at = RZP_CLOSES_AT[$slug] ?? null;
+    return $at !== null && time() >= strtotime($at);
 }
 
 /** Printed on the invoice, so it comes from here rather than from the client. */
@@ -81,6 +100,7 @@ const RZP_COURSE_TITLES = [
     'pocso-child-safety'  => 'POCSO & Child Safety Facilitator Program (POCSO TTT)',
     'inclusive-workplace' => 'Inclusive Workplace Facilitator Program (DEI TTT)',
     'demo-course'         => 'Demo · Workplace Facilitation Essentials',
+    'posh-masterclass-2026' => 'PoSH 2026: The New Compliance & Workplace Reality — Masterclass, 25 September 2026',
 ];
 
 function rzp_title_for(string $slug): string

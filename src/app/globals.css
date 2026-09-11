@@ -645,3 +645,13 @@ body {
     grid-auto-flow: row;
   }
 }
+
+/* Masterclass facilitator card: a narrower portrait beside the name on phones. */
+@media (max-width: 640px) {
+  .mc-facilitator { grid-template-columns: 110px 1fr !important; }
+}
+/* The hero's jump-to-form button, for when the form is stacked out of sight. */
+.mc-mobile-cta { display: none; }
+@media (max-width: 900px) {
+  .mc-mobile-cta { display: block; }
+}

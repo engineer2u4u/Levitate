@@ -24,6 +24,7 @@ const routes: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/posh-train-the-trainer-certification/", priority: 0.9, changeFrequency: "weekly" },
   { path: "/pocso-train-the-trainer-certification/", priority: 0.9, changeFrequency: "weekly" },
   { path: "/dei-train-the-trainer-certification/", priority: 0.9, changeFrequency: "weekly" },
+  { path: "/posh-2026-masterclass/", priority: 0.9, changeFrequency: "weekly" },
   { path: "/services/train-the-trainer/", priority: 0.9, changeFrequency: "monthly" },
   { path: "/corporate-soft-skills-training-service/", priority: 0.9, changeFrequency: "monthly" },
   { path: "/services/institutional/", priority: 0.8, changeFrequency: "monthly" },
@@ -32,6 +33,7 @@ const routes: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/contact/", priority: 0.8, changeFrequency: "yearly" },
   { path: "/privacy-policy/", priority: 0.3, changeFrequency: "yearly" },
   { path: "/disclaimer/", priority: 0.3, changeFrequency: "yearly" },
+  { path: "/refund-policy/", priority: 0.3, changeFrequency: "yearly" },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

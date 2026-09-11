@@ -137,6 +137,7 @@ check() {
 check /                                        200
 check /certifications/                         200
 check /posh-train-the-trainer-certification/   200
+check /posh-2026-masterclass/                  200
 check /contact/                                200
 check /googleb70ed38c6bb644c5.html             200
 check /admin-panel/                            200

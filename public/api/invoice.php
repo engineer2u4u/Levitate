@@ -105,7 +105,11 @@ function lvt_financial_year(int $ts): string
  */
 function lvt_next_invoice_no(string $fy): ?string
 {
-    $path = lvt_invoice_dir() . "/counter-$fy.txt";
+    // Test payments number from their own counter under their own prefix. A
+    // test card must never take a number from the real series: a GST series
+    // may not gap, and a number burnt on a test would be a gap.
+    $test = function_exists('rzp_is_test_mode') && rzp_is_test_mode();
+    $path = lvt_invoice_dir() . ($test ? "/counter-test-$fy.txt" : "/counter-$fy.txt");
     $fh = @fopen($path, 'c+');
     if (!$fh) {
         return null;
@@ -123,7 +127,7 @@ function lvt_next_invoice_no(string $fy): ?string
     flock($fh, LOCK_UN);
     fclose($fh);
 
-    return sprintf('%s/%s/%03d', LVT_INVOICE_PREFIX, $fy, $n);
+    return sprintf('%s%s/%s/%03d', $test ? 'TEST-' : '', LVT_INVOICE_PREFIX, $fy, $n);
 }
 
 /* ------------------------------------------------------------------ */
@@ -185,6 +189,7 @@ function lvt_issue_invoice(string $paymentId, string $orderId, int $amountPaise,
             'gstin'   => $buyerGstin,
             'address' => (string) ($notes['customer_address'] ?? ''),
             'role'    => (string) ($notes['customer_role'] ?? ''),
+            'org'     => (string) ($notes['customer_org'] ?? ''),
         ],
         'place_of_supply' => $place . ' — ' . LVT_STATES[$place],
         'amounts'      => [
@@ -222,6 +227,9 @@ function lvt_invoice_html(array $inv): string
 
     $buyerGstin = $inv['buyer']['gstin'] !== ''
         ? '<div>GSTIN: <strong>' . $e($inv['buyer']['gstin']) . '</strong></div>' : '';
+    // A company buying with its GST number is the party being billed.
+    $buyerOrg = ($inv['buyer']['org'] ?? '') !== ''
+        ? '<div>' . $e($inv['buyer']['org']) . '</div>' : '';
     $buyerAddr = $inv['buyer']['address'] !== ''
         ? '<div>' . $e($inv['buyer']['address']) . '</div>' : '';
 
@@ -248,7 +256,7 @@ function lvt_invoice_html(array $inv): string
   <div style="margin-top:6px">
     <div style="font-weight:bold">' . $e($inv['buyer']['name']) . '</div>
     <div style="color:#5b6e82;font-size:13px">' . $e($inv['buyer']['email']) . '</div>
-    ' . $buyerAddr . $buyerGstin . '
+    ' . $buyerOrg . $buyerAddr . $buyerGstin . '
     <div style="color:#5b6e82;font-size:12.5px;margin-top:4px">Place of supply: ' . $e($inv['place_of_supply']) . '</div>
   </div>
 
