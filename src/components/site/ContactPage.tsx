@@ -2,10 +2,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type CSSProperties } from "react";
+import { useCallback, useState, useSyncExternalStore, type CSSProperties } from "react";
 import Reveal from "@/components/home/Reveal";
 import { contact } from "@/lib/site";
 import { submitEnquiry } from "@/lib/submitEnquiry";
+import { courseBySlug } from "@/lib/lms/courses";
 
 const INTENTS = ["Certification program (individual)", "Corporate training intervention", "Institutional / student program", "HR advisory & culture consulting", "Something else"];
 
@@ -62,6 +63,21 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 export default function ContactPage() {
   const [intent, setIntent] = useState(0);
+  /**
+   * The programme a landing page sent this visitor from, via ?from=<slug>.
+   * Resolved against the catalogue, so only a real programme's name can
+   * ever appear — the raw query string is never shown or sent. Read as an
+   * external value rather than effect-set state: a static export has no
+   * query at build time, and the server snapshot is simply "none".
+   */
+  const fromProgramme = useSyncExternalStore(
+    useCallback(() => () => {}, []),
+    useCallback(() => {
+      const slug = new URLSearchParams(window.location.search).get("from");
+      return (slug && courseBySlug(slug)?.title) || "";
+    }, []),
+    useCallback(() => "", []),
+  );
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -161,7 +177,10 @@ export default function ContactPage() {
                   const form = e.currentTarget;
                   setSending(true);
                   setError(null);
-                  const res = await submitEnquiry(form, { intent: INTENTS[intent] }, { form: "contact" });
+                  // A visitor sent from a programme's landing page is asking about that
+                  // programme; say so, or the enquiry reads like any other.
+                  const topic = fromProgramme && intent === 0 ? `${INTENTS[intent]} — ${fromProgramme}` : INTENTS[intent];
+                  const res = await submitEnquiry(form, { intent: topic }, { form: "contact" });
                   setSending(false);
                   if (res.ok) {
                     setSent(true);

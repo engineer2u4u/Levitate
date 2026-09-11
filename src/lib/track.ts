@@ -19,6 +19,7 @@ declare global {
 }
 
 export type TrackEvent =
+  | "enquire_click"
   | "reserve_seat_click"
   | "whatsapp_click"
   | "kit_download"

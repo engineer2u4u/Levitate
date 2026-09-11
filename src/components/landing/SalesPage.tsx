@@ -11,7 +11,7 @@ import TrustedBy from "@/components/site/TrustedBy";
 import YouTubeEmbed from "@/components/site/YouTubeEmbed";
 import VideoTestimonials, { type PlayableClip } from "@/components/home/VideoTestimonials";
 import { certificateCards } from "@/lib/certificateArt";
-import { ENROLMENT_OPEN, courseBySlug } from "@/lib/lms/courses";
+import { courseBySlug } from "@/lib/lms/courses";
 import { outlineBySlug } from "@/lib/programOutlines";
 import { contact } from "@/lib/site";
 import { track } from "@/lib/track";
@@ -89,9 +89,14 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
 
   const waHref = `${contact.whatsapp}?text=${encodeURIComponent(offer.whatsapp)}`;
 
-  const onReserve = () => {
-    track("reserve_seat_click", { course: offer.slug, price: offer.price.amount });
-    router.push(ENROLMENT_OPEN ? `/lms/checkout/${offer.slug}/` : `/lms/course/${offer.slug}/`);
+  /**
+   * The primary button now opens a conversation rather than a checkout. It
+   * carries the programme along, so the enquiry says which page it came from
+   * — otherwise every landing page's leads look alike in the admin.
+   */
+  const onEnquire = () => {
+    track("enquire_click", { course: offer.slug, price: offer.price.amount });
+    router.push(`/contact/?from=${offer.slug}`);
   };
 
   const onWhatsApp = () => track("whatsapp_click", { course: offer.slug, placement: "landing" });
@@ -124,8 +129,8 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
             </div>
 
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <button type="button" onClick={onReserve} className="lp-btn-grad" style={ctaPrimary}>
-                Reserve a seat →
+              <button type="button" onClick={onEnquire} className="lp-btn-grad" style={ctaPrimary}>
+                Enquire Now
               </button>
               <a href={waHref} target="_blank" rel="noopener noreferrer" onClick={onWhatsApp} style={ctaGhost}>
                 Talk to the team
@@ -287,7 +292,7 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
             Seats are limited per batch so that everyone gets facilitation practice and feedback. Reserve yours, or message us first — either is fine.
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <button type="button" onClick={onReserve} className="lp-btn-grad" style={ctaPrimary}>Reserve a seat →</button>
+            <button type="button" onClick={onEnquire} className="lp-btn-grad" style={ctaPrimary}>Enquire Now</button>
             <a href={waHref} target="_blank" rel="noopener noreferrer" onClick={onWhatsApp} style={ctaGhost}>Talk to the team</a>
           </div>
           <div style={{ font: T.small, color: "rgba(255,255,255,.55)", marginTop: 18 }}>
