@@ -128,10 +128,10 @@ export const POSH_LANDING: LandingOffer = {
   },
 
   bundle: {
-    title: "Also running: POCSO & Child Safety",
+    title: "Also running: Inclusive Workplace (DEI)",
     body:
-      "The POCSO Facilitator certification starts 24 October, three evenings, for professionals in child-facing organisations. Ask us about taking both.",
-    href: "/pocso-train-the-trainer-certification/",
+      "The DEI Train-the-Trainer certification starts 10 October — twenty applied hours anchored in the BRIDGE Inclusion Framework. Ask us about taking both.",
+    href: "/dei-train-the-trainer-certification/",
   },
 
   faqs: [],
