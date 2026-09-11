@@ -19,7 +19,8 @@ export default function Page() {
     <>
       <SiteHeader active="certifications" />
       <SalesPage offer={{ ...POCSO_LANDING, faqs: faqsBySlug("pocso-child-safety") ?? [] }} />
-      <SiteFooter />
+      {/* Accreditations already sit after the hero; the footer's copy would repeat them. */}
+      <SiteFooter accreditations={false} bandWidth={1180} />
       <WhatsAppFloat />
       <ScrollToTop />
     </>

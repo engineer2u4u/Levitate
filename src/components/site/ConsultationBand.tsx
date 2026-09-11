@@ -15,15 +15,18 @@ export default function ConsultationBand({
   // Breathing room above and below by default: the band butts against whatever
   // section precedes it otherwise, wherever it is dropped in.
   padding = "72px 48px",
+  maxWidth = 1240,
 }: {
   /** What the conversation would be about — the programme, or the work. */
   subject?: string;
   background?: string;
   padding?: string;
+  /** Pages with their own content width pass it, so the band lines up. */
+  maxWidth?: number;
 }) {
   return (
     <div className="site-page-sec" style={{ background, padding }}>
-      <div style={{ maxWidth: 1240, margin: "0 auto" }}>
+      <div style={{ maxWidth, margin: "0 auto" }}>
         <div className="lms-cta-band" style={{ background: "linear-gradient(120deg,#0c2a45,#0a1f38)", borderRadius: 22, padding: "36px 40px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 28, flexWrap: "wrap" }}>
           <div style={{ flex: 1, minWidth: 260 }}>
             <div style={{ font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#7fe3dc", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 10 }}>

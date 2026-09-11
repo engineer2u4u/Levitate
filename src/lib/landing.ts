@@ -14,6 +14,9 @@
 
 import type { Faq } from "./lms/poshFaqs";
 
+/** The glyphs the "why" cards can carry. */
+export type WhyIcon = "clock" | "award" | "person" | "screen" | "shield" | "layers";
+
 export type LandingOffer = {
   /** Course slug — the price and the Razorpay order both come from it. */
   slug: string;
@@ -47,7 +50,7 @@ export type LandingOffer = {
   /** Caption under the play control on the poster. */
   posterLabel?: string;
   /** The four reasons this programme, not a cheaper one. */
-  why: { k: string; v: string }[];
+  why: { k: string; v: string; icon: WhyIcon }[];
   /** What the certification opens up afterwards. */
   career: { title: string; intro: string; points: string[] };
   /** Gated lead magnet. Unset until the PDF exists in /public. */
@@ -105,10 +108,10 @@ export const POSH_LANDING: LandingOffer = {
   posterLabel: "Watch a PoSH session",
 
   why: [
-    { k: "15 learning hours", v: "Twelve hours live across six sessions and three weekends, plus three guided hours in the LMS — long enough to practise facilitating, not just to be told about it." },
-    { k: "SHRM PDCs", v: "Levitate PeopleSoft is a SHRM Recertification Provider. The programme earns Professional Development Credits toward SHRM-CP® and SHRM-SCP® recertification." },
-    { k: "The founder teaches it", v: "Every session is led by Parichita Kotnala — a certified PoSH and POCSO educator with 15+ years of global HR experience, not a rotating panel." },
-    { k: "Dedicated LMS access", v: "Recorded sessions, module resources, the trainer toolkit, downloadable templates and knowledge checks, in one place." },
+    { k: "15 learning hours", icon: "clock", v: "Twelve hours live across six sessions and three weekends, plus three guided hours in the LMS — long enough to practise facilitating, not just to be told about it." },
+    { k: "SHRM PDCs", icon: "award", v: "Levitate PeopleSoft is a SHRM Recertification Provider. The programme earns Professional Development Credits toward SHRM-CP® and SHRM-SCP® recertification." },
+    { k: "The founder teaches it", icon: "person", v: "Every session is led by Parichita Kotnala — a certified PoSH and POCSO educator with 15+ years of global HR experience, not a rotating panel." },
+    { k: "Dedicated LMS access", icon: "screen", v: "Recorded sessions, module resources, the trainer toolkit, downloadable templates and knowledge checks, in one place." },
   ],
 
   career: {
@@ -166,10 +169,10 @@ export const POCSO_LANDING: LandingOffer = {
   posterLabel: "Watch a POCSO session",
 
   why: [
-    { k: "Built for child-facing work", v: "Schools, NGOs, hospitals, sport and hospitality — settings where a disclosure is a real possibility and the response has to be right first time." },
-    { k: "SHRM PDCs", v: "Levitate PeopleSoft is a SHRM Recertification Provider. The programme earns Professional Development Credits toward SHRM-CP® and SHRM-SCP® recertification." },
-    { k: "The founder teaches it", v: "Every session is led by Parichita Kotnala, a certified PoSH and POCSO educator and trainer." },
-    { k: "Dedicated LMS access", v: "Recorded sessions, module resources, the trainer toolkit, templates and knowledge checks, in one place." },
+    { k: "Built for child-facing work", icon: "shield", v: "Schools, NGOs, hospitals, sport and hospitality — settings where a disclosure is a real possibility and the response has to be right first time." },
+    { k: "SHRM PDCs", icon: "award", v: "Levitate PeopleSoft is a SHRM Recertification Provider. The programme earns Professional Development Credits toward SHRM-CP® and SHRM-SCP® recertification." },
+    { k: "The founder teaches it", icon: "person", v: "Every session is led by Parichita Kotnala, a certified PoSH and POCSO educator and trainer." },
+    { k: "Dedicated LMS access", icon: "screen", v: "Recorded sessions, module resources, the trainer toolkit, templates and knowledge checks, in one place." },
   ],
 
   career: {
@@ -232,10 +235,10 @@ export const DEI_LANDING: LandingOffer = {
   posterLabel: "Watch a DEI session",
 
   why: [
-    { k: "20 applied hours", v: "Long enough to practise facilitating rather than to be told about inclusion — thirteen modules, from the global landscape through to running the room." },
-    { k: "The BRIDGE Framework", v: "Bias visible, respectful language, inclusive decisions, dialogue over debate, growing belonging, everyday allyship. A structure to facilitate with, not a slide to admire." },
-    { k: "SHRM PDCs", v: "Levitate PeopleSoft is a SHRM Recertification Provider. The programme earns Professional Development Credits toward SHRM-CP® and SHRM-SCP® recertification." },
-    { k: "The founder teaches it", v: "Every session is led by Parichita Kotnala — 15+ years of global HR across India, the UK, Europe, the US and Canada, not a rotating panel." },
+    { k: "20 applied hours", icon: "clock", v: "Long enough to practise facilitating rather than to be told about inclusion — thirteen modules, from the global landscape through to running the room." },
+    { k: "The BRIDGE Framework", icon: "layers", v: "Bias visible, respectful language, inclusive decisions, dialogue over debate, growing belonging, everyday allyship. A structure to facilitate with, not a slide to admire." },
+    { k: "SHRM PDCs", icon: "award", v: "Levitate PeopleSoft is a SHRM Recertification Provider. The programme earns Professional Development Credits toward SHRM-CP® and SHRM-SCP® recertification." },
+    { k: "The founder teaches it", icon: "person", v: "Every session is led by Parichita Kotnala — 15+ years of global HR across India, the UK, Europe, the US and Canada, not a rotating panel." },
   ],
 
   career: {

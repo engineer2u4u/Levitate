@@ -29,14 +29,26 @@ function PinIcon() {
 const head = { font: "700 13px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", letterSpacing: ".1em", textTransform: "uppercase" as const, marginBottom: 16 };
 const col = { display: "flex", flexDirection: "column" as const, gap: 10, font: "500 13.5px 'Plus Jakarta Sans',sans-serif" };
 
-export default function SiteFooter() {
+export default function SiteFooter({
+  accreditations = true,
+  bandWidth = 1240,
+}: {
+  /**
+   * False on pages that already place accreditations themselves. The
+   * landing pages put them straight after the hero, where they persuade;
+   * a second copy at the foot of the page only repeats them.
+   */
+  accreditations?: boolean;
+  /** Content width for the bands above the footer, to match the page. */
+  bandWidth?: number;
+} = {}) {
   return (
     <>
     {/* Both of these run above the footer, so every page carries them. The
-        homepage is the one exception — it does not use SiteFooter and places
-        its own copies, so nothing is shown twice. */}
-    <ConsultationBand background="#f7fafc" />
-    <Accreditations spaceBelow />
+        homepage does not use SiteFooter and places its own copies; the
+        landing pages turn accreditations off here for the same reason. */}
+    <ConsultationBand background="#f7fafc" maxWidth={bandWidth} />
+    {accreditations && <Accreditations spaceBelow maxWidth={bandWidth} />}
     <div className="site-sec" style={{ background: "#eef3f7", borderTop: "1px solid #dbe5ec", padding: "64px 48px 32px" }}>
       <div style={{ maxWidth: 1240, margin: "0 auto" }}>
         <div className="site-footer-grid" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1.2fr", gap: 48, marginBottom: 48 }}>

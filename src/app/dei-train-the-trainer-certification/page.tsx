@@ -33,7 +33,8 @@ export default function Page() {
     <>
       <SiteHeader active="certifications" />
       <SalesPage offer={{ ...DEI_LANDING, faqs: faqsBySlug("inclusive-workplace") ?? [] }} />
-      <SiteFooter />
+      {/* Accreditations already sit after the hero; the footer's copy would repeat them. */}
+      <SiteFooter accreditations={false} bandWidth={1180} />
       <WhatsAppFloat />
       <ScrollToTop />
     </>

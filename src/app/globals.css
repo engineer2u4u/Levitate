@@ -625,3 +625,23 @@ body {
     margin-bottom: 20px;
   }
 }
+
+/* Landing-page module list: numbered down the first column, then down the
+   second, the way a numbered list is read. A plain two-column grid flows
+   across each row instead, so 01 sat beside 02 and the eye zigzagged.
+   --rows is set inline to half the count, rounded up. */
+.lp-modules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(var(--rows), auto);
+  grid-auto-flow: column;
+  gap: 12px 14px;
+}
+@media (max-width: 760px) {
+  /* One column: back to ordinary row flow, still in order. */
+  .lp-modules {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-auto-flow: row;
+  }
+}

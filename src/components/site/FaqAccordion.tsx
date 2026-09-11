@@ -11,12 +11,24 @@ import type { Faq } from "@/lib/lms/poshFaqs";
  * and in-page find still reaches text inside a closed answer. The open index is
  * tracked only to rotate the chevron.
  */
-export default function FaqAccordion({ items, heading = "Frequently asked questions" }: { items: Faq[]; heading?: string }) {
+export default function FaqAccordion({
+  items,
+  heading = "Frequently asked questions",
+  size = "md",
+}: {
+  items: Faq[];
+  heading?: string;
+  /** "lg" sets questions and answers at the landing pages' body scale. */
+  size?: "md" | "lg";
+}) {
   const [open, setOpen] = useState<number | null>(null);
+  const q = size === "lg" ? "700 16px/1.5" : "700 14.5px/1.55";
+  const a = size === "lg" ? "400 15px/1.75" : "400 13.5px/1.8";
+  const eyebrow = size === "lg" ? "700 12px" : "700 11.5px";
 
   return (
     <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
-      <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 18 }}>{heading}</div>
+      <div style={{ font: `${eyebrow} 'Plus Jakarta Sans',sans-serif`, color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 18 }}>{heading}</div>
       <div style={{ display: "flex", flexDirection: "column" }}>
         {items.map((f, i) => (
           <details
@@ -25,7 +37,7 @@ export default function FaqAccordion({ items, heading = "Frequently asked questi
             style={{ borderBottom: i < items.length - 1 ? "1px solid #eef3f7" : "none" }}
           >
             <summary
-              style={{ cursor: "pointer", listStyle: "none", display: "flex", alignItems: "flex-start", gap: 14, padding: "16px 0", font: "700 14.5px/1.55 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}
+              style={{ cursor: "pointer", listStyle: "none", display: "flex", alignItems: "flex-start", gap: 14, padding: "16px 0", font: `${q} 'Plus Jakarta Sans',sans-serif`, color: "#0a1b33" }}
             >
               <span aria-hidden style={{ flex: "none", font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#2f7fd6", fontVariantNumeric: "tabular-nums", marginTop: 3, minWidth: 20 }}>
                 {String(i + 1).padStart(2, "0")}
@@ -39,7 +51,7 @@ export default function FaqAccordion({ items, heading = "Frequently asked questi
             </summary>
             <div style={{ padding: "0 40px 18px 34px", display: "flex", flexDirection: "column", gap: 10 }}>
               {f.a.map((para) => (
-                <p key={para} style={{ font: "400 13.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: 0 }}>{para}</p>
+                <p key={para} style={{ font: `${a} 'Plus Jakarta Sans',sans-serif`, color: "#5b6e82", margin: 0 }}>{para}</p>
               ))}
             </div>
           </details>

@@ -12,7 +12,26 @@ import type { CertificateCard } from "@/lib/certificateArt";
  * scaled up, which stays sharp at any size instead of blurring the way a
  * bitmap would.
  */
-export default function CertificateGallery({ cards, columns = 2 }: { cards: CertificateCard[]; columns?: 1 | 2 }) {
+export default function CertificateGallery({
+  cards,
+  columns = 2,
+  equal = false,
+}: {
+  cards: CertificateCard[];
+  columns?: 1 | 2;
+  /**
+   * Frame every certificate at the same size. The SHRM artwork is 3:2 and
+   * the Levitate one 16:9, so at equal widths the SHRM one stood taller and
+   * the pair looked mismatched. Each now sits centred in an identical 3:2
+   * frame — the taller shape, so neither is cropped.
+   *
+   * The frame is 1.4423:1, not 3:2. Padding in % is a share of the width on
+   * all four sides, so 4% padding in a 3:2 box leaves an interior shorter
+   * than 3:2 and the SHRM plate would be clipped. 1 / (0.92 × 2/3 + 0.08)
+   * makes the interior exactly 3:2.
+   */
+  equal?: boolean;
+}) {
   const [open, setOpen] = useState<number | null>(null);
   const shown = open === null ? null : cards[open];
 
@@ -42,7 +61,15 @@ export default function CertificateGallery({ cards, columns = 2 }: { cards: Cert
               aria-label={`Enlarge the ${c.title}`}
               style={{ display: "block", width: "100%", padding: 0, border: "1px solid #e3eaf0", borderRadius: 12, overflow: "hidden", background: "#f7fafc", lineHeight: 0 }}
             >
-              <CertificatePlate issue={c.issue} />
+              {equal ? (
+                <span style={{ display: "flex", alignItems: "center", justifyContent: "center", aspectRatio: "1.4423", padding: "4%" }}>
+                  <span style={{ display: "block", width: "100%", boxShadow: "0 6px 22px rgba(10,27,51,.12)" }}>
+                    <CertificatePlate issue={c.issue} />
+                  </span>
+                </span>
+              ) : (
+                <CertificatePlate issue={c.issue} />
+              )}
             </button>
             <figcaption style={{ marginTop: 10 }}>
               <div style={{ font: "700 13px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{c.title}</div>

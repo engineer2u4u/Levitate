@@ -38,7 +38,8 @@ export default function Page() {
     <>
       <SiteHeader active="certifications" />
       <SalesPage offer={{ ...POSH_LANDING, faqs: faqsBySlug("posh-trainer") ?? [] }} />
-      <SiteFooter />
+      {/* Accreditations already sit after the hero; the footer's copy would repeat them. */}
+      <SiteFooter accreditations={false} bandWidth={1180} />
       <WhatsAppFloat />
       <ScrollToTop />
     </>

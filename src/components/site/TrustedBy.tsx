@@ -9,10 +9,10 @@ import { trustedLogos } from "@/lib/site";
  * logos supplied in the content doc. Logos arrive with mixed backgrounds, so
  * each sits in its own white card to keep the row visually even.
  */
-export default function TrustedBy() {
+export default function TrustedBy({ maxWidth = 1240 }: { maxWidth?: number } = {}) {
   return (
     <div className="site-page-sec" style={{ background: "#f4f7f9", padding: "80px 48px" }}>
-      <div style={{ maxWidth: 1240, margin: "0 auto" }}>
+      <div style={{ maxWidth, margin: "0 auto" }}>
         <Reveal style={{ textAlign: "center", marginBottom: 44 }}>
           <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Our Clients &amp; Partners</div>
           <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>
