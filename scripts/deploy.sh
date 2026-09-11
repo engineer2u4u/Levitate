@@ -62,7 +62,13 @@ grep -q 'href="/lms/"' out/index.html && die "this is a testing build (the LMS i
 # Verification builds switch the Google Ads tag off so scripted runs do not
 # count as visits, and leave out/ in that state. Shipping one would silently
 # stop conversion tracking and the remarketing audience.
-grep -q "AW-18437850806" out/index.html || die "out/ has no Google Ads tag — it was built with NEXT_PUBLIC_ANALYTICS_OFF=1. Rebuild without it."
+for id in G-ZF8DHDXC06 AW-18437850806; do
+  grep -q "$id" out/index.html || die "out/ is missing Google tag $id — it was built with NEXT_PUBLIC_ANALYTICS_OFF=1. Rebuild without it."
+done
+
+# Search Console verifies ownership by fetching this file. Losing it on a
+# deploy would unverify the property.
+[ -f out/googleb70ed38c6bb644c5.html ] || die "out/ has no Search Console verification file."
 
 say "comparing the live root .htaccess with the build's"
 LIVE_HT="$(mktemp)"; trap 'rm -f "$LIVE_HT"' EXIT
@@ -132,6 +138,7 @@ check /                                        200
 check /certifications/                         200
 check /posh-train-the-trainer-certification/   200
 check /contact/                                200
+check /googleb70ed38c6bb644c5.html             200
 check /admin-panel/                            200
 check /admin-panel/enquiries/                  200
 ADMIN_CHUNK="$(curl -s "$ORIGIN/admin-panel/" | grep -o '/admin-panel/_next/static/chunks/[^"]*\.js' | head -1)"
