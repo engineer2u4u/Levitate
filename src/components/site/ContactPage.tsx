@@ -161,7 +161,7 @@ export default function ContactPage() {
                   const form = e.currentTarget;
                   setSending(true);
                   setError(null);
-                  const res = await submitEnquiry(form, { intent: INTENTS[intent] });
+                  const res = await submitEnquiry(form, { intent: INTENTS[intent] }, { form: "contact" });
                   setSending(false);
                   if (res.ok) {
                     setSent(true);

@@ -1,14 +1,24 @@
 import emailjs from "@emailjs/browser";
+import { supabaseConfig, supabaseConfigured } from "@/lib/lms/auth";
 
 /**
- * Sends enquiry forms via EmailJS.
+ * Sends an enquiry two ways: an EmailJS email to the office, and a row in the
+ * `enquiries` table the admin portal reads.
  *
  * EmailJS connects to the Outlook mailbox over OAuth rather than SMTP AUTH,
  * so it works even with Microsoft 365 Security Defaults enabled (which block
  * legacy SMTP authentication outright).
  *
- * The public key is meant to be visible in the browser — restrict usage in the
- * EmailJS dashboard by allow-listing levitatepeoplesoft.com.
+ * The table exists because an email is not a record. Nobody can filter an
+ * inbox by programme or export it to a spreadsheet, and an email that fails
+ * to arrive is an enquiry lost without trace.
+ *
+ * The two run side by side and the enquiry counts as received if EITHER
+ * lands. Telling a visitor their message failed when it is sitting safely in
+ * the database — or in the inbox — would send them away for nothing.
+ *
+ * The EmailJS public key is meant to be visible in the browser — restrict
+ * usage in the EmailJS dashboard by allow-listing levitatepeoplesoft.com.
  */
 // These are not secrets — EmailJS ships them to the browser by design, so they
 // live here to keep builds reproducible. Abuse is prevented by allow-listing
@@ -19,12 +29,77 @@ const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "565sP1Y5l58ASC
 
 export type EnquiryResult = { ok: true } | { ok: false; error: string };
 
+/** Which form an enquiry came from. Matches the check constraint on the table. */
+export type EnquiryForm = "popup" | "contact" | "service" | "kit" | "other";
+
 const val = (data: FormData, key: string) => {
   const v = data.get(key);
   return typeof v === "string" ? v.trim() : "";
 };
 
-export async function submitEnquiry(form: HTMLFormElement, extra: Record<string, string> = {}): Promise<EnquiryResult> {
+/**
+ * A client with no session of its own. An enquiry is anonymous by nature,
+ * and the insert policy admits the anon role — borrowing a signed-in
+ * learner's session would only tie their account to a public form for no
+ * reason.
+ */
+let dbPromise: Promise<import("@supabase/supabase-js").SupabaseClient> | null = null;
+function db() {
+  dbPromise ??= import("@supabase/supabase-js").then((m) =>
+    m.createClient(supabaseConfig.url, supabaseConfig.anonKey, {
+      auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    }),
+  );
+  return dbPromise;
+}
+
+/** Trims to the column's limit, so one overlong field cannot fail the row. */
+const cap = (v: string, n: number) => (v.length > n ? v.slice(0, n) : v);
+
+async function record(row: Record<string, string>): Promise<boolean> {
+  if (!supabaseConfigured) return false;
+  try {
+    const client = await db();
+    // return=minimal: the anon role may insert but not read, so asking for
+    // the row back would fail the whole request.
+    const { error } = await client.from("enquiries").insert(row);
+    if (error) console.error("[enquiry] could not record:", error.message);
+    return !error;
+  } catch (err) {
+    console.error("[enquiry] could not record:", err);
+    return false;
+  }
+}
+
+async function email(params: Record<string, string>): Promise<{ ok: boolean; detail: string }> {
+  if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) return { ok: false, detail: "" };
+  try {
+    await emailjs.send(SERVICE_ID, TEMPLATE_ID, params, { publicKey: PUBLIC_KEY });
+    return { ok: true, detail: "" };
+  } catch (err: unknown) {
+    const detail =
+      typeof err === "object" && err !== null && "text" in err && typeof (err as { text: unknown }).text === "string"
+        ? (err as { text: string }).text
+        : "";
+    console.error("[enquiry] EmailJS send failed:", err);
+    return { ok: false, detail };
+  }
+}
+
+export async function submitEnquiry(
+  form: HTMLFormElement,
+  extra: Record<string, string> = {},
+  opts: {
+    /** Which form this is — drives the admin's filter. */
+    form?: EnquiryForm;
+    /**
+     * False for submissions that use this path to send an email but are not
+     * enquiries — a signed learner acknowledgement, say. They would be noise
+     * in a list of people asking about programmes.
+     */
+    store?: boolean;
+  } = {},
+): Promise<EnquiryResult> {
   const data = new FormData(form);
 
   // Honeypot. It is a CHECKBOX on purpose: Chrome autofill populates every text
@@ -36,9 +111,8 @@ export async function submitEnquiry(form: HTMLFormElement, extra: Record<string,
     return { ok: true };
   }
 
-  if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
-    return { ok: false, error: "The enquiry form is not configured yet." };
-  }
+  const page = extra.source || (typeof window !== "undefined" ? window.location.pathname : "");
+  const intent = extra.intent || val(data, "intent");
 
   // Keys here must match the {{variables}} used in the EmailJS template.
   const params: Record<string, string> = {
@@ -46,24 +120,37 @@ export async function submitEnquiry(form: HTMLFormElement, extra: Record<string,
     from_email: val(data, "email"),
     phone: val(data, "phone") || "—",
     organization: val(data, "organization") || "—",
-    intent: extra.intent || val(data, "intent") || "—",
+    intent: intent || "—",
     participants: val(data, "participants") || "—",
     mode: val(data, "mode") || "—",
     message: val(data, "message") || "—",
     // A form may name where it came from; otherwise the page it sits on.
-    source: extra.source || (typeof window !== "undefined" ? window.location.pathname : ""),
-    subject: `Website enquiry: ${extra.intent || val(data, "intent") || "General"}`,
+    source: page,
+    subject: `Website enquiry: ${intent || "General"}`,
   };
 
-  try {
-    await emailjs.send(SERVICE_ID, TEMPLATE_ID, params, { publicKey: PUBLIC_KEY });
-    return { ok: true };
-  } catch (err: unknown) {
-    const detail =
-      typeof err === "object" && err !== null && "text" in err && typeof (err as { text: unknown }).text === "string"
-        ? (err as { text: string }).text
-        : "";
-    console.error("[enquiry] EmailJS send failed:", err);
-    return { ok: false, error: detail ? `We could not send your enquiry (${detail}).` : "We could not send your enquiry just now." };
-  }
+  const [mailed, stored] = await Promise.all([
+    email(params),
+    opts.store === false
+      ? Promise.resolve(false)
+      : record({
+          form: opts.form ?? "other",
+          name: cap(val(data, "name"), 200),
+          email: cap(val(data, "email"), 320),
+          phone: cap(val(data, "phone"), 40),
+          organization: cap(val(data, "organization"), 200),
+          intent: cap(intent, 300),
+          participants: cap(val(data, "participants"), 60),
+          mode: cap(val(data, "mode"), 60),
+          message: cap(val(data, "message"), 5000),
+          page: cap(page, 300),
+        }),
+  ]);
+
+  if (mailed.ok || stored) return { ok: true };
+
+  return {
+    ok: false,
+    error: mailed.detail ? `We could not send your enquiry (${mailed.detail}).` : "We could not send your enquiry just now.",
+  };
 }

@@ -41,7 +41,7 @@ export default function LeadGate({
     const res = await submitEnquiry(e.currentTarget, {
       intent: `Kit download — ${kit.title}`,
       source: typeof window !== "undefined" ? window.location.pathname : "",
-    });
+    }, { form: "kit" });
 
     track("kit_download", { course: slug, kit: kit.title });
     setState("done");

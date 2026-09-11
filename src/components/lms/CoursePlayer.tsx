@@ -629,7 +629,7 @@ function Acknowledgement({
     await submitEnquiry(e.currentTarget, {
       intent: `Acknowledgement — ${item.title}`,
       source: typeof window !== "undefined" ? window.location.pathname : "",
-    });
+    }, { store: false });
     setAt(when.toLocaleString("en-IN", { dateStyle: "full", timeStyle: "short" }));
     setBusy(false);
     onSign(item);

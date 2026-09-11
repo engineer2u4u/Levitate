@@ -86,7 +86,7 @@ export default function EnquiryPopup() {
     // No `intent` override here — the dropdown's own value has to reach the
     // mail, otherwise every pop-up enquiry arrives without the program on it.
     // Provenance goes in `source` instead.
-    const res = await submitEnquiry(formRef.current, { source: `Landing pop-up (${window.location.pathname})` });
+    const res = await submitEnquiry(formRef.current, { source: `Landing pop-up (${window.location.pathname})` }, { form: "popup" });
     setBusy(false);
     if (res.ok) {
       setSent(true);

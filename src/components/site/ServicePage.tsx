@@ -343,7 +343,7 @@ export default function ServicePage({
                   const form = e.currentTarget;
                   setSending(true);
                   setError(null);
-                  const res = await submitEnquiry(form, { intent: `${p.crumb} — ${p.options[opt]}` });
+                  const res = await submitEnquiry(form, { intent: `${p.crumb} — ${p.options[opt]}` }, { form: "service" });
                   setSending(false);
                   if (res.ok) {
                     setSent(true);
