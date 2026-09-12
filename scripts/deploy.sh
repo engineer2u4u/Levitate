@@ -129,7 +129,7 @@ ssh_ "set -e
   ls | grep -vxF -f ~/keep.txt > ~/stale.txt || true
   # Refuse outright if anything on the delete list is part of the new build.
   if grep -qxF -f ~/keep.txt ~/stale.txt; then echo 'overlap with the new build — not pruning'; exit 1; fi
-  xargs -r rm -f < ~/stale.txt
+  xargs -r rm -rf < ~/stale.txt
   echo \"   removed \$(wc -l < ~/stale.txt) stale chunk(s)\"
   rm -f ~/keep.txt ~/stale.txt"
 
