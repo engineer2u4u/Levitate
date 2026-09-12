@@ -3,8 +3,10 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import Reveal from "@/components/home/Reveal";
-import { batches } from "@/lib/site";
 import BrandText from "@/components/site/BrandText";
+import { useCatalog } from "@/components/site/CatalogProvider";
+import { batchCards } from "@/lib/catalog";
+import { formatFee } from "@/lib/lms/courses";
 
 /**
  * Live cohorts open for enrolment.
@@ -22,6 +24,23 @@ const eyebrow: CSSProperties = {
 };
 
 export default function UpcomingBatches({ background = "#f4f7f9" }: { background?: string }) {
+  // Shaped as the cards always were; the facts now come from the catalogue,
+  // dated batches first and earliest first.
+  const batches = batchCards(useCatalog()).flatMap((c) =>
+    c.batch
+      ? [{
+          tag: c.batch.tag,
+          title: c.batch.title,
+          status: c.batch.statusLabel,
+          open: c.status === "enrolling",
+          rows: c.batch.rows,
+          fee: formatFee(c.feePaise),
+          feeNote: c.batch.feeNote,
+          cta: c.batch.cta,
+        }]
+      : [],
+  );
+
   return (
     <div id="upcoming" className="site-page-sec" style={{ background, padding: "88px 48px", scrollMarginTop: 110 }}>
       <div style={{ maxWidth: 1240, margin: "0 auto" }}>

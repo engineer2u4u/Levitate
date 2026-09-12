@@ -1,13 +1,17 @@
+"use client";
+
 import Link from "next/link";
-import { batches } from "@/lib/site";
+import { useCatalog } from "@/components/site/CatalogProvider";
+import { batchCards, startsText } from "@/lib/catalog";
 
 /**
  * Full-width enrolment strip that sits directly under the homepage nav.
- * Reads the open cohorts from shared site data, so it disappears on its own
- * once no batch is enrolling rather than advertising stale dates.
+ * Reads the enrolling, dated batches from the catalogue (the admin's Courses
+ * and Sessions screens), so it disappears on its own once no batch is
+ * enrolling rather than advertising stale dates.
  */
 export default function AnnouncementBar() {
-  const open = batches.filter((b) => b.open && b.short && b.starts);
+  const open = batchCards(useCatalog()).filter((c) => c.status === "enrolling" && c.batch?.short && startsText(c));
   if (open.length === 0) return null;
 
   return (
@@ -26,7 +30,7 @@ export default function AnnouncementBar() {
           </svg>
         </span>
         <div style={{ font: "700 15px/1.45 'Plus Jakarta Sans',sans-serif", color: "#fff" }}>
-          Enrolment open: {open.map((b) => `${b.short} from ${b.starts}`).join(" · ")}
+          Enrolment open: {open.map((c) => `${c.batch?.short} from ${startsText(c)}`).join(" · ")}
         </div>
         <Link
           href="/certifications#upcoming"

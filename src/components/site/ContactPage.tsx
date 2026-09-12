@@ -6,7 +6,8 @@ import { useCallback, useState, useSyncExternalStore, type CSSProperties } from 
 import Reveal from "@/components/home/Reveal";
 import { contact } from "@/lib/site";
 import { submitEnquiry } from "@/lib/submitEnquiry";
-import { courseBySlug } from "@/lib/lms/courses";
+import { useCatalog } from "@/components/site/CatalogProvider";
+import { catalogCourse } from "@/lib/catalog";
 
 const INTENTS = ["Certification program (individual)", "Corporate training intervention", "Institutional / student program", "HR advisory & culture consulting", "Something else"];
 
@@ -70,14 +71,13 @@ export default function ContactPage() {
    * external value rather than effect-set state: a static export has no
    * query at build time, and the server snapshot is simply "none".
    */
-  const fromProgramme = useSyncExternalStore(
+  const fromSlug = useSyncExternalStore(
     useCallback(() => () => {}, []),
-    useCallback(() => {
-      const slug = new URLSearchParams(window.location.search).get("from");
-      return (slug && courseBySlug(slug)?.title) || "";
-    }, []),
+    useCallback(() => new URLSearchParams(window.location.search).get("from") ?? "", []),
     useCallback(() => "", []),
   );
+  const catalog = useCatalog();
+  const fromProgramme = (fromSlug && catalogCourse(catalog, fromSlug)?.title) || "";
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -138,8 +138,9 @@ export default function ContactPage() {
       {/* FORM + INFO */}
       <div className="site-page-sec" style={{ background: "#fff", padding: "20px 48px 88px" }}>
         <div className="site-stack" style={{ maxWidth: 1240, margin: "0 auto", display: "grid", gridTemplateColumns: "1.15fr .85fr", gap: 34, alignItems: "start" }}>
-          {/* Form */}
-          <div style={{ background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 22, padding: "40px 42px", boxShadow: "0 2px 8px rgba(10,27,51,.05)" }}>
+          {/* Form. The landing pages link straight here (#enquiry-form); the
+              margin keeps it clear of the sticky header when scrolled to. */}
+          <div id="enquiry-form" style={{ background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 22, padding: "40px 42px", boxShadow: "0 2px 8px rgba(10,27,51,.05)", scrollMarginTop: 110 }}>
             {sent ? (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 14, padding: "40px 20px" }}>
                 <div style={{ width: 64, height: 64, borderRadius: "50%", background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -320,8 +321,6 @@ export default function ContactPage() {
             <Reveal style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "28px 30px", boxShadow: "0 2px 6px rgba(10,27,51,.05)" }}>
               <div style={{ font: "700 18px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 18 }}>Reach us directly</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <Row href={`mailto:${contact.email}`} title="Email" sub={contact.email} kind="mail" />
-                <Row href={`tel:${contact.tel}`} title="Phone" sub={contact.phone} kind="phone" />
                 <Row href={contact.whatsapp} title="WhatsApp" sub="Chat with our team →" kind="wa" />
               </div>
               <div style={{ borderTop: "1px solid #e3eaf0", marginTop: 20, paddingTop: 16, font: "500 12.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#8296a9" }}>

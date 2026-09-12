@@ -45,22 +45,28 @@ if ((string) ($payment['order_id'] ?? '') !== $orderId) {
     rzp_fail('This payment belongs to a different order.', 400);
 }
 
-// The order's notes are the server's own record of what was being bought,
-// and of everything the invoice has to say about the buyer.
-$notes   = is_array($payment['notes'] ?? null) ? $payment['notes'] : [];
+// The order is this server's own record of the sale: the order endpoint wrote
+// the course into its notes and the fee into its amount. It is what the
+// payment is checked against — not today's fee, which an admin may have
+// changed between checkout and payment. Checking the current fee would reject
+// a genuine payment made at the old price.
+$order   = rzp_api('GET', '/v1/orders/' . rawurlencode($orderId));
+$notes   = is_array($order['notes'] ?? null) ? $order['notes'] : [];
 $paidFor = (string) ($notes['course_slug'] ?? '');
 if ($paidFor === '') {
-    $order   = rzp_api('GET', '/v1/orders/' . rawurlencode($orderId));
-    $notes   = is_array($order['notes'] ?? null) ? $order['notes'] : [];
-    $paidFor = (string) ($notes['course_slug'] ?? '');
+    rzp_fail('This payment is not for a course sold here.', 400);
 }
-if ($slug !== '' && $paidFor !== '' && $slug !== $paidFor) {
+if ($slug !== '' && $slug !== $paidFor) {
     rzp_fail('This payment was for a different course.', 400);
 }
 
-$expectedAmount = rzp_price_for($paidFor !== '' ? $paidFor : $slug);
-if ($expectedAmount === null || (int) ($payment['amount'] ?? 0) !== $expectedAmount) {
-    rzp_fail('The amount paid does not match the course fee.', 400);
+$expectedAmount = (int) ($order['amount'] ?? 0);
+if (
+    $expectedAmount <= 0
+    || ($order['currency'] ?? '') !== 'INR'
+    || (int) ($payment['amount'] ?? 0) !== $expectedAmount
+) {
+    rzp_fail('The amount paid does not match the order.', 400);
 }
 
 $slugPaid = $paidFor !== '' ? $paidFor : $slug;

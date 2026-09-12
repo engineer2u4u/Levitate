@@ -1,19 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { courseBySlug } from "@/lib/lms/courses";
+import { useCatalogCourse, useCourse } from "@/components/site/CatalogProvider";
+import { dateTile, dateWithDay } from "@/lib/catalog";
 import { updateEnrolment } from "@/lib/lms/enrolments";
 import { curriculumBySlug } from "@/lib/lms/poshCurriculum";
 import { useSession } from "./useSession";
 
 export default function LiveSessions() {
   const { user, loading, enrolments } = useSession();
+  const enrolment = enrolments.find((e) => curriculumBySlug(e.courseSlug)) ?? null;
+  // The course and each session's date, time and topic come from the
+  // catalogue (the admin's Sessions screen). How many sessions there are, and
+  // attendance against them, stays with the curriculum.
+  const course = useCourse(enrolment?.courseSlug ?? "");
+  const scheduled = useCatalogCourse(enrolment?.courseSlug ?? "")?.sessions ?? [];
 
   if (loading) return <div style={{ background: "#f7fafc", minHeight: "60vh" }} />;
 
-  const enrolment = enrolments.find((e) => curriculumBySlug(e.courseSlug)) ?? null;
   const curriculum = enrolment ? curriculumBySlug(enrolment.courseSlug) : null;
-  const course = enrolment ? courseBySlug(enrolment.courseSlug) : null;
 
   if (!user || !enrolment || !curriculum || !course) {
     return (
@@ -45,21 +50,26 @@ export default function LiveSessions() {
             {curriculum.sessions.map((s, i) => {
               const done = i < attended;
               const next = i === nextIdx && !done;
+              const when = scheduled[i];
+              const tile = when?.startsOn ? dateTile(when.startsOn) : { day: s.day, month: s.month };
+              const date = when?.startsOn ? dateWithDay(when.startsOn) : s.date;
+              const time = when?.timeLabel || s.time;
+              const topic = when?.topic || s.topic;
               return (
                 <div key={s.n} style={{ background: "#fff", border: `1px solid ${next ? "rgba(27,143,136,.45)" : "#e3eaf0"}`, borderRadius: 16, padding: "22px 24px", display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap" }}>
                   <div style={{ textAlign: "center", background: done ? "rgba(47,196,188,.12)" : next ? "linear-gradient(135deg,#2fc4bc,#2f7fd6)" : "#f7fafc", border: `1px solid ${next ? "transparent" : done ? "rgba(27,143,136,.3)" : "#e3eaf0"}`, borderRadius: 13, padding: "12px 14px", minWidth: 64, flex: "none" }}>
-                    <div style={{ font: "700 19px 'Plus Jakarta Sans',sans-serif", color: next ? "#fff" : "#0a1b33" }}>{s.day}</div>
-                    <div style={{ font: "700 10px 'Plus Jakarta Sans',sans-serif", color: next ? "rgba(255,255,255,.85)" : "#8296a9", letterSpacing: ".1em", textTransform: "uppercase" }}>{s.month}</div>
+                    <div style={{ font: "700 19px 'Plus Jakarta Sans',sans-serif", color: next ? "#fff" : "#0a1b33" }}>{tile.day}</div>
+                    <div style={{ font: "700 10px 'Plus Jakarta Sans',sans-serif", color: next ? "rgba(255,255,255,.85)" : "#8296a9", letterSpacing: ".1em", textTransform: "uppercase" }}>{tile.month}</div>
                   </div>
 
                   <div style={{ flex: 1, minWidth: 230 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                      <div style={{ font: "700 16px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{s.topic}</div>
+                      <div style={{ font: "700 16px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{topic}</div>
                       <div style={{ font: "700 9.5px 'Plus Jakarta Sans',sans-serif", letterSpacing: ".1em", textTransform: "uppercase", color: done ? "#136f6a" : next ? "#1f5fa8" : "#8296a9", background: done ? "rgba(47,196,188,.12)" : next ? "rgba(47,127,214,.1)" : "#f4f7f9", border: `1px solid ${done ? "rgba(27,143,136,.35)" : next ? "rgba(47,127,214,.3)" : "#dbe5ec"}`, borderRadius: 999, padding: "4px 9px" }}>
                         {done ? "Attended" : next ? "Up next" : "Scheduled"}
                       </div>
                     </div>
-                    <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginTop: 6 }}>Session {s.n} · {s.date} · {s.time} · Zoom</div>
+                    <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginTop: 6 }}>Session {s.n} · {date} · {time} · Zoom</div>
                     <div style={{ font: "500 11.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 7 }}>
                       {done ? "Recording and notes emailed after the session" : next ? "Final reminder with the Zoom link goes out 1 hour before" : "Reminders scheduled 24 hours and 1 hour before"}
                     </div>

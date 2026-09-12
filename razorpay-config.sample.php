@@ -19,4 +19,9 @@ return [
 
     // Never leaves the server. Razorpay -> Settings -> API Keys.
     'RAZORPAY_KEY_SECRET' => 'PUT_THE_TEST_KEY_SECRET_HERE',
+
+    // Where fees and titles come from: the admin's Supabase project. The public
+    // (anon) key is enough — the same read the website makes.
+    'SUPABASE_URL'        => 'https://xxxxxxxxxxxxxxxxxxxx.supabase.co',
+    'SUPABASE_ANON_KEY'   => 'PUT_THE_SUPABASE_ANON_KEY_HERE',
 ];

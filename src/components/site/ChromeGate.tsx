@@ -11,6 +11,21 @@ import { usePathname } from "next/navigation";
 export const isImmersive = (pathname: string) => pathname.startsWith("/lms/learn");
 
 /**
+ * The paid-ad landing pages. A visitor there arrived from an ad for one thing
+ * and the page is built around a single action; a pop-up asking what they are
+ * interested in interrupts the answer they came for.
+ */
+const LANDING_PAGES = [
+  "/posh-train-the-trainer-certification",
+  "/pocso-train-the-trainer-certification",
+  "/dei-train-the-trainer-certification",
+  "/posh-2026-masterclass",
+];
+
+export const isLanding = (pathname: string) =>
+  LANDING_PAGES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+
+/**
  * Hides site chrome on those routes.
  *
  * A wrapper rather than a separate layout because the App Router nests layouts
@@ -20,7 +35,15 @@ export const isImmersive = (pathname: string) => pathname.startsWith("/lms/learn
  * browser, so the exported HTML for /lms/learn/* never contains the chrome and
  * there is nothing to flash away on hydration.
  */
-export default function ChromeGate({ children }: { children: React.ReactNode }) {
+export default function ChromeGate({
+  children,
+  hideOnLanding = false,
+}: {
+  children: React.ReactNode;
+  /** Also hide on the landing pages. */
+  hideOnLanding?: boolean;
+}) {
   const pathname = usePathname() ?? "";
-  return isImmersive(pathname) ? null : <>{children}</>;
+  if (isImmersive(pathname) || (hideOnLanding && isLanding(pathname))) return null;
+  return <>{children}</>;
 }

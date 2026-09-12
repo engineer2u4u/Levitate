@@ -2,7 +2,8 @@
 "use client";
 
 import Link from "next/link";
-import { courseBySlug } from "@/lib/lms/courses";
+import { useCatalogCourse, useCourse } from "@/components/site/CatalogProvider";
+import { dateWithDay } from "@/lib/catalog";
 import { updateEnrolment } from "@/lib/lms/enrolments";
 import { curriculumBySlug } from "@/lib/lms/poshCurriculum";
 import { certificateCriteria, courseProgress } from "@/lib/lms/progress";
@@ -24,7 +25,7 @@ function EmptyState() {
 }
 
 function EnrolmentCard({ e }: { e: Enrolment }) {
-  const course = courseBySlug(e.courseSlug);
+  const course = useCourse(e.courseSlug);
   const curriculum = curriculumBySlug(e.courseSlug);
   if (!course) return null;
 
@@ -61,6 +62,10 @@ function EnrolmentCard({ e }: { e: Enrolment }) {
 
 export default function Dashboard() {
   const { user, loading, enrolments, openAuth } = useSession();
+  // The primary course drives the hero panels; today only PoSH has content.
+  const primary = enrolments.find((e) => curriculumBySlug(e.courseSlug)) ?? null;
+  const course = useCourse(primary?.courseSlug ?? "");
+  const scheduled = useCatalogCourse(primary?.courseSlug ?? "")?.sessions ?? [];
 
   if (loading) return <div style={{ background: "#f7fafc", minHeight: "60vh", padding: "38px 48px" }} />;
 
@@ -80,13 +85,17 @@ export default function Dashboard() {
     );
   }
 
-  // The primary course drives the hero panels; today only PoSH has content.
-  const primary = enrolments.find((e) => curriculumBySlug(e.courseSlug)) ?? null;
   const curriculum = primary ? curriculumBySlug(primary.courseSlug) : null;
-  const course = primary ? courseBySlug(primary.courseSlug) : null;
   const p = curriculum ? courseProgress(curriculum, primary) : null;
   const attended = primary?.sessionsAttended ?? 0;
-  const nextSession = curriculum ? curriculum.sessions[Math.min(attended, curriculum.sessions.length - 1)] : null;
+  // Which session is next comes from attendance against the curriculum; its
+  // date, time and topic from the catalogue (the admin's Sessions screen).
+  const nextIdx = curriculum ? Math.min(attended, curriculum.sessions.length - 1) : -1;
+  const planned = curriculum ? curriculum.sessions[nextIdx] : null;
+  const when = scheduled[nextIdx];
+  const nextSession = planned
+    ? { topic: when?.topic || planned.topic, date: when?.startsOn ? dateWithDay(when.startsOn) : planned.date, time: when?.timeLabel || planned.time }
+    : null;
 
   return (
     <div style={{ background: "#f7fafc", padding: "38px 48px 90px", minHeight: "60vh" }} className="site-page-sec">

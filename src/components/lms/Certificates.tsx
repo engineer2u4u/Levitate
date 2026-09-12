@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { courseBySlug } from "@/lib/lms/courses";
+import { useCourse } from "@/components/site/CatalogProvider";
 import { updateEnrolment } from "@/lib/lms/enrolments";
 import { curriculumBySlug } from "@/lib/lms/poshCurriculum";
 import { certificateCriteria, isCertificateEligible } from "@/lib/lms/progress";
@@ -10,12 +10,12 @@ import { useSession } from "./useSession";
 
 export default function Certificates() {
   const { user, loading, enrolments } = useSession();
+  const enrolment = enrolments.find((e) => curriculumBySlug(e.courseSlug)) ?? null;
+  const course = useCourse(enrolment?.courseSlug ?? "");
 
   if (loading) return <div style={{ background: "#f7fafc", minHeight: "60vh" }} />;
 
-  const enrolment = enrolments.find((e) => curriculumBySlug(e.courseSlug)) ?? null;
   const curriculum = enrolment ? curriculumBySlug(enrolment.courseSlug) : null;
-  const course = enrolment ? courseBySlug(enrolment.courseSlug) : null;
 
   if (!user || !enrolment || !curriculum || !course) {
     return (

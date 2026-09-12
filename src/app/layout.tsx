@@ -3,6 +3,8 @@ import ShrmMarquee from "@/components/site/ShrmMarquee";
 import EnquiryPopup from "@/components/site/EnquiryPopup";
 import ChromeGate from "@/components/site/ChromeGate";
 import GoogleTag from "@/components/site/GoogleTag";
+import CatalogProvider from "@/components/site/CatalogProvider";
+import { loadCatalog } from "@/lib/catalog";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -60,11 +62,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Course facts from the admin's database, read once per build and baked into
+  // every page; CatalogProvider refreshes them in the browser. See lib/catalog.
+  const catalog = await loadCatalog();
+
   return (
     <html lang="en">
       <head>
@@ -80,13 +86,15 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <ChromeGate>
-          <ShrmMarquee />
-        </ChromeGate>
-        {children}
-        <ChromeGate>
-          <EnquiryPopup />
-        </ChromeGate>
+        <CatalogProvider initial={catalog}>
+          <ChromeGate>
+            <ShrmMarquee />
+          </ChromeGate>
+          {children}
+          <ChromeGate hideOnLanding>
+            <EnquiryPopup />
+          </ChromeGate>
+        </CatalogProvider>
         <GoogleTag />
       </body>
     </html>

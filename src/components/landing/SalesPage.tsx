@@ -12,6 +12,8 @@ import YouTubeEmbed from "@/components/site/YouTubeEmbed";
 import VideoTestimonials, { type PlayableClip } from "@/components/home/VideoTestimonials";
 import { certificateCards } from "@/lib/certificateArt";
 import { courseBySlug } from "@/lib/lms/courses";
+import { useCatalogCourse } from "@/components/site/CatalogProvider";
+import { fill } from "@/lib/catalog";
 import { outlineBySlug } from "@/lib/programOutlines";
 import { contact } from "@/lib/site";
 import { track } from "@/lib/track";
@@ -61,6 +63,15 @@ export const T = {
 export default function SalesPage({ offer }: { offer: LandingOffer }) {
   // Only for the certificate artwork — the fee is no longer shown here.
   const course = courseBySlug(offer.slug);
+
+  // Dates and the fee come from the admin's catalogue. The page's own copy
+  // carries {starts} and {fee} placeholders (see lib/landing.ts), and the
+  // "Also running" blurb is filled with the other programme's dates.
+  const entry = useCatalogCourse(offer.slug);
+  const bundleEntry = useCatalogCourse(offer.bundle?.slug ?? "");
+  const batch = { starts: fill(offer.batch.starts, entry), rows: offer.batch.rows.map((r) => ({ k: r.k, v: fill(r.v, entry) })) };
+  const faqs = offer.faqs.map((f) => ({ ...f, a: f.a.map((t) => fill(t, entry)) }));
+  const price = fill(offer.price.amount, entry);
   const outline = outlineBySlug(offer.slug);
   const router = useRouter();
 
@@ -87,7 +98,7 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
     useCallback(() => offer.headline, [offer]),
   );
 
-  const waHref = `${contact.whatsapp}?text=${encodeURIComponent(offer.whatsapp)}`;
+  const waHref = `${contact.whatsapp}?text=${encodeURIComponent(fill(offer.whatsapp, entry))}`;
 
   /**
    * The primary button now opens a conversation rather than a checkout. It
@@ -95,8 +106,9 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
    * — otherwise every landing page's leads look alike in the admin.
    */
   const onEnquire = () => {
-    track("enquire_click", { course: offer.slug, price: offer.price.amount });
-    router.push(`/contact/?from=${offer.slug}`);
+    track("enquire_click", { course: offer.slug, price });
+    // Straight to the form, not the top of the contact page.
+    router.push(`/contact/?from=${offer.slug}#enquiry-form`);
   };
 
   const onWhatsApp = () => track("whatsapp_click", { course: offer.slug, placement: "landing" });
@@ -123,7 +135,7 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
 
             {/* The facts that decide whether to keep reading. */}
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 28 }}>
-              <Fact k="Batch starts" v={offer.batch.starts} />
+              <Fact k="Batch starts" v={batch.starts} />
               {typeof offer.seatsLeft === "number" && <Fact k="Seats left" v={String(offer.seatsLeft)} accent />}
               {offer.offerClosesOn && <Fact k="Offer closes" v={offer.offerClosesOn} accent />}
             </div>
@@ -159,7 +171,7 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
                   </div>
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 18px", background: "rgba(255,255,255,.06)", border: "1px solid rgba(255,255,255,.16)", borderRadius: 14, padding: "16px 18px" }}>
-                  {offer.batch.rows.map((r) => (
+                  {batch.rows.map((r) => (
                     <div key={r.k} style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
                       <span style={{ font: T.small, color: "rgba(255,255,255,.6)" }}>{r.k}</span>
                       <span style={{ font: T.small, fontWeight: 700, color: "#fff", textAlign: "right" }}>{r.v}</span>
@@ -174,7 +186,7 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
                 <div style={{ font: T.eyebrow, color: "#5fe0d6", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 16 }}>
                   This batch
                 </div>
-                {offer.batch.rows.map((r) => (
+                {batch.rows.map((r) => (
                   <div key={r.k} style={{ display: "flex", justifyContent: "space-between", gap: 16, padding: "9px 0", borderBottom: "1px solid rgba(255,255,255,.09)" }}>
                     <span style={{ font: T.small, color: "rgba(255,255,255,.62)" }}>{r.k}</span>
                     <span style={{ font: T.small, fontWeight: 700, color: "#fff", textAlign: "right" }}>{r.v}</span>
@@ -261,9 +273,9 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
       <TrustedBy maxWidth={MAX} />
 
       {/* ------------------------------------------------------------ FAQ */}
-      {offer.faqs.length > 0 && (
+      {faqs.length > 0 && (
         <Section tone="soft">
-          <FaqAccordion items={offer.faqs} size="lg" />
+          <FaqAccordion items={faqs} size="lg" />
         </Section>
       )}
 
@@ -273,7 +285,7 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
           <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 18, padding: "28px 30px", display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap" }}>
             <div style={{ flex: 1, minWidth: 260 }}>
               <div style={{ font: T.cardTitle, color: "#0a1b33", marginBottom: 6 }}>{offer.bundle.title}</div>
-              <p style={{ font: T.body, color: "#5b6e82", margin: 0 }}>{offer.bundle.body}</p>
+              <p style={{ font: T.body, color: "#5b6e82", margin: 0 }}>{fill(offer.bundle.body, bundleEntry)}</p>
             </div>
             <Link href={offer.bundle.href} style={{ ...ctaGhost, color: "#0a1b33", borderColor: "rgba(10,27,51,.24)", whiteSpace: "nowrap" }}>
               See that programme
@@ -286,7 +298,7 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
       <section className="site-page-sec" style={{ background: "linear-gradient(120deg,#0c2a45,#0a1f38)", padding: "72px 48px" }}>
         <div style={{ maxWidth: MAX, margin: "0 auto", textAlign: "center" }}>
           <h2 style={{ font: T.h2, color: "#fff", margin: "0 0 14px", letterSpacing: "-.02em" }}>
-            Next batch starts {offer.batch.starts}
+            Next batch starts {batch.starts}
           </h2>
           <p style={{ font: T.lead, color: "rgba(255,255,255,.78)", margin: "0 auto 28px", maxWidth: MEASURE }}>
             Seats are limited per batch so that everyone gets facilitation practice and feedback. Reserve yours, or message us first — either is fine.

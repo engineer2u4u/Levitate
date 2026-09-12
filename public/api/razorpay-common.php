@@ -1,5 +1,14 @@
 <?php
 /**
+ * RECOVERY COPY — belongs at public/api/razorpay-common.php.
+ *
+ * That path is currently blocked on this machine (the file was removed by
+ * security software mid-session and the name cannot be recreated until a
+ * reboot). Once it can be written again, this file moves there and this copy
+ * is deleted. Nothing requires it from here.
+ *
+ * ---------------------------------------------------------------------------
+ *
  * Shared plumbing for the two Razorpay endpoints.
  *
  * The site is a static export, so this is the only place that can hold a
@@ -55,13 +64,166 @@ function rzp_is_test_mode(): bool
 }
 
 /* ------------------------------------------------------------------ */
-/* Prices — the server's copy, and the only one that counts             */
+/* Catalogue — what a course costs, as the admin last saved it          */
 /* ------------------------------------------------------------------ */
 /**
- * Deliberately duplicated from src/lib/lms/courses.ts rather than derived from
- * it. The client's copy decides what to display; this one decides what is
- * charged, and a build artefact the browser can edit must not be able to reach
- * it. A course absent here cannot be paid for at all.
+ * A course's fee, title, state and session times, read from the admin's
+ * database (Supabase `courses` + `sessions`).
+ *
+ * The browser never tells this server a price; this server asks the database
+ * — with the same public key and the same public read the website makes, so
+ * RLS returns only published courses. A course the database does not return
+ * cannot be paid for.
+ *
+ * Cached for a minute above the web root, so a burst of checkouts is one
+ * request. If Supabase cannot be reached, the last good copy is used; a server
+ * that has never reached it falls back to the fixed tables below, which are
+ * the prices it was deployed with.
+ */
+function rzp_catalog(string $slug): ?array
+{
+    static $memo = [];
+    if (!preg_match('/^[a-z0-9-]{1,64}$/', $slug)) {
+        return null;
+    }
+    if (array_key_exists($slug, $memo)) {
+        return $memo[$slug];
+    }
+
+    $dir    = dirname($_SERVER['DOCUMENT_ROOT'] ?? __DIR__) . '/levitate-cache';
+    $file   = $dir . '/course-' . $slug . '.json';
+    $cached = is_readable($file) ? json_decode((string) file_get_contents($file), true) : null;
+    if (is_array($cached) && time() - (int) ($cached['fetched'] ?? 0) < 60) {
+        return $memo[$slug] = is_array($cached['course'] ?? null) ? $cached['course'] : null;
+    }
+
+    $url = rtrim(rzp_cfg('SUPABASE_URL'), '/');
+    $key = rzp_cfg('SUPABASE_ANON_KEY');
+    if ($url !== '' && $key !== '') {
+        $rows = rzp_http_json(
+            $url . '/rest/v1/courses?slug=eq.' . rawurlencode($slug) . '&status=eq.live'
+                . '&select=' . rawurlencode('title,price_paise,price_on_request,site_status,sessions(starts_at,status)'),
+            ['apikey: ' . $key, 'Authorization: Bearer ' . $key]
+        );
+        if (is_array($rows)) {
+            // An empty answer is an answer: the course is not published.
+            $course = is_array($rows[0] ?? null) ? $rows[0] : null;
+            if (!is_dir($dir)) {
+                @mkdir($dir, 0700, true);
+            }
+            @file_put_contents($file, json_encode(['fetched' => time(), 'course' => $course]), LOCK_EX);
+            return $memo[$slug] = $course;
+        }
+        error_log('Catalogue unreachable for ' . $slug . '; using ' . (is_array($cached) ? 'the last good copy' : 'the deployed prices'));
+    }
+
+    if (is_array($cached)) {
+        return $memo[$slug] = is_array($cached['course'] ?? null) ? $cached['course'] : null;
+    }
+    return $memo[$slug] = rzp_fallback_course($slug);
+}
+
+/** GET a JSON document. Null on any failure: the caller decides what that means. */
+function rzp_http_json(string $url, array $headers): ?array
+{
+    if (function_exists('curl_init')) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER     => $headers,
+            CURLOPT_TIMEOUT        => 8,
+            CURLOPT_SSL_VERIFYPEER => true,
+        ]);
+        $res  = curl_exec($ch);
+        $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+    } else {
+        $ctx  = stream_context_create(['http' => ['header' => implode("\r\n", $headers), 'timeout' => 8, 'ignore_errors' => true]]);
+        $res  = @file_get_contents($url, false, $ctx);
+        $code = 0;
+        foreach ($http_response_header ?? [] as $h) {
+            if (preg_match('#^HTTP/\S+\s+(\d{3})#', $h, $m)) {
+                $code = (int) $m[1];
+            }
+        }
+    }
+    if ($res === false || $code !== 200) {
+        return null;
+    }
+    $data = json_decode((string) $res, true);
+    return is_array($data) ? $data : null;
+}
+
+/** The deployed prices, shaped like a catalogue row. The last resort only. */
+function rzp_fallback_course(string $slug): ?array
+{
+    $price = RZP_PRICES_PAISE[$slug] ?? null;
+    if ($price === null) {
+        return null;
+    }
+    $closes = RZP_CLOSES_AT[$slug] ?? null;
+    return [
+        'title'            => RZP_COURSE_TITLES[$slug] ?? $slug,
+        'price_paise'      => $price,
+        'price_on_request' => false,
+        'site_status'      => 'enrolling',
+        'sessions'         => $closes ? [['starts_at' => $closes, 'status' => 'open']] : [],
+    ];
+}
+
+/**
+ * What a course costs now, or null if it cannot be bought: unpublished, on
+ * the waitlist, or with its fee still "on request".
+ */
+function rzp_price_for(string $slug): ?int
+{
+    $c = rzp_catalog($slug);
+    if ($c === null || ($c['site_status'] ?? '') !== 'enrolling' || !empty($c['price_on_request'])) {
+        return null;
+    }
+    $paise = (int) ($c['price_paise'] ?? 0);
+    return $paise > 0 ? $paise : null;
+}
+
+/**
+ * One-off sessions stop taking payment the moment they start. Courses are not
+ * listed and stay open. Checked when an order is created, not at verification
+ * — someone who opened checkout at 5:59 and paid at 6:01 has paid for a seat.
+ */
+const RZP_CLOSE_AT_START = ['posh-masterclass-2026'];
+
+function rzp_is_closed(string $slug): bool
+{
+    if (!in_array($slug, RZP_CLOSE_AT_START, true)) {
+        return false;
+    }
+    $times = [];
+    foreach ((array) (rzp_catalog($slug)['sessions'] ?? []) as $s) {
+        $t = strtotime((string) ($s['starts_at'] ?? ''));
+        if ($t !== false && ($s['status'] ?? 'open') !== 'draft') {
+            $times[] = $t;
+        }
+    }
+    if (!$times && isset(RZP_CLOSES_AT[$slug])) {
+        $times[] = strtotime(RZP_CLOSES_AT[$slug]);
+    }
+    return $times !== [] && time() >= min($times);
+}
+
+/** Printed on the invoice, so it comes from here rather than from the client. */
+function rzp_title_for(string $slug): string
+{
+    $title = (string) (rzp_catalog($slug)['title'] ?? '');
+    return $title !== '' ? $title : (RZP_COURSE_TITLES[$slug] ?? $slug);
+}
+
+/* ------------------------------------------------------------------ */
+/* Deployed prices — the fallback when the database cannot be reached   */
+/* ------------------------------------------------------------------ */
+/**
+ * Only ever used by rzp_fallback_course(). Kept so a server that cannot reach
+ * Supabase and has no cached copy still charges the prices it shipped with,
+ * rather than refusing every sale. The admin's database is the real source.
  */
 const RZP_PRICES_PAISE = [
     'posh-trainer'        => 3200000,
@@ -73,40 +235,19 @@ const RZP_PRICES_PAISE = [
     'posh-masterclass-2026' => 199900,
 ];
 
-function rzp_price_for(string $slug): ?int
-{
-    return RZP_PRICES_PAISE[$slug] ?? null;
-}
-
-/**
- * When a one-off session stops taking payment: the moment it starts. Courses
- * are absent here and stay open. Checked when an order is created, not at
- * verification — someone who opened checkout at 5:59 and paid at 6:01 has
- * paid for a seat, not for nothing.
- */
+/** Fallback start times for one-off sessions (see RZP_CLOSE_AT_START). */
 const RZP_CLOSES_AT = [
-    'posh-masterclass-2026' => '2026-09-25T18:00:00+05:30',
+    'posh-masterclass-2026' => '2026-09-27T11:30:00+05:30',
 ];
 
-function rzp_is_closed(string $slug): bool
-{
-    $at = RZP_CLOSES_AT[$slug] ?? null;
-    return $at !== null && time() >= strtotime($at);
-}
-
-/** Printed on the invoice, so it comes from here rather than from the client. */
+/** Fallback invoice titles. */
 const RZP_COURSE_TITLES = [
     'posh-trainer'        => 'PoSH & Workplace Dignity Facilitator Program (PoSH TTT)',
     'pocso-child-safety'  => 'POCSO & Child Safety Facilitator Program (POCSO TTT)',
     'inclusive-workplace' => 'Inclusive Workplace Facilitator Program (DEI TTT)',
     'demo-course'         => 'Demo · Workplace Facilitation Essentials',
-    'posh-masterclass-2026' => 'PoSH 2026: The New Compliance & Workplace Reality — Masterclass, 25 September 2026',
+    'posh-masterclass-2026' => 'PoSH 2026: The New Compliance & Workplace Reality — Masterclass, 27 September 2026',
 ];
-
-function rzp_title_for(string $slug): string
-{
-    return RZP_COURSE_TITLES[$slug] ?? $slug;
-}
 
 /* ------------------------------------------------------------------ */
 /* Request plumbing                                                    */

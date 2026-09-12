@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { contact, services, type NavKey } from "@/lib/site";
-import { VISIBLE_COURSES as COURSES } from "@/lib/lms/courses";
+import { useVisibleCourses } from "@/components/site/CatalogProvider";
 import { LMS_TESTING } from "@/lib/lms/testMode";
 
 function MailIcon({ size = 13 }: { size?: number }) {
@@ -34,6 +34,8 @@ function NewBadge() {
 }
 
 export default function SiteHeader({ active }: { active?: NavKey }) {
+  // The Certifications menu lists what the admin has published.
+  const COURSES = useVisibleCourses();
   const [svcOpen, setSvcOpen] = useState(false);
   const [certOpen, setCertOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);

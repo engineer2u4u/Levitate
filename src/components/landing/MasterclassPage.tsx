@@ -1,11 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState, useSyncExternalStore, type CSSProperties, type FormEvent } from "react";
+import { useMemo, useState, useSyncExternalStore, type CSSProperties, type FormEvent } from "react";
 import Link from "next/link";
 import Accreditations from "@/components/site/Accreditations";
 import FaqAccordion from "@/components/site/FaqAccordion";
 import { MASTERCLASS as M, MASTERCLASS_FAQS, type ThemeIcon } from "@/lib/masterclass";
+import { useCatalogCourse } from "@/components/site/CatalogProvider";
+import { dateCompact, dateFull, firstSession, startsText } from "@/lib/catalog";
 import { formatPaise, razorpayGateway } from "@/lib/lms/payment";
 import { LMS_TESTING } from "@/lib/lms/testMode";
 import { contact } from "@/lib/site";
@@ -23,8 +25,51 @@ import { H2, MAX, MEASURE, SANS, Section, T, Tick, ctaGhost, ctaPrimary } from "
  * registering. No account — someone who clicked an ad will not make one.
  */
 
-const CLOSES_AT = Date.parse(M.startsAt);
 const subscribeNever = () => () => {};
+
+/** What the page says about the session that an admin can change. */
+type Facts = {
+  feePaise: number;
+  standardPaise: number;
+  startsAt: string;
+  endsAt: string;
+  /** "Friday" */
+  day: string;
+  /** "27 September 2026" */
+  date: string;
+  /** "Sun, 27 Sep 2026" */
+  dateShort: string;
+  time: string;
+  duration: string;
+  checkoutTitle: string;
+};
+
+/**
+ * The fee, the standard fee, the date and the times as the admin last saved
+ * them (course "posh-masterclass-2026" and its session), with the page's own
+ * constants as the fallback. The payment server reads the same row, so what
+ * this shows and what it charges agree.
+ */
+function useFacts(): Facts {
+  const entry = useCatalogCourse(M.slug);
+  return useMemo(() => {
+    const s = entry ? firstSession(entry) : null;
+    const startsOn = s?.startsOn ?? M.startsAt.slice(0, 10);
+    const [day, date] = dateFull(startsOn).split(", ");
+    return {
+      feePaise: entry?.feePaise ?? M.feePaise,
+      standardPaise: entry?.listPricePaise ?? M.standardPaise,
+      startsAt: s?.startsAt ?? M.startsAt,
+      endsAt: s?.endsAt ?? M.endsAt,
+      day,
+      date,
+      dateShort: dateCompact(startsOn),
+      time: s?.timeLabel || M.time,
+      duration: entry?.duration || M.duration,
+      checkoutTitle: `PoSH 2026 Masterclass · ${date}`,
+    };
+  }, [entry]);
+}
 
 /**
  * Registration closes when the session starts. The server refuses orders
@@ -32,19 +77,35 @@ const subscribeNever = () => () => {};
  * cannot work. Read as an external value so the static HTML (built before the
  * session) and a visit after it do not disagree during hydration.
  */
-function useClosed() {
-  return useSyncExternalStore(subscribeNever, () => Date.now() >= CLOSES_AT, () => false);
+function useClosed(startsAt: string) {
+  const closesAt = Date.parse(startsAt);
+  return useSyncExternalStore(subscribeNever, () => Date.now() >= closesAt, () => false);
 }
 
-const ITEM = { item_id: M.slug, item_name: M.checkoutTitle, price: M.feePaise / 100, quantity: 1 };
+const item = (f: Facts) => ({ item_id: M.slug, item_name: f.checkoutTitle, price: f.feePaise / 100, quantity: 1 });
 
 const scrollToRegister = () => {
   document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
 export default function MasterclassPage() {
-  const closed = useClosed();
-  const waHref = `${contact.whatsapp}?text=${encodeURIComponent("Hi, I have a question about the PoSH 2026 masterclass on 25 September.")}`;
+  const facts = useFacts();
+  const closed = useClosed(facts.startsAt);
+  const poshEntry = useCatalogCourse("posh-trainer");
+  const poshStarts = poshEntry ? startsText(poshEntry) : "";
+  const waHref = `${contact.whatsapp}?text=${encodeURIComponent(`Hi, I have a question about the PoSH 2026 masterclass on ${facts.date}.`)}`;
+
+  // FAQ answers carry {when}, {date}, {fee} and {list_fee}.
+  const faqs = MASTERCLASS_FAQS.map((f) => ({
+    ...f,
+    a: f.a.map((t) =>
+      t
+        .replace("{when}", `${facts.day}, ${facts.date}, ${facts.time}`)
+        .replace("{date}", facts.date)
+        .replace("{fee}", formatPaise(facts.feePaise))
+        .replace("{list_fee}", formatPaise(facts.standardPaise)),
+    ),
+  }));
   const onWhatsApp = () => track("whatsapp_click", { course: M.slug, placement: "masterclass" });
 
   const onReserve = () => {
@@ -70,15 +131,15 @@ export default function MasterclassPage() {
             <p style={{ font: T.lead, fontSize: 17, color: "rgba(255,255,255,.82)", margin: "0 0 30px", maxWidth: 560 }}>{M.sub}</p>
 
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 30 }}>
-              <Fact icon="calendar" k="Date" v={M.dateShort} />
-              <Fact icon="clock" k="Timings" v={M.time} />
-              <Fact icon="hourglass" k="Duration" v={M.duration} />
+              <Fact icon="calendar" k="Date" v={facts.dateShort} />
+              <Fact icon="clock" k="Timings" v={facts.time} />
+              <Fact icon="hourglass" k="Duration" v={facts.duration} />
             </div>
 
             {/* Phones stack the card below all this; one tap takes them to it. */}
             {!closed && (
               <button type="button" onClick={onReserve} className="lp-btn-grad mc-mobile-cta" style={{ ...ctaPrimary, width: "100%", marginBottom: 28, fontSize: 16 }}>
-                Reserve Your Seat · {formatPaise(M.feePaise)} →
+                Reserve Your Seat · {formatPaise(facts.feePaise)} →
               </button>
             )}
 
@@ -92,7 +153,7 @@ export default function MasterclassPage() {
             </div>
           </div>
 
-          <RegisterCard closed={closed} />
+          <RegisterCard closed={closed} facts={facts} />
         </div>
       </section>
 
@@ -178,7 +239,7 @@ export default function MasterclassPage() {
 
       {/* ------------------------------------------------------------ FAQ */}
       <Section tone="soft">
-        <FaqAccordion items={MASTERCLASS_FAQS} size="lg" />
+        <FaqAccordion items={faqs} size="lg" />
       </Section>
 
       {/* ------------------------------------------------------ CROSS-SELL */}
@@ -187,7 +248,7 @@ export default function MasterclassPage() {
           <div style={{ flex: 1, minWidth: 260 }}>
             <div style={{ font: T.cardTitle, color: "#0a1b33", marginBottom: 6 }}>Ready to deliver PoSH training yourself?</div>
             <p style={{ font: T.body, color: "#5b6e82", margin: 0 }}>
-              The PoSH Train-the-Trainer Certification — 15 learning hours across 15 modules, with a batch starting 3 October.
+              The PoSH Train-the-Trainer Certification — 15 learning hours across 15 modules{poshStarts ? `, with a batch starting ${poshStarts}` : ""}.
             </p>
           </div>
           <Link href="/posh-train-the-trainer-certification/" style={{ ...ctaGhost, color: "#0a1b33", borderColor: "rgba(10,27,51,.24)", whiteSpace: "nowrap" }}>
@@ -200,15 +261,15 @@ export default function MasterclassPage() {
       <section className="site-page-sec" style={{ background: "linear-gradient(120deg,#0c2a45,#0a1f38)", padding: "72px 48px" }}>
         <div style={{ maxWidth: MAX, margin: "0 auto", textAlign: "center" }}>
           <div style={{ font: T.eyebrow, color: "#5fe0d6", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>
-            {M.day}, {M.date} · {M.time}
+            {facts.day}, {facts.date} · {facts.time}
           </div>
           <h2 style={{ font: T.h2, color: "#fff", margin: "0 0 14px", letterSpacing: "-.02em" }}>
-            {closed ? "Registrations for this masterclass have closed" : `Reserve your seat for ${formatPaise(M.feePaise)}`}
+            {closed ? "Registrations for this masterclass have closed" : `Reserve your seat for ${formatPaise(facts.feePaise)}`}
           </h2>
           <p style={{ font: T.lead, color: "rgba(255,255,255,.78)", margin: "0 auto 28px", maxWidth: MEASURE }}>
             {closed
               ? "Message us to hear about the next session."
-              : `Early-bird fee, including taxes — against a standard fee of ${formatPaise(M.standardPaise)}. Two hours that bring your PoSH practice up to date.`}
+              : `Early-bird fee, including taxes — against a standard fee of ${formatPaise(facts.standardPaise)}. Two hours that bring your PoSH practice up to date.`}
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             {!closed && (
@@ -236,13 +297,13 @@ type Done = { name: string; email: string; paymentId: string; amountPaise: numbe
 /** Google Calendar wants UTC in its compact form: 20260925T123000Z. */
 const calStamp = (iso: string) => new Date(iso).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
 
-const CALENDAR_URL =
+const calendarUrl = (f: Facts) =>
   "https://calendar.google.com/calendar/render?action=TEMPLATE" +
   `&text=${encodeURIComponent(`${M.title} ${M.titleRest} — Levitate PeopleSoft masterclass`)}` +
-  `&dates=${calStamp(M.startsAt)}/${calStamp(M.endsAt)}` +
+  `&dates=${calStamp(f.startsAt)}/${calStamp(f.endsAt)}` +
   `&details=${encodeURIComponent("Your seat is reserved. Levitate PeopleSoft will email everything you need for the session beforehand.")}`;
 
-function RegisterCard({ closed }: { closed: boolean }) {
+function RegisterCard({ closed, facts }: { closed: boolean; facts: Facts }) {
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState<Done | null>(null);
@@ -267,12 +328,12 @@ function RegisterCard({ closed }: { closed: boolean }) {
 
     setError("");
     setPaying(true);
-    track("begin_checkout", { currency: "INR", value: M.feePaise / 100, items: [ITEM] });
+    track("begin_checkout", { currency: "INR", value: facts.feePaise / 100, items: [item(facts)] });
 
     const res = await razorpayGateway.pay({
       courseSlug: M.slug,
-      courseTitle: M.checkoutTitle,
-      amountPaise: M.feePaise,
+      courseTitle: facts.checkoutTitle,
+      amountPaise: facts.feePaise,
       customer: { name, email, contact: phone },
       billing: { organisation, designation },
       // A development build may use the server's test keys; the public page
@@ -287,7 +348,7 @@ function RegisterCard({ closed }: { closed: boolean }) {
     }
 
     const live = res.live === true;
-    track("purchase", { transaction_id: res.paymentId, value: res.amountPaise / 100, currency: "INR", items: [ITEM] });
+    track("purchase", { transaction_id: res.paymentId, value: res.amountPaise / 100, currency: "INR", items: [item(facts)] });
 
     // Into the admin's enquiry list and the office inbox. Not awaited: the
     // payment is verified and the seat is theirs whether or not this lands,
@@ -296,7 +357,7 @@ function RegisterCard({ closed }: { closed: boolean }) {
     void submitEnquiry(
       form,
       {
-        intent: M.checkoutTitle,
+        intent: facts.checkoutTitle,
         source: M.path,
         message: [
           live ? "" : "TEST PAYMENT — Razorpay test mode, no money taken.",
@@ -329,7 +390,7 @@ function RegisterCard({ closed }: { closed: boolean }) {
         </div>
         <h2 style={{ font: `800 26px/1.2 ${SANS}`, color: "#0a1b33", margin: "0 0 8px", letterSpacing: "-.02em" }}>You&apos;re registered</h2>
         <p style={{ font: T.body, color: "#5b6e82", margin: "0 0 20px" }}>
-          Thank you, {done.name.split(" ")[0]}. Your seat for {M.title} {M.titleRest} on {M.day}, {M.date} is reserved.
+          Thank you, {done.name.split(" ")[0]}. Your seat for {M.title} {M.titleRest} on {facts.day}, {facts.date} is reserved.
         </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 8, background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 14, padding: "14px 16px", marginBottom: 18 }}>
@@ -339,11 +400,11 @@ function RegisterCard({ closed }: { closed: boolean }) {
         </div>
 
         <p style={{ font: T.body, color: "#3d5064", margin: "0 0 20px" }}>
-          Razorpay has emailed your payment receipt to <strong>{done.email}</strong>. We will be in touch before {M.date} with everything you need for the session.
+          Razorpay has emailed your payment receipt to <strong>{done.email}</strong>. We will be in touch before {facts.date} with everything you need for the session.
         </p>
 
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="lp-btn-grad" style={{ ...ctaPrimary, display: "inline-block", fontSize: 14, padding: "13px 22px" }}>
+          <a href={calendarUrl(facts)} target="_blank" rel="noopener noreferrer" className="lp-btn-grad" style={{ ...ctaPrimary, display: "inline-block", fontSize: 14, padding: "13px 22px" }}>
             Add to Google Calendar
           </a>
           <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" style={{ ...ctaGhost, color: "#0a1b33", borderColor: "rgba(10,27,51,.24)", fontSize: 14, padding: "12px 20px" }}>
@@ -361,14 +422,14 @@ function RegisterCard({ closed }: { closed: boolean }) {
       <div style={{ display: "flex", alignItems: "stretch", gap: 18, paddingBottom: 20, marginBottom: 20, borderBottom: "1px solid #eef2f6", flexWrap: "wrap" }}>
         <div>
           <div style={{ font: `700 13px ${SANS}`, color: "#b07d1e", letterSpacing: ".04em" }}>Early Bird</div>
-          <div style={{ font: `800 40px/1.05 ${SANS}`, color: "#0a1b33", letterSpacing: "-.02em", margin: "4px 0 6px" }}>{formatPaise(M.feePaise)}</div>
+          <div style={{ font: `800 40px/1.05 ${SANS}`, color: "#0a1b33", letterSpacing: "-.02em", margin: "4px 0 6px" }}>{formatPaise(facts.feePaise)}</div>
           <div style={{ font: `700 10.5px ${SANS}`, color: "#5b6e82", letterSpacing: ".16em", textTransform: "uppercase" }}>Limited period offer</div>
         </div>
         <div style={{ width: 1, background: "#eef2f6" }} />
         <div style={{ paddingTop: 2 }}>
           <div style={{ font: `600 13px ${SANS}`, color: "#8296a9" }}>Standard Fee</div>
           <div style={{ font: `700 22px ${SANS}`, color: "#a9b8c6", textDecoration: "line-through", textDecorationColor: "#d9534f", margin: "6px 0 6px" }}>
-            {formatPaise(M.standardPaise)}
+            {formatPaise(facts.standardPaise)}
           </div>
           <div style={{ font: `600 10.5px ${SANS}`, color: "#8296a9", letterSpacing: ".1em", textTransform: "uppercase" }}>Incl. of taxes</div>
         </div>
@@ -420,7 +481,7 @@ function RegisterCard({ closed }: { closed: boolean }) {
             className="lp-btn-grad"
             style={{ ...ctaPrimary, width: "100%", marginTop: 16, fontSize: 16, padding: "16px 20px", cursor: paying ? "wait" : "pointer", opacity: paying ? 0.8 : 1 }}
           >
-            {paying ? "Opening secure payment…" : `Pay ${formatPaise(M.feePaise)} & reserve your seat →`}
+            {paying ? "Opening secure payment…" : `Pay ${formatPaise(facts.feePaise)} & reserve your seat →`}
           </button>
 
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, font: `500 12.5px ${SANS}`, color: "#8296a9", marginTop: 12, textAlign: "center" }}>

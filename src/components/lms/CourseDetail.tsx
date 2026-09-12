@@ -4,7 +4,9 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ENROLMENT_OPEN, courseBySlug, formatFee } from "@/lib/lms/courses";
+import { ENROLMENT_OPEN, formatFee } from "@/lib/lms/courses";
+import { useCatalogCourse, useCourse } from "@/components/site/CatalogProvider";
+import { fill } from "@/lib/catalog";
 import { PAYMENT_OFF } from "@/lib/lms/payment";
 import { enrol } from "@/lib/lms/enrolments";
 import { contact } from "@/lib/site";
@@ -30,13 +32,15 @@ const Lock = () => (
 );
 
 export default function CourseDetail({ slug }: { slug: string }) {
-  const course = courseBySlug(slug);
+  const course = useCourse(slug);
+  // Dates written into the FAQ answers are placeholders, filled from here.
+  const entry = useCatalogCourse(slug);
   const curriculum = curriculumBySlug(slug);
   const outline = outlineBySlug(slug);
   const brochure = brochureBySlug(slug);
   // Undefined where the brochure copy exists but its PDF has not arrived.
   const brochurePdf = brochure?.brochure;
-  const faqs = faqsBySlug(slug);
+  const faqs = faqsBySlug(slug)?.map((f) => ({ ...f, a: f.a.map((t) => fill(t, entry)) }));
   const program = programBySlug(slug);
   // A course authored as modules and submodules can simply be started —
   // there is nothing to pay for and nothing to wait for.

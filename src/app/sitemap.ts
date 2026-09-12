@@ -1,23 +1,25 @@
 import type { MetadataRoute } from "next";
-import { VISIBLE_COURSES as COURSES } from "@/lib/lms/courses";
+import { loadCatalog, visibleLmsCourses } from "@/lib/catalog";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://levitatepeoplesoft.com";
 
 // Required with `output: export` — emit sitemap.xml at build time.
 export const dynamic = "force-static";
 
+type Route = { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"] };
+
 /**
  * Emits /sitemap.xml at build time. Paths carry a trailing slash to match
  * `trailingSlash: true`, so the URLs here are exactly the ones Apache serves
  * (no redirect hop for crawlers).
  */
-const routes: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"] }[] = [
+const LEADING: Route[] = [
   { path: "/", priority: 1.0, changeFrequency: "monthly" },
   { path: "/about-us/", priority: 0.9, changeFrequency: "monthly" },
   { path: "/certifications/", priority: 0.9, changeFrequency: "monthly" },
-  // The per-program pages the Certifications menu points at. The rest of the
-  // LMS is account-gated working software and stays out of the sitemap.
-  ...COURSES.map((c) => ({ path: `/lms/course/${c.slug}/`, priority: 0.8, changeFrequency: "monthly" as const })),
+];
+
+const TRAILING: Route[] = [
   // Paid-ad landing pages. Indexed rather than hidden: they are the best
   // answer the site has for "posh train the trainer" and the like, and a page
   // good enough to send paid traffic to is good enough to send crawlers to.
@@ -36,7 +38,17 @@ const routes: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: "/refund-policy/", priority: 0.3, changeFrequency: "yearly" },
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // The per-program pages the Certifications menu points at: whatever the
+  // admin has published and not hidden. The rest of the LMS is account-gated
+  // working software and stays out of the sitemap.
+  const courses = visibleLmsCourses(await loadCatalog());
+  const routes: Route[] = [
+    ...LEADING,
+    ...courses.map((c) => ({ path: `/lms/course/${c.slug}/`, priority: 0.8, changeFrequency: "monthly" as const })),
+    ...TRAILING,
+  ];
+
   const lastModified = new Date();
   return routes.map(({ path, priority, changeFrequency }) => ({
     url: `${SITE_URL}${path}`,

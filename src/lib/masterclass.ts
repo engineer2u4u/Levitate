@@ -5,9 +5,12 @@
  * sign in to and nothing to unlock. A visitor pays, and the payment is the
  * registration. So it lives here rather than in the course catalogue.
  *
- * The fee shown here is display only. What is charged comes from
- * RZP_PRICES_PAISE in public/api/razorpay-common.php, and registration closes
- * there at RZP_CLOSES_AT — the two copies must be changed together.
+ * The fee, the date and the times shown here are the FALLBACK. The live values
+ * come from the admin's catalogue (course "posh-masterclass-2026" and its one
+ * session — see lib/catalog.ts), which is also where the payment server reads
+ * the fee it charges and the moment registration closes.
+ *
+ * FAQ answers may use {when}, {date}, {fee} and {list_fee}; the page fills them.
  */
 
 import type { Faq } from "@/lib/lms/poshFaqs";
@@ -20,15 +23,15 @@ export const MASTERCLASS = {
   titleRest: "The New Compliance & Workplace Reality",
   sub: "Judicial Developments, Evolving Workplaces & the AI × PoSH Intersection",
   /** Shown on the Razorpay sheet and on the invoice description. */
-  checkoutTitle: "PoSH 2026 Masterclass · 25 September 2026",
+  checkoutTitle: "PoSH 2026 Masterclass · 27 September 2026",
 
-  date: "25 September 2026",
-  dateShort: "Fri, 25 Sep 2026",
-  day: "Friday",
-  time: "6 PM – 8 PM IST",
+  date: "27 September 2026",
+  dateShort: "Sun, 27 Sep 2026",
+  day: "Sunday",
+  time: "11:30 AM – 1:30 PM IST",
   duration: "2 Hours",
-  startsAt: "2026-09-25T18:00:00+05:30",
-  endsAt: "2026-09-25T20:00:00+05:30",
+  startsAt: "2026-09-27T11:30:00+05:30",
+  endsAt: "2026-09-27T13:30:00+05:30",
 
   /** Early bird, open until the session starts. */
   feePaise: 199900,
@@ -82,11 +85,11 @@ export type ThemeIcon = (typeof MASTERCLASS.themes)[number]["icon"];
 export const MASTERCLASS_FAQS: Faq[] = [
   {
     q: "When is the masterclass?",
-    a: ["Friday, 25 September 2026, from 6 PM to 8 PM IST."],
+    a: ["{when}."],
   },
   {
     q: "What does it cost?",
-    a: ["₹1,999 including GST — the early-bird fee, against a standard fee of ₹2,999."],
+    a: ["{fee} including GST — the early-bird fee, against a standard fee of {list_fee}."],
   },
   {
     q: "How do I pay?",
@@ -94,7 +97,7 @@ export const MASTERCLASS_FAQS: Faq[] = [
   },
   {
     q: "What confirmation will I receive?",
-    a: ["Razorpay emails your payment receipt straight away. We will be in touch before 25 September with everything you need for the session."],
+    a: ["Razorpay emails your payment receipt straight away. We will be in touch before {date} with everything you need for the session."],
   },
   {
     q: "Can I cancel?",

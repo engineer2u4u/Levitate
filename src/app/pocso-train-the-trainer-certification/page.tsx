@@ -6,13 +6,20 @@ import ScrollToTop from "@/components/home/ScrollToTop";
 import SalesPage from "@/components/landing/SalesPage";
 import { POCSO_LANDING } from "@/lib/landing";
 import { faqsBySlug } from "@/lib/lms/poshFaqs";
+import { catalogCourse, fill, loadCatalog } from "@/lib/catalog";
 
-export const metadata: Metadata = {
-  title: "POCSO Train-the-Trainer Certification",
-  description:
-    "A founder-led POCSO and Child Safety Facilitator certification for schools, NGOs and child-facing organisations. Three evenings from 24 October, with SHRM PDCs and a trainer toolkit.",
-  alternates: { canonical: "/pocso-train-the-trainer-certification/" },
-};
+/** The start date in the description is the catalogue's, as the build read it. */
+export async function generateMetadata(): Promise<Metadata> {
+  const course = catalogCourse(await loadCatalog(), POCSO_LANDING.slug);
+  return {
+    title: "POCSO Train-the-Trainer Certification",
+    description: fill(
+      "A founder-led POCSO and Child Safety Facilitator certification for schools, NGOs and child-facing organisations. Three evenings from {starts}, with SHRM PDCs and a trainer toolkit.",
+      course,
+    ),
+    alternates: { canonical: "/pocso-train-the-trainer-certification/" },
+  };
+}
 
 export default function Page() {
   return (

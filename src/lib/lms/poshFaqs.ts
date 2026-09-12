@@ -5,6 +5,8 @@
  * renders them as separate paragraphs rather than one run-on block.
  * Keyed by course slug, like the brochure content.
  */
+/** Answers may carry {starts}, {starts_short} and {fee}; wherever they are
+ *  shown they are filled from the course's catalogue entry (lib/catalog.ts). */
 export type Faq = { q: string; a: string[] };
 
 export const POSH_FAQS: Faq[] = [
@@ -138,7 +140,7 @@ export const POCSO_FAQS: Faq[] = [
   {
     q: "When does the next batch run?",
     a: [
-      "From 24 October — three evenings, two hours a day, 6:00 to 8:00 PM, live online. Nine hours in total across eight modules.",
+      "From {starts} — three evenings, two hours a day, 6:00 to 8:00 PM, live online. Nine hours in total across eight modules.",
     ],
   },
   {
@@ -202,7 +204,7 @@ export const DEI_FAQS: Faq[] = [
   {
     q: "When does the next batch run?",
     a: [
-      "The batch starts 10 October, live online, across 20 learning hours and thirteen modules. Session timings are being confirmed and will be shared before the batch opens.",
+      "The batch starts {starts}, live online, across 20 learning hours and thirteen modules. Session timings are being confirmed and will be shared before the batch opens.",
     ],
   },
   {

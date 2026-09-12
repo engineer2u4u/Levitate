@@ -70,6 +70,15 @@ done
 # deploy would unverify the property.
 [ -f out/googleb70ed38c6bb644c5.html ] || die "out/ has no Search Console verification file."
 
+# The PHP endpoints are a set: the two Razorpay ones require the shared file
+# beside them, and the enquiry mailer requires smtp.php. Shipping the folder
+# half-empty would answer every checkout with a 500 — and the browser would
+# report it as "the payment server did not answer properly", which sounds like
+# Razorpay rather than a missing file.
+for f in razorpay-common.php razorpay-order.php razorpay-verify.php invoice.php smtp.php enquiry.php; do
+  [ -f "out/api/$f" ] || die "out/api/$f is missing — the site would go live without a working payment or enquiry endpoint."
+done
+
 say "comparing the live root .htaccess with the build's"
 LIVE_HT="$(mktemp)"; trap 'rm -f "$LIVE_HT"' EXIT
 ssh_ "cat ${ROOT}/.htaccess" | tr -d '\r' > "$LIVE_HT"

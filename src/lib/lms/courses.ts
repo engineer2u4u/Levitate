@@ -9,7 +9,7 @@ export const COURSES: Course[] = [
     tag: "Enrolling", mode: "Live online · Weekend batch",
     title: "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
     short: "PoSH Train-the-Trainer",
-    desc: "Build legal understanding, inquiry competence and PoSH facilitation skills across 11 practice-led modules.",
+    desc: "Build legal understanding, inquiry competence and PoSH facilitation skills across 15 practice-led modules.",
     img: "/assets/workshop-tables.jpeg", status: "enrolling",
     feePaise: 3200000, priceNote: "incl. taxes · from 3 Oct",
     modulesLabel: "15 modules", hoursLabel: "15 learning hours", facilitator: "Parichita Kotnala",

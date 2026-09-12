@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties } from "react";
-import { courseBySlug, feeBreakdown } from "@/lib/lms/courses";
+import { feeBreakdown } from "@/lib/lms/courses";
+import { useCourse } from "@/components/site/CatalogProvider";
 import { enrol } from "@/lib/lms/enrolments";
 import { PAYMENT_OFF, formatPaise, gateway, isTestKey } from "@/lib/lms/payment";
 import { HOME_STATE_CODE, INDIA_STATES, stateCodeOfGstin } from "@/lib/lms/indiaStates";
@@ -34,7 +35,7 @@ const METHODS = [
 ] as const;
 
 export default function Checkout({ slug }: { slug: string }) {
-  const course = courseBySlug(slug);
+  const course = useCourse(slug);
   const { user, loading, enrolments, openAuth } = useSession();
 
   const [method, setMethod] = useState<string>("upi");
