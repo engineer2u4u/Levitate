@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Accreditations from "@/components/site/Accreditations";
@@ -76,6 +76,25 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
   const router = useRouter();
 
   const [clip, setClip] = useState<PlayableClip | null>(null);
+
+  /**
+   * The hero video plays in the same modal the testimonials use, rather than
+   * inside the hero column — it is half the width there, and the batch facts
+   * beneath it would be pushed off the fold by a player worth watching.
+   */
+  const heroVideo: PlayableClip | null = offer.founderVideoId
+    ? { id: offer.founderVideoId, title: `${offer.eyebrow} — a message from Parichita Kotnala` }
+    : null;
+
+  // Escape closes the video, as it does on the certificate viewer.
+  useEffect(() => {
+    if (!clip) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setClip(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [clip]);
 
   /**
    * Ad traffic arrives with ?kw=<key> and the H1 echoes the search that
@@ -154,19 +173,22 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
           </div>
 
           <div>
-            {offer.founderVideoId ? (
+            {heroVideo ? (
               /* Video first, then the batch facts in a strip beneath it, so a
-                 video does not take them off the fold. */
+                 video does not take them off the fold. The poster is a cover,
+                 not a player: clicking it opens the same modal the
+                 testimonials use, because this column is half the page wide
+                 and a video played in place would push the batch facts off
+                 the fold it was put above. */
               <>
                 <div style={{ position: "relative", paddingTop: "56.25%", borderRadius: 18, overflow: "hidden", border: "1px solid rgba(255,255,255,.14)", background: "#000", marginBottom: 14 }}>
                   <div style={{ position: "absolute", inset: 0 }}>
                     <YouTubeEmbed
-                      id={offer.founderVideoId}
-                      title={`${offer.eyebrow} — a message from Parichita Kotnala`}
-                      autoplay={false}
-                      controls
+                      id={heroVideo.id}
+                      title={heroVideo.title}
                       facade
                       posterLabel={offer.posterLabel}
+                      onRequestPlay={() => setClip(heroVideo)}
                     />
                   </div>
                 </div>
@@ -313,19 +335,31 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
         </div>
       </section>
 
+      {/* One modal for every video on the page — the hero cover and the
+          testimonial cards both open it. Dressed like the PoSH section's:
+          same scrim, same teal-edged frame, same close control. */}
       {clip && (
         <div
           role="dialog"
           aria-modal
           aria-label={clip.title}
           onClick={() => setClip(null)}
-          style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(10,27,51,.55)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 40 }}
+          style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(10,27,51,.55)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 40, animation: "fadeUp .3s ease" }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            style={{ width: "100%", maxWidth: clip.portrait ? 420 : 900, aspectRatio: clip.portrait ? "9 / 16" : "16 / 9", borderRadius: 18, overflow: "hidden", background: "#000" }}
+            style={{ position: "relative", width: "100%", maxWidth: clip.portrait ? 420 : 900, aspectRatio: clip.portrait ? "9 / 16" : "16 / 9", borderRadius: 18, overflow: "hidden", background: "#050d1a", border: "1px solid rgba(47,196,188,.4)", boxShadow: "0 40px 120px rgba(10,27,51,.45)" }}
           >
             <YouTubeEmbed key={clip.id} id={clip.id} title={clip.title} />
+            <button
+              type="button"
+              onClick={() => setClip(null)}
+              aria-label="Close the video"
+              className="lp-close-btn"
+              style={{ position: "absolute", top: 14, right: 14, width: 40, height: 40, borderRadius: "50%", background: "rgba(255,255,255,.1)", border: "1px solid rgba(255,255,255,.25)", color: "#fff", font: "600 18px 'Plus Jakarta Sans',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 2 }}
+            >
+              ✕
+            </button>
           </div>
         </div>
       )}

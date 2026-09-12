@@ -107,7 +107,7 @@ export const POSH_LANDING: LandingOffer = {
     ],
   },
   price: { amount: "{fee}", note: "inclusive of taxes" },
-  founderVideoId: "wfGzTNtutXs",
+  founderVideoId: "6TrFt7CMlUI",
   posterLabel: "Watch a PoSH session",
 
   why: [

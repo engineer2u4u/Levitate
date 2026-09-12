@@ -30,6 +30,7 @@ export default function YouTubeEmbed({
   facade = false,
   posterLabel,
   poster,
+  onRequestPlay,
 }: {
   id: string;
   title: string;
@@ -41,6 +42,11 @@ export default function YouTubeEmbed({
   posterLabel?: string;
   /** Override the still. Defaults to the video's own thumbnail. */
   poster?: string;
+  /**
+   * Handle the poster click yourself — to open the video in a modal, say —
+   * instead of loading the player in place. Facade only.
+   */
+  onRequestPlay?: () => void;
 }) {
   const ref = useRef<HTMLIFrameElement>(null);
   // A facade starts unplayed; every other use is already past the click.
@@ -95,7 +101,7 @@ export default function YouTubeEmbed({
     return (
       <button
         type="button"
-        onClick={() => setPlaying(true)}
+        onClick={onRequestPlay ?? (() => setPlaying(true))}
         aria-label={`Play: ${title}`}
         style={{
           position: "relative",

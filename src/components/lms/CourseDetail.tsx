@@ -448,7 +448,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
                 </div>
               </div>
 
-              <CertificateGallery cards={certificateCards(course.certificate)} />
+              <CertificateGallery cards={certificateCards(course.certificate)} equal />
               <p style={{ font: "500 11.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#8296a9", margin: "14px 0 0" }}>
                 Specimens — select either to enlarge it.
               </p>
