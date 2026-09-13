@@ -55,7 +55,7 @@ const LVT_SELLER = [
     'address' => "H 4022, 1st Floor, Versalia Ansal Esencia, Sector 67\nUrban Estate Gurgaon SO, Gurugram, Haryana 122001",
     'state'   => '06',
     'email'   => 'contactus@levitatepeoplesoft.com',
-    'phone'   => '+91 70656 45999',
+    'phone'   => '+91 90269 95540',
     'site'    => 'www.levitatepeoplesoft.com',
 ];
 

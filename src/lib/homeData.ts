@@ -2,8 +2,8 @@
 
 export const contact = {
   email: "contactus@levitatepeoplesoft.com",
-  phone: "+91-70656 45999",
-  whatsapp: "https://wa.me/917065645999",
+  phone: "+91-90269 95540",
+  whatsapp: "https://wa.me/919026995540",
 };
 
 export const navLinks = ["Home", "Services", "Certifications", "About Us", "Contact"];
