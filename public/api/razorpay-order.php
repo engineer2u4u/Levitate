@@ -12,6 +12,7 @@
 declare(strict_types=1);
 
 require __DIR__ . '/razorpay-common.php';
+require __DIR__ . '/supabase-common.php';
 
 $body = rzp_begin();
 
@@ -56,7 +57,39 @@ $note = static function (string $v): string {
 $customer = is_array($body['customer'] ?? null) ? $body['customer'] : [];
 $billing  = is_array($body['billing'] ?? null) ? $body['billing'] : [];
 
+/**
+ * Which run of the course is being bought — decided here, never taken from
+ * the browser — and who is buying it.
+ *
+ * Both go into the order's notes, which only this server writes and the
+ * verify step reads back from Razorpay. That is what lets verify record the
+ * enrolment on the right batch and the right account without trusting
+ * anything the browser says after paying.
+ *
+ * If the database cannot be asked, the sale still goes ahead: the payment is
+ * real either way, and the office can place it from the Razorpay record. If
+ * it answers that there is no open batch, or that the batch is full, the
+ * sale is refused before anyone is charged.
+ */
+$batch = lvt_sb_next_batch($slug);
+if ($batch === null) {
+    rzp_fail('There is no open batch to enrol in right now. Please contact us to join the next one.');
+}
+if (is_array($batch) && $batch['seats_left'] < 1) {
+    rzp_fail('This batch is full. Please contact us to join the next one.');
+}
+
+// A signed-in learner's token, sent in the body (Apache on shared hosting can
+// strip an Authorization header before PHP sees it). Checked with Supabase.
+$buyer = lvt_sb_user(is_string($body['accessToken'] ?? null) ? $body['accessToken'] : '');
+
 $notes = ['course_slug' => $slug];
+if (is_array($batch)) {
+    $notes['batch_id'] = $batch['id'];
+}
+if ($buyer !== null) {
+    $notes['user_id'] = $buyer['id'];
+}
 foreach ([
     'customer_name'      => $customer['name'] ?? '',
     'customer_email'     => $customer['email'] ?? '',

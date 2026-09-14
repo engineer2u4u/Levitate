@@ -17,6 +17,7 @@
 declare(strict_types=1);
 
 require __DIR__ . '/razorpay-common.php';
+require __DIR__ . '/supabase-common.php';
 require __DIR__ . '/invoice.php';
 
 $body = rzp_begin();
@@ -77,9 +78,29 @@ $slugPaid = $paidFor !== '' ? $paidFor : $slug;
 $invoice = lvt_issue_invoice($paymentId, $orderId, $expectedAmount, rzp_title_for($slugPaid), $notes);
 $emailed = $invoice !== null && lvt_send_invoice($invoice);
 
+// The enrolment, on the batch and account the order endpoint wrote into the
+// notes. Idempotent in the database, so this and the webhook reporting the
+// same payment make one enrolment. Like the invoice, a failure here is logged,
+// never shown as a failed payment — the office can still place them by hand.
+$enrolmentId = null;
+if (($notes['batch_id'] ?? '') !== '') {
+    $enrolmentId = lvt_sb_record_paid_enrolment([
+        'payment_id'   => $paymentId,
+        'order_id'     => $orderId,
+        'batch_id'     => (string) $notes['batch_id'],
+        'user_id'      => (string) ($notes['user_id'] ?? ''),
+        'email'        => (string) ($notes['customer_email'] ?? ''),
+        'name'         => (string) ($notes['customer_name'] ?? ''),
+        'phone'        => (string) ($notes['customer_contact'] ?? ''),
+        'amount_paise' => $expectedAmount,
+        'invoice_no'   => (string) ($invoice['invoice_no'] ?? ''),
+    ]);
+}
+
 echo json_encode([
     'ok'          => true,
     'verified'    => true,
+    'enrolmentRecorded' => $enrolmentId !== null,
     'invoiceNo'   => $invoice['invoice_no'] ?? null,
     'invoiceSent' => $emailed,
     'courseSlug'  => $slugPaid,

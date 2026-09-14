@@ -1,4 +1,8 @@
+import { getClient, supabaseConfig, supabaseConfigured } from "./supabase";
 import type { LmsUser } from "./types";
+
+// Re-exported: screens have always imported these from here.
+export { supabaseConfig, supabaseConfigured };
 
 /**
  * Auth is deliberately behind a narrow interface.
@@ -23,14 +27,6 @@ export type AuthAdapter = {
   /** Fires whenever the session changes. Returns an unsubscribe. */
   onChange(cb: (user: LmsUser | null) => void): () => void;
 };
-
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
-
-/** True once a Supabase project is configured at build time. */
-export const supabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
-
-export const supabaseConfig = { url: SUPABASE_URL, anonKey: SUPABASE_ANON_KEY };
 
 /* ------------------------------------------------------------------ */
 /* Local adapter — browser only, no security, for demoing the flow     */
@@ -137,17 +133,6 @@ const toUser = (u: { id: string; email?: string; user_metadata?: SupaMeta } | nu
       }
     : null;
 
-/** The client is imported lazily so the SDK is only fetched where it is used. */
-let clientPromise: Promise<import("@supabase/supabase-js").SupabaseClient> | null = null;
-const getClient = () => {
-  clientPromise ??= import("@supabase/supabase-js").then((m) =>
-    m.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
-    }),
-  );
-  return clientPromise;
-};
-
 export const supabaseAuth: AuthAdapter = {
   kind: "supabase",
 
@@ -174,8 +159,9 @@ export const supabaseAuth: AuthAdapter = {
     });
     if (error) return { ok: false, error: error.message };
     const user = toUser(data.user);
-    // With email confirmation on, there is no session yet — say so plainly
-    // rather than dropping the learner on a screen that looks signed out.
+    // Email confirmation is off for this project, so a session comes back at
+    // once. If it is ever switched on, say so rather than dropping the learner
+    // on a screen that looks signed out.
     if (!data.session) {
       return { ok: false, error: "Check your inbox to confirm your email, then sign in." };
     }

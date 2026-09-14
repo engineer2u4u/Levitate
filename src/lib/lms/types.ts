@@ -99,6 +99,14 @@ export type Curriculum = {
 export type Enrolment = {
   courseSlug: string;
   enrolledAt: string;
+  /** From the database: its id, and whether payment has been confirmed.
+   *  Absent in the browser-only fallback, which only ever holds paid ones. */
+  id?: string;
+  status?: "pending" | "paid";
+  /** The run of the course this enrolment is on, e.g. "October 2026". */
+  batchName?: string;
+  /** Set while payment is pending, when the office has sent a link. */
+  paymentLink?: string;
   /** Lesson ids the learner has marked complete. */
   completed: string[];
   /** How many stages are released — driven by facilitator-marked sessions. */

@@ -18,6 +18,8 @@ import {
 } from "@/lib/lms/courseProgress";
 import { useSession } from "./useSession";
 import { courseBySlug } from "@/lib/lms/courses";
+import { moduleGate, useCourseAccess } from "@/lib/lms/access";
+import { supabaseConfigured } from "@/lib/lms/supabase";
 import { submitEnquiry } from "@/lib/submitEnquiry";
 
 const SANS = "'Plus Jakarta Sans',sans-serif";
@@ -36,6 +38,15 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   // knows the syllabus. A course with no catalogue row is treated as free.
   const fee = courseBySlug(slug)?.feePaise ?? 0;
   const enrolled = enrolments.some((e) => e.courseSlug === slug);
+  // What the database says this learner may reach: their batch, whether
+  // payment is confirmed, and which modules are open. Without Supabase (a
+  // local build) the browser-only enrolment stands in and nothing is gated.
+  const { access, loading: accessLoading } = useCourseAccess(slug, user?.id ?? null);
+  const gate = useMemo(() => moduleGate(access, course?.modules.map((m) => m.id) ?? []), [access, course]);
+  const paid = supabaseConfigured ? access?.enrolment.status === "paid" : enrolled;
+  const nextSession = access?.next_session
+    ? [access.next_session.date_label, access.next_session.time_label].filter(Boolean).join(", ")
+    : "";
   const [progress, setProgress] = useState<CourseProgress | null>(null);
   const [ready, setReady] = useState(false);
   const [active, setActive] = useState(0);
@@ -124,16 +135,32 @@ export default function CoursePlayer({ slug }: { slug: string }) {
     );
   }
 
+  if (supabaseConfigured && accessLoading) return <Shell><Muted>Loading your course…</Muted></Shell>;
+
   // Content is for people who have paid for it. The check is a courtesy, not a
   // wall: this is a static export, so the item text ships in the bundle either
-  // way. Real gating needs signed URLs and content fetched per request.
-  if (fee > 0 && !enrolled) {
+  // way. Real gating needs signed URLs and content fetched per request. What
+  // the database does control is progress, Zoom links and which modules open.
+  if (fee > 0 && !paid) {
+    const pending = access?.enrolment.status === "pending";
     return (
       <Shell>
         <h1 style={{ font: `700 24px ${SANS}`, color: "#0a1b33", margin: "0 0 10px" }}>{course.title}</h1>
-        <p style={{ font: `400 14.5px/1.75 ${SANS}`, color: "#5b6e82", maxWidth: 560, margin: "0 0 22px" }}>
-          This course is open to enrolled learners. Enrol on the course page and it opens straight away.
-        </p>
+        {pending ? (
+          <p style={{ font: `400 14.5px/1.75 ${SANS}`, color: "#5b6e82", maxWidth: 560, margin: "0 0 22px" }}>
+            You are enrolled in the {access?.batch.name} batch, and your payment is still to be confirmed. The course opens here as soon as it is.
+            {access?.enrolment.payment_link ? " If you have not paid yet, you can use the link below." : ""}
+          </p>
+        ) : (
+          <p style={{ font: `400 14.5px/1.75 ${SANS}`, color: "#5b6e82", maxWidth: 560, margin: "0 0 22px" }}>
+            This course is open to enrolled learners. Enrol on the course page, or if the office has enrolled you, enter your enrolment code on My Learning.
+          </p>
+        )}
+        {pending && access?.enrolment.payment_link && (
+          <a href={access.enrolment.payment_link} target="_blank" rel="noopener noreferrer" className="lp-btn-grad" style={{ display: "inline-block", marginRight: 10, background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `700 14px ${SANS}`, padding: "13px 26px", borderRadius: 999 }}>
+            Complete payment
+          </a>
+        )}
         <Link href={`/lms/course/${course.slug}`} className="lp-btn-grad" style={{ display: "inline-block", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `700 14px ${SANS}`, padding: "13px 26px", borderRadius: 999 }}>
           Go to the course page
         </Link>
@@ -144,7 +171,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   if (!ready) return <Shell><Muted>Loading your progress…</Muted></Shell>;
 
   const item = items[active];
-  const state = itemState(items, active, progress);
+  const state = itemState(items, active, progress, gate);
   const stats = courseStats(course, progress);
   const done = new Set(progress?.completedItems ?? []);
   const kit = kitReleased(course, progress);
@@ -193,8 +220,10 @@ export default function CoursePlayer({ slug }: { slug: string }) {
           <nav style={{ padding: "8px 0 24px" }}>
             {course.modules.map((m) => {
               const first = items.findIndex((i) => i.moduleId === m.id);
-              const moduleLocked = itemState(items, first, progress) === "locked";
+              const moduleLocked = ["locked", "scheduled"].includes(itemState(items, first, progress, gate));
               const moduleDone = m.items.every((i) => done.has(i.id));
+              // Closed for the batch until an admin unlocks it after a session.
+              const moduleScheduled = Boolean(gate && !gate.open.has(m.id)) && !moduleDone;
               return (
                 <div key={m.id} style={{ padding: "14px 22px 4px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
@@ -203,18 +232,27 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                     {moduleLocked && <LockIcon />}
                   </div>
                   {m.summary && <div style={{ font: `500 11.5px/1.5 ${SANS}`, color: "#8296a9", marginBottom: 8 }}>{m.summary}</div>}
+                  {moduleScheduled && (
+                    <div style={{ font: `600 11px/1.5 ${SANS}`, color: "#1f5fa8", background: "rgba(47,127,214,.08)", border: "1px solid rgba(47,127,214,.22)", borderRadius: 8, padding: "6px 9px", margin: "4px 0 8px" }}>
+                      Opens after the next live session{nextSession ? ` · ${nextSession}` : ""}
+                    </div>
+                  )}
 
                   <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                     {m.items.map((it) => {
                       const idx = items.findIndex((x) => x.id === it.id);
-                      const st = itemState(items, idx, progress);
+                      const st = itemState(items, idx, progress, gate);
                       const isActive = idx === active;
                       return (
                         <button
                           key={it.id}
                           type="button"
-                          disabled={st === "locked"}
-                          title={st === "preview" ? "Look ahead — you cannot complete it from here" : undefined}
+                          disabled={st === "locked" || st === "scheduled"}
+                          title={
+                            st === "preview" ? "Look ahead — you cannot complete it from here"
+                            : st === "scheduled" ? "Opens after the next live session"
+                            : undefined
+                          }
                           onClick={() => {
                             setActive(idx);
                             setMenuOpen(false);
@@ -224,17 +262,17 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                             display: "flex", alignItems: "flex-start", gap: 11, width: "100%", textAlign: "left",
                             border: "none", borderRadius: 10, padding: "10px 12px",
                             background: isActive ? "#eef4f7" : "transparent",
-                            cursor: st === "locked" ? "not-allowed" : "pointer",
-                            opacity: st === "locked" ? 0.55 : 1,
+                            cursor: st === "locked" || st === "scheduled" ? "not-allowed" : "pointer",
+                            opacity: st === "locked" || st === "scheduled" ? 0.55 : 1,
                             outline: st === "preview" && isActive ? "1.5px dashed #a9b8c6" : "none",
                             outlineOffset: -2,
                           }}
                         >
                           <span style={{ flex: "none", marginTop: 1 }}>
-                            {st === "done" ? <Tick /> : st === "locked" ? <LockIcon /> : st === "preview" ? <PeekIcon /> : <Dot />}
+                            {st === "done" ? <Tick /> : st === "locked" || st === "scheduled" ? <LockIcon /> : st === "preview" ? <PeekIcon /> : <Dot />}
                           </span>
                           <span style={{ flex: 1 }}>
-                            <span style={{ display: "block", font: `${isActive ? 700 : 600} 13px/1.4 ${SANS}`, color: st === "locked" ? "#8296a9" : "#0a1b33" }}>
+                            <span style={{ display: "block", font: `${isActive ? 700 : 600} 13px/1.4 ${SANS}`, color: st === "locked" || st === "scheduled" ? "#8296a9" : "#0a1b33" }}>
                               {it.title}
                             </span>
                             <span style={{ display: "block", font: `500 11px ${SANS}`, color: "#8296a9", marginTop: 3 }}>
@@ -288,6 +326,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
           <ItemView
             item={item}
             state={state}
+            nextSession={nextSession}
             attempt={progress?.quizAttempts[item.id] ?? null}
             onComplete={onComplete}
           />
@@ -298,7 +337,11 @@ export default function CoursePlayer({ slug }: { slug: string }) {
               learner has already passed is reachable from the list on the
               left; going further than they have been is this button. */}
           <div className="lms-player-foot">
-            {state === "preview" ? (
+            {state === "scheduled" ? (
+              <span style={{ font: `600 12.5px/1.5 ${SANS}`, color: "#8296a9" }}>
+                This module opens after the next live session{nextSession ? ` (${nextSession})` : ""}.
+              </span>
+            ) : state === "preview" ? (
               <>
                 <span style={{ font: `500 12.5px/1.5 ${SANS}`, color: "#8296a9" }}>
                   You are looking ahead. Finish “{items[frontier]?.title}” to continue from here.
@@ -349,13 +392,27 @@ const KIND_LABEL: Record<CourseItem["kind"], string> = {
 const itemMeta = (it: CourseItem) => it.meta ?? `${KIND_LABEL[it.kind]} · ${it.minutes} min`;
 
 function ItemView({
-  item, state, attempt, onComplete,
+  item, state, nextSession, attempt, onComplete,
 }: {
   item: CourseItem;
   state: ItemState;
+  nextSession: string;
   attempt: { score: number; total: number } | null;
   onComplete: (item: CourseItem, attempt?: { score: number; total: number }) => void;
 }) {
+  if (state === "scheduled") {
+    return (
+      <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "48px 40px", textAlign: "center" }}>
+        <LockIcon size={30} />
+        <h2 style={{ font: `700 20px ${SANS}`, color: "#0a1b33", margin: "14px 0 8px" }}>Wait for the next live session</h2>
+        <p style={{ font: `400 14px/1.7 ${SANS}`, color: "#5b6e82", margin: 0 }}>
+          “{item.title}” is part of a module your facilitator opens after the live session that covers it.
+          {nextSession ? ` The next session is ${nextSession}.` : ""} Your Zoom link is under Live sessions.
+        </p>
+      </div>
+    );
+  }
+
   if (state === "locked") {
     return (
       <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "48px 40px", textAlign: "center" }}>

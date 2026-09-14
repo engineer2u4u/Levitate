@@ -24,4 +24,16 @@ return [
     // (anon) key is enough — the same read the website makes.
     'SUPABASE_URL'        => 'https://xxxxxxxxxxxxxxxxxxxx.supabase.co',
     'SUPABASE_ANON_KEY'   => 'PUT_THE_SUPABASE_ANON_KEY_HERE',
+
+    // Records a verified payment as a paid enrolment, through the one database
+    // function granted to it (record_paid_enrolment). Supabase -> Project
+    // Settings -> API Keys: prefer a revocable "secret" key (sb_secret_...) over
+    // the legacy service_role key. Without it payments still go through and are
+    // invoiced, but the learner's enrolment has to be added by hand.
+    'SUPABASE_SERVICE_KEY' => 'PUT_THE_SUPABASE_SECRET_KEY_HERE',
+
+    // Razorpay -> Settings -> Webhooks: URL .../api/razorpay-webhook.php, event
+    // payment.captured, and this same secret. Records the enrolment even when
+    // the buyer closes the browser before the success screen.
+    'RAZORPAY_WEBHOOK_SECRET' => 'PUT_THE_WEBHOOK_SECRET_HERE',
 ];

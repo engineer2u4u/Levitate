@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, type CSSProperties } from "react";
 import { feeBreakdown } from "@/lib/lms/courses";
 import { useCourse } from "@/components/site/CatalogProvider";
-import { enrol } from "@/lib/lms/enrolments";
+import { enrol, isPaid } from "@/lib/lms/enrolments";
 import { PAYMENT_OFF, formatPaise, gateway, isTestKey } from "@/lib/lms/payment";
 import { HOME_STATE_CODE, INDIA_STATES, stateCodeOfGstin } from "@/lib/lms/indiaStates";
 import { useSession } from "./useSession";
@@ -36,7 +36,7 @@ const METHODS = [
 
 export default function Checkout({ slug }: { slug: string }) {
   const course = useCourse(slug);
-  const { user, loading, enrolments, openAuth } = useSession();
+  const { user, loading, enrolments, openAuth, refreshEnrolments } = useSession();
 
   const [method, setMethod] = useState<string>("upi");
   const [paying, setPaying] = useState(false);
@@ -52,7 +52,9 @@ export default function Checkout({ slug }: { slug: string }) {
   // picks, defaulting to home so the common case needs no thought.
   const [state, setState] = useState(HOME_STATE_CODE);
 
-  const alreadyEnrolled = enrolments.some((e) => e.courseSlug === slug);
+  // Only a paid enrolment means there is nothing to pay. One still pending (the
+  // office sent a link) can be paid here instead, and the server marks it paid.
+  const alreadyEnrolled = enrolments.some((e) => e.courseSlug === slug && isPaid(e));
 
   // A signed-out visitor who deep-links here gets the modal, not a dead end.
   useEffect(() => {
@@ -121,7 +123,7 @@ export default function Checkout({ slug }: { slug: string }) {
           <div style={{ background: "rgba(47,196,188,.09)", border: "1px solid rgba(27,143,136,.3)", borderRadius: 14, padding: "18px 20px", textAlign: "left", marginBottom: 26 }}>
             <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#136f6a", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 8 }}>Released now</div>
             <div style={{ font: "500 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>
-              Your first module is open in the course area. Each item unlocks as you finish the one before it.
+              Orientation is open in the course area now. The rest of the modules open after each live session, and your session dates and Zoom links are under Live sessions.
             </div>
           </div>
 
@@ -182,8 +184,11 @@ export default function Checkout({ slug }: { slug: string }) {
       setError(res.cancelled ? "Payment cancelled — you have not been charged." : res.error);
       return;
     }
-    // Access follows a completed payment, never the button click.
+    // Access follows a completed payment, never the button click. With the
+    // database, the server has already recorded the enrolment during
+    // verification; reading it back is all that is left to do here.
     enrol(user.id, slug, { orderId: res.orderId, paymentId: res.paymentId, amountPaise: res.amountPaise, at: res.at });
+    void refreshEnrolments();
     setReceipt({ orderId: res.orderId, paymentId: res.paymentId, amountPaise: res.amountPaise });
     window.scrollTo(0, 0);
   };

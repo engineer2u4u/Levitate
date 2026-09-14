@@ -1,5 +1,5 @@
-import { supabaseConfig, supabaseConfigured } from "./auth";
 import { flatItems, totalItems, type CourseContent, type FlatItem } from "./courseContent";
+import { getClient, supabaseConfigured } from "./supabase";
 
 /**
  * Per-learner progress through a self-paced course.
@@ -36,10 +36,21 @@ const EMPTY = (slug: string): CourseProgress => ({
 
 /* ------------------------------------------------------------- unlocking */
 
-export type ItemState = "done" | "open" | "preview" | "locked";
+export type ItemState = "done" | "open" | "preview" | "locked" | "scheduled";
 
 /**
- * Strictly sequential: an item opens when the one before it is done.
+ * The modules open to the learner's batch. An admin unlocks them after each
+ * live session, so a module can be further along the list than the learner
+ * but still closed. Null where the course is not taught in batches, and every
+ * module is open.
+ */
+export type ModuleGate = { open: ReadonlySet<string> } | null;
+
+/**
+ * Strictly sequential: an item opens when the one before it is done — and,
+ * for a course taught in batches, only once its module has been unlocked for
+ * the learner's batch. A closed module's items are "scheduled": waiting for a
+ * live session, not for the learner.
  *
  * Deliberately derived rather than stored. A stored "unlocked up to N" drifts
  * the moment the syllabus changes — insert a module and every learner's cursor
@@ -51,9 +62,11 @@ export type ItemState = "done" | "open" | "preview" | "locked";
  * beyond it stays locked, otherwise previewing the preview would step the
  * frontier forward one item at a time and the sequence would mean nothing.
  */
-export function itemState(items: FlatItem[], index: number, p: CourseProgress | null): ItemState {
+export function itemState(items: FlatItem[], index: number, p: CourseProgress | null, gate: ModuleGate = null): ItemState {
   const done = new Set(p?.completedItems ?? []);
   if (done.has(items[index].id)) return "done";
+  // Finished work stays finished even if its module is closed again later.
+  if (gate && !gate.open.has(items[index].moduleId)) return "scheduled";
   if (index === 0) return "open";
   if (done.has(items[index - 1].id)) return "open";
   return index === frontierIndex(items, p) + 1 ? "preview" : "locked";
@@ -107,16 +120,6 @@ const fromRow = (r: Row): CourseProgress => ({
   completedAt: r.completed_at,
 });
 
-let clientPromise: Promise<import("@supabase/supabase-js").SupabaseClient> | null = null;
-function getClient() {
-  clientPromise ??= import("@supabase/supabase-js").then((m) =>
-    m.createClient(supabaseConfig.url, supabaseConfig.anonKey, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
-    }),
-  );
-  return clientPromise;
-}
-
 export async function readProgress(userId: string, slug: string): Promise<CourseProgress | null> {
   if (!userId) return null;
 
@@ -133,6 +136,10 @@ export async function readProgress(userId: string, slug: string): Promise<Course
   const { data, error } = await supabase
     .from("course_progress")
     .select("course_slug, completed_items, quiz_attempts, started_at, completed_at")
+    // Row-level security already limits a learner to their own rows, but staff
+    // can read everyone's — without this, a staff account opening a course would
+    // get every learner's row and no single answer.
+    .eq("user_id", userId)
     .eq("course_slug", slug)
     .maybeSingle();
   // A learner with no row yet is the normal first visit, not a failure.

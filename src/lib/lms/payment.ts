@@ -8,6 +8,8 @@
  * real one later is a new adapter plus a PHP endpoint, not a UI change.
  */
 
+import { accessToken } from "./supabase";
+
 export type PaymentRequest = {
   courseSlug: string;
   courseTitle: string;
@@ -131,6 +133,10 @@ export const razorpayGateway: PaymentGateway = {
           "/api/razorpay-order.php",
           {
             courseSlug: req.courseSlug,
+            // Who is buying, when signed in, so the server can put the paid
+            // enrolment on their account. Checked with Supabase there; sent
+            // in the body because shared hosting can drop auth headers.
+            accessToken: (await accessToken()) ?? undefined,
             // The server decides the amount; these only ever describe who is
             // paying and how they should be invoiced.
             customer: { ...req.customer, contact: tidyPhone(req.customer.contact ?? "") },

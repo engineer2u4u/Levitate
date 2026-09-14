@@ -8,7 +8,7 @@ import { ENROLMENT_OPEN, formatFee } from "@/lib/lms/courses";
 import { useCatalogCourse, useCourse } from "@/components/site/CatalogProvider";
 import { fill } from "@/lib/catalog";
 import { PAYMENT_OFF } from "@/lib/lms/payment";
-import { enrol } from "@/lib/lms/enrolments";
+import { enrol, isPaid } from "@/lib/lms/enrolments";
 import { contact } from "@/lib/site";
 import { outlineBySlug } from "@/lib/programOutlines";
 import { contentBySlug } from "@/lib/lms/courseContent";
@@ -75,7 +75,8 @@ export default function CourseDetail({ slug }: { slug: string }) {
 
   const certificates = certificateCards(course.certificate);
 
-  const enrolled = enrolments.some((e) => e.courseSlug === slug);
+  // Paid opens the course; an enrolment still awaiting payment does not.
+  const enrolled = enrolments.some((e) => e.courseSlug === slug && isPaid(e));
   const waitlist = course.status === "waitlist" || course.feePaise === null;
 
   const goCheckout = () => router.push(`/lms/checkout/${slug}`);

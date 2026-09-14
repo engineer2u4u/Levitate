@@ -11,7 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import { auth, supabaseConfigured } from "@/lib/lms/auth";
-import { EMPTY, onEnrolmentsChange, readEnrolments } from "@/lib/lms/enrolments";
+import { EMPTY, loadEnrolments, onEnrolmentsChange, readEnrolments } from "@/lib/lms/enrolments";
 import type { Enrolment, LmsUser } from "@/lib/lms/types";
 import AuthModal, { type AuthMode } from "./AuthModal";
 
@@ -22,6 +22,8 @@ type SessionValue = {
   /** True until the first auth check resolves — screens must not flash signed-out. */
   loading: boolean;
   enrolments: Enrolment[];
+  /** Reads enrolments again — after a payment, or after claiming a code. */
+  refreshEnrolments: () => Promise<void>;
   /** Which adapter is live, so the UI can be honest about demo accounts. */
   authKind: "supabase" | "local";
   signOut: () => Promise<void>;
@@ -58,6 +60,15 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   // so a write anywhere re-renders every screen reading them. The store hands
   // back a stable reference between writes, which this relies on.
   const userId = user?.id ?? "";
+
+  // Fresh from the database whenever the account changes, so enrolments made
+  // by the office or by a payment show without a reload.
+  useEffect(() => {
+    if (userId) void loadEnrolments(userId);
+  }, [userId]);
+
+  const refreshEnrolments = useCallback(() => loadEnrolments(userId), [userId]);
+
   const enrolments = useSyncExternalStore(
     onEnrolmentsChange,
     useCallback(() => (userId ? readEnrolments(userId) : EMPTY), [userId]),
@@ -75,8 +86,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo<SessionValue>(
-    () => ({ user, loading, enrolments, authKind: supabaseConfigured ? "supabase" : "local", signOut, openAuth }),
-    [user, loading, enrolments, signOut, openAuth],
+    () => ({ user, loading, enrolments, refreshEnrolments, authKind: supabaseConfigured ? "supabase" : "local", signOut, openAuth }),
+    [user, loading, enrolments, refreshEnrolments, signOut, openAuth],
   );
 
   return (
