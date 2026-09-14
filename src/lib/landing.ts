@@ -246,7 +246,7 @@ export const DEI_LANDING: LandingOffer = {
     ],
   },
   price: { amount: "{fee}", note: "inclusive of taxes" },
-  founderVideoId: "4pf99e4AKBU",
+  founderVideoId: "ilnzye3waKU",
   posterLabel: "Watch a DEIB session",
   framework: true,
   approach: {
