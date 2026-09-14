@@ -59,6 +59,12 @@ done
 # A testing build puts the LMS in the public nav. It is never right for production.
 grep -q 'href="/lms/"' out/index.html && die "this is a testing build (the LMS is in the nav). Rebuild with NEXT_PUBLIC_LMS_TESTING unset."
 
+# Razorpay test keys are for localhost (npm run dev:pay). A build that baked one
+# in would hand live visitors a checkout that cannot take their money. Matched
+# as a whole key id — the bare prefix "rzp_test_" is in the code itself, which
+# checks for it.
+grep -rqsE "rzp_test_[A-Za-z0-9]{14}" out/ && die "out/ contains a Razorpay TEST key. Rebuild with NEXT_PUBLIC_RAZORPAY_KEY_ID unset — production takes its key from the server."
+
 # Verification builds switch the Google Ads tag off so scripted runs do not
 # count as visits, and leave out/ in that state. Shipping one would silently
 # stop conversion tracking and the remarketing audience.

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
+    "dev:pay": "node scripts/dev-pay.mjs",
     "build": "next build --webpack",
     "dev:turbo": "next dev",
     "build:turbo": "next build",
