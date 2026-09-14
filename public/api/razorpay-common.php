@@ -244,7 +244,7 @@ const RZP_CLOSES_AT = [
 const RZP_COURSE_TITLES = [
     'posh-trainer'        => 'PoSH & Workplace Dignity Facilitator Program (PoSH TTT)',
     'pocso-child-safety'  => 'POCSO & Child Safety Facilitator Program (POCSO TTT)',
-    'inclusive-workplace' => 'Inclusive Workplace Facilitator Program (DEI TTT)',
+    'inclusive-workplace' => 'Inclusive Workplace Facilitator Program (DEIB TTT)',
     'demo-course'         => 'Demo · Workplace Facilitation Essentials',
     'posh-masterclass-2026' => 'PoSH 2026: The New Compliance & Workplace Reality — Masterclass, 27 September 2026',
 ];

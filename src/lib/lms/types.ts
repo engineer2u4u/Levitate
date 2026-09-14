@@ -67,7 +67,8 @@ export type Course = {
   /** Kept out of the public nav, the sitemap and the certifications cards.
    *  Test fixtures live in the catalogue without being advertised. */
   hidden?: boolean;
-  /** What this course's certificates say. Every programme awards both. */
+  /** What this course's certificates say. Every programme awards SHRM and
+   *  Levitate's own; CPD-certified ones add a CPD certificate. */
   certificate: {
     /** The programme name as printed — not always the catalogue title. */
     name: string;
@@ -75,6 +76,8 @@ export type Course = {
     closing: string;
     /** Printed in the completion chip. */
     hours: string;
+    /** Also awards a CPD certificate (The CPD Certification Service). */
+    cpd?: boolean;
   };
 };
 

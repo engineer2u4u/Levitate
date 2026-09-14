@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     "HR advisory",
     "PoSH training",
     "POCSO training",
-    "DEI facilitation",
+    "DEIB facilitation",
     "workplace wellbeing",
     "Levitate PeopleSoft",
   ],

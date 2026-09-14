@@ -185,11 +185,11 @@ export const POCSO_BROCHURE: ProgramBrochure = {
 };
 
 export const DEI_BROCHURE: ProgramBrochure = {
-  eyebrow: "Certified DEI Train-the-Trainer",
+  eyebrow: "Certified DEIB Train-the-Trainer",
   strapline: "Understand. Reflect. Apply. Facilitate. Transform.",
-  meta: ["20 Hours · Total Certification", "13 Modules · Curriculum", "BRIDGE · Inclusion Framework", "Applied TTT · Format"],
+  meta: ["20 + 5 Hours · Total Certification", "13 Modules · Curriculum", "BRIDGE · Inclusion Framework", "Applied TTT · Format"],
   about:
-    "The Inclusive Workplace Facilitator Program (DEI TTT) is a 20-hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, translating inclusion from concept into everyday workplace behaviour while building the capability to design and facilitate practical DEI learning experiences.",
+    "The Inclusive Workplace Facilitator Program (DEIB TTT) is a 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, translating inclusion from concept into everyday workplace behaviour while building the capability to design and facilitate practical DEIB learning experiences.",
 
   stats: [
     { n: "2,000+", label: "Professionals Trained" },
@@ -199,23 +199,23 @@ export const DEI_BROCHURE: ProgramBrochure = {
   ],
 
   objectives: [
-    "Explain core DEI concepts, identity, intersectionality, privilege, power and the global inclusion landscape",
+    "Explain core DEIB concepts, identity, intersectionality, privilege, power and the global inclusion landscape",
     "Recognise and interrupt bias, stereotypes, microaggressions and exclusion in everyday workplace decisions and communication",
     "Strengthen psychological safety, belonging, allyship, inclusive leadership and culturally intelligent collaboration",
-    "Apply an inclusion lens across the employee lifecycle, DEI strategy, governance, measurement and organisational change",
-    "Design and facilitate engaging, workplace-relevant DEI learning experiences using adult-learning principles",
+    "Apply an inclusion lens across the employee lifecycle, DEIB strategy, governance, measurement and organisational change",
+    "Design and facilitate engaging, workplace-relevant DEIB learning experiences using adult-learning principles",
     "Navigate sensitive conversations, resistance, difficult questions and emotionally charged moments with confidence",
-    "Use cases, structured debriefing and audience adaptation to translate DEI learning into practical workplace application",
+    "Use cases, structured debriefing and audience adaptation to translate DEIB learning into practical workplace application",
   ],
 
   audience: [
     "HR & L&D Professionals",
-    "DEI, Culture & Employee Experience Professionals",
+    "DEIB, Culture & Employee Experience Professionals",
     "People Managers & Inclusive Leaders",
     "Employee Resource Group & Inclusion Leads",
     "Workplace Trainers & Facilitators",
     "HR Consultants & Independent Professionals",
-    "Aspiring DEI Facilitators",
+    "Aspiring DEIB Facilitators",
     "New Potential Trainers (freelance and/or corporate)",
   ],
 
@@ -223,9 +223,9 @@ export const DEI_BROCHURE: ProgramBrochure = {
     tags: ["Audio-Video", "Interactive Presentation", "Case Studies", "Roleplay", "Activity Sheets", "Reflection & Group Discussion"],
     // The printed brochure reuses the PoSH wording here and ends on "lead POSH
     // conversations", which is a copy-paste left in the PDF. Saying that on the
-    // DEI page would be plainly wrong, so the sentence names DEI instead.
+    // DEIB page would be plainly wrong, so the sentence names DEIB instead.
     body:
-      "Every session combines inclusion knowledge with practical HR insight and facilitator practice — using workplace cases, role plays, reflection, discussion and applied facilitation rather than theory alone. Participants leave equipped to lead DEI conversations, not simply understand the concepts.",
+      "Every session combines inclusion knowledge with practical HR insight and facilitator practice — using workplace cases, role plays, reflection, discussion and applied facilitation rather than theory alone. Participants leave equipped to lead DEIB conversations, not simply understand the concepts.",
     blocks: [
       {
         title: "Study Material",

@@ -11,7 +11,7 @@ import BrandText from "@/components/site/BrandText";
 const why = [
   { t: "Global content with workplace relevance", d: "Global workplace content, practical HR insights and real-world application for evolving workplace realities." },
   { t: "Practice-led learning", d: "Cases, reflection, discussion, role plays and facilitation practice — not only theory." },
-  { t: "Designed for sensitive conversations", d: "Leadership, DEI, wellbeing, PoSH and POCSO facilitated with confidence, clarity and care." },
+  { t: "Designed for sensitive conversations", d: "Leadership, DEIB, wellbeing, PoSH and POCSO facilitated with confidence, clarity and care." },
   { t: "Trainer toolkits included", d: "Templates, case studies, facilitation guides, sample session plans, FAQs and workplace-ready tools." },
   { t: "Assessment-based certification", d: "Linked to participation, practice, reflection and assessment — not just attendance." },
 ];

@@ -9,14 +9,14 @@ import { faqsBySlug } from "@/lib/lms/poshFaqs";
 import { catalogCourse, fill, loadCatalog } from "@/lib/catalog";
 
 const KEYWORDS = [
-  "DEI certification",
-  "DEI train the trainer",
-  "DEI facilitator certification",
-  "diversity equity and inclusion certification",
+  "DEIB certification",
+  "DEIB train the trainer",
+  "DEIB facilitator certification",
+  "diversity equity inclusion and belonging certification",
   "diversity and inclusion training",
   "unconscious bias training certification",
   "inclusion training certification",
-  "DEI certification course",
+  "DEIB certification course",
   "HR trainer course",
   "HR certification",
   "employee resource group training",
@@ -27,9 +27,9 @@ const KEYWORDS = [
 export async function generateMetadata(): Promise<Metadata> {
   const course = catalogCourse(await loadCatalog(), DEI_LANDING.slug);
   return {
-    title: "DEI Train-the-Trainer Certification",
+    title: "DEIB Train-the-Trainer Certification",
     description: fill(
-      "A founder-led DEI facilitator certification with SHRM PDCs — 20 applied hours across 13 modules, anchored in the BRIDGE Inclusion Framework. Batch from {starts}. Learn to design and facilitate diversity, equity and inclusion learning.",
+      "A founder-led DEIB facilitator certification with SHRM PDCs — 20 + 5 hours across 13 modules, anchored in the BRIDGE Inclusion Framework. Batch from {starts}. Learn to design and facilitate diversity, equity and inclusion learning.",
       course,
     ),
     keywords: KEYWORDS,

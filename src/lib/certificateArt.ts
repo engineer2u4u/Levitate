@@ -14,6 +14,8 @@
 export const CANVASES = {
   shrm: { w: 1536, h: 1024 },
   excellence: { w: 1600, h: 900 },
+  // A4 portrait — The CPD Certification Service's own delegate template.
+  cpd: { w: 1819, h: 2573 },
 } as const;
 
 export type CertificateTemplate = keyof typeof CANVASES;
@@ -21,6 +23,7 @@ export type CertificateTemplate = keyof typeof CANVASES;
 export const PLATES: Record<CertificateTemplate, string> = {
   shrm: "/certificates/shrm.jpg",
   excellence: "/certificates/excellence.jpg",
+  cpd: "/certificates/cpd.jpg",
 };
 
 /**
@@ -141,6 +144,9 @@ export const MASKS: Record<CertificateTemplate, MaskRegion[]> = {
     { id: "certId", x: 200, y: 780, w: 180, h: 34 },
     { id: "issued", x: 200, y: 828, w: 180, h: 34 },
   ],
+  // Nothing to cover: the plate is the background image lifted out of the
+  // CPD Certification Service's Word template, which has no specimen text.
+  cpd: [],
 };
 
 /**
@@ -164,6 +170,7 @@ export const MASK_COLORS: Record<CertificateTemplate, Record<string, string>> = 
     certId: "rgb(4, 113, 154)",
     issued: "rgb(2, 115, 147)",
   },
+  cpd: {},
 };
 
 /** What a specimen certificate says. */
@@ -174,6 +181,8 @@ export type CertificateIssue = {
   completedOn: string;
   hours: string;
   pdcs: string;
+  /** "No. CPD Hours/ Points" on the CPD certificate. */
+  cpdHours: string;
   certificateId: string;
   /** Trailing clause on the Award certificate; falls back to the PoSH line. */
   closing?: string;
@@ -208,9 +217,13 @@ export type CertificateCard = {
 /** Specimen values — the same on every programme, so nothing reads as real. */
 const SPECIMEN = { completedOn: "Sep 2026", certificateId: "2026-09-001" };
 
-/** Both certificates a programme awards, carrying that programme's name. */
-export function certificateCards(certificate: { name: string; closing: string; hours: string }): CertificateCard[] {
-  return [
+/**
+ * The certificates a programme awards, carrying that programme's name: SHRM
+ * and Levitate's own on every programme, and CPD where the programme is
+ * CPD-certified.
+ */
+export function certificateCards(certificate: { name: string; closing: string; hours: string; cpd?: boolean }): CertificateCard[] {
+  const cards: CertificateCard[] = [
     {
       title: "SHRM Certificate of Completion",
       caption: "Issued with the PDCs earned toward SHRM-CP® and SHRM-SCP® recertification.",
@@ -221,6 +234,7 @@ export function certificateCards(certificate: { name: string; closing: string; h
         completedOn: SPECIMEN.completedOn,
         hours: certificate.hours,
         pdcs: "",
+        cpdHours: "",
         certificateId: SPECIMEN.certificateId,
       },
     },
@@ -234,9 +248,29 @@ export function certificateCards(certificate: { name: string; closing: string; h
         completedOn: SPECIMEN.completedOn,
         hours: certificate.hours,
         pdcs: "",
+        cpdHours: "",
         certificateId: SPECIMEN.certificateId,
         closing: certificate.closing,
       },
     },
   ];
+  if (certificate.cpd) {
+    cards.push({
+      title: "CPD Certificate",
+      caption: "Issued under The CPD Certification Service, with the applicable CPD learning hours.",
+      issue: {
+        template: "cpd",
+        recipientName: "",
+        courseName: certificate.name,
+        completedOn: SPECIMEN.completedOn,
+        hours: certificate.hours,
+        pdcs: "",
+        // Left blank on the specimen, like the SHRM PDC count: the hours
+        // awarded are set per certificate when it is issued.
+        cpdHours: "",
+        certificateId: SPECIMEN.certificateId,
+      },
+    });
+  }
+  return cards;
 }

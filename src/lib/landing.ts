@@ -32,6 +32,8 @@ export type LandingOffer = {
    */
   headlines: Record<string, string>;
   sub: string;
+  /** A short line under the H1, before `sub`. Unset on pages without one. */
+  strapline?: string;
   /** Batch facts. Shown as the page's proof that this is a real, dated cohort.
    *  Dates and fees here are placeholders — {starts}, {starts_short}, {fee} —
    *  filled from the admin's catalogue (see lib/catalog.ts), as is `whatsapp`. */
@@ -51,8 +53,13 @@ export type LandingOffer = {
   founderVideoId?: string;
   /** Caption under the play control on the poster. */
   posterLabel?: string;
-  /** The four reasons this programme, not a cheaper one. */
+  /** The reasons this programme, not a cheaper one. The heading counts them. */
   why: { k: string; v: string; icon: WhyIcon }[];
+  /** Shows the programme's framework under the curriculum — the letters and
+   *  names from lib/programs.ts, the same ones the course page shows. */
+  framework?: boolean;
+  /** How the programme is taught, under the curriculum. */
+  approach?: { text: string; lensesIntro: string; lenses: string[] };
   /** What the certification opens up afterwards. */
   career: { title: string; intro: string; points: string[] };
   /** Gated lead magnet. Unset until the PDF exists in /public. */
@@ -91,13 +98,13 @@ export const POSH_LANDING: LandingOffer = {
     business: "Business trainer PoSH certification",
   },
   sub:
-    "Fifteen learning hours — twelve live with the founder, three guided in the LMS — that take you past knowing the law to facilitating it: running awareness sessions, supporting an Internal Committee, and handling the questions a room actually asks.",
+    "12 + 3 learning hours — twelve live with the founder, three guided in the LMS — that take you past knowing the law to facilitating it: running awareness sessions, supporting an Internal Committee, and handling the questions a room actually asks.",
 
   batch: {
     starts: "{starts}",
     rows: [
       { k: "Batch starts", v: "{starts}" },
-      { k: "Duration", v: "15 learning hours" },
+      { k: "Duration", v: "12 + 3 learning hours" },
       { k: "Live", v: "12 hours across 6 sessions" },
       { k: "Guided LMS", v: "3 hours" },
       { k: "Curriculum", v: "15 modules" },
@@ -111,8 +118,9 @@ export const POSH_LANDING: LandingOffer = {
   posterLabel: "Watch a PoSH session",
 
   why: [
-    { k: "15 learning hours", icon: "clock", v: "Twelve hours live across six sessions and three weekends, plus three guided hours in the LMS — long enough to practise facilitating, not just to be told about it." },
-    { k: "SHRM PDCs", icon: "award", v: "Levitate PeopleSoft is a SHRM Recertification Provider. The programme earns Professional Development Credits toward SHRM-CP® and SHRM-SCP® recertification." },
+    { k: "12 + 3 learning hours", icon: "clock", v: "Twelve hours live across six sessions and three weekends, plus three guided hours in the LMS — long enough to practise facilitating, not just to be told about it." },
+    { k: "Earn SHRM Certificate with applicable PDC's", icon: "award", v: "Levitate PeopleSoft is a SHRM Recertification Provider. The programme earns Professional Development Credits toward SHRM-CP® and SHRM-SCP® recertification." },
+    { k: "Earn CPD Certificate with applicable CPD learning hours", icon: "shield", v: "Levitate PeopleSoft is a recognised CPD Provider. The programme awards a CPD certificate, in The CPD Certification Service's format, recording its applicable CPD learning hours." },
     { k: "The founder teaches it", icon: "person", v: "Every session is led by Parichita Kotnala — a certified PoSH and POCSO educator with 15+ years of global HR experience, not a rotating panel." },
     { k: "Dedicated LMS access", icon: "screen", v: "Recorded sessions, module resources, the trainer toolkit, downloadable templates and knowledge checks, in one place." },
   ],
@@ -132,9 +140,9 @@ export const POSH_LANDING: LandingOffer = {
 
   bundle: {
     slug: "inclusive-workplace",
-    title: "Also running: Inclusive Workplace (DEI)",
+    title: "Also running: Inclusive Workplace (DEIB)",
     body:
-      "The DEI Train-the-Trainer certification starts {starts} — twenty applied hours anchored in the BRIDGE Inclusion Framework. Ask us about taking both.",
+      "The DEIB Train-the-Trainer certification starts {starts} — 20 + 5 hours anchored in the BRIDGE Inclusion Framework. Ask us about taking both.",
     href: "/dei-train-the-trainer-certification/",
   },
 
@@ -203,46 +211,54 @@ export const POCSO_LANDING: LandingOffer = {
   whatsapp: "Hi, I'd like to know more about the POCSO Facilitator certification starting {starts}.",
 };
 
-/* ------------------------------------------------------------------- DEI */
+/* ------------------------------------------------------------------- DEIB */
 
 export const DEI_LANDING: LandingOffer = {
   slug: "inclusive-workplace",
-  eyebrow: "Certified DEI Train-the-Trainer",
-  headline: "Become a certified DEI facilitator",
+  eyebrow: "Certified Inclusive Workplace Facilitator",
+  headline: "Diversity, Equity, Inclusion & Belonging",
   headlines: {
-    ttt: "Become a certified DEI Train-the-Trainer",
-    facilitator: "DEI Facilitator Certification",
-    certification: "DEI Certification for HR and people leaders",
-    course: "DEI Certification Course — live, and founder-led",
-    diversity: "Diversity, Equity and Inclusion Certification",
+    ttt: "Become a certified DEIB Train-the-Trainer",
+    facilitator: "DEIB Facilitator Certification",
+    certification: "DEIB Certification for HR and people leaders",
+    course: "DEIB Certification Course — live, and founder-led",
+    diversity: "Diversity, Equity, Inclusion and Belonging Certification",
     inclusion: "Inclusion training you can go on to deliver yourself",
     bias: "Learn to facilitate unconscious bias training, credibly",
     belonging: "Build psychological safety and belonging that holds",
-    hr: "Add DEI facilitation to your HR practice",
+    hr: "Add DEIB facilitation to your HR practice",
     erg: "For ERG and inclusion leads who have to run the sessions",
   },
+  strapline: "Understand. Reflect. Apply. Facilitate. Transform.",
   sub:
-    "Twenty applied hours anchored in the BRIDGE Inclusion Framework — turning inclusion from a value statement into everyday workplace behaviour, and giving you the capability to design and facilitate the sessions yourself.",
+    "Built around Levitate PeopleSoft's BRIDGE Inclusion Framework, the programme develops participants' ability to apply DEIB at work and facilitate meaningful learning for others.",
 
   batch: {
     starts: "{starts}",
     rows: [
       { k: "Batch starts", v: "{starts}" },
-      { k: "Duration", v: "20 hours" },
+      { k: "Duration", v: "20 + 5 hours" },
+      { k: "Guided LMS", v: "5 hours" },
       { k: "Curriculum", v: "13 modules" },
       { k: "Framework", v: "BRIDGE Inclusion" },
-      { k: "Timing", v: "To be confirmed" },
+      { k: "Timing", v: "11:00 AM – 1:00 PM" },
       { k: "Mode", v: "Live online" },
     ],
   },
   price: { amount: "{fee}", note: "inclusive of taxes" },
   founderVideoId: "4pf99e4AKBU",
-  posterLabel: "Watch a DEI session",
+  posterLabel: "Watch a DEIB session",
+  framework: true,
+  approach: {
+    text: "Workplace cases, reflective activities, practical tools, role-plays, learning design and facilitation practice.",
+    lensesIntro: "Participants use two lenses throughout:",
+    lenses: ["What am I learning?", "How would I facilitate this learning?"],
+  },
 
   why: [
-    { k: "20 applied hours", icon: "clock", v: "Long enough to practise facilitating rather than to be told about inclusion — thirteen modules, from the global landscape through to running the room." },
+    { k: "20 + 5 hours", icon: "clock", v: "Twenty live, applied hours — long enough to practise facilitating rather than to be told about inclusion — plus five hours of guided LMS. Thirteen modules, from the global landscape through to running the room." },
     { k: "The BRIDGE Framework", icon: "layers", v: "Bias visible, respectful language, inclusive decisions, dialogue over debate, growing belonging, everyday allyship. A structure to facilitate with, not a slide to admire." },
-    { k: "SHRM PDCs", icon: "award", v: "Levitate PeopleSoft is a SHRM Recertification Provider. The programme earns Professional Development Credits toward SHRM-CP® and SHRM-SCP® recertification." },
+    { k: "Earn SHRM Certificate with applicable PDC's", icon: "award", v: "Levitate PeopleSoft is a SHRM Recertification Provider. The programme earns Professional Development Credits toward SHRM-CP® and SHRM-SCP® recertification." },
     { k: "The founder teaches it", icon: "person", v: "Every session is led by Parichita Kotnala — 15+ years of global HR across India, the UK, Europe, the US and Canada, not a rotating panel." },
   ],
 
@@ -250,10 +266,10 @@ export const DEI_LANDING: LandingOffer = {
     title: "What the certification opens up",
     intro: "It is a facilitator certification, so what it changes is what you can be asked to do:",
     points: [
-      "Design and deliver DEI learning that lands as behaviour rather than as a policy briefing",
+      "Design and deliver DEIB learning that lands as behaviour rather than as a policy briefing",
       "Facilitate identity-sensitive conversations, disagreement and hot moments without losing the room",
       "Interrupt bias, stereotypes and microaggressions in everyday decisions and communication — and teach others to",
-      "Apply an inclusion lens across the employee lifecycle, DEI strategy, governance and measurement",
+      "Apply an inclusion lens across the employee lifecycle, DEIB strategy, governance and measurement",
       "Lead an ERG or inclusion council with something more durable than good intentions",
       "Carry a verifiable certificate ID and the PDCs on your professional profile",
     ],
@@ -268,5 +284,5 @@ export const DEI_LANDING: LandingOffer = {
   },
 
   faqs: [],
-  whatsapp: "Hi, I'd like to know more about the DEI Train-the-Trainer certification starting {starts}.",
+  whatsapp: "Hi, I'd like to know more about the DEIB Train-the-Trainer certification starting {starts}.",
 };

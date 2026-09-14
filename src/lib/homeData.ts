@@ -13,7 +13,7 @@ export const services: Service[] = [
   {
     num: "01",
     title: "Train-the-Trainer Certification Programs",
-    desc: "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity & Inclusion, Applied Workplace Mental Health & Wellbeing, PoSH and POCSO — along with HR Edge certification for future HR professionals.",
+    desc: "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity, Inclusion & Belonging, Applied Workplace Mental Health & Wellbeing, PoSH and POCSO — along with HR Edge certification for future HR professionals.",
   },
   {
     num: "02",
@@ -92,9 +92,9 @@ export const certs: Cert[] = [
   },
   {
     num: "02",
-    tag: "DEI · TTT",
-    title: "Inclusive Workplace Facilitator Program (DEI TTT)",
-    sub: "Diversity, Equity & Inclusion Certification",
+    tag: "DEIB · TTT",
+    title: "Inclusive Workplace Facilitator Program (DEIB TTT)",
+    sub: "Diversity, Equity, Inclusion & Belonging Certification",
     desc: "Lead meaningful conversations on inclusion, unconscious bias, belonging and psychological safety.",
   },
   {
@@ -122,7 +122,7 @@ export const certs: Cert[] = [
     num: "06",
     tag: "HR Edge certification · TTT",
     title: "HR Edge certification (HR Students)",
-    sub: "Integrated DEI, PoSH & Wellbeing Certification",
+    sub: "Integrated DEIB, PoSH & Wellbeing Certification",
     desc: "A career advantage for MBA-HR, PGDM-HR and early-career HR professionals entering modern workplaces.",
   },
 ];
@@ -139,7 +139,7 @@ export const whyPoints: WhyPoint[] = [
   },
   {
     t: "Designed for sensitive conversations",
-    d: "Leadership, DEI, wellbeing, PoSH and POCSO facilitated with confidence, clarity and care.",
+    d: "Leadership, DEIB, wellbeing, PoSH and POCSO facilitated with confidence, clarity and care.",
   },
   {
     t: "Trainer toolkits included",
@@ -233,7 +233,7 @@ export const testimonials: Testimonial[] = [
 
 export const tickerA = [
   "Corporate Leadership Facilitation",
-  "Diversity, Equity & Inclusion",
+  "Diversity, Equity, Inclusion & Belonging",
   "Workplace Mental Health & Wellbeing",
   "PoSH Train-the-Trainer",
   "POCSO & Child Safety",
@@ -279,7 +279,7 @@ export const founders = [
     imgPos: "50% 50%",
     name: "Parichita Kotnala",
     role: "Founder & Managing Partner · Global HR Leader",
-    bio: "15+ years of global HR leadership across India, the UK, Europe and North America — spanning leadership enablement, workplace culture, DEI, PoSH, POCSO, wellbeing and people advisory. She leads Levitate's practice-led certification programs for credible workplace facilitators.",
+    bio: "15+ years of global HR leadership across India, the UK, Europe and North America — spanning leadership enablement, workplace culture, DEIB, PoSH, POCSO, wellbeing and people advisory. She leads Levitate's practice-led certification programs for credible workplace facilitators.",
   },
   {
     img: "/assets/ravindra.png",

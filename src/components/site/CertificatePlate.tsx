@@ -3,6 +3,7 @@ import {
   CLOSING_NOTE,
   MASKS,
   MASK_COLORS,
+  ORG_NAME,
   PLATES,
   fitBlock,
   parseRich,
@@ -34,12 +35,18 @@ export default function CertificatePlate({ issue }: { issue: CertificateIssue })
       xmlns="http://www.w3.org/2000/svg"
       style={{ display: "block", width: "100%", height: "auto", background: "#fff" }}
       role="img"
-      aria-label={`Specimen ${issue.template === "shrm" ? "SHRM certificate of completion" : "certificate of training completion"} for ${issue.courseName}`}
+      aria-label={`Specimen ${LABELS[issue.template]} for ${issue.courseName}`}
     >
-      {issue.template === "shrm" ? <Shrm issue={issue} /> : <Excellence issue={issue} />}
+      {issue.template === "shrm" ? <Shrm issue={issue} /> : issue.template === "cpd" ? <Cpd issue={issue} /> : <Excellence issue={issue} />}
     </svg>
   );
 }
+
+const LABELS: Record<CertificateIssue["template"], string> = {
+  shrm: "SHRM certificate of completion",
+  excellence: "certificate of training completion",
+  cpd: "CPD certificate",
+};
 
 /** One patch over the plate's specimen text, in the plate's own background. */
 function Patch({ r, fill }: { r: MaskRegion; fill: string; }) {
@@ -159,6 +166,53 @@ function Excellence({ issue }: { issue: CertificateIssue }) {
       </text>
       <text x="362" y="852" textAnchor="end" fontFamily={SANS} fontSize="17" fontWeight="800" fill="#ffffff">
         {issue.completedOn || "—"}
+      </text>
+    </>
+  );
+}
+
+/* -------------------------- C · CPD, 1819 × 2573 -------------------------- */
+
+const C = CANVASES.cpd;
+// The plate's body copy is centred here, a little left of the page centre;
+// the values sit under those lines, so they share it.
+const C_MID = 893;
+const C_INK = "#111111";
+
+function Cpd({ issue }: { issue: CertificateIssue }) {
+  // The activity has the band between "the above named has participated…" and
+  // "CPD Provider Organisation" to itself, so a long title takes more lines
+  // rather than smaller type until it has to.
+  const activityLines = wrap(issue.courseName || "Course name", 44);
+  const activity = fitBlock(activityLines.length, 1240, [0, 58, 56, 50], [44, 44, 42, 38]);
+  const name = issue.recipientName || "[Name of Delegate]";
+
+  return (
+    <>
+      <rect width={C.w} height={C.h} fill="#fff" />
+      <image href={PLATES.cpd} x="0" y="0" width={C.w} height={C.h} preserveAspectRatio="none" />
+
+      {/* Between "DEVELOPMENT" and the line naming the delegate. */}
+      <text x={C_MID} y="962" textAnchor="middle" fontFamily={SANS} fontSize={name.length > 34 ? 52 : 66} fontWeight="700" fill={C_INK}>
+        {name}
+      </text>
+
+      {activityLines.map((line, i) => (
+        <text key={i} x={C_MID} y={activity.startY + i * activity.step + 15} textAnchor="middle" fontFamily={SANS} fontSize={activity.size} fontWeight="700" fill={C_INK}>
+          {line}
+        </text>
+      ))}
+
+      <text x={C_MID} y="1724" textAnchor="middle" fontFamily={SANS} fontSize="44" fontWeight="700" fill={C_INK}>
+        {ORG_NAME}
+      </text>
+
+      {/* On the baselines of the plate's own labels, past the longer of them. */}
+      <text x="1015" y="2024" fontFamily={SANS} fontSize="44" fontWeight="700" fill={C_INK}>
+        {issue.completedOn || "—"}
+      </text>
+      <text x="1015" y="2116" fontFamily={SANS} fontSize="44" fontWeight="700" fill={C_INK}>
+        {issue.cpdHours || "[Number]"}
       </text>
     </>
   );

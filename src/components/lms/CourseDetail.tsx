@@ -73,6 +73,8 @@ export default function CourseDetail({ slug }: { slug: string }) {
     );
   }
 
+  const certificates = certificateCards(course.certificate);
+
   const enrolled = enrolments.some((e) => e.courseSlug === slug);
   const waitlist = course.status === "waitlist" || course.feePaise === null;
 
@@ -448,9 +450,9 @@ export default function CourseDetail({ slug }: { slug: string }) {
                 </div>
               </div>
 
-              <CertificateGallery cards={certificateCards(course.certificate)} equal />
+              <CertificateGallery cards={certificates} equal columns={certificates.length === 3 ? 3 : 2} />
               <p style={{ font: "500 11.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#8296a9", margin: "14px 0 0" }}>
-                Specimens — select either to enlarge it.
+                Specimens — select {certificates.length === 3 ? "any" : "either"} to enlarge it.
               </p>
             </div>
 

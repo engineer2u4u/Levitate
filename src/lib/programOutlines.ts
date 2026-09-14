@@ -61,15 +61,16 @@ export const POSH_OUTLINE: ProgramOutline = {
 
 export const DEI_OUTLINE: ProgramOutline = {
   intro:
-    "A 20-hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, equipping participants to translate inclusion from concept into everyday workplace behaviour and facilitate DEI learning with confidence.",
+    "A 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, equipping participants to translate inclusion from concept into everyday workplace behaviour and facilitate DEIB learning with confidence.",
   facts: [
-    { k: "Duration", v: "20 Hours" },
+    { k: "Duration", v: "20 + 5 Hours" },
+    { k: "Guided LMS", v: "5 Hours" },
     { k: "Format", v: "Applied TTT" },
     { k: "Framework", v: "BRIDGE Inclusion" },
     { k: "Curriculum", v: "13 Modules" },
   ],
   modules: [
-    "DEI Foundations & the Global Inclusion Landscape",
+    "DEIB Foundations & the Global Inclusion Landscape",
     "Identity, Intersectionality, Privilege & Power",
     "Bias, Stereotypes & Inclusive Decision-Making",
     "Inclusive Communication, Microaggressions & Constructive Dialogue",
@@ -77,9 +78,9 @@ export const DEI_OUTLINE: ProgramOutline = {
     "Cultural Intelligence & Working Across Difference",
     "Psychological Safety, Belonging & Inclusive Teams",
     "Allyship, Bystander Intervention & Inclusive Leadership",
-    "Inclusive Employee Lifecycle & Organisational DEI",
-    "Designing Powerful DEI Learning Experiences",
-    "Facilitating Sensitive & Difficult DEI Conversations",
+    "Inclusive Employee Lifecycle & Organisational DEIB",
+    "Designing Powerful DEIB Learning Experiences",
+    "Facilitating Sensitive & Difficult DEIB Conversations",
     "Managing Resistance, Hot Moments & Challenging Questions",
     "Case Facilitation, Debriefing & Audience Adaptation",
   ],

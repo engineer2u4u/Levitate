@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "PoSH Train-the-Trainer Certification",
     description: fill(
-      "A founder-led PoSH Train-the-Trainer certification with SHRM PDCs — 15 learning hours across 15 modules, 12 of them live over three weekends. Batch from {starts}. Learn to facilitate PoSH awareness and support an Internal Committee.",
+      "A founder-led PoSH Train-the-Trainer certification with SHRM PDCs — 12 + 3 learning hours across 15 modules: 12 live over three weekends, 3 guided in the LMS. Batch from {starts}. Learn to facilitate PoSH awareness and support an Internal Committee.",
       course,
     ),
     keywords: KEYWORDS,

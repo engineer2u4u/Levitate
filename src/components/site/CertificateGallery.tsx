@@ -2,13 +2,16 @@
 
 import { useEffect, useState } from "react";
 import CertificatePlate from "./CertificatePlate";
-import type { CertificateCard } from "@/lib/certificateArt";
+import { CANVASES, type CertificateCard } from "@/lib/certificateArt";
+
+/** Width / height of the artwork a card is drawn on. */
+const ratioOf = (c: CertificateCard) => CANVASES[c.issue.template].w / CANVASES[c.issue.template].h;
 
 /**
  * The certificates a programme awards, enlarging on click.
  *
- * Both are drawn as SVG rather than shipped as flat images, so each programme's
- * own name is printed on them — and the enlarged view is the same drawing
+ * Each is drawn as SVG rather than shipped as a flat image, so each programme's
+ * own name is printed on it — and the enlarged view is the same drawing
  * scaled up, which stays sharp at any size instead of blurring the way a
  * bitmap would.
  */
@@ -18,7 +21,7 @@ export default function CertificateGallery({
   equal = false,
 }: {
   cards: CertificateCard[];
-  columns?: 1 | 2;
+  columns?: 1 | 2 | 3;
   /**
    * Frame every certificate at the same size. The SHRM artwork is 3:2 and
    * the Levitate one 16:9, so at equal widths the SHRM one stood taller and
@@ -29,6 +32,10 @@ export default function CertificateGallery({
    * all four sides, so 4% padding in a 3:2 box leaves an interior shorter
    * than 3:2 and the SHRM plate would be clipped. 1 / (0.92 × 2/3 + 0.08)
    * makes the interior exactly 3:2.
+   *
+   * A portrait certificate (CPD, A4) is fitted to that interior's height
+   * instead of its width, so it sits upright in the same frame rather than
+   * standing twice as tall as its neighbours.
    */
   equal?: boolean;
 }) {
@@ -51,7 +58,7 @@ export default function CertificateGallery({
 
   return (
     <>
-      <div className={columns === 2 ? "site-grid-2" : undefined} style={{ display: "grid", gridTemplateColumns: columns === 2 ? "1fr 1fr" : "1fr", gap: 18 }}>
+      <div className={columns > 1 ? `site-grid-${columns}` : undefined} style={{ display: "grid", gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`, gap: 18 }}>
         {cards.map((c, i) => (
           <figure key={c.title} style={{ margin: 0 }}>
             <button
@@ -63,7 +70,9 @@ export default function CertificateGallery({
             >
               {equal ? (
                 <span style={{ display: "flex", alignItems: "center", justifyContent: "center", aspectRatio: "1.4423", padding: "4%" }}>
-                  <span style={{ display: "block", width: "100%", boxShadow: "0 6px 22px rgba(10,27,51,.12)" }}>
+                  {/* The interior is 3:2, so a plate narrower than that is as
+                      wide as 2/3 × its own ratio allows. */}
+                  <span style={{ display: "block", width: `${Math.min(1, (2 / 3) * ratioOf(c)) * 100}%`, boxShadow: "0 6px 22px rgba(10,27,51,.12)" }}>
                     <CertificatePlate issue={c.issue} />
                   </span>
                 </span>
@@ -98,7 +107,9 @@ export default function CertificateGallery({
           </button>
 
           {/* Stops a click on the certificate itself from closing the view. */}
-          <div onClick={(e) => e.stopPropagation()} style={{ width: "min(1180px, 100%)", maxHeight: "88vh", overflow: "auto", borderRadius: 14, background: "#fff", cursor: "default" }}>
+          {/* Never taller than the viewport allows, so a portrait certificate
+              is seen whole rather than scrolled. */}
+          <div onClick={(e) => e.stopPropagation()} style={{ width: `min(1180px, 100%, calc(88vh * ${ratioOf(shown).toFixed(4)}))`, maxHeight: "88vh", overflow: "auto", borderRadius: 14, background: "#fff", cursor: "default" }}>
             <CertificatePlate issue={shown.issue} />
           </div>
 

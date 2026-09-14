@@ -204,7 +204,7 @@ const FALLBACK_SESSIONS: Record<string, CatalogSession[]> = {
     { ...at("2026-10-18", "18:00", "20:00"), topic: "Trainer craft & facilitation assessment" },
   ],
   "pocso-child-safety": [at("2026-10-24", "18:00", "20:00")],
-  "inclusive-workplace": [{ startsOn: "2026-10-10", timeLabel: "To be confirmed", topic: "", startsAt: null, endsAt: null }],
+  "inclusive-workplace": [{ startsOn: "2026-10-10", timeLabel: "11:00 AM – 1:00 PM", topic: "", startsAt: null, endsAt: null }],
   [MASTERCLASS.slug]: [
     { startsOn: MASTERCLASS.startsAt.slice(0, 10), timeLabel: MASTERCLASS.time, topic: "", startsAt: MASTERCLASS.startsAt, endsAt: MASTERCLASS.endsAt },
   ],
@@ -213,7 +213,7 @@ const FALLBACK_SESSIONS: Record<string, CatalogSession[]> = {
 /** site.ts keys its batch cards by title; the catalogue keys everything by slug. */
 const BATCH_SLUGS: Record<string, string> = {
   "PoSH TTT Certification": "posh-trainer",
-  "Diversity, Equity & Inclusion Batch": "inclusive-workplace",
+  "Diversity, Equity, Inclusion & Belonging Batch": "inclusive-workplace",
   "POCSO TTT Certification": "pocso-child-safety",
   "Mental Health & Well-being Batch": "workplace-wellbeing",
 };

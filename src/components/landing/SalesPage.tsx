@@ -15,6 +15,7 @@ import { courseBySlug } from "@/lib/lms/courses";
 import { useCatalogCourse } from "@/components/site/CatalogProvider";
 import { fill } from "@/lib/catalog";
 import { outlineBySlug } from "@/lib/programOutlines";
+import { programBySlug } from "@/lib/programs";
 import { contact } from "@/lib/site";
 import { track } from "@/lib/track";
 import type { LandingOffer, WhyIcon } from "@/lib/landing";
@@ -73,9 +74,12 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
   const faqs = offer.faqs.map((f) => ({ ...f, a: f.a.map((t) => fill(t, entry)) }));
   const price = fill(offer.price.amount, entry);
   const outline = outlineBySlug(offer.slug);
+  // The same letters and names the course page shows, so the two cannot drift.
+  const program = offer.framework ? programBySlug(offer.slug) : undefined;
   const router = useRouter();
 
   const [clip, setClip] = useState<PlayableClip | null>(null);
+  const certificates = course ? certificateCards(course.certificate) : [];
 
   /**
    * The hero video plays in the same modal the testimonials use, rather than
@@ -148,6 +152,9 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
             <h1 style={{ font: `800 clamp(30px,3.6vw,46px)/1.12 ${SANS}`, color: "#fff", margin: "0 0 16px", letterSpacing: "-.02em" }}>
               {headline}
             </h1>
+            {offer.strapline && (
+              <div style={{ font: `700 16px/1.5 ${SANS}`, color: "#5fe0d6", margin: "-4px 0 14px" }}>{offer.strapline}</div>
+            )}
             <p style={{ font: T.lead, color: "rgba(255,255,255,.82)", margin: "0 0 26px", maxWidth: 560 }}>
               {offer.sub}
             </p>
@@ -224,10 +231,15 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
 
       {/* ------------------------------------------------------------- WHY */}
       <Section tone="soft">
-        <H2 eyebrow="Why this certification">Four reasons it costs what it costs</H2>
+        <H2 eyebrow="Why this certification">{COUNT_WORDS[offer.why.length] ?? offer.why.length} reasons it costs what it costs</H2>
         <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, marginTop: 34 }}>
-          {offer.why.map((w) => (
-            <div key={w.k} style={{ display: "flex", gap: 18, alignItems: "flex-start", background: "#fff", border: "1px solid #e3eaf0", borderRadius: 18, padding: "26px 28px" }}>
+          {offer.why.map((w, i) => (
+            <div
+              key={w.k}
+              // An odd card out takes the whole row rather than leaving a hole
+              // beside it.
+              style={{ gridColumn: offer.why.length % 2 && i === offer.why.length - 1 ? "1 / -1" : undefined, display: "flex", gap: 18, alignItems: "flex-start", background: "#fff", border: "1px solid #e3eaf0", borderRadius: 18, padding: "26px 28px" }}
+            >
               <span
                 aria-hidden
                 style={{ flex: "none", width: 52, height: 52, borderRadius: 14, background: "linear-gradient(135deg,rgba(47,196,188,.16),rgba(47,127,214,.16))", display: "flex", alignItems: "center", justifyContent: "center" }}
@@ -261,6 +273,38 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
               </div>
             ))}
           </div>
+
+          {program && (
+            <div style={{ marginTop: 44 }}>
+              <div style={{ font: T.eyebrow, color: "#1b8f88", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 16 }}>
+                <BrandText>{program.pillarTitle}</BrandText>
+              </div>
+              {/* Collapses to three, then two, columns with the course page's tiles. */}
+              <div className="lms-pillars" style={{ display: "grid", gridTemplateColumns: `repeat(${program.pillars.length}, minmax(0,1fr))`, gap: 12 }}>
+                {program.pillars.map((p, i) => (
+                  <div key={`${p.k}-${i}`} style={{ background: "#fff", border: "1px solid #e3eaf0", borderTop: "3px solid #2f7fd6", borderRadius: 14, padding: "18px 16px" }}>
+                    <div style={{ font: `800 28px ${SANS}`, color: "#1b8f88", marginBottom: 6 }}>{p.k}</div>
+                    <div style={{ font: T.item, color: "#0a1b33" }}>{p.v}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {offer.approach && (
+            <div style={{ marginTop: 28, background: "#f7fafc", border: "1px solid #e9eff4", borderRadius: 16, padding: "24px 26px" }}>
+              <div style={{ font: T.eyebrow, color: "#1b8f88", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 10 }}>Learning approach</div>
+              <p style={{ font: T.body, color: "#3d5064", margin: "0 0 18px", maxWidth: MEASURE }}>{offer.approach.text}</p>
+              <div style={{ font: T.small, color: "#5b6e82", marginBottom: 10 }}>{offer.approach.lensesIntro}</div>
+              <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                {offer.approach.lenses.map((l) => (
+                  <div key={l} style={{ background: "#fff", border: "1px solid #e3eaf0", borderLeft: "3px solid #2fc4bc", borderRadius: 12, padding: "14px 18px", font: `700 16px/1.45 ${SANS}`, color: "#0a1b33" }}>
+                    &ldquo;{l}&rdquo;
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </Section>
       )}
 
@@ -284,9 +328,9 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
       {/* --------------------------------------------------- CERTIFICATES */}
       {course && (
         <Section>
-          <H2 eyebrow="What you receive">Two certificates on completion</H2>
+          <H2 eyebrow="What you receive">{certificates.length === 3 ? "Three" : "Two"} certificates on completion</H2>
           <div style={{ marginTop: 32 }}>
-            <CertificateGallery cards={certificateCards(course.certificate)} equal />
+            <CertificateGallery cards={certificates} equal columns={certificates.length === 3 ? 3 : 2} />
           </div>
         </Section>
       )}
@@ -435,6 +479,8 @@ export const Tick = () => (
  * library: six glyphs are not worth a dependency, and these share one stroke
  * weight and one colour so they read as a set.
  */
+const COUNT_WORDS: Record<number, string> = { 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six" };
+
 function Icon({ name }: { name: WhyIcon }) {
   const p = { fill: "none", stroke: "#1b8f88", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const };
   return (

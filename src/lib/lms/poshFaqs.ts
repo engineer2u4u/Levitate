@@ -183,28 +183,28 @@ export const POCSO_FAQS: Faq[] = [
 ];
 
 /**
- * DEI FAQs, drafted from the programme's own brochure — the twenty hours, the
+ * DEIB FAQs, drafted from the programme's own brochure — the 20 + 5 hours, the
  * thirteen modules, the BRIDGE framework, the audience and the inclusions all
  * come from there. Nothing here claims anything the brochure does not.
  */
 export const DEI_FAQS: Faq[] = [
   {
-    q: "What is the Inclusive Workplace Facilitator Programme (DEI TTT)?",
+    q: "What is the Inclusive Workplace Facilitator Programme (DEIB TTT)?",
     a: [
-      "It is a 20-hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, built to translate inclusion from concept into everyday workplace behaviour.",
-      "It is a facilitator certification rather than an awareness course: as much of it is about designing and running DEI sessions as about the content of them.",
+      "It is a 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, built to translate inclusion from concept into everyday workplace behaviour.",
+      "It is a facilitator certification rather than an awareness course: as much of it is about designing and running DEIB sessions as about the content of them.",
     ],
   },
   {
     q: "Who should attend?",
     a: [
-      "HR and L&D professionals; DEI, culture and employee-experience professionals; people managers and inclusive leaders; employee resource group and inclusion leads; workplace trainers and facilitators; HR consultants and independent professionals; aspiring DEI facilitators; and new trainers, freelance or corporate.",
+      "HR and L&D professionals; DEIB, culture and employee-experience professionals; people managers and inclusive leaders; employee resource group and inclusion leads; workplace trainers and facilitators; HR consultants and independent professionals; aspiring DEIB facilitators; and new trainers, freelance or corporate.",
     ],
   },
   {
     q: "When does the next batch run?",
     a: [
-      "The batch starts {starts}, live online, across 20 learning hours and thirteen modules. Session timings are being confirmed and will be shared before the batch opens.",
+      "The batch starts {starts}, live online, across 20 + 5 learning hours — twenty live and five in the guided LMS — and thirteen modules. Live sessions run 11:00 AM – 1:00 PM.",
     ],
   },
   {
@@ -217,11 +217,11 @@ export const DEI_FAQS: Faq[] = [
   {
     q: "What does the curriculum cover?",
     a: [
-      "Thirteen modules: DEI foundations and the global inclusion landscape; identity, intersectionality, privilege and power; bias, stereotypes and inclusive decision-making; inclusive communication, microaggressions and constructive dialogue; dimensions of diversity and intersectional inclusion; cultural intelligence; psychological safety, belonging and inclusive teams; allyship, bystander intervention and inclusive leadership; the inclusive employee lifecycle and organisational DEI; designing powerful DEI learning experiences; facilitating sensitive and difficult conversations; managing resistance, hot moments and challenging questions; and case facilitation, debriefing and audience adaptation.",
+      "Thirteen modules: DEIB foundations and the global inclusion landscape; identity, intersectionality, privilege and power; bias, stereotypes and inclusive decision-making; inclusive communication, microaggressions and constructive dialogue; dimensions of diversity and intersectional inclusion; cultural intelligence; psychological safety, belonging and inclusive teams; allyship, bystander intervention and inclusive leadership; the inclusive employee lifecycle and organisational DEIB; designing powerful DEIB learning experiences; facilitating sensitive and difficult conversations; managing resistance, hot moments and challenging questions; and case facilitation, debriefing and audience adaptation.",
     ],
   },
   {
-    q: "Do I need a DEI background to enrol?",
+    q: "Do I need a DEIB background to enrol?",
     a: [
       "No. The programme builds the concepts from the ground up and then spends its time on application — designing sessions, handling resistance and facilitating conversations across difference.",
     ],
