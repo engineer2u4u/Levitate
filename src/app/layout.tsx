@@ -3,6 +3,7 @@ import ShrmMarquee from "@/components/site/ShrmMarquee";
 import EnquiryPopup from "@/components/site/EnquiryPopup";
 import ChromeGate from "@/components/site/ChromeGate";
 import GoogleTag from "@/components/site/GoogleTag";
+import AttributionCapture from "@/components/site/AttributionCapture";
 import CatalogProvider from "@/components/site/CatalogProvider";
 import { loadCatalog } from "@/lib/catalog";
 import "./globals.css";
@@ -96,6 +97,7 @@ export default async function RootLayout({
           </ChromeGate>
         </CatalogProvider>
         <GoogleTag />
+        <AttributionCapture />
       </body>
     </html>
   );

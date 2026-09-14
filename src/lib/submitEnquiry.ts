@@ -1,5 +1,7 @@
 import emailjs from "@emailjs/browser";
 import { supabaseConfig, supabaseConfigured } from "@/lib/lms/auth";
+import { ATTRIBUTION_COLUMNS, CHANNEL_LABEL, attributionFields, type Channel } from "@/lib/attribution";
+import { track } from "@/lib/track";
 
 /**
  * Sends an enquiry two ways: an EmailJS email to the office, and a row in the
@@ -69,6 +71,13 @@ async function record(row: Record<string, string>): Promise<boolean> {
     if (error?.code === "23514" && row.form !== "other") {
       ({ error } = await client.from("enquiries").insert({ ...row, form: "other" }));
     }
+    // PGRST204 is an unknown column: the source columns reached the site
+    // before migration 0016 reached the database. The enquiry itself matters
+    // more than where it came from, so it is kept without them.
+    if (error?.code === "PGRST204") {
+      const bare = Object.fromEntries(Object.entries(row).filter(([k]) => !(ATTRIBUTION_COLUMNS as readonly string[]).includes(k)));
+      ({ error } = await client.from("enquiries").insert(bare));
+    }
     if (error) console.error("[enquiry] could not record:", error.message);
     return !error;
   } catch (err) {
@@ -121,6 +130,13 @@ export async function submitEnquiry(
   const intent = extra.intent || val(data, "intent");
   const message = extra.message || val(data, "message");
 
+  // Where the visitor came from, noted on the visit that brought them.
+  const origin = attributionFields();
+  const channel = origin.channel ? CHANNEL_LABEL[origin.channel as Channel] ?? origin.channel : "";
+  const leadSource = [channel, origin.utm_campaign && `campaign "${origin.utm_campaign}"`, origin.utm_term && `keyword "${origin.utm_term}"`]
+    .filter(Boolean)
+    .join(" · ");
+
   // Keys here must match the {{variables}} used in the EmailJS template.
   const params: Record<string, string> = {
     from_name: val(data, "name"),
@@ -131,8 +147,12 @@ export async function submitEnquiry(
     participants: val(data, "participants") || "—",
     mode: val(data, "mode") || "—",
     message: message || "—",
-    // A form may name where it came from; otherwise the page it sits on.
-    source: page,
+    // A form may name where it came from; otherwise the page it sits on. The
+    // visitor's source rides along here, so it shows in the email without
+    // the EmailJS template having to change; {{lead_source}} is there too
+    // for a template that wants it on a line of its own.
+    source: leadSource ? `${page} · via ${leadSource}` : page,
+    lead_source: leadSource || "—",
     subject: `Website enquiry: ${intent || "General"}`,
   };
 
@@ -151,10 +171,20 @@ export async function submitEnquiry(
           mode: cap(val(data, "mode"), 60),
           message: cap(message, 5000),
           page: cap(page, 300),
+          ...origin,
         }),
   ]);
 
-  if (mailed.ok || stored) return { ok: true };
+  if (mailed.ok || stored) {
+    // A lead for GA4, which attributes it to the session's source/medium on
+    // its own, and which Google Ads can import as a conversion. Not for rows
+    // that are not enquiries, and not for the masterclass, whose paid
+    // registration already reports a purchase. Nothing personal is sent.
+    if (opts.store !== false && opts.form !== "masterclass") {
+      track("generate_lead", { form: opts.form ?? "other", programme: intent || "General", lead_channel: origin.channel || "unknown" });
+    }
+    return { ok: true };
+  }
 
   return {
     ok: false,

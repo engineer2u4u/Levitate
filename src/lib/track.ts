@@ -22,6 +22,9 @@ export type TrackEvent =
   | "kit_form_open"
   | "brochure_download"
   | "payment_success"
+  // A submitted enquiry. GA4's recommended name for a lead, so Google Ads can
+  // import it as a conversion without renaming.
+  | "generate_lead"
   // GA4's own ecommerce names, so its purchase reports and revenue fill in
   // without mapping — and a GA4 purchase can be imported into Ads as-is.
   | "begin_checkout"
