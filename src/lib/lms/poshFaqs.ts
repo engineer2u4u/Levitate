@@ -198,7 +198,7 @@ export const DEI_FAQS: Faq[] = [
   {
     q: "Who should attend?",
     a: [
-      "HR and L&D professionals; DEIB, culture and employee-experience professionals; people managers and inclusive leaders; employee resource group and inclusion leads; workplace trainers and facilitators; HR consultants and independent professionals; aspiring DEIB facilitators; and new trainers, freelance or corporate.",
+      "HR and L&D professionals; DEIB, culture and employee-experience professionals; people managers and inclusive leaders; workplace trainers and facilitators; HR consultants and independent professionals; aspiring DEIB facilitators; and new trainers, freelance or corporate.",
     ],
   },
   {

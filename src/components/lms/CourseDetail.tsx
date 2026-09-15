@@ -16,6 +16,7 @@ import { BROCHURE_ASSETS_READY, brochureBySlug } from "@/lib/lms/brochures";
 import { SHRM_ACCREDITATION, certificateCards } from "@/lib/certificateArt";
 import { included, programBySlug } from "@/lib/programs";
 import CertificateGallery from "@/components/site/CertificateGallery";
+import TestimonialCards from "@/components/site/TestimonialCards";
 import ConsultationBand from "@/components/site/ConsultationBand";
 import BrandText from "@/components/site/BrandText";
 import UpcomingBatches from "@/components/site/UpcomingBatches";
@@ -404,6 +405,12 @@ export default function CourseDetail({ slug }: { slug: string }) {
                       </div>
                     ))}
                   </div>
+                  {brochure.scope && (
+                    <div style={{ background: "#fff6ee", borderRadius: 13, padding: "16px 20px", marginTop: 22 }}>
+                      <div style={{ font: "700 13.5px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 5 }}>Professional scope</div>
+                      <p style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: 0 }}>{brochure.scope}</p>
+                    </div>
+                  )}
                 </div>
 
                 <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
@@ -430,6 +437,13 @@ export default function CourseDetail({ slug }: { slug: string }) {
                     ))}
                   </div>
                 </div>
+
+                {brochure.testimonials && brochure.testimonials.length > 0 && (
+                  <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
+                    <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 18 }}>What participants say</div>
+                    <TestimonialCards items={brochure.testimonials} />
+                  </div>
+                )}
 
               </>
             )}

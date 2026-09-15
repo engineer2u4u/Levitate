@@ -16,6 +16,10 @@ export type ProgramBrochure = {
   about: string;
   stats: { n: string; label: string }[];
   audience: string[];
+  /** The brochure's "Professional Scope" line, under the audience list. */
+  scope?: string;
+  /** Written testimonials from the brochure — on the course and landing pages. */
+  testimonials?: { name: string; quote: string }[];
   methodology: {
     tags: string[];
     body: string;
@@ -189,7 +193,7 @@ export const DEI_BROCHURE: ProgramBrochure = {
   strapline: "Understand. Reflect. Apply. Facilitate. Transform.",
   meta: ["20 + 5 Hours · Total Certification", "13 Modules · Curriculum", "BRIDGE · Inclusion Framework", "Applied TTT · Format"],
   about:
-    "The Inclusive Workplace Facilitator Program (DEIB TTT) is a 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, translating inclusion from concept into everyday workplace behaviour while building the capability to design and facilitate practical DEIB learning experiences.",
+    "The Inclusive Workplace Facilitator Program (DEIB TTT) is a 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, equipping participants to translate inclusion from concept into everyday workplace behaviour and facilitate DEIB learning with confidence.",
 
   stats: [
     { n: "2,000+", label: "Professionals Trained" },
@@ -212,11 +216,32 @@ export const DEI_BROCHURE: ProgramBrochure = {
     "HR & L&D Professionals",
     "DEIB, Culture & Employee Experience Professionals",
     "People Managers & Inclusive Leaders",
-    "Employee Resource Group & Inclusion Leads",
     "Workplace Trainers & Facilitators",
     "HR Consultants & Independent Professionals",
     "Aspiring DEIB Facilitators",
     "New Potential Trainers (freelance and/or corporate)",
+  ],
+  scope:
+    "A professional, workplace-focused, practice-led DEIB facilitator certification designed to build applied inclusion and facilitation capability.",
+
+  // As printed in the FINAL brochure, which names the programme DEI in them.
+  testimonials: [
+    {
+      name: "Aditi Malhotra",
+      quote: "The programme made DEI feel practical and relevant to real workplace situations. I especially valued the structured approach to inclusive conversations and everyday decision-making.",
+    },
+    {
+      name: "Rohan Bhatia",
+      quote: "The facilitation practice was the strongest part for me. The sessions helped me build confidence to handle sensitive topics, different viewpoints and challenging questions with greater clarity.",
+    },
+    {
+      name: "Meera Iyer",
+      quote: "I appreciated how the programme connected inclusion, psychological safety and belonging with actual workplace behaviour. The case discussions gave me ideas I can immediately use in my own sessions.",
+    },
+    {
+      name: "Siddharth Rao",
+      quote: "A well-structured Train-the-Trainer programme that goes beyond DEI theory. I came away with practical tools for designing engaging sessions and facilitating meaningful conversations across differences.",
+    },
   ],
 
   methodology: {
@@ -234,16 +259,18 @@ export const DEI_BROCHURE: ProgramBrochure = {
       {
         title: "Learning Management System (LMS)",
         body:
-          "Every participant receives access to Levitate PeopleSoft's dedicated LMS — a central learning and resource hub supporting the live certification programme throughout the learning journey. Module-wise quizzes and knowledge checks help participants reinforce key concepts, track progress and prepare for the programme's assessment-based certification.",
+          "Every participant receives access to Levitate PeopleSoft's dedicated LMS — a central learning and resource hub supporting the live certification programme throughout the learning journey. It brings programme resources together in one place, including recorded session access, module-wise learning resources, trainer toolkits, case materials, templates, downloadable resources and knowledge checks. Module-wise quizzes and knowledge checks help participants reinforce key concepts, track their learning progress and prepare for the programme's assessment-based certification.",
         chips: ["Recorded Session Access", "Trainer Toolkit", "Module Resources", "Downloadable Templates", "Quizzes", "Progress Tracking"],
       },
     ],
   },
 
+  // The FINAL brochure, at the URL the earlier one had, so any link already
+  // sent out opens the current copy.
   brochure: {
     href: "/assets/brochures/levitate-dei-ttt-brochure.pdf",
     label: "Download the programme brochure",
-    meta: "PDF · 14 pages · 10 MB",
+    meta: "PDF · 14 pages · 3 MB",
   },
 };
 

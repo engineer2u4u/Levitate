@@ -40,7 +40,7 @@ export const COURSES: Course[] = [
     tag: "DEIB · TTT", mode: "Live online · from 10 October",
     title: "Inclusive Workplace Facilitator Program (DEIB TTT)",
     short: "Inclusive Workplace",
-    desc: "A 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, translating inclusion from concept into everyday workplace behaviour.",
+    desc: "A 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, equipping participants to translate inclusion from concept into everyday workplace behaviour and facilitate DEIB learning with confidence.",
     img: "/assets/workshop-handsup.jpeg", status: "enrolling",
     feePaise: 4000000, priceNote: "incl. taxes · from 10 October",
     modulesLabel: "13 Modules", hoursLabel: "20 + 5 Hours", facilitator: "Parichita Kotnala",

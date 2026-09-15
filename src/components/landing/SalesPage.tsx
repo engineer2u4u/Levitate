@@ -16,6 +16,8 @@ import { useCatalogCourse } from "@/components/site/CatalogProvider";
 import { fill } from "@/lib/catalog";
 import { outlineBySlug } from "@/lib/programOutlines";
 import { programBySlug } from "@/lib/programs";
+import { brochureBySlug } from "@/lib/lms/brochures";
+import TestimonialCards from "@/components/site/TestimonialCards";
 import { contact } from "@/lib/site";
 import { track } from "@/lib/track";
 import type { LandingOffer, WhyIcon } from "@/lib/landing";
@@ -80,6 +82,7 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
 
   const [clip, setClip] = useState<PlayableClip | null>(null);
   const certificates = course ? certificateCards(course.certificate) : [];
+  const testimonials = brochureBySlug(offer.slug)?.testimonials ?? [];
 
   /**
    * The hero video plays in the same modal the testimonials use, rather than
@@ -331,6 +334,17 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
           <H2 eyebrow="What you receive">{certificates.length === 3 ? "Three" : "Two"} certificates on completion</H2>
           <div style={{ marginTop: 32 }}>
             <CertificateGallery cards={certificates} equal columns={certificates.length === 3 ? 3 : 2} />
+          </div>
+        </Section>
+      )}
+
+      {/* Written testimonials, where the programme's brochure has them. The
+          same list the course page shows, so the two cannot drift. */}
+      {testimonials.length > 0 && (
+        <Section tone="soft">
+          <H2 eyebrow="Testimonials">What participants say</H2>
+          <div style={{ marginTop: 32 }}>
+            <TestimonialCards items={testimonials} />
           </div>
         </Section>
       )}
