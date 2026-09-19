@@ -28,8 +28,10 @@
  */
 
 import { spawn, spawnSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import os from "node:os";
 import path from "node:path";
+import { rootCertificates } from "node:tls";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -122,11 +124,40 @@ function shutdown(code) {
 process.on("SIGINT", () => shutdown(0));
 process.on("SIGTERM", () => shutdown(0));
 
+/* --------------------------------------------------------- certificates */
+
+/**
+ * The certificate authorities PHP should trust for its HTTPS calls to
+ * Razorpay and Supabase, for this run only.
+ *
+ * A bundled PHP (XAMPP's, say) carries a CA file that is years old, and an
+ * antivirus that scans HTTPS — Norton's Web/Mail Shield, for one — re-signs
+ * every site with its own root, which no stock bundle contains. Either fails
+ * every call with "unable to get local issuer certificate". Node already has
+ * both: a current Mozilla root set built in, and the scanner's root through
+ * NODE_EXTRA_CA_CERTS, which such products set up. So PHP gets the same list.
+ *
+ * Verification stays on: this widens what is trusted to what the machine
+ * already trusts, never switches checking off. php.ini is not touched.
+ */
+function caBundle() {
+  const extras = [process.env.NODE_EXTRA_CA_CERTS, process.env.DEV_PAY_EXTRA_CA]
+    .filter(Boolean)
+    .filter((f) => existsSync(f))
+    .map((f) => readFileSync(f, "utf8"));
+  const file = path.join(os.tmpdir(), "levitate-dev-pay-ca.pem");
+  writeFileSync(file, [...rootCertificates, ...extras].join("\n") + "\n");
+  return { file, extras: extras.length };
+}
+
+const ca = caBundle();
+
 console.log(`[dev:pay] PHP ${php.version} · Razorpay TEST key ${keys.RAZORPAY_KEY_ID.slice(0, 14)}… · payment API ${API_BASE}`);
+console.log(`[dev:pay] PHP trusts ${rootCertificates.length} current roots${ca.extras ? ` + ${ca.extras} from NODE_EXTRA_CA_CERTS (e.g. an antivirus that scans HTTPS)` : ""}`);
 
 // The whole keys file goes to PHP: it may carry more than the two Razorpay
 // keys, and each entry overrides razorpay-config.php for this run only.
-run("php", php.bin, ["-S", `127.0.0.1:${PORT}`, "-t", "public"], keys);
+run("php", php.bin, ["-d", `curl.cainfo=${ca.file}`, "-d", `openssl.cafile=${ca.file}`, "-S", `127.0.0.1:${PORT}`, "-t", "public"], keys);
 
 // Process environment outranks every .env file Next loads, so these override
 // whatever .env.local says for this run, and only for it.
