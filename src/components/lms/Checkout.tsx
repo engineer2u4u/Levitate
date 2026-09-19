@@ -6,6 +6,7 @@ import { feeBreakdown } from "@/lib/lms/courses";
 import { useCourse } from "@/components/site/CatalogProvider";
 import { enrol, isPaid } from "@/lib/lms/enrolments";
 import { PAYMENT_OFF, formatPaise, gateway, isTestKey } from "@/lib/lms/payment";
+import { track } from "@/lib/track";
 import { HOME_STATE_CODE, INDIA_STATES, stateCodeOfGstin } from "@/lib/lms/indiaStates";
 import { useSession } from "./useSession";
 
@@ -167,10 +168,19 @@ export default function Checkout({ slug }: { slug: string }) {
     );
   }
 
+  // Ad platforms hear only about real money: Razorpay with a live key. The
+  // simulation, free entry and test keys (npm run dev:pay) would otherwise
+  // report sales that never happened and train the ads on them.
+  const realMoney = gateway.kind === "razorpay" && !isTestKey;
+  // GA4's ecommerce item, as the masterclass reports it. Meta reads value and
+  // currency from the same payload (lib/track.ts).
+  const item = { item_id: slug, item_name: course.title, price: (course.feePaise as number) / 100, quantity: 1 };
+
   const pay = async () => {
     if (paying) return;
     setPaying(true);
     setError("");
+    if (realMoney) track("begin_checkout", { currency: "INR", value: (course.feePaise as number) / 100, items: [item] });
     const res = await gateway.pay({
       courseSlug: slug,
       courseTitle: course.title,
@@ -187,6 +197,11 @@ export default function Checkout({ slug }: { slug: string }) {
     // Access follows a completed payment, never the button click. With the
     // database, the server has already recorded the enrolment during
     // verification; reading it back is all that is left to do here.
+    // The amount the server verified with Razorpay, not the one on the page.
+    // `live` is the server's own word on its key; absent means an older server.
+    if (realMoney && res.live !== false) {
+      track("purchase", { transaction_id: res.paymentId, value: res.amountPaise / 100, currency: "INR", items: [item] });
+    }
     enrol(user.id, slug, { orderId: res.orderId, paymentId: res.paymentId, amountPaise: res.amountPaise, at: res.at });
     void refreshEnrolments();
     setReceipt({ orderId: res.orderId, paymentId: res.paymentId, amountPaise: res.amountPaise });
