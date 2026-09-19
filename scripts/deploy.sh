@@ -71,6 +71,8 @@ grep -rqsE "rzp_test_[A-Za-z0-9]{14}" out/ && die "out/ contains a Razorpay TEST
 for id in G-ZF8DHDXC06 AW-18437850806; do
   grep -q "$id" out/index.html || die "out/ is missing Google tag $id — it was built with NEXT_PUBLIC_ANALYTICS_OFF=1. Rebuild without it."
 done
+# The same switch drops the Meta Pixel, which Meta ads report and optimise on.
+grep -q "3581363985351504" out/index.html || die "out/ is missing the Meta Pixel — it was built with NEXT_PUBLIC_ANALYTICS_OFF=1. Rebuild without it."
 
 # Search Console verifies ownership by fetching this file. Losing it on a
 # deploy would unverify the property.

@@ -56,6 +56,7 @@ export const privacyPolicy: LegalDoc = {
       h: "Cookies",
       p: [
         "This website may use essential cookies required for the site to function, and may use analytics cookies to understand aggregate usage. You can control or disable cookies through your browser settings.",
+        "We also use Google Analytics, Google Ads and the Meta (Facebook) Pixel. These tools set cookies and receive information about your visit — such as the pages you view and whether you submit an enquiry or complete a payment — so that we can measure our advertising and show our ads to relevant audiences on Google, Facebook and Instagram. We do not send them your name, email or phone number. You can adjust how Meta uses this information in your Facebook ad preferences, and how Google uses it in your Google ad settings.",
       ],
     },
     {
