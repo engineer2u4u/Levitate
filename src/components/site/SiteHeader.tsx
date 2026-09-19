@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { contact, services, type NavKey } from "@/lib/site";
-import { useVisibleCourses } from "@/components/site/CatalogProvider";
+import { useCatalogCourse, useVisibleCourses } from "@/components/site/CatalogProvider";
+import { firstSession } from "@/lib/catalog";
+import { MASTERCLASS } from "@/lib/masterclass";
 import { LMS_TESTING } from "@/lib/lms/testMode";
 
 function MailIcon({ size = 13 }: { size?: number }) {
@@ -33,9 +35,24 @@ function NewBadge() {
   );
 }
 
+/** No subscription: the clock is read once per render, which is all a menu needs. */
+const noSubscribe = () => () => {};
+
 export default function SiteHeader({ active }: { active?: NavKey }) {
   // The Certifications menu lists what the admin has published.
   const COURSES = useVisibleCourses();
+
+  // The masterclass is hidden from the catalogue — it is a one-off, not a
+  // programme — so it gets its own entry at the end of the menu, gone once its
+  // session in the admin has ended (the code's time until that loads) rather
+  // than advertising something already over.
+  const masterclass = useCatalogCourse(MASTERCLASS.slug);
+  const mcSession = masterclass ? firstSession(masterclass) : null;
+  const mcEndsAt = mcSession?.endsAt ?? MASTERCLASS.endsAt;
+  // Shown in the exported HTML; the browser hides it once the clock says the
+  // session is over. Read through an external-store snapshot so the two agree
+  // at hydration instead of flashing.
+  const mcOver = useSyncExternalStore(noSubscribe, () => Date.now() > new Date(mcEndsAt).getTime(), () => false);
   const [svcOpen, setSvcOpen] = useState(false);
   const [certOpen, setCertOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -121,6 +138,9 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
                 {COURSES.map((c) => (
                   <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setCertOpen(false)} className="site-dropitem" style={{ padding: "11px 14px", borderRadius: 10, font: "600 13.5px/1.4 'Plus Jakarta Sans',sans-serif", display: "block", color: "#0a1b33" }}>{c.title}</Link>
                 ))}
+                {!mcOver && (
+                  <Link href={MASTERCLASS.path} onClick={() => setCertOpen(false)} className="site-dropitem" style={{ padding: "11px 14px", borderRadius: 10, font: "600 13.5px/1.4 'Plus Jakarta Sans',sans-serif", display: "block", color: "#0a1b33" }}>PoSH 2026 Masterclass</Link>
+                )}
               </div>
             </div>
           </div>
@@ -188,6 +208,9 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
             {COURSES.map((c) => (
               <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064", lineHeight: 1.4 }}>{c.title}</Link>
             ))}
+            {!mcOver && (
+              <Link href={MASTERCLASS.path} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064", lineHeight: 1.4 }}>PoSH 2026 Masterclass</Link>
+            )}
             <Link href="/about-us" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "about" ? "#1b8f88" : "#0a1b33" }}>About Us</Link>
             <Link href="/parichita-kotnala" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "parichita" ? "#1b8f88" : "#0a1b33" }}>Parichita Kotnala</Link>
             <Link href="/contact" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "contact" ? "#1b8f88" : "#0a1b33" }}>Contact</Link>
