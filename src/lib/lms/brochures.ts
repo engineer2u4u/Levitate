@@ -224,11 +224,11 @@ export const DEI_BROCHURE: ProgramBrochure = {
   scope:
     "A professional, workplace-focused, practice-led DEIB facilitator certification designed to build applied inclusion and facilitation capability.",
 
-  // As printed in the FINAL brochure, which names the programme DEI in them.
+  // From the FINAL brochure, with DEI in the quotes brought into line with DEIB.
   testimonials: [
     {
       name: "Aditi Malhotra",
-      quote: "The programme made DEI feel practical and relevant to real workplace situations. I especially valued the structured approach to inclusive conversations and everyday decision-making.",
+      quote: "The programme made DEIB feel practical and relevant to real workplace situations. I especially valued the structured approach to inclusive conversations and everyday decision-making.",
     },
     {
       name: "Rohan Bhatia",
@@ -240,7 +240,7 @@ export const DEI_BROCHURE: ProgramBrochure = {
     },
     {
       name: "Siddharth Rao",
-      quote: "A well-structured Train-the-Trainer programme that goes beyond DEI theory. I came away with practical tools for designing engaging sessions and facilitating meaningful conversations across differences.",
+      quote: "A well-structured Train-the-Trainer programme that goes beyond DEIB theory. I came away with practical tools for designing engaging sessions and facilitating meaningful conversations across differences.",
     },
   ],
 
