@@ -200,7 +200,8 @@ export default function Checkout({ slug }: { slug: string }) {
     // The amount the server verified with Razorpay, not the one on the page.
     // `live` is the server's own word on its key; absent means an older server.
     if (realMoney && res.live !== false) {
-      track("purchase", { transaction_id: res.paymentId, value: res.amountPaise / 100, currency: "INR", items: [item] });
+      // meta_event_id pairs this with the server's own report of the sale.
+      track("purchase", { transaction_id: res.paymentId, value: res.amountPaise / 100, currency: "INR", items: [item], meta_event_id: res.metaEventId });
     }
     enrol(user.id, slug, { orderId: res.orderId, paymentId: res.paymentId, amountPaise: res.amountPaise, at: res.at });
     void refreshEnrolments();

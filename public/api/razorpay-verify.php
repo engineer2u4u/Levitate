@@ -19,6 +19,7 @@ declare(strict_types=1);
 require __DIR__ . '/razorpay-common.php';
 require __DIR__ . '/supabase-common.php';
 require __DIR__ . '/invoice.php';
+require __DIR__ . '/meta-capi.php';
 
 $body = rzp_begin();
 
@@ -97,9 +98,28 @@ if (($notes['batch_id'] ?? '') !== '') {
     ]);
 }
 
+// Meta hears about the sale from here as well as from the browser, carrying
+// the id the browser made, so the two count once. Test-mode payments are not
+// reported: they are not sales. Never allowed to affect the answer below.
+$metaReported = false;
+if (!rzp_is_test_mode()) {
+    $metaReported = lvt_meta_capi_event([
+        'event_name' => 'Purchase',
+        'event_id'   => (string) ($body['metaEventId'] ?? ''),
+        'value'      => $expectedAmount / 100,
+        'currency'   => (string) ($payment['currency'] ?? 'INR'),
+        'email'      => (string) ($notes['customer_email'] ?? ''),
+        'phone'      => (string) ($notes['customer_contact'] ?? ''),
+        'source_url' => (string) ($body['sourceUrl'] ?? ($_SERVER['HTTP_REFERER'] ?? '')),
+        'fbc'        => (string) ($body['fbc'] ?? ''),
+        'fbp'        => (string) ($body['fbp'] ?? ''),
+    ]);
+}
+
 echo json_encode([
     'ok'          => true,
     'verified'    => true,
+    'metaReported' => $metaReported,
     'enrolmentRecorded' => $enrolmentId !== null,
     'invoiceNo'   => $invoice['invoice_no'] ?? null,
     'invoiceSent' => $emailed,

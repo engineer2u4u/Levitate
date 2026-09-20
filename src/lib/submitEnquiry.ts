@@ -1,7 +1,33 @@
 import emailjs from "@emailjs/browser";
 import { supabaseConfig, supabaseConfigured } from "@/lib/lms/auth";
 import { ATTRIBUTION_COLUMNS, CHANNEL_LABEL, attributionFields, type Channel } from "@/lib/attribution";
-import { track } from "@/lib/track";
+import { metaCookies, newEventId, track } from "@/lib/track";
+
+/** Where the PHP endpoints live — same origin once deployed (see payment.ts). */
+const API = (process.env.NEXT_PUBLIC_PAYMENT_API_BASE ?? "").replace(/\/+$/, "");
+
+/**
+ * Tells the server about this lead, so it reports it to Meta as well as the
+ * pixel does — the copy that survives an ad blocker or a closed tab. The
+ * contact details go no further than that server, which sends Meta only their
+ * hashes.
+ *
+ * Nothing waits on it and nothing is shown if it fails: the enquiry is
+ * already sent, and reporting is not the visitor's problem. `keepalive` lets
+ * it finish even if the page is being left.
+ */
+function reportLeadToMeta(eventId: string, email: string, phone: string) {
+  try {
+    void fetch(`${API}/api/meta-lead.php`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ eventId, email, phone, sourceUrl: window.location.href, ...metaCookies() }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {
+    // Reporting must never be able to break a submitted enquiry.
+  }
+}
 
 /**
  * Sends an enquiry two ways: an EmailJS email to the office, and a row in the
@@ -181,7 +207,11 @@ export async function submitEnquiry(
     // that are not enquiries, and not for the masterclass, whose paid
     // registration already reports a purchase. Nothing personal is sent.
     if (opts.store !== false && opts.form !== "masterclass") {
-      track("generate_lead", { form: opts.form ?? "other", programme: intent || "General", lead_channel: origin.channel || "unknown" });
+      // One id for both reports of this lead — the pixel's, below, and the
+      // server's, so Meta pairs them and counts one.
+      const eventId = newEventId("generate_lead");
+      track("generate_lead", { form: opts.form ?? "other", programme: intent || "General", lead_channel: origin.channel || "unknown", meta_event_id: eventId });
+      reportLeadToMeta(eventId, val(data, "email"), val(data, "phone"));
     }
     return { ok: true };
   }

@@ -36,4 +36,17 @@ return [
     // payment.captured, and this same secret. Records the enrolment even when
     // the buyer closes the browser before the success screen.
     'RAZORPAY_WEBHOOK_SECRET' => 'PUT_THE_WEBHOOK_SECRET_HERE',
+
+    /*
+     * Meta Conversions API — reports each verified purchase to Meta from this
+     * server as well as from the browser, so a blocked or closed browser does
+     * not lose the sale. Both copies carry the same event id, so Meta counts
+     * them once.
+     *
+     * Events Manager -> Data sources -> your pixel -> Settings -> Conversions
+     * API -> Generate access token. Leave it out and only the pixel reports.
+     * The pixel id defaults to the one the site's base code carries.
+     */
+    'META_CAPI_TOKEN' => 'PUT_THE_META_CONVERSIONS_API_TOKEN_HERE',
+    // 'META_PIXEL_ID' => '3581363985351504',
 ];

@@ -348,7 +348,8 @@ function RegisterCard({ closed, facts }: { closed: boolean; facts: Facts }) {
     }
 
     const live = res.live === true;
-    track("purchase", { transaction_id: res.paymentId, value: res.amountPaise / 100, currency: "INR", items: [item(facts)] });
+    // meta_event_id pairs this with the server's own report of the sale.
+    track("purchase", { transaction_id: res.paymentId, value: res.amountPaise / 100, currency: "INR", items: [item(facts)], meta_event_id: res.metaEventId });
 
     // Into the admin's enquiry list and the office inbox. Not awaited: the
     // payment is verified and the seat is theirs whether or not this lands,

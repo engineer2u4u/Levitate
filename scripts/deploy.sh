@@ -83,7 +83,7 @@ grep -q "3581363985351504" out/index.html || die "out/ is missing the Meta Pixel
 # half-empty would answer every checkout with a 500 — and the browser would
 # report it as "the payment server did not answer properly", which sounds like
 # Razorpay rather than a missing file.
-for f in razorpay-common.php razorpay-order.php razorpay-verify.php invoice.php smtp.php enquiry.php; do
+for f in razorpay-common.php razorpay-order.php razorpay-verify.php invoice.php smtp.php enquiry.php supabase-common.php meta-capi.php meta-lead.php; do
   [ -f "out/api/$f" ] || die "out/api/$f is missing — the site would go live without a working payment or enquiry endpoint."
 done
 

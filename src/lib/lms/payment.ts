@@ -9,6 +9,7 @@
  */
 
 import { accessToken } from "./supabase";
+import { metaCookies, newEventId } from "@/lib/track";
 
 export type PaymentRequest = {
   courseSlug: string;
@@ -26,7 +27,9 @@ export type PaymentRequest = {
 };
 
 export type PaymentResult =
-  | { ok: true; orderId: string; paymentId: string; amountPaise: number; at: string; invoiceNo?: string | null; live?: boolean }
+  /** `metaEventId` is the id the payment server reported this sale to Meta
+   *  with, so the browser's own Purchase event pairs with it. */
+  | { ok: true; orderId: string; paymentId: string; amountPaise: number; at: string; invoiceNo?: string | null; live?: boolean; metaEventId?: string }
   | { ok: false; error: string; cancelled?: boolean };
 
 export type PaymentGateway = {
@@ -178,11 +181,17 @@ export const razorpayGateway: PaymentGateway = {
 
       if (!success) return { ok: false, error: "Payment was cancelled.", cancelled: true };
 
+      // Made here so the server's report of this sale to Meta and the
+      // browser's carry the same id, and Meta counts one sale.
+      const metaEventId = newEventId("purchase");
       const verified = await post<{ amountPaise: number; at: string; invoiceNo?: string | null; live?: boolean }>("/api/razorpay-verify.php", {
         orderId: success.razorpay_order_id,
         paymentId: success.razorpay_payment_id,
         signature: success.razorpay_signature,
         courseSlug: req.courseSlug,
+        metaEventId,
+        sourceUrl: window.location.href,
+        ...metaCookies(),
       });
 
       return {
@@ -193,6 +202,7 @@ export const razorpayGateway: PaymentGateway = {
         at: verified.at,
         invoiceNo: verified.invoiceNo ?? null,
         live: verified.live === true,
+        metaEventId,
       };
     } catch (e) {
       return { ok: false, error: (e as Error).message };
