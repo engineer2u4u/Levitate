@@ -120,9 +120,8 @@ export default function CourseDetail({ slug }: { slug: string }) {
       ? "Enrol now →"
     : canPay
       ? "Enrol · Pay securely"
-      : waitlist
-        ? "Join the waitlist"
-        : "Enquire about this program →";
+      // Paused in the admin, fee on request, or payments closed: enquire.
+      : "Enquire about this program →";
   const onCta = canStart
     ? () => router.push(`/lms/learn/${slug}`)
     : enrolled || canPay

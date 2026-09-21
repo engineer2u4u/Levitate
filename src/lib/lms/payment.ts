@@ -214,11 +214,12 @@ export const razorpayGateway: PaymentGateway = {
 export const isTestKey = KEY_ID.startsWith("rzp_test_");
 
 /**
- * Whether this build can actually take money. Enrolment opens on the back of
- * it, so a build with no key never shows a pay button it cannot honour, and
- * configuring the key is the whole of going live rather than half of it.
+ * Whether this build can actually take money: with a key, or in production,
+ * where the order endpoint supplies the live key. A local build with neither
+ * never shows a pay button it cannot honour. Which courses show one is then
+ * each course's Live switch in the admin.
  */
-export const PAYMENT_READY = Boolean(KEY_ID);
+export const PAYMENT_READY = Boolean(KEY_ID) || process.env.NODE_ENV === "production";
 
 /* ---------------------------------------------------------- free entry */
 
@@ -241,13 +242,19 @@ const freeGateway: PaymentGateway = {
 };
 
 /**
- * Free entry wins where it is set. Otherwise real Razorpay the moment a key id
- * is configured, and the simulation until then — a build with no key cannot
- * take money and a build with one does not pretend to.
+ * Free entry wins where it is set. Otherwise real Razorpay whenever a key id is
+ * configured, and always in a production build — which leaves the key out on
+ * purpose (deploy.sh refuses a test key) because the order endpoint hands the
+ * live key id to the checkout itself, as the masterclass page already relies
+ * on. The simulation is for a development build with no key, and nowhere else.
+ *
+ * Whether a course may be paid for is then the admin's Live switch on that
+ * course (site_status), checked here for the button and again by the order
+ * endpoint, which refuses a paused course.
  */
 export const gateway: PaymentGateway = PAYMENT_OFF
   ? freeGateway
-  : KEY_ID
+  : KEY_ID || process.env.NODE_ENV === "production"
     ? razorpayGateway
     : simulatedGateway;
 

@@ -33,6 +33,9 @@ export default function UpcomingBatches({ background = "#f4f7f9" }: { background
           title: c.batch.title,
           status: c.batch.statusLabel,
           open: c.status === "enrolling",
+          // Live and priced: the card goes to the course page, where enrolment
+          // is. Paused, or fee on request: it goes to the enquiry form.
+          href: c.status === "enrolling" && c.feePaise !== null ? `/lms/course/${c.slug}` : "/contact",
           rows: c.batch.rows,
           fee: formatFee(c.feePaise),
           feeNote: c.batch.feeNote,
@@ -77,7 +80,7 @@ export default function UpcomingBatches({ background = "#f4f7f9" }: { background
                   <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginTop: 4 }}>{b.fee}</div>
                   <div style={{ font: "500 11.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 2 }}>{b.feeNote}</div>
                 </div>
-                <Link href="/contact" className="lp-btn-outline" style={{ border: "1.5px solid rgba(27,143,136,.5)", color: "#1b8f88", font: "700 13.5px 'Plus Jakarta Sans',sans-serif", padding: "12px 22px", borderRadius: 999, whiteSpace: "nowrap" }}>{b.cta}</Link>
+                <Link href={b.href} className="lp-btn-outline" style={{ border: "1.5px solid rgba(27,143,136,.5)", color: "#1b8f88", font: "700 13.5px 'Plus Jakarta Sans',sans-serif", padding: "12px 22px", borderRadius: 999, whiteSpace: "nowrap" }}>{b.cta}</Link>
               </div>
             </Reveal>
           ))}

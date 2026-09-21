@@ -98,7 +98,7 @@ export default function Catalogue() {
                           whiteSpace: "nowrap",
                         }}
                       >
-                        {enrolled ? "Enrolled ·  Open" : c.status === "enrolling" ? "View course" : "Join waitlist"}
+                        {enrolled ? "Enrolled ·  Open" : c.status === "enrolling" ? "View course" : "Enquire"}
                       </Link>
                     </div>
                   </div>

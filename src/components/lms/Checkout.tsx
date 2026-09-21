@@ -76,15 +76,17 @@ export default function Checkout({ slug }: { slug: string }) {
     );
   }
 
-  if (course.feePaise === null) {
+  // Paused in the admin, or no fee set: nothing to pay for here. The order
+  // endpoint refuses these too; this just says so before anyone tries.
+  if (course.feePaise === null || course.status === "waitlist") {
     return (
       <div style={{ background: "#f7fafc", padding: "70px 48px", minHeight: "50vh" }} className="site-page-sec">
         <div style={{ maxWidth: 620, margin: "0 auto", background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "34px 36px", textAlign: "center" }}>
-          <h1 style={{ font: "700 21px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 10px" }}>Dates not open yet</h1>
+          <h1 style={{ font: "700 21px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 10px" }}>Not open for enrolment right now</h1>
           <p style={{ font: "400 14px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 20px" }}>
-            {course.title} does not have an open batch to pay for yet. Join the waitlist and we will confirm dates and pricing with you first.
+            {course.title} is not taking online enrolments at the moment. Send us an enquiry and we will confirm the next batch and its fee with you.
           </p>
-          <Link href="/contact" className="lp-btn-grad" style={{ display: "inline-block", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 13.5px 'Plus Jakarta Sans',sans-serif", padding: "13px 26px", borderRadius: 999 }}>Join the waitlist</Link>
+          <Link href="/contact" className="lp-btn-grad" style={{ display: "inline-block", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 13.5px 'Plus Jakarta Sans',sans-serif", padding: "13px 26px", borderRadius: 999 }}>Enquire about this program</Link>
         </div>
       </div>
     );

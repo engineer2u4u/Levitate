@@ -75,8 +75,17 @@ export type CatalogCourse = {
   sortOrder: number;
   /** The start shown while there are no session dates: "October 2026". */
   startsLabel: string;
+  /**
+   * When the batch now taking enrolments starts — the soonest upcoming or
+   * running batch that is open for enrolment, as the admin set it. This is the
+   * date the site advertises: a batch can begin before its first live session
+   * (with its orientation, say), and the start is the admin's decision, not a
+   * side effect of how the sessions were scheduled.
+   */
+  batchStartsOn: string | null;
   batch: BatchCard | null;
-  /** Earliest first. */
+  /** That batch's open sessions (all open sessions for a course without
+   *  batches), earliest first. */
   sessions: CatalogSession[];
 };
 
@@ -140,19 +149,25 @@ export const dateTile = (iso: string) => {
 
 /* ------------------------------------------------------------ derived text */
 
-/** The first dated session — the batch start. */
+/** The first dated session of the batch being sold. */
 export const firstSession = (c: Pick<CatalogCourse, "sessions">) => c.sessions.find((s) => s.startsOn) ?? null;
 
+type Starts = Pick<CatalogCourse, "sessions" | "startsLabel" | "batchStartsOn">;
+
+/** The day the course is advertised to start: the enrolling batch's own start
+ *  date, else its first session, else nothing (the label stands in). */
+export const startDay = (c: Starts): string | null => c.batchStartsOn ?? firstSession(c)?.startsOn ?? null;
+
 /** "3 October", or the course's own label while it has no dates. */
-export const startsText = (c: Pick<CatalogCourse, "sessions" | "startsLabel">) => {
-  const s = firstSession(c);
-  return s?.startsOn ? dateLong(s.startsOn) : c.startsLabel;
+export const startsText = (c: Starts) => {
+  const day = startDay(c);
+  return day ? dateLong(day) : c.startsLabel;
 };
 
 /** "3 Oct", or the label. */
-export const startsShortText = (c: Pick<CatalogCourse, "sessions" | "startsLabel">) => {
-  const s = firstSession(c);
-  return s?.startsOn ? dateShort(s.startsOn) : c.startsLabel;
+export const startsShortText = (c: Starts) => {
+  const day = startDay(c);
+  return day ? dateShort(day) : c.startsLabel;
 };
 
 /**
@@ -166,7 +181,7 @@ export const startsShortText = (c: Pick<CatalogCourse, "sessions" | "startsLabel
  * it — the price note, the batch card, an FAQ answer — rather than each one
  * being edited by hand and one being missed.
  */
-export function fill(text: string, c: Pick<CatalogCourse, "sessions" | "startsLabel" | "feePaise"> | null | undefined): string {
+export function fill(text: string, c: (Starts & Pick<CatalogCourse, "feePaise">) | null | undefined): string {
   if (!c || !text.includes("{")) return text;
   return text.replace(/\{(starts|starts_short|fee)\}/g, (_, key: string) =>
     key === "starts" ? startsText(c) : key === "starts_short" ? startsShortText(c) : formatFee(c.feePaise),
@@ -245,6 +260,7 @@ function fromCode(c: Course, i: number): CatalogCourse {
     img: c.img,
     sortOrder: c.hidden ? 99 : i + 1,
     startsLabel: c.slug === "workplace-wellbeing" ? "October 2026" : "",
+    batchStartsOn: null,
     batch: fallbackBatch(c.slug),
     sessions: FALLBACK_SESSIONS[c.slug] ?? [],
   };
@@ -271,6 +287,7 @@ const MASTERCLASS_FALLBACK: CatalogCourse = {
   img: "",
   sortOrder: 50,
   startsLabel: "",
+  batchStartsOn: null,
   batch: null,
   sessions: FALLBACK_SESSIONS[MASTERCLASS.slug],
 };
@@ -282,7 +299,18 @@ export const FALLBACK_CATALOG: Catalog = {
 
 /* --------------------------------------------------------------- database */
 
-type SessionRow = { starts_on: string | null; time_label: string; topic: string; starts_at: string | null; ends_at: string | null; status: string };
+type SessionRow = { batch_id?: string | null; starts_on: string | null; time_label: string; topic: string; starts_at: string | null; ends_at: string | null; status: string };
+
+/** Public read returns only upcoming and running batches of live courses. */
+type BatchRow = { id: string; starts_on: string | null; status: string; enrolment_open: boolean };
+
+/** The batch a course is selling: the soonest upcoming or running one that is
+ *  open for enrolment. The same rule the payment server uses to place a buyer. */
+function enrollingBatch(rows: BatchRow[] | null | undefined): BatchRow | null {
+  return (rows ?? [])
+    .filter((b) => (b.status === "upcoming" || b.status === "running") && b.enrolment_open)
+    .sort((a, b) => (a.starts_on ?? "9999").localeCompare(b.starts_on ?? "9999"))[0] ?? null;
+}
 
 type CourseRow = {
   slug: string; title: string; short: string; tag: string; category: string; description: string;
@@ -291,6 +319,7 @@ type CourseRow = {
   hours_label: string; facilitator_name: string; image: string; sort_order: number; starts_label: string;
   batch: Partial<{ show: boolean; tag: string; title: string; short: string; status_label: string; rows: { k: string; v: string }[]; fee_note: string; cta: string }> | null;
   sessions: SessionRow[] | null;
+  batches?: BatchRow[] | null;
 };
 
 /**
@@ -301,7 +330,8 @@ const SELECT = [
   "slug", "title", "short", "tag", "category", "description", "mode", "duration", "site_status", "hidden",
   "price_paise", "price_on_request", "price_note", "list_price_paise", "modules_label", "hours_label",
   "facilitator_name", "image", "sort_order", "starts_label", "batch",
-  "sessions(starts_on,time_label,topic,starts_at,ends_at,status)",
+  "sessions(batch_id,starts_on,time_label,topic,starts_at,ends_at,status)",
+  "batches(id,starts_on,status,enrolment_open)",
 ].join(",");
 
 const str = (v: unknown) => (typeof v === "string" ? v : "");
@@ -309,6 +339,7 @@ const str = (v: unknown) => (typeof v === "string" ? v : "");
 function fromRow(r: CourseRow): CatalogCourse {
   const code = COURSES.find((c) => c.slug === r.slug);
   const b = r.batch && typeof r.batch === "object" ? r.batch : null;
+  const current = enrollingBatch(r.batches);
   return finish({
     slug: r.slug,
     title: r.title,
@@ -330,6 +361,7 @@ function fromRow(r: CourseRow): CatalogCourse {
     img: str(r.image) || code?.img || "",
     sortOrder: Number.isFinite(r.sort_order) ? r.sort_order : 0,
     startsLabel: str(r.starts_label),
+    batchStartsOn: current?.starts_on ?? null,
     batch:
       b && b.show
         ? {
@@ -346,6 +378,9 @@ function fromRow(r: CourseRow): CatalogCourse {
     sessions: (r.sessions ?? [])
       // The public read already drops drafts; closed sessions have run.
       .filter((s) => s.status === "open")
+      // Only the batch being sold, so November's dates do not sit among
+      // October's. A course with no enrolling batch keeps every open session.
+      .filter((s) => !current || s.batch_id === current.id)
       .map((s) => ({ startsOn: s.starts_on, timeLabel: str(s.time_label), topic: str(s.topic), startsAt: s.starts_at, endsAt: s.ends_at }))
       .sort((a, b) => (a.startsOn ?? "9999").localeCompare(b.startsOn ?? "9999")),
   });
@@ -451,4 +486,4 @@ export const visibleLmsCourses = (catalog: Catalog): Course[] =>
 export const batchCards = (catalog: Catalog) =>
   catalog.courses
     .filter((c) => c.batch?.show)
-    .sort((a, b) => (firstSession(a)?.startsOn ?? "9999").localeCompare(firstSession(b)?.startsOn ?? "9999"));
+    .sort((a, b) => (startDay(a) ?? "9999").localeCompare(startDay(b) ?? "9999"));
