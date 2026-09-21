@@ -120,7 +120,7 @@ export const POSH_FAQS: Faq[] = [
 
 /**
  * POCSO FAQs, drafted from the programme's own brochure — the schedule, the
- * eight modules, the audience and the inclusions all come from there. Nothing
+ * ten modules, the audience and the inclusions all come from there. Nothing
  * here claims anything the brochure does not.
  */
 export const POCSO_FAQS: Faq[] = [
@@ -140,7 +140,7 @@ export const POCSO_FAQS: Faq[] = [
   {
     q: "When does the next batch run?",
     a: [
-      "From {starts} — three evenings, two hours a day, 6:00 to 8:00 PM, live online. Nine hours in total across eight modules.",
+      "From {starts} — three evenings, two hours a day, 6:00 to 8:00 PM, live online. Nine hours in total across ten modules.",
     ],
   },
   {
@@ -152,7 +152,7 @@ export const POCSO_FAQS: Faq[] = [
   {
     q: "What does the curriculum cover?",
     a: [
-      "Eight modules: foundations of POCSO and the Levitate GUARD Child Safety Framework™; ground rules for safe and sensitive facilitation; the law, offences and the child-protection ecosystem; age-appropriate child-safety communication; recognising signals, grooming and vulnerability; disclosure, response and responsible reporting; prevention and institutional child-safety systems; and a trainer mastery and certification practicum.",
+      "Ten modules: purpose, child safety and the certification journey; the Levitate GUARD Child Safety Framework™; the POCSO legal and child-protection ecosystem; POCSO offences, reporting and child-friendly justice; age-appropriate child-safety communication; recognising signals, grooming and vulnerability; disclosure, response and responsible reporting; prevention and institutional child-safety systems; an applied child-safety case laboratory; and trainer craft, facilitation and a certification practicum.",
     ],
   },
   {

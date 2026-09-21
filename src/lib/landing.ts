@@ -45,6 +45,13 @@ export type LandingOffer = {
    * and an ad platform optimising on that value needs it to be right.
    */
   price: { amount: string; note: string };
+  /**
+   * Puts the fee back on this one page, beside the batch date, under this
+   * label — with the standard fee struck through when the admin has set one.
+   * For an offer worth leading with (POCSO's early bird); the other pages
+   * keep the fee off, for the reason above.
+   */
+  showPrice?: { label: string };
   /** Unset until the seat count is being tracked honestly. */
   seatsLeft?: number;
   /** Unset until the founding-cohort rate and its close date are decided. */
@@ -177,6 +184,7 @@ export const POCSO_LANDING: LandingOffer = {
     ],
   },
   price: { amount: "{fee}", note: "inclusive of taxes" },
+  showPrice: { label: "Early bird offer" },
   founderVideoId: "4pf99e4AKBU",
   posterLabel: "Watch a POCSO session",
 

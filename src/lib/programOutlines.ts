@@ -16,16 +16,18 @@ export type ProgramOutline = {
 export const POCSO_OUTLINE: ProgramOutline = {
   intro:
     "A practice-led certification that builds legal clarity, facilitation sensitivity and the confidence to lead child-safety conversations responsibly.",
-  facts: [{ k: "Duration", v: "9 Hours" }, { k: "Format", v: "3 Days" }, { k: "Session", v: "3 Hrs / Day" }, { k: "Curriculum", v: "8 Modules" }],
+  facts: [{ k: "Duration", v: "9 Hours" }, { k: "Format", v: "3 Days" }, { k: "Session", v: "3 Hrs / Day" }, { k: "Curriculum", v: "10 Modules" }],
   modules: [
-    "Foundations of POCSO & the Levitate GUARD Child Safety Framework™",
-    "Ground Rules for Safe & Sensitive Facilitation",
-    "Understanding POCSO: Law, Offences & Child Protection Ecosystem",
+    "Purpose, Child Safety and the Certification Journey",
+    "The Levitate GUARD Child Safety Framework™",
+    "Understanding the POCSO Legal & Child-Protection Ecosystem",
+    "POCSO Offences, Reporting and Child-Friendly Justice",
     "Age-Appropriate Child Safety Communication",
-    "Recognising Signals, Grooming & Vulnerability",
-    "Disclosure, Response & Responsible Reporting",
-    "Prevention & Institutional Child-Safety Systems",
-    "POCSO Trainer Mastery & Certification Practicum",
+    "Recognising Signals, Grooming and Vulnerability",
+    "Disclosure, Response and Responsible Reporting",
+    "Prevention and Institutional Child-Safety Systems",
+    "Applied Child-Safety Case Laboratory",
+    "Trainer Craft, Facilitation and Certification Practicum",
   ],
   closing: "Understand the law. Speak to children safely. Facilitate with responsibility.",
 };

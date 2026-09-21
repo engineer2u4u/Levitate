@@ -227,7 +227,8 @@ function rzp_title_for(string $slug): string
  */
 const RZP_PRICES_PAISE = [
     'posh-trainer'        => 3200000,
-    'pocso-child-safety'  => 2000000,
+    // The early-bird fee; the ₹12,000 standard fee is only ever shown struck through.
+    'pocso-child-safety'  => 650000,
     'inclusive-workplace' => 4000000,
     'demo-course'         => 100000,
     // The early-bird fee, open until the session starts. The ₹2,999 standard

@@ -11,7 +11,7 @@ import TrustedBy from "@/components/site/TrustedBy";
 import YouTubeEmbed from "@/components/site/YouTubeEmbed";
 import VideoTestimonials, { type PlayableClip } from "@/components/home/VideoTestimonials";
 import { certificateCards } from "@/lib/certificateArt";
-import { courseBySlug } from "@/lib/lms/courses";
+import { courseBySlug, formatFee } from "@/lib/lms/courses";
 import { useCatalogCourse } from "@/components/site/CatalogProvider";
 import { fill } from "@/lib/catalog";
 import { outlineBySlug } from "@/lib/programOutlines";
@@ -165,6 +165,13 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
             {/* The facts that decide whether to keep reading. */}
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 28 }}>
               <Fact k="Batch starts" v={batch.starts} />
+              {offer.showPrice && (entry?.feePaise ?? course?.feePaise) != null && (
+                <PriceFact
+                  label={offer.showPrice.label}
+                  feePaise={(entry?.feePaise ?? course?.feePaise) as number}
+                  listPaise={entry?.listPricePaise ?? course?.listPricePaise ?? null}
+                />
+              )}
               {typeof offer.seatsLeft === "number" && <Fact k="Seats left" v={String(offer.seatsLeft)} accent />}
               {offer.offerClosesOn && <Fact k="Offer closes" v={offer.offerClosesOn} accent />}
             </div>
@@ -455,6 +462,27 @@ export const ctaGhost: React.CSSProperties = {
   padding: "14px 26px",
   borderRadius: 999,
 };
+
+/**
+ * The fee as an offer: the price, and the standard fee struck through when
+ * there is one higher than it. Styled as an accented Fact so it sits in the
+ * same row as the batch date.
+ */
+function PriceFact({ label, feePaise, listPaise }: { label: string; feePaise: number; listPaise: number | null }) {
+  // No higher standard fee means no offer to show: an "early bird" label over
+  // the full price would say something untrue, so the box stays off until the
+  // admin has set both.
+  if (listPaise === null || listPaise <= feePaise) return null;
+  return (
+    <div style={{ background: "rgba(255,176,86,.15)", border: "1px solid rgba(255,176,86,.45)", borderRadius: 12, padding: "9px 15px" }}>
+      <div style={{ font: `600 11px ${SANS}`, color: "#ffcf94", letterSpacing: ".12em", textTransform: "uppercase" }}>{label}</div>
+      <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginTop: 3 }}>
+        <span style={{ font: `700 15px ${SANS}`, color: "#fff" }}>{formatFee(feePaise)}</span>
+        <span style={{ font: `500 13px ${SANS}`, color: "rgba(255,255,255,.55)", textDecoration: "line-through" }}>{formatFee(listPaise)}</span>
+      </div>
+    </div>
+  );
+}
 
 function Fact({ k, v, accent = false }: { k: string; v: string; accent?: boolean }) {
   return (

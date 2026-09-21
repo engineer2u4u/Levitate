@@ -85,7 +85,7 @@ export const batches: Batch[] = [
     fee: "₹40,000", feeNote: "inclusive of taxes", cta: "Enrol for this batch" },
   { tag: "POCSO Train-the-Trainer", title: "POCSO TTT Certification", status: "Enrolling", open: true, short: "POCSO TTT", starts: "24 October",
     rows: [{ k: "Batch starts", v: "24 October" }, { k: "Duration", v: "3 days" }, { k: "Daily", v: "2 hours per day" }, { k: "Timing", v: "6:00 – 8:00 PM" }, { k: "Mode", v: "Live online" }, { k: "Seats", v: "Limited cohort" }],
-    fee: "₹20,000", feeNote: "inclusive of taxes", cta: "Enrol for this batch" },
+    fee: "₹6,500", feeNote: "Early bird · inclusive of taxes", cta: "Enrol for this batch" },
   { tag: "Wellbeing Train-the-Trainer", title: "Mental Health & Well-being Batch", status: "Dates coming soon", open: false,
     rows: [{ k: "Batch month", v: "October 2026" }, { k: "Exact dates", v: "To be announced" }, { k: "Timing", v: "To be confirmed" }, { k: "Mode", v: "Live online" }],
     fee: "On request", feeNote: "confirmed with batch dates", cta: "Join the waitlist" },

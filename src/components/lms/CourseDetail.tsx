@@ -36,6 +36,8 @@ export default function CourseDetail({ slug }: { slug: string }) {
   const course = useCourse(slug);
   // Dates written into the FAQ answers are placeholders, filled from here.
   const entry = useCatalogCourse(slug);
+  // The admin's struck-through standard fee, or the code's until it loads.
+  const listPrice = entry?.listPricePaise ?? course?.listPricePaise ?? null;
   const curriculum = curriculumBySlug(slug);
   const outline = outlineBySlug(slug);
   const brochure = brochureBySlug(slug);
@@ -172,7 +174,14 @@ export default function CourseDetail({ slug }: { slug: string }) {
             </div>
 
             <div style={{ background: "#fff", borderRadius: 20, padding: 24, boxShadow: "0 24px 50px rgba(4,16,30,.35)" }}>
-              <div style={{ font: "700 27px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{formatFee(course.feePaise)}</div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
+                <div style={{ font: "700 27px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{formatFee(course.feePaise)}</div>
+                {/* The standard fee, struck through, while an offer is running.
+                    Shown only when it is actually higher — never charged. */}
+                {listPrice !== null && course.feePaise !== null && listPrice > course.feePaise && (
+                  <div style={{ font: "600 17px 'Plus Jakarta Sans',sans-serif", color: "#a9b8c6", textDecoration: "line-through" }}>{formatFee(listPrice)}</div>
+                )}
+              </div>
               <div style={{ font: "500 11.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 16 }}>{course.priceNote}</div>
 
               {enrolled && (

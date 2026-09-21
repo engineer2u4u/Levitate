@@ -101,7 +101,7 @@ export const BROCHURE_ASSETS_READY = true;
 export const POCSO_BROCHURE: ProgramBrochure = {
   eyebrow: "POCSO & Child Safety Facilitator Program (POCSO TTT)",
   strapline: "Protect with knowledge. Respond with responsibility. Facilitate with care.",
-  meta: ["9 Hours · Duration", "3 Days · Format", "3 Hrs / Day · Session", "8 Modules · Curriculum"],
+  meta: ["9 Hours · Duration", "3 Days · Format", "3 Hrs / Day · Session", "10 Modules · Curriculum"],
   about:
     "The POCSO & Child Safety Facilitator Program (POCSO TTT) is an intensive, practice-led Train-the-Trainer certification designed to help professionals facilitate child-safety and POCSO awareness with legal clarity, age-appropriate communication and responsible reporting.",
 

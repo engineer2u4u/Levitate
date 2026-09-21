@@ -60,6 +60,8 @@ export type Course = {
   status: CourseStatus;
   /** Fee in paise, so money is never held as a float. null = "On request". */
   feePaise: number | null;
+  /** The standard fee, shown struck through beside an offer. Never charged. */
+  listPricePaise?: number | null;
   priceNote: string;
   modulesLabel: string;
   hoursLabel: string;

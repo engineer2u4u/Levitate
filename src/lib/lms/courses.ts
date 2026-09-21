@@ -27,8 +27,10 @@ export const COURSES: Course[] = [
     short: "POCSO & Child Safety",
     desc: "Facilitate child-safety awareness with sensitivity, legal clarity and responsible communication.",
     img: "/assets/school-group.jpeg", status: "enrolling",
-    feePaise: 2000000, priceNote: "incl. taxes · from 24 Oct",
-    modulesLabel: "8 modules", hoursLabel: "9 hours", facilitator: "Parichita Kotnala",
+    // Early bird: ₹6,500 against the ₹12,000 standard fee, which is shown struck
+    // through and never charged.
+    feePaise: 650000, listPricePaise: 1200000, priceNote: "Early bird · incl. taxes · from 24 Oct",
+    modulesLabel: "10 modules", hoursLabel: "9 hours", facilitator: "Parichita Kotnala",
     certificate: {
       name: "POCSO & Child Safety Facilitator Program (POCSO TTT)",
       closing: "under the **Protection of Children from Sexual Offences** (POCSO Act, 2012).",

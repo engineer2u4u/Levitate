@@ -237,7 +237,7 @@ function fromCode(c: Course, i: number): CatalogCourse {
     status: c.status,
     hidden: Boolean(c.hidden),
     feePaise: c.feePaise,
-    listPricePaise: null,
+    listPricePaise: c.listPricePaise ?? null,
     priceNote: c.priceNote,
     modulesLabel: c.modulesLabel,
     hoursLabel: c.hoursLabel,
