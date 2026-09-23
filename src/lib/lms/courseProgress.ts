@@ -16,6 +16,17 @@ import { getClient, supabaseConfigured } from "./supabase";
  */
 export type QuizAttempt = { score: number; total: number };
 
+/**
+ * Every quiz is held to the same pass mark: 70%, rounded up, so a 10-question
+ * quiz needs 7 and a 6-question quiz needs 5. Kept here rather than in the
+ * screen because both the player and anything that reports on attempts have to
+ * agree on what a pass is.
+ */
+export const QUIZ_PASS_RATIO = 0.7;
+export const passMark = (total: number) => Math.ceil(total * QUIZ_PASS_RATIO);
+export const quizPassed = (a: QuizAttempt | null | undefined) =>
+  Boolean(a && a.total > 0 && a.score >= passMark(a.total));
+
 export type CourseProgress = {
   courseSlug: string;
   completedItems: string[];
@@ -204,6 +215,21 @@ export async function completeItem(
       completedItems.length >= totalItems(c) ? current.completedAt ?? new Date().toISOString() : null,
   };
   return save(userId, next);
+}
+
+/**
+ * Records a quiz attempt without completing the item — what a score under the
+ * pass mark earns. The attempt still reaches the admin, because a learner who
+ * keeps missing the mark is worth seeing; the course simply does not move on.
+ */
+export async function recordQuizAttempt(
+  userId: string,
+  c: CourseContent,
+  itemId: string,
+  attempt: QuizAttempt,
+): Promise<CourseProgress> {
+  const current = (await readProgress(userId, c.slug)) ?? EMPTY(c.slug);
+  return save(userId, { ...current, quizAttempts: { ...current.quizAttempts, [itemId]: attempt } });
 }
 
 /** Undo, for a learner who marked something complete by mistake. */

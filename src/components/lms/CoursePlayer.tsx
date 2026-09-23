@@ -12,6 +12,10 @@ import {
   itemState,
   type ItemState,
   kitReleased,
+  passMark,
+  type QuizAttempt,
+  quizPassed,
+  recordQuizAttempt,
   startCourse,
   uncompleteItem,
   type CourseProgress,
@@ -52,8 +56,24 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   const [active, setActive] = useState(0);
   const [error, setError] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  // The item whose material the learner has actually scrolled to the end of.
+  // Held as an id rather than a flag, so moving to another item resets the
+  // gate by itself instead of through an effect that races the render.
+  const [readTo, setReadTo] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const items = useMemo(() => (course ? flatItems(course) : []), [course]);
+
+  // A new item starts at its beginning. Without this the pane keeps the
+  // previous item's scroll position, which both drops the learner into the
+  // middle of the next reading and hands them its Proceed button unread.
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 });
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 900px)").matches) {
+      window.scrollTo({ top: 0 });
+    }
+  }, [active]);
 
   // Load once the learner is known, and land them on the first unfinished item.
   useEffect(() => {
@@ -91,6 +111,28 @@ export default function CoursePlayer({ slug }: { slug: string }) {
       }
     },
     [course, user],
+  );
+
+  /**
+   * A quiz moves the course on only at 70% or better. A lower score is still
+   * written down — it is the team's window on where people struggle — but the
+   * item stays open, so the learner retakes it rather than carrying a fail
+   * forward.
+   */
+  const onQuizSubmit = useCallback(
+    async (item: CourseItem, attempt: QuizAttempt) => {
+      if (!course || !user) return;
+      if (quizPassed(attempt)) {
+        await onComplete(item, attempt);
+        return;
+      }
+      try {
+        setProgress(await recordQuizAttempt(user.id, course, item.id, attempt));
+      } catch (e) {
+        setError((e as Error).message);
+      }
+    },
+    [course, user, onComplete],
   );
 
   const onUndo = useCallback(
@@ -180,6 +222,18 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   const frontier = frontierIndex(items, progress);
   const isLast = active === items.length - 1;
   const advance = () => setActive((i) => Math.min(i + 1, items.length - 1));
+  const attempt = progress?.quizAttempts[item.id] ?? null;
+  // A reading hands over its Proceed button once its end has been on screen.
+  const unread = item.kind === "reading" && !item.acknowledgement && readTo !== item.id;
+
+  const proceed = () => {
+    if (saving) return;
+    setSaving(true);
+    void onComplete(item).then(() => {
+      setSaving(false);
+      advance();
+    });
+  };
 
   return (
     <div className="lms-player-shell">
@@ -303,7 +357,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
 
         {/* ----------------------------- CONTENT ---------------------------- */}
         <main style={{ minWidth: 0, display: "flex", flexDirection: "column" }}>
-          <div className="lms-player-scroll">
+          <div className="lms-player-scroll" ref={scrollRef}>
           <div className="lms-player-col">
           <button type="button" className="lms-player-toggle" onClick={() => setMenuOpen((o) => !o)}>
             {menuOpen ? "Hide contents" : "Show contents"}
@@ -327,8 +381,10 @@ export default function CoursePlayer({ slug }: { slug: string }) {
             item={item}
             state={state}
             nextSession={nextSession}
-            attempt={progress?.quizAttempts[item.id] ?? null}
+            attempt={attempt}
             onComplete={onComplete}
+            onQuizSubmit={onQuizSubmit}
+            onReachEnd={setReadTo}
           />
           </div>
           </div>
@@ -356,21 +412,33 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                   Mark as not complete
                 </button>
                 <button type="button" onClick={advance} disabled={isLast} className="lp-btn-grad" style={{ ...FOOT_PRIMARY, opacity: isLast ? 0.45 : 1, cursor: isLast ? "default" : "pointer" }}>
-                  {isLast ? "Course complete" : "Go to next item →"}
+                  {isLast ? "Course complete" : "Proceed to next lesson →"}
                 </button>
               </>
             ) : item.acknowledgement ? (
               <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>Sign the acknowledgement above to continue.</span>
             ) : item.kind === "quiz" ? (
-              <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>Submit the quiz to continue.</span>
+              <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>
+                {attempt
+                  ? `Score ${passMark(attempt.total)} of ${attempt.total} or better to continue — retake the quiz above.`
+                  : "Submit the quiz to continue."}
+              </span>
+            ) : unread ? (
+              /* The button is withheld, not disabled: a reading is finished by
+                 reading it, and a greyed-out control invites clicking at it. */
+              <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>
+                Read to the end of this page to continue.
+              </span>
             ) : (
               <button
                 type="button"
-                onClick={() => { void onComplete(item).then(advance); }}
+                onClick={proceed}
+                disabled={saving}
                 className="lp-btn-grad"
-                style={FOOT_PRIMARY}
+                style={{ ...FOOT_PRIMARY, cursor: saving ? "wait" : "pointer", opacity: saving ? 0.8 : 1, display: "inline-flex", alignItems: "center", gap: 9 }}
               >
-                Mark complete &amp; go to next item →
+                {saving && <Spinner />}
+                {saving ? "Saving your progress…" : "Proceed to next lesson →"}
               </button>
             )}
           </div>
@@ -392,13 +460,15 @@ const KIND_LABEL: Record<CourseItem["kind"], string> = {
 const itemMeta = (it: CourseItem) => it.meta ?? `${KIND_LABEL[it.kind]} · ${it.minutes} min`;
 
 function ItemView({
-  item, state, nextSession, attempt, onComplete,
+  item, state, nextSession, attempt, onComplete, onQuizSubmit, onReachEnd,
 }: {
   item: CourseItem;
   state: ItemState;
   nextSession: string;
-  attempt: { score: number; total: number } | null;
-  onComplete: (item: CourseItem, attempt?: { score: number; total: number }) => void;
+  attempt: QuizAttempt | null;
+  onComplete: (item: CourseItem, attempt?: QuizAttempt) => void;
+  onQuizSubmit: (item: CourseItem, attempt: QuizAttempt) => void;
+  onReachEnd: (itemId: string) => void;
 }) {
   if (state === "scheduled") {
     return (
@@ -483,11 +553,11 @@ function ItemView({
               {item.questions.length} questions
             </div>
             <p style={{ font: `400 14px/1.7 ${SANS}`, color: "#5b6e82", margin: 0 }}>
-              The questions open once you reach this item. Your score is recorded for the team, but it never blocks you from continuing.
+              The questions open once you reach this item. You need {passMark(item.questions.length)} of {item.questions.length} right — 70% — to move on, and you can retake the quiz as often as you need.
             </p>
           </div>
         ) : (
-          <QuizView item={item} attempt={attempt} onSubmit={(a) => onComplete(item, a)} />
+          <QuizView item={item} attempt={attempt} onSubmit={(a) => onQuizSubmit(item, a)} />
         )
       )}
 
@@ -496,18 +566,51 @@ function ItemView({
           <Tick /> Completed
         </span>
       )}
+
+      <EndMarker id={item.id} onSee={onReachEnd} />
     </>
   );
 }
 
-/** Submitting completes the item whatever the score — the score is recorded,
- *  not used as a gate. */
+/**
+ * Reports when the end of the item's material has been on screen — what the
+ * Proceed button waits for on a reading.
+ *
+ * An observer rather than a scroll listener, because the reading column
+ * scrolls inside its own pane on desktop and with the window below 900px; the
+ * observer reports what the learner can see and cannot tell the difference.
+ * Material short enough to need no scrolling passes immediately, which is
+ * right: there was nothing left to read.
+ */
+function EndMarker({ id, onSee }: { id: string; onSee: (itemId: string) => void }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === "undefined") {
+      onSee(id);
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        onSee(id);
+        io.disconnect();
+      }
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [id, onSee]);
+  return <div ref={ref} aria-hidden style={{ height: 1 }} />;
+}
+
+/** 70% carries the item. Anything less is recorded and handed back with a
+ *  Retake — the score is a gate, and the learner can always try again. */
 function QuizView({
   item, attempt, onSubmit,
 }: {
   item: CourseItem;
-  attempt: { score: number; total: number } | null;
-  onSubmit: (a: { score: number; total: number }) => void;
+  attempt: QuizAttempt | null;
+  onSubmit: (a: QuizAttempt) => void;
 }) {
   const questions = item.questions ?? [];
   const [picked, setPicked] = useState<Record<number, number>>({});
@@ -517,13 +620,23 @@ function QuizView({
   const score = questions.reduce((n, q, i) => n + (picked[i] === q.answer ? 1 : 0), 0);
 
   if (attempt && !shown) {
+    const passed = quizPassed(attempt);
+    const need = passMark(attempt.total);
     return (
       <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, font: `700 13px ${SANS}`, color: "#136f6a", background: "rgba(47,196,188,.12)", border: "1px solid rgba(27,143,136,.35)", borderRadius: 999, padding: "10px 18px", marginBottom: 14 }}>
-          <Tick /> Submitted — {attempt.score}/{attempt.total}
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 8, font: `700 13px ${SANS}`,
+          color: passed ? "#136f6a" : "#a53f28",
+          background: passed ? "rgba(47,196,188,.12)" : "rgba(226,86,74,.08)",
+          border: `1px solid ${passed ? "rgba(27,143,136,.35)" : "rgba(226,86,74,.28)"}`,
+          borderRadius: 999, padding: "10px 18px", marginBottom: 14,
+        }}>
+          {passed ? <><Tick /> Passed — {attempt.score}/{attempt.total}</> : <>Not passed — {attempt.score}/{attempt.total}</>}
         </div>
         <p style={{ font: `400 14px/1.7 ${SANS}`, color: "#5b6e82", margin: "0 0 16px" }}>
-          Your score is recorded. You can retake this quiz; the most recent attempt is what the team sees.
+          {passed
+            ? `You needed ${need} of ${attempt.total} and you have it. Your score is recorded; you can retake the quiz, and the most recent attempt is what the team sees.`
+            : `The pass mark is ${need} of ${attempt.total} — 70%. Your attempt is recorded either way. Go back over the material and retake the quiz to carry on.`}
         </p>
         <button type="button" onClick={() => { setPicked({}); setShown(true); }} className="lp-btn-outline" style={{ cursor: "pointer", background: "#fff", border: "1.5px solid rgba(10,27,51,.28)", color: "#0a1b33", font: `700 13.5px ${SANS}`, padding: "12px 22px", borderRadius: 999 }}>
           Retake quiz
@@ -576,11 +689,11 @@ function QuizView({
       >
         Submit answers
       </button>
-      {answered < questions.length && (
-        <div style={{ font: `500 12px ${SANS}`, color: "#8296a9", marginTop: 10 }}>
-          Answer all {questions.length} questions to submit.
-        </div>
-      )}
+      <div style={{ font: `500 12px ${SANS}`, color: "#8296a9", marginTop: 10 }}>
+        {answered < questions.length
+          ? `Answer all ${questions.length} questions to submit.`
+          : `You need ${passMark(questions.length)} of ${questions.length} right — 70% — to pass.`}
+      </div>
     </div>
   );
 }
@@ -831,6 +944,19 @@ const FOOT_GHOST: React.CSSProperties = {
   borderRadius: 999,
   whiteSpace: "nowrap",
 };
+
+/** Shown while the item's completion is on its way to the database, so the
+ *  wait after Proceed reads as work rather than a dead button. */
+const Spinner = () => (
+  <span
+    aria-hidden
+    style={{
+      flex: "none", width: 15, height: 15, borderRadius: "50%",
+      border: "2px solid rgba(255,255,255,.4)", borderTopColor: "#fff",
+      animation: "spinSlow .7s linear infinite",
+    }}
+  />
+);
 
 /** An item that can be read ahead of turn but not completed from there. */
 const PeekIcon = () => (
