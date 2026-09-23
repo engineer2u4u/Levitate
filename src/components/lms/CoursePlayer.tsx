@@ -508,11 +508,13 @@ function ItemView({
       </div>
       <h2 style={{ font: `700 clamp(24px,2.6vw,32px)/1.2 ${SANS}`, color: "#0a1b33", margin: "0 0 24px", letterSpacing: "-.02em" }}>{item.title}</h2>
 
-      {item.kind === "video" && (
+      {/* A film, whether the item is one or merely carries one: a reading with
+          a videoId shows it above the text it belongs to. */}
+      {(item.kind === "video" || item.videoId) && (
         <div style={{ position: "relative", paddingTop: "56.25%", borderRadius: 16, overflow: "hidden", background: "#0a1b33", marginBottom: 26 }}>
           {item.videoId ? (
             <iframe
-              src={`https://www.youtube-nocookie.com/embed/${item.videoId}`}
+              src={`https://www.youtube-nocookie.com/embed/${item.videoId}${item.videoBare ? "?controls=0&modestbranding=1&rel=0&iv_load_policy=3" : ""}`}
               title={item.title}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

@@ -34,8 +34,13 @@ export type CourseItem = {
   meta?: string;
   /** Reading: paragraphs. A heading is a line that starts with "## ". */
   body?: string[];
-  /** Video: a YouTube id, plus the same body rendered underneath. */
+  /** A YouTube id. On a video item it is the item; on a reading it is a film
+   *  shown above the text, because some material is watched and read. */
   videoId?: string;
+  /** Hides the player's controls, for a film meant to be watched straight
+   *  through. YouTube still draws its own play button on the first frame —
+   *  only autoplay removes that, and a narrated film should not autoplay. */
+  videoBare?: boolean;
   questions?: QuizQuestion[];
   /**
    * Material the learner must agree to, not merely read. Renders a name field
