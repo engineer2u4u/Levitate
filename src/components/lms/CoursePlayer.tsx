@@ -1233,7 +1233,6 @@ function KitPage({
         name={who.name}
         org={who.org}
         completedOn={completedOn}
-        ready
         finished
       />
     </>

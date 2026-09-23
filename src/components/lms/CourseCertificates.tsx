@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import CertificatePlate from "@/components/site/CertificatePlate";
 import { CANVASES, certificateCards, type CertificateIssue } from "@/lib/certificateArt";
 import { downloadCertificatePdf, downloadCertificatePng, fileStem } from "@/lib/lms/certificateExport";
-import { issueCertificate, isRevoked, type Certificate } from "@/lib/lms/certificates";
+import { issueCertificate, isRevoked, type Certificate, type CertificateGap } from "@/lib/lms/certificates";
 import { courseBySlug } from "@/lib/lms/courses";
 
 const SANS = "'Plus Jakarta Sans',sans-serif";
@@ -23,21 +23,20 @@ const SANS = "'Plus Jakarta Sans',sans-serif";
  * verifiable by nobody.
  */
 export default function CourseCertificates({
-  slug, name, org, completedOn, ready, finished,
+  slug, name, org, completedOn, finished,
 }: {
   slug: string;
   name: string;
   org: string;
   /** "Sep 2026" — when the course was finished, for the preview. */
   completedOn: string;
-  /** False while the learner is only looking ahead at this item. */
-  ready: boolean;
   /** Every item done, so the register will accept an issue. */
   finished: boolean;
 }) {
   const course = courseBySlug(slug);
   const [issued, setIssued] = useState<Certificate | null>(null);
   const [note, setNote] = useState("");
+  const [gap, setGap] = useState<CertificateGap | null>(null);
   // Starts true where a request is about to go out, so the card says it is
   // checking from the first render rather than flickering through "preview".
   const [asking, setAsking] = useState(finished && Boolean(course?.certificate));
@@ -50,8 +49,12 @@ export default function CourseCertificates({
     void issueCertificate(slug, name)
       .then((res) => {
         if (!live) return;
-        if (res.ok) setIssued(res.certificate);
-        else setNote(res.message);
+        if (res.ok) {
+          setIssued(res.certificate);
+        } else {
+          setNote(res.message);
+          setGap(res.reason);
+        }
       })
       .finally(() => {
         if (live) setAsking(false);
@@ -64,6 +67,12 @@ export default function CourseCertificates({
   if (!course?.certificate) return null;
 
   const revoked = issued ? isRevoked(issued) : false;
+  // Finishing the course is what earns the certificate, and nobody has to
+  // issue it by hand: the number is asked for automatically, and a register
+  // that is not there yet holds nothing up — that copy simply carries no
+  // number until one exists. Only a learner who has not finished, or a
+  // certificate that has been withdrawn, has nothing to download.
+  const downloadable = finished && !revoked && gap !== "not-finished";
   // The register's snapshot wins over the account and the catalogue.
   const printedName = issued?.recipient_name || name;
   const printedCourse = issued?.course_title || course.certificate.name;
@@ -105,7 +114,7 @@ export default function CourseCertificates({
         </div>
       )}
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 18, alignItems: "start" }}>
         {cards.map((card) => (
           <CertificateCard
             key={card.title}
@@ -113,9 +122,8 @@ export default function CourseCertificates({
             caption={card.caption}
             issue={card.issue}
             name={printedName}
-            downloadable={Boolean(issued) && !revoked}
+            downloadable={downloadable}
             waiting={asking}
-            ready={ready}
           />
         ))}
       </div>
@@ -146,7 +154,7 @@ export default function CourseCertificates({
 }
 
 function CertificateCard({
-  title, caption, issue, name, downloadable, waiting, ready,
+  title, caption, issue, name, downloadable, waiting,
 }: {
   title: string;
   caption: string;
@@ -154,11 +162,9 @@ function CertificateCard({
   name: string;
   downloadable: boolean;
   waiting: boolean;
-  ready: boolean;
 }) {
   const holder = useRef<HTMLDivElement | null>(null);
   const plate = CANVASES[issue.template];
-  const portrait = plate.h > plate.w;
   const [busy, setBusy] = useState<"png" | "pdf" | null>(null);
   const [failed, setFailed] = useState("");
 
@@ -179,40 +185,39 @@ function CertificateCard({
   };
 
   return (
-    <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "22px 24px" }}>
-      <div style={{ font: `700 15px/1.4 ${SANS}`, color: "#0a1b33", marginBottom: 4 }}>{title}</div>
-      <div style={{ font: `400 13px/1.65 ${SANS}`, color: "#5b6e82", marginBottom: 16 }}>{caption}</div>
-
-      {/* Capped rather than run to the column's full width: three certificates
-          at 1200px each is a scroll, not a page. Portrait sits narrower so the
-          CPD certificate takes about the same room as the landscape pair. */}
-      <div
-        ref={holder}
-        style={{
-          width: "100%",
-          maxWidth: portrait ? 380 : 600,
-          borderRadius: 12,
-          overflow: "hidden",
-          border: "1px solid #eef2f6",
-          boxShadow: "0 10px 28px rgba(10,27,51,.10)",
-        }}
-      >
-        <CertificatePlate issue={issue} />
+    <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "18px 18px 20px", display: "flex", flexDirection: "column", height: "100%" }}>
+      {/* A band of fixed height with the plate centred in it, so a portrait
+          certificate and two landscape ones line up across the row instead of
+          each starting wherever its own proportions put it. */}
+      <div style={{ height: 200, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+        <div
+          ref={holder}
+          style={{
+            width: Math.round(200 * (plate.w / plate.h)),
+            maxWidth: "100%",
+            borderRadius: 10,
+            overflow: "hidden",
+            border: "1px solid #eef2f6",
+            boxShadow: "0 8px 22px rgba(10,27,51,.12)",
+          }}
+        >
+          <CertificatePlate issue={issue} />
+        </div>
       </div>
 
-      {!ready ? (
-        <div style={{ font: `600 12.5px ${SANS}`, color: "#8296a9", marginTop: 16 }}>
-          Your certificates open when you reach this item.
-        </div>
-      ) : downloadable ? (
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", marginTop: 16 }}>
-          <DownloadButton label="Download PDF" busy={busy === "pdf"} disabled={busy !== null} onClick={() => download("pdf")} primary />
-          <DownloadButton label="Download PNG" busy={busy === "png"} disabled={busy !== null} onClick={() => download("png")} />
+      <div style={{ font: `700 14px/1.4 ${SANS}`, color: "#0a1b33", marginBottom: 4 }}>{title}</div>
+      <div style={{ font: `400 12.5px/1.6 ${SANS}`, color: "#5b6e82", marginBottom: 14, flex: 1 }}>{caption}</div>
+
+      {downloadable ? (
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginTop: 14 }}>
+          <DownloadButton label="PDF" busy={busy === "pdf"} disabled={busy !== null} onClick={() => download("pdf")} primary />
+          <DownloadButton label="PNG" busy={busy === "png"} disabled={busy !== null} onClick={() => download("png")} />
+          {waiting && <Spin />}
         </div>
       ) : (
-        <div style={{ display: "flex", alignItems: "center", gap: 9, font: `600 12.5px ${SANS}`, color: "#8296a9", marginTop: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 9, font: `600 12px/1.6 ${SANS}`, color: "#8296a9", marginTop: 14 }}>
           {waiting && <Spin />}
-          {waiting ? "Checking the certificate register…" : "A preview. Downloads open once your certificate is issued."}
+          {waiting ? "Preparing your certificate…" : "Finish the course and this is yours to download."}
         </div>
       )}
 

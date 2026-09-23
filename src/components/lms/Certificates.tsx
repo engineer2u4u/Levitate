@@ -69,7 +69,6 @@ export default function Certificates() {
               name={user.name}
               org={user.org}
               completedOn=""
-              ready
               finished
             />
           </section>

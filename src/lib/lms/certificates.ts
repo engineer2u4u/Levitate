@@ -28,13 +28,17 @@ export type Certificate = {
 /**
  * Why there is no certificate to show.
  *
- * `pending` covers the states that are nobody's fault and will resolve on
- * their own — the course is not finished, or the register has not been
- * created yet — as against a real failure worth showing as an error.
+ * The reason matters, because two of these are not alike. "not-finished" is
+ * the learner's own state and the one thing that should hold a certificate
+ * back. "no-register" is ours — the register has not been created yet, or
+ * this build has no database — and holding someone's certificate for a gap at
+ * our end would be punishing them for our plumbing.
  */
+export type CertificateGap = "not-finished" | "no-register" | "failed";
+
 export type CertificateResult =
   | { ok: true; certificate: Certificate }
-  | { ok: false; pending: boolean; message: string };
+  | { ok: false; reason: CertificateGap; message: string };
 
 /** The register is not installed until its migration has been run. */
 const missingFunction = (code?: string, message?: string) =>
@@ -48,7 +52,7 @@ const missingFunction = (code?: string, message?: string) =>
  */
 export async function issueCertificate(courseSlug: string, name?: string): Promise<CertificateResult> {
   if (!supabaseConfigured) {
-    return { ok: false, pending: true, message: "Certificates are issued from the live site." };
+    return { ok: false, reason: "no-register", message: "Certificate numbers are issued from the live site." };
   }
   try {
     const supabase = await getClient();
@@ -59,21 +63,25 @@ export async function issueCertificate(courseSlug: string, name?: string): Promi
 
     if (error) {
       if (missingFunction(error.code, error.message)) {
-        return { ok: false, pending: true, message: "Certificate numbers are not being issued yet." };
+        return { ok: false, reason: "no-register", message: "Certificate numbers are not being issued yet." };
       }
       // A course whose lesson list is not set up cannot be checked for
       // completion, which is a gap at our end, not a refusal to the learner.
       if (/no lesson list/i.test(error.message)) {
-        return { ok: false, pending: true, message: "Certificates for this programme are issued by the office." };
+        return { ok: false, reason: "no-register", message: "Certificate numbers for this programme are issued by the office." };
       }
-      return { ok: false, pending: /not finished/i.test(error.message), message: error.message };
+      return {
+        ok: false,
+        reason: /not finished/i.test(error.message) ? "not-finished" : "failed",
+        message: error.message,
+      };
     }
 
     const row = (Array.isArray(data) ? data[0] : data) as Certificate | null;
-    if (!row) return { ok: false, pending: true, message: "No certificate has been issued yet." };
+    if (!row) return { ok: false, reason: "no-register", message: "No certificate has been issued yet." };
     return { ok: true, certificate: row };
   } catch (e) {
-    return { ok: false, pending: false, message: (e as Error).message };
+    return { ok: false, reason: "failed", message: (e as Error).message };
   }
 }
 
