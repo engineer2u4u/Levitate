@@ -216,7 +216,6 @@ export const POSH_CONTENT: CourseContent = {
           minutes: 8,
           meta: "Film & reading · 8 min",
           videoId: "iGLLFCVMX_0",
-          videoBare: true,
           body: [
             "Watch the film above — “Sexual Harassment At The Workplace In India | #MakeMyWorkplaceSafe” — and then read on.",
             "Every PoSH facilitator should be able to explain the lineage from memory: the assault on Bhanwari Devi, the petition that followed, the Vishaka Guidelines the Supreme Court laid down in 1997, and the sixteen years between those guidelines and the 2013 Act that replaced them.",

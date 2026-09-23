@@ -763,6 +763,12 @@ function FilmFrame({
     let cancelled = false;
     let player: YTPlayer | null = null;
     let timer: number | undefined;
+    // Which seconds of the film have actually been on. Counting seconds
+    // covered rather than the furthest point reached is what lets the learner
+    // seek freely without seeking past the requirement: dragging to the end
+    // marks one second, not the film.
+    const seen = new Set<number>();
+    let last = -1;
     const mount = document.createElement("div");
     mount.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
     host.appendChild(mount);
@@ -787,12 +793,21 @@ function FilmFrame({
               timer = window.setInterval(() => {
                 if (!player) return;
                 const length = player.getDuration();
-                if (length > 0) onProgress(itemId, player.getCurrentTime() / length);
+                if (length <= 0) return;
+                const now = Math.floor(player.getCurrentTime());
+                // Everything between the last tick and this one counts, so
+                // playing at double speed is not penalised; a jump bigger than
+                // a tick could reasonably cover is a seek, and credits only
+                // the second landed on.
+                const step = now - last;
+                if (last >= 0 && step > 0 && step <= 4) {
+                  for (let t = last + 1; t <= now; t += 1) seen.add(t);
+                } else {
+                  seen.add(now);
+                }
+                last = now;
+                onProgress(itemId, seen.size / Math.ceil(length));
               }, 1000);
-            },
-            onStateChange: (e: { data: number }) => {
-              // The last seconds are titles; ending it counts as watching it.
-              if (e.data === YT.PlayerState.ENDED) onProgress(itemId, 1);
             },
             onError: () => onUnavailable(itemId),
           },
