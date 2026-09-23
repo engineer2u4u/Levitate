@@ -34,6 +34,13 @@ export type CourseItem = {
   meta?: string;
   /** Reading: paragraphs. A heading is a line that starts with "## ". */
   body?: string[];
+  /** Puts the delegate feedback form under the body. The item completes when
+   *  the form is sent, the way an acknowledgement completes when signed. */
+  feedback?: boolean;
+  /** Renders the body's "- " lines as a checklist the learner can tick off
+   *  rather than as bullets. For material that is worked through against a
+   *  real committee or report, not simply read. */
+  checklist?: boolean;
   /** A YouTube id. On a video item it is the item; on a reading it is a film
    *  shown above the text, because some material is watched and read. */
   videoId?: string;

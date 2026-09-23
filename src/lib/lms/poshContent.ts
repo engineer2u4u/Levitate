@@ -378,6 +378,7 @@ export const POSH_CONTENT: CourseContent = {
           title: "Internal Committee Constitution & Governance",
           minutes: 15,
           meta: "Quick reference checklist · Module 7",
+          checklist: true,
           body: [
             "Use this to review whether an Internal Committee appears properly constituted, documented, visible and capable of functioning. Work through each item and note any action required.",
 
@@ -510,6 +511,7 @@ export const POSH_CONTENT: CourseContent = {
           title: "Inquiry Report Structure",
           minutes: 12,
           meta: "Quick checklist · Module 8",
+          checklist: true,
           body: [
             "Use this when reviewing or preparing the structure of an inquiry report. The report should reflect the actual process and evidence in the case; unnecessary personal information should not be added merely to complete a template.",
 
@@ -672,11 +674,9 @@ export const POSH_CONTENT: CourseContent = {
           title: "Delegate Feedback Form",
           minutes: 5,
           meta: "Feedback",
+          feedback: true,
           body: [
-            "Your feedback shapes the next cohort, so please give it honestly.",
-            "We ask you to rate five things from 1 (poor) to 5 (excellent): programme content, facilitator knowledge and delivery, practical examples and activities, relevance to your professional role, and the overall learning experience.",
-            "Then three questions in your own words: what was the most useful part of the programme, what could we improve, and how confident do you feel now — very confident, confident, or needing more practice.",
-            "The form is sent to you by email at the end of the programme.",
+            "Your feedback shapes the next cohort, so please give it honestly. It goes to the programme team, not to your organisation.",
           ],
         },
       ],

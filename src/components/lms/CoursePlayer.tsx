@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { contentBySlug, flatItems, totalMinutes, type CourseItem } from "@/lib/lms/courseContent";
 import {
@@ -428,6 +428,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
             state={state}
             nextSession={nextSession}
             attempt={attempt}
+            who={{ id: user.id, name: user.name, email: user.email }}
             onComplete={onComplete}
             onQuizSubmit={onQuizSubmit}
             onReachEnd={setReadTo}
@@ -463,6 +464,8 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                   {isLast ? "Course complete" : "Proceed to next lesson →"}
                 </button>
               </>
+            ) : item.feedback ? (
+              <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>Send your feedback above to continue.</span>
             ) : item.acknowledgement ? (
               <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>Sign the acknowledgement above to continue.</span>
             ) : item.kind === "quiz" ? (
@@ -512,14 +515,15 @@ const KIND_LABEL: Record<CourseItem["kind"], string> = {
 const itemMeta = (it: CourseItem) => it.meta ?? `${KIND_LABEL[it.kind]} · ${it.minutes} min`;
 
 function ItemView({
-  item, state, nextSession, attempt, onComplete, onQuizSubmit, onReachEnd, onVideoProgress, onVideoUnavailable,
+  item, state, nextSession, attempt, who, onComplete, onQuizSubmit, onReachEnd, onVideoProgress, onVideoUnavailable,
 }: {
   item: CourseItem;
   state: ItemState;
+  who: { id: string; name: string; email: string };
   nextSession: string;
   attempt: QuizAttempt | null;
   onComplete: (item: CourseItem, attempt?: QuizAttempt) => void;
-  onQuizSubmit: (item: CourseItem, attempt: QuizAttempt) => void;
+  onQuizSubmit: (item: CourseItem, attempt: QuizAttempt) => Promise<void>;
   onReachEnd: (itemId: string) => void;
   onVideoProgress: (itemId: string, fraction: number) => void;
   onVideoUnavailable: (itemId: string) => void;
@@ -598,8 +602,14 @@ function ItemView({
 
       {item.body && (
         <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px", marginBottom: 24 }}>
-          {item.body.map((para, i) => <Para key={i} text={para} />)}
+          {item.checklist
+            ? <Checklist key={item.id} item={item} userId={who.id} />
+            : item.body.map((para, i) => <Para key={i} text={para} />)}
         </div>
+      )}
+
+      {item.feedback && state !== "preview" && (
+        <FeedbackForm item={item} who={who} sent={state === "done"} onSent={onComplete} />
       )}
 
       {item.acknowledgement && state !== "preview" && (
@@ -809,37 +819,70 @@ function QuizView({
 }: {
   item: CourseItem;
   attempt: QuizAttempt | null;
-  onSubmit: (a: QuizAttempt) => void;
+  onSubmit: (a: QuizAttempt) => Promise<void> | void;
 }) {
   const questions = item.questions ?? [];
   const [picked, setPicked] = useState<Record<number, number>>({});
   const [shown, setShown] = useState(false);
+  const [marking, setMarking] = useState(false);
+  // The attempt just marked, held here so the result is the one that was sat.
+  // Reading it from the stored progress instead showed the previous score for
+  // as long as the write took, and a retake flashed the old mark first.
+  const [result, setResult] = useState<QuizAttempt | null>(null);
 
   const answered = Object.keys(picked).length;
   const score = questions.reduce((n, q, i) => n + (picked[i] === q.answer ? 1 : 0), 0);
 
-  if (attempt && !shown) {
-    const passed = quizPassed(attempt);
-    const need = passMark(attempt.total);
+  const verdict = result ?? attempt;
+  if (verdict && !shown) {
+    const passed = quizPassed(verdict);
+    const need = passMark(verdict.total);
+    const percent = verdict.total > 0 ? Math.round((verdict.score / verdict.total) * 100) : 0;
+    const ink = passed ? "#136f6a" : "#a53f28";
     return (
-      <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
-        <div style={{
-          display: "inline-flex", alignItems: "center", gap: 8, font: `700 13px ${SANS}`,
-          color: passed ? "#136f6a" : "#a53f28",
-          background: passed ? "rgba(47,196,188,.12)" : "rgba(226,86,74,.08)",
-          border: `1px solid ${passed ? "rgba(27,143,136,.35)" : "rgba(226,86,74,.28)"}`,
-          borderRadius: 999, padding: "10px 18px", marginBottom: 14,
-        }}>
-          {passed ? <><Tick /> Passed — {attempt.score}/{attempt.total}</> : <>Not passed — {attempt.score}/{attempt.total}</>}
+      <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 24, padding: "clamp(32px,4vw,56px) clamp(28px,4vw,60px)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "clamp(20px,3vw,40px)", flexWrap: "wrap" }}>
+          {/* The score is the answer to the only question the learner has,
+              so it is the biggest thing on the page rather than a footnote. */}
+          <div style={{
+            flex: "none", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            minWidth: 168, padding: "24px 30px", borderRadius: 20,
+            background: passed ? "rgba(47,196,188,.1)" : "rgba(226,86,74,.07)",
+            border: `2px solid ${passed ? "rgba(27,143,136,.32)" : "rgba(226,86,74,.26)"}`,
+          }}>
+            <div style={{ font: `800 clamp(38px,5vw,52px)/1 ${SANS}`, color: ink, letterSpacing: "-.02em" }}>
+              {verdict.score}<span style={{ font: `700 24px ${SANS}`, color: passed ? "rgba(19,111,106,.55)" : "rgba(165,63,40,.55)" }}>/{verdict.total}</span>
+            </div>
+            <div style={{ font: `700 13px ${SANS}`, color: ink, marginTop: 8 }}>{percent}%</div>
+          </div>
+
+          <div style={{ flex: 1, minWidth: 260 }}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 8, font: `800 14px ${SANS}`, color: ink,
+              background: passed ? "rgba(47,196,188,.12)" : "rgba(226,86,74,.08)",
+              border: `1px solid ${passed ? "rgba(27,143,136,.35)" : "rgba(226,86,74,.28)"}`,
+              borderRadius: 999, padding: "10px 20px", marginBottom: 14,
+            }}>
+              {passed ? <><Tick /> Passed</> : <>Not passed</>}
+            </div>
+            <h3 style={{ font: `700 clamp(20px,2.2vw,26px)/1.3 ${SANS}`, color: "#0a1b33", margin: "0 0 10px", letterSpacing: "-.01em" }}>
+              {passed ? "You have the pass mark." : `You need ${need} of ${verdict.total} to pass.`}
+            </h3>
+            <p style={{ font: `400 15px/1.75 ${SANS}`, color: "#5b6e82", margin: "0 0 22px", maxWidth: 560 }}>
+              {passed
+                ? `The pass mark was ${need} of ${verdict.total}. Your score is recorded; you can retake the quiz, and the most recent attempt is what the team sees.`
+                : `The pass mark is 70% of the questions, to the nearest whole question. Your attempt is recorded either way. Go back over the material and retake the quiz to carry on.`}
+            </p>
+            <button
+              type="button"
+              onClick={() => { setResult(null); setPicked({}); setShown(true); }}
+              className="lp-btn-outline"
+              style={{ cursor: "pointer", background: "#fff", border: "1.5px solid rgba(10,27,51,.28)", color: "#0a1b33", font: `700 14px ${SANS}`, padding: "14px 26px", borderRadius: 999 }}
+            >
+              Retake quiz
+            </button>
+          </div>
         </div>
-        <p style={{ font: `400 14px/1.7 ${SANS}`, color: "#5b6e82", margin: "0 0 16px" }}>
-          {passed
-            ? `The pass mark was ${need} of ${attempt.total} and you have it. Your score is recorded; you can retake the quiz, and the most recent attempt is what the team sees.`
-            : `The pass mark is ${need} of ${attempt.total} — 70%, to the nearest whole question. Your attempt is recorded either way. Go back over the material and retake the quiz to carry on.`}
-        </p>
-        <button type="button" onClick={() => { setPicked({}); setShown(true); }} className="lp-btn-outline" style={{ cursor: "pointer", background: "#fff", border: "1.5px solid rgba(10,27,51,.28)", color: "#0a1b33", font: `700 13.5px ${SANS}`, padding: "12px 22px", borderRadius: 999 }}>
-          Retake quiz
-        </button>
       </div>
     );
   }
@@ -860,13 +903,30 @@ function QuizView({
                   type="button"
                   onClick={() => setPicked((p) => ({ ...p, [qi]: oi }))}
                   style={{
+                    display: "flex", alignItems: "center", gap: 11,
                     textAlign: "left", cursor: "pointer", borderRadius: 12, padding: "12px 15px",
-                    border: `1.5px solid ${chosen ? "#1b8f88" : "#e3eaf0"}`,
-                    background: chosen ? "rgba(47,196,188,.08)" : "#f7fafc",
-                    font: `${chosen ? 700 : 500} 13.5px/1.5 ${SANS}`, color: "#0a1b33",
+                    border: `2px solid ${chosen ? "#1b8f88" : "#e3eaf0"}`,
+                    background: chosen ? "rgba(47,196,188,.16)" : "#f7fafc",
+                    boxShadow: chosen ? "0 2px 12px rgba(27,143,136,.18)" : "none",
+                    font: `${chosen ? 700 : 500} 13.5px/1.5 ${SANS}`,
+                    color: chosen ? "#0e5d59" : "#0a1b33",
+                    transition: "background .15s ease, border-color .15s ease",
                   }}
                 >
-                  {opt}
+                  {/* The answer someone picked has to be obvious at a glance,
+                      not a shade of the one they did not. */}
+                  <span
+                    aria-hidden
+                    style={{
+                      flex: "none", width: 18, height: 18, borderRadius: "50%",
+                      border: `2px solid ${chosen ? "#1b8f88" : "#c4d2de"}`,
+                      background: chosen ? "#1b8f88" : "#fff",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                    }}
+                  >
+                    {chosen && <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#fff" }} />}
+                  </span>
+                  <span style={{ flex: 1 }}>{opt}</span>
                 </button>
               );
             })}
@@ -876,19 +936,32 @@ function QuizView({
 
       <button
         type="button"
-        disabled={answered < questions.length}
+        disabled={answered < questions.length || marking}
         // Back to the verdict, not to the filled-in form: a retake has to say
         // whether it passed as plainly as the first attempt did.
-        onClick={() => { setShown(false); onSubmit({ score, total: questions.length }); }}
+        onClick={() => {
+          if (marking) return;
+          const sat = { score, total: questions.length };
+          setMarking(true);
+          // The verdict appears once the attempt is recorded, carrying the
+          // score just sat — never the one before it.
+          void Promise.resolve(onSubmit(sat)).finally(() => {
+            setResult(sat);
+            setShown(false);
+            setMarking(false);
+          });
+        }}
         className="lp-btn-grad"
         style={{
-          cursor: answered < questions.length ? "not-allowed" : "pointer", border: "none",
+          display: "inline-flex", alignItems: "center", gap: 9,
+          cursor: answered < questions.length ? "not-allowed" : marking ? "wait" : "pointer", border: "none",
           background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff",
           font: `700 14px ${SANS}`, padding: "14px 28px", borderRadius: 999,
-          opacity: answered < questions.length ? 0.5 : 1,
+          opacity: answered < questions.length ? 0.5 : marking ? 0.8 : 1,
         }}
       >
-        Submit answers
+        {marking && <Spinner />}
+        {marking ? "Marking your answers…" : "Submit answers"}
       </button>
       <div style={{ font: `500 12px ${SANS}`, color: "#8296a9", marginTop: 10 }}>
         {answered < questions.length
@@ -929,6 +1002,339 @@ function KitBanner({ course }: { course: { readingKit: { title: string; meta: st
  * and **bold** inside either — enough to lay out a handout without pulling in
  * a markdown renderer for six characters of syntax.
  */
+/* ---------------------------------------------------------- feedback */
+
+const RATED = [
+  "Programme content",
+  "Facilitator knowledge and delivery",
+  "Practical examples and activities",
+  "Relevance to my professional role",
+  "Overall learning experience",
+] as const;
+
+const SCALE = ["Poor", "Fair", "Good", "Very good", "Excellent"];
+const CONFIDENCE = ["Very confident", "Confident", "Need more practice"];
+
+/**
+ * The delegate feedback form.
+ *
+ * It goes out the same way a signed acknowledgement does — an email to the
+ * office, nothing stored as an enquiry, since this is a delegate on a
+ * programme rather than someone asking about one. Sending it completes the
+ * item, so the footer holds the course here until it is in.
+ */
+function FeedbackForm({
+  item, who, sent, onSent,
+}: {
+  item: CourseItem;
+  who: { id: string; name: string; email: string };
+  sent: boolean;
+  onSent: (item: CourseItem) => void;
+}) {
+  const [ratings, setRatings] = useState<Record<string, number>>({});
+  const [useful, setUseful] = useState("");
+  const [improve, setImprove] = useState("");
+  const [confidence, setConfidence] = useState("");
+  const [recommend, setRecommend] = useState("");
+  const [comments, setComments] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState("");
+
+  const rated = RATED.every((area) => ratings[area]);
+  const ready = rated && confidence !== "" && recommend !== "";
+
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (busy || !ready) return;
+    setBusy(true);
+    setFailed("");
+    const message = [
+      "Delegate Feedback — PoSH Train-the-Trainer Certification Programme",
+      "",
+      ...RATED.map((area) => `${area}: ${ratings[area]}/5 (${SCALE[ratings[area] - 1]})`),
+      "",
+      `Most useful part: ${useful.trim() || "—"}`,
+      `What could we improve: ${improve.trim() || "—"}`,
+      `Confidence after the programme: ${confidence}`,
+      `Would recommend: ${recommend}`,
+      `Additional comments: ${comments.trim() || "—"}`,
+    ].join("\n");
+
+    const res = await submitEnquiry(
+      e.currentTarget,
+      {
+        intent: "Delegate feedback — PoSH TTT",
+        message,
+        source: typeof window !== "undefined" ? window.location.pathname : "",
+      },
+      { store: false },
+    );
+    setBusy(false);
+    if (res.ok) onSent(item);
+    else setFailed(res.error || "Your feedback could not be sent. Please try again.");
+  };
+
+  if (sent) {
+    return (
+      <div style={{ background: "rgba(47,196,188,.09)", border: "1px solid rgba(27,143,136,.3)", borderRadius: 18, padding: "26px 28px", marginBottom: 24 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+          <Tick />
+          <span style={{ font: `700 15px ${SANS}`, color: "#136f6a" }}>Thank you — your feedback is in</span>
+        </div>
+        <div style={{ font: `500 13.5px/1.7 ${SANS}`, color: "#3d5064" }}>
+          It goes straight to the programme team and shapes the next cohort.
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={submit} style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "clamp(26px,3vw,36px) clamp(24px,3vw,38px)", marginBottom: 24 }}>
+      {/* The office needs to know whose feedback this is; the learner has
+          already told us, so it is carried rather than asked for again. */}
+      <input type="hidden" name="name" value={who.name} readOnly />
+      <input type="hidden" name="email" value={who.email} readOnly />
+
+      <h3 style={{ font: `700 19px ${SANS}`, color: "#0a1b33", margin: "0 0 4px" }}>Delegate Feedback Form</h3>
+      <p style={{ font: `500 13px/1.7 ${SANS}`, color: "#8296a9", margin: "0 0 22px" }}>
+        PoSH Train-the-Trainer Certification Programme · 1 poor to 5 excellent
+      </p>
+
+      {RATED.map((area) => (
+        <div key={area} style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", padding: "12px 0", borderTop: "1px solid #eef2f6" }}>
+          <div style={{ flex: "1 1 240px", font: `600 14px/1.5 ${SANS}`, color: "#0a1b33" }}>{area}</div>
+          <div role="radiogroup" aria-label={area} style={{ display: "flex", gap: 8 }}>
+            {[1, 2, 3, 4, 5].map((n) => {
+              const on = ratings[area] === n;
+              return (
+                <button
+                  key={n}
+                  type="button"
+                  role="radio"
+                  aria-checked={on}
+                  title={SCALE[n - 1]}
+                  onClick={() => setRatings((r) => ({ ...r, [area]: n }))}
+                  style={{
+                    width: 42, height: 42, borderRadius: 12, cursor: "pointer",
+                    border: `2px solid ${on ? "#1b8f88" : "#e3eaf0"}`,
+                    background: on ? "rgba(47,196,188,.16)" : "#f7fafc",
+                    boxShadow: on ? "0 2px 10px rgba(27,143,136,.18)" : "none",
+                    font: `${on ? 800 : 600} 14.5px ${SANS}`, color: on ? "#0e5d59" : "#5b6e82",
+                  }}
+                >
+                  {n}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+
+      <FeedbackText label="What was the most useful part of the programme?" value={useful} onChange={setUseful} />
+      <FeedbackText label="What could we improve?" value={improve} onChange={setImprove} />
+
+      <FeedbackChoice
+        label="How confident do you feel after completing the programme?"
+        options={CONFIDENCE}
+        value={confidence}
+        onChange={setConfidence}
+      />
+      <FeedbackChoice
+        label="Would you recommend this programme?"
+        options={["Yes", "No"]}
+        value={recommend}
+        onChange={setRecommend}
+      />
+      <FeedbackText label="Additional comments" value={comments} onChange={setComments} />
+
+      {failed && (
+        <div role="alert" style={{ font: `600 12.5px/1.6 ${SANS}`, color: "#a53f28", background: "rgba(226,86,74,.08)", border: "1px solid rgba(226,86,74,.28)", borderRadius: 12, padding: "12px 14px", margin: "18px 0 0" }}>
+          {failed}
+        </div>
+      )}
+
+      <button
+        type="submit"
+        disabled={!ready || busy}
+        className="lp-btn-grad"
+        style={{
+          display: "inline-flex", alignItems: "center", gap: 9, marginTop: 24,
+          cursor: !ready ? "not-allowed" : busy ? "wait" : "pointer", border: "none",
+          background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff",
+          font: `700 14px ${SANS}`, padding: "14px 28px", borderRadius: 999,
+          opacity: !ready ? 0.5 : busy ? 0.8 : 1,
+        }}
+      >
+        {busy && <Spinner />}
+        {busy ? "Sending your feedback…" : "Send feedback"}
+      </button>
+      {!ready && (
+        <div style={{ font: `500 12px ${SANS}`, color: "#8296a9", marginTop: 10 }}>
+          Rate all five areas and answer the two choice questions to send.
+        </div>
+      )}
+    </form>
+  );
+}
+
+function FeedbackText({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+  return (
+    <label style={{ display: "block", marginTop: 22 }}>
+      <span style={{ display: "block", font: `600 14px/1.5 ${SANS}`, color: "#0a1b33", marginBottom: 8 }}>{label}</span>
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        rows={3}
+        style={{ width: "100%", resize: "vertical", borderRadius: 12, border: "1.5px solid #e3eaf0", background: "#f7fafc", padding: "12px 14px", font: `400 14px/1.6 ${SANS}`, color: "#0a1b33" }}
+      />
+    </label>
+  );
+}
+
+function FeedbackChoice({
+  label, options, value, onChange,
+}: {
+  label: string;
+  options: string[];
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div style={{ marginTop: 22 }}>
+      <div style={{ font: `600 14px/1.5 ${SANS}`, color: "#0a1b33", marginBottom: 10 }}>{label}</div>
+      <div role="radiogroup" aria-label={label} style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+        {options.map((opt) => {
+          const on = value === opt;
+          return (
+            <button
+              key={opt}
+              type="button"
+              role="radio"
+              aria-checked={on}
+              onClick={() => onChange(opt)}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 9, cursor: "pointer",
+                borderRadius: 999, padding: "11px 18px",
+                border: `2px solid ${on ? "#1b8f88" : "#e3eaf0"}`,
+                background: on ? "rgba(47,196,188,.16)" : "#f7fafc",
+                boxShadow: on ? "0 2px 10px rgba(27,143,136,.18)" : "none",
+                font: `${on ? 700 : 500} 13.5px ${SANS}`, color: on ? "#0e5d59" : "#0a1b33",
+              }}
+            >
+              <span aria-hidden style={{ width: 16, height: 16, borderRadius: "50%", border: `2px solid ${on ? "#1b8f88" : "#c4d2de"}`, background: on ? "#1b8f88" : "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {on && <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#fff" }} />}
+              </span>
+              {opt}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* Ticks are held in localStorage and read through a store rather than copied
+   into state by an effect — the same shape the enrolment list uses, and the
+   only way to read browser storage without a first render that disagrees with
+   the prerendered HTML. */
+const NO_TICKS: Record<number, boolean> = {};
+const tickCache = new Map<string, Record<number, boolean>>();
+const tickListeners = new Set<() => void>();
+
+function readTicks(key: string): Record<number, boolean> {
+  const hit = tickCache.get(key);
+  if (hit) return hit;
+  let parsed = NO_TICKS;
+  try {
+    const raw = window.localStorage.getItem(key);
+    if (raw) parsed = JSON.parse(raw) as Record<number, boolean>;
+  } catch {
+    parsed = NO_TICKS;
+  }
+  // Cached so the snapshot is the same object between writes; a fresh one
+  // every read would tell React the store had changed, forever.
+  tickCache.set(key, parsed);
+  return parsed;
+}
+
+function writeTicks(key: string, next: Record<number, boolean>) {
+  tickCache.set(key, next);
+  try {
+    window.localStorage.setItem(key, JSON.stringify(next));
+  } catch {
+    /* quota or private mode — the ticks will not survive a reload */
+  }
+  tickListeners.forEach((l) => l());
+}
+
+const subscribeTicks = (cb: () => void) => {
+  tickListeners.add(cb);
+  return () => {
+    tickListeners.delete(cb);
+  };
+};
+
+/**
+ * A body rendered as a checklist: every "- " line becomes something to tick.
+ *
+ * These items are worked through against a real committee or a real report
+ * rather than read, and a facilitator halfway down a forty-line list needs to
+ * see where they got to. The ticks are a working aid, not progress: they stay
+ * in this browser, they are not sent anywhere, and they do not gate anything.
+ */
+function Checklist({ item, userId }: { item: CourseItem; userId: string }) {
+  const key = `lvt.lms.checklist.${userId}.${item.id}`;
+  const ticked = useSyncExternalStore(
+    subscribeTicks,
+    useCallback(() => readTicks(key), [key]),
+    // The prerendered HTML has no ticks in it, and neither must the first
+    // client render, or the two disagree.
+    useCallback(() => NO_TICKS, []),
+  );
+  const write = (next: Record<number, boolean>) => writeTicks(key, next);
+
+  const lines = item.body ?? [];
+  const boxes = lines.filter((l) => l.startsWith("- ")).length;
+  const done = Object.values(ticked).filter(Boolean).length;
+
+  return (
+    <>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 18 }}>
+        <span style={{ font: `700 12px ${SANS}`, color: "#1b8f88", background: "rgba(47,196,188,.1)", border: "1px solid rgba(27,143,136,.25)", borderRadius: 999, padding: "7px 14px" }}>
+          {done} of {boxes} checked
+        </span>
+        {done > 0 && (
+          <button type="button" onClick={() => write({})} style={{ cursor: "pointer", border: "none", background: "transparent", font: `600 12px ${SANS}`, color: "#8296a9", padding: 0 }}>
+            Clear all
+          </button>
+        )}
+        <span style={{ font: `500 11.5px ${SANS}`, color: "#a9b8c6" }}>Saved in this browser · not part of your progress</span>
+      </div>
+
+      {lines.map((text, i) =>
+        text.startsWith("- ") ? (
+          <label
+            key={i}
+            style={{ display: "flex", gap: 11, alignItems: "flex-start", margin: "0 0 9px", cursor: "pointer" }}
+          >
+            <input
+              type="checkbox"
+              checked={ticked[i] === true}
+              onChange={(e) => write({ ...ticked, [i]: e.target.checked })}
+              style={{ flex: "none", width: 16, height: 16, marginTop: 5, accentColor: "#1b8f88", cursor: "pointer" }}
+            />
+            <span style={{ font: `400 14.5px/1.75 ${SANS}`, color: ticked[i] ? "#a9b8c6" : "#5b6e82", textDecoration: ticked[i] ? "line-through" : "none" }}>
+              {bold(text.slice(2))}
+            </span>
+          </label>
+        ) : (
+          <Para key={i} text={text} />
+        ),
+      )}
+    </>
+  );
+}
+
 function Para({ text }: { text: string }) {
   if (text.startsWith("## "))
     return <h3 style={{ font: `700 17px ${SANS}`, color: "#0a1b33", margin: "26px 0 12px" }}>{bold(text.slice(3))}</h3>;
