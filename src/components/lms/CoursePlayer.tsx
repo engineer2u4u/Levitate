@@ -24,6 +24,8 @@ import { courseBySlug } from "@/lib/lms/courses";
 import { moduleGate, useCourseAccess } from "@/lib/lms/access";
 import { supabaseConfigured } from "@/lib/lms/supabase";
 import { submitEnquiry } from "@/lib/submitEnquiry";
+import { zipFiles } from "@/lib/lms/zip";
+import { fileStem } from "@/lib/lms/certificateExport";
 import CourseCertificates from "./CourseCertificates";
 
 const SANS = "'Plus Jakarta Sans',sans-serif";
@@ -1100,6 +1102,84 @@ function QuizView({
  * top of material the learner was still working through. They live here
  * instead, at the end, where someone who has finished comes to collect.
  */
+/**
+ * The whole kit as one archive.
+ *
+ * Built here rather than on the server because the site is a static export:
+ * the files are already public, so fetching them back and zipping them in the
+ * browser needs nothing the site does not already serve.
+ */
+function KitDownload({ course }: { course: CourseContent }) {
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState("");
+
+  const files = course.readingKit.filter((f) => f.href);
+
+  const download = async () => {
+    if (busy || !files.length) return;
+    setBusy(true);
+    setFailed("");
+    try {
+      const entries = await Promise.all(
+        files.map(async (file) => {
+          const res = await fetch(file.href as string);
+          if (!res.ok) throw new Error(`${file.title} could not be fetched.`);
+          const data = new Uint8Array(await res.arrayBuffer());
+          // Named for the reading, not for the path it happens to live at.
+          const ext = (file.href as string).split(".").pop() ?? "pdf";
+          return { name: `${fileStem(file.title)}.${ext}`, data };
+        }),
+      );
+      const blob = zipFiles(entries);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${fileStem(course.title, "reading kit")}.zip`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 10_000);
+    } catch (e) {
+      setFailed((e as Error).message || "The reading kit could not be prepared.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (!files.length) return null;
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={download}
+        disabled={busy}
+        style={{
+          display: "inline-flex", alignItems: "center", gap: 10,
+          cursor: busy ? "wait" : "pointer", border: "none",
+          background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff",
+          font: `700 14px ${SANS}`, padding: "14px 26px", borderRadius: 999,
+          opacity: busy ? 0.8 : 1,
+        }}
+      >
+        {busy ? (
+          <span aria-hidden style={{ flex: "none", width: 15, height: 15, borderRadius: "50%", border: "2px solid rgba(255,255,255,.4)", borderTopColor: "#fff", animation: "spinSlow .7s linear infinite" }} />
+        ) : (
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M12 3v12" /><path d="M7 11l5 5 5-5" /><path d="M4 20h16" />
+          </svg>
+        )}
+        {busy ? "Preparing your kit…" : `Download all ${files.length} files (ZIP)`}
+      </button>
+      {failed && (
+        <div role="alert" style={{ font: `600 12px/1.6 ${SANS}`, color: "#ffd9d2", background: "rgba(226,86,74,.18)", border: "1px solid rgba(226,86,74,.4)", borderRadius: 10, padding: "10px 12px", marginTop: 12 }}>
+          {failed}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function KitPage({
   course, slug, who, completedOn,
 }: {
@@ -1117,32 +1197,28 @@ function KitPage({
           Every item is finished. These materials are yours to keep — download them now or come back for them whenever
           you need them.
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }} className="site-grid-2">
-          {course.readingKit.map((file) => {
-            const inside = (
-              <>
-                <span aria-hidden style={{ flex: "none", width: 28, height: 28, borderRadius: 8, background: "rgba(127,227,220,.16)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7fe3dc" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12" /><path d="M7 12l5 5 5-5" /><path d="M4 20h16" /></svg>
-                </span>
-                <span>
-                  <span style={{ display: "block", font: `700 12.5px ${SANS}`, color: "#fff" }}>{file.title}</span>
-                  <span style={{ display: "block", font: `500 11px ${SANS}`, color: "rgba(255,255,255,.6)" }}>{file.meta}</span>
-                </span>
-              </>
-            );
-            const style = {
-              display: "flex", alignItems: "center", gap: 11,
-              background: "rgba(255,255,255,.08)", border: "1px solid rgba(127,227,220,.3)",
-              borderRadius: 12, padding: "12px 14px", textDecoration: "none",
-            } as const;
-            // A file with nowhere to download from is listed, not linked —
-            // better than a link that goes nowhere.
-            return file.href ? (
-              <a key={file.title} href={file.href} download style={style}>{inside}</a>
-            ) : (
-              <div key={file.title} style={style}>{inside}</div>
-            );
-          })}
+        <KitDownload course={course} />
+
+        {/* A contents page for the archive, not seven downloads. */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 22 }} className="site-grid-2">
+          {course.readingKit.map((file, i) => (
+            <div
+              key={file.title}
+              style={{
+                display: "flex", alignItems: "center", gap: 11,
+                background: "rgba(255,255,255,.06)", border: "1px solid rgba(127,227,220,.22)",
+                borderRadius: 12, padding: "12px 14px",
+              }}
+            >
+              <span aria-hidden style={{ flex: "none", width: 26, height: 26, borderRadius: 8, background: "rgba(127,227,220,.14)", display: "flex", alignItems: "center", justifyContent: "center", font: `800 10px ${SANS}`, color: "#7fe3dc" }}>
+                {i + 1}
+              </span>
+              <span>
+                <span style={{ display: "block", font: `700 12.5px ${SANS}`, color: "#fff" }}>{file.title}</span>
+                <span style={{ display: "block", font: `500 11px ${SANS}`, color: "rgba(255,255,255,.6)" }}>{file.meta}</span>
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 

@@ -680,27 +680,6 @@ export const POSH_CONTENT: CourseContent = {
         },
       ],
     },
-
-    /* ================================================================== */
-    {
-      id: "certificate",
-      title: "Your Certificate",
-      summary: "What you receive, and what it takes to receive it.",
-      items: [
-        {
-          id: "p-certificate",
-          kind: "reading",
-          title: "Your certificate",
-          minutes: 5,
-          meta: "Completion",
-          body: [
-            "You receive three certificates: the Levitate PeopleSoft Certificate of Training Completion, a SHRM Certificate of Completion showing the Professional Development Credits earned toward SHRM-CP® and SHRM-SCP® recertification, and a CPD certificate issued under The CPD Certification Service.",
-            "Certification follows demonstrated learning rather than attendance alone — the assessment and the facilitation practice are what it rests on.",
-            "Finish the course below and your certificates are issued, made out in your name and ready to download as a PDF or a PNG, alongside your reading kit.",
-          ],
-        },
-      ],
-    },
   ],
 
   /* The files still exist, as a take-away rather than as a lesson. */
