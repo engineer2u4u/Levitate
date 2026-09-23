@@ -17,13 +17,17 @@ import { getClient, supabaseConfigured } from "./supabase";
 export type QuizAttempt = { score: number; total: number };
 
 /**
- * Every quiz is held to the same pass mark: 70%, rounded up, so a 10-question
- * quiz needs 7 and a 6-question quiz needs 5. Kept here rather than in the
- * screen because both the player and anything that reports on attempts have to
- * agree on what a pass is.
+ * Every quiz is held to the same pass mark: 70% of its questions, to the
+ * nearest whole question — 2 of 3, 3 of 4, 4 of 5, 14 of 20.
+ *
+ * Nearest rather than rounded up, because most of these quizzes are short and
+ * rounding up quietly raises the bar on exactly those: a 3-question check
+ * would demand 100% and a 4-question one 75%, so "70%" would only mean 70% on
+ * the 20-question final. Kept here rather than in the screen because the
+ * player and anything that reports on attempts have to agree on what a pass is.
  */
 export const QUIZ_PASS_RATIO = 0.7;
-export const passMark = (total: number) => Math.ceil(total * QUIZ_PASS_RATIO);
+export const passMark = (total: number) => Math.round(total * QUIZ_PASS_RATIO);
 export const quizPassed = (a: QuizAttempt | null | undefined) =>
   Boolean(a && a.total > 0 && a.score >= passMark(a.total));
 

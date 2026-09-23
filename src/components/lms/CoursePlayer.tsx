@@ -553,7 +553,7 @@ function ItemView({
               {item.questions.length} questions
             </div>
             <p style={{ font: `400 14px/1.7 ${SANS}`, color: "#5b6e82", margin: 0 }}>
-              The questions open once you reach this item. You need {passMark(item.questions.length)} of {item.questions.length} right — 70% — to move on, and you can retake the quiz as often as you need.
+              The questions open once you reach this item. You need {passMark(item.questions.length)} of {item.questions.length} right to move on — 70%, to the nearest whole question — and you can retake the quiz as often as you need.
             </p>
           </div>
         ) : (
@@ -635,8 +635,8 @@ function QuizView({
         </div>
         <p style={{ font: `400 14px/1.7 ${SANS}`, color: "#5b6e82", margin: "0 0 16px" }}>
           {passed
-            ? `You needed ${need} of ${attempt.total} and you have it. Your score is recorded; you can retake the quiz, and the most recent attempt is what the team sees.`
-            : `The pass mark is ${need} of ${attempt.total} — 70%. Your attempt is recorded either way. Go back over the material and retake the quiz to carry on.`}
+            ? `The pass mark was ${need} of ${attempt.total} and you have it. Your score is recorded; you can retake the quiz, and the most recent attempt is what the team sees.`
+            : `The pass mark is ${need} of ${attempt.total} — 70%, to the nearest whole question. Your attempt is recorded either way. Go back over the material and retake the quiz to carry on.`}
         </p>
         <button type="button" onClick={() => { setPicked({}); setShown(true); }} className="lp-btn-outline" style={{ cursor: "pointer", background: "#fff", border: "1.5px solid rgba(10,27,51,.28)", color: "#0a1b33", font: `700 13.5px ${SANS}`, padding: "12px 22px", borderRadius: 999 }}>
           Retake quiz
@@ -678,7 +678,9 @@ function QuizView({
       <button
         type="button"
         disabled={answered < questions.length}
-        onClick={() => onSubmit({ score, total: questions.length })}
+        // Back to the verdict, not to the filled-in form: a retake has to say
+        // whether it passed as plainly as the first attempt did.
+        onClick={() => { setShown(false); onSubmit({ score, total: questions.length }); }}
         className="lp-btn-grad"
         style={{
           cursor: answered < questions.length ? "not-allowed" : "pointer", border: "none",
@@ -692,7 +694,7 @@ function QuizView({
       <div style={{ font: `500 12px ${SANS}`, color: "#8296a9", marginTop: 10 }}>
         {answered < questions.length
           ? `Answer all ${questions.length} questions to submit.`
-          : `You need ${passMark(questions.length)} of ${questions.length} right — 70% — to pass.`}
+          : `You need ${passMark(questions.length)} of ${questions.length} right to pass.`}
       </div>
     </div>
   );

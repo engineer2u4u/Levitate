@@ -93,7 +93,7 @@ export const DEMO_COURSE: CourseContent = {
             "This is a demo course. It exists so the learning journey can be walked end to end — every item kind, the unlock rule, progress tracking and the reading kit — without depending on the real programme content.",
             "## How this works",
             "Items unlock one at a time. The next item opens only once you have finished the one before it, and that applies across modules too: the first item of Module 2 stays locked until the last item of Module 1 is done.",
-            "A reading is finished by reading it: the Proceed button appears once you reach the end of the page. A video is finished by proceeding past it. A quiz is finished by passing it — 70% or better — and every attempt is recorded and shown to the team, so a lower score sends you back over the material rather than on.",
+            "A reading is finished by reading it: the Proceed button appears once you reach the end of the page. A video is finished by proceeding past it. A quiz is finished by passing it — each one states its pass mark, 70% of its questions — and every attempt is recorded and shown to the team, so a lower score sends you back over the material rather than on.",
             "## What you get at the end",
             "Finishing every item releases the reading kit, a set of take-away materials that stays available afterwards.",
           ],
@@ -128,13 +128,13 @@ export const DEMO_COURSE: CourseContent = {
             {
               q: "What completes a quiz item?",
               options: [
-                "Scoring 70% or better",
+                "Reaching the pass mark shown under the questions",
                 "Submitting it, whatever the score",
                 "Opening it",
                 "Nothing — quizzes are optional",
               ],
               answer: 0,
-              explanation: "The pass mark is 70%. Every attempt is recorded for the team; a score below the mark leaves the item open so you can retake it.",
+              explanation: "The pass mark is 70% of the questions, to the nearest whole question, and each quiz states its own. Every attempt is recorded for the team; a score below the mark leaves the item open so you can retake it.",
             },
             {
               q: "When is the reading kit released?",
