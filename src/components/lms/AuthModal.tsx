@@ -43,6 +43,10 @@ export default function AuthModal({ authKind, initialMode = "signin", reason, on
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  // A sign-up pauses here: the name typed above is the name that will be
+  // printed on a certificate and snapshotted the moment one is issued, and it
+  // is far easier to read it back now than to have it reissued later.
+  const [confirming, setConfirming] = useState(false);
 
   // Escape closes, and the modal owns focus while it is up.
   useEffect(() => {
@@ -61,6 +65,15 @@ export default function AuthModal({ authKind, initialMode = "signin", reason, on
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (busy) return;
+    if (mode === "signup" && !confirming) {
+      if (!name.trim()) {
+        setError("Please enter your name.");
+        return;
+      }
+      setError("");
+      setConfirming(true);
+      return;
+    }
     setBusy(true);
     setError("");
     const res =
@@ -106,7 +119,7 @@ export default function AuthModal({ authKind, initialMode = "signin", reason, on
             <button
               key={m}
               type="button"
-              onClick={() => { setMode(m); setError(""); }}
+              onClick={() => { setMode(m); setError(""); setConfirming(false); }}
               style={{ flex: 1, textAlign: "center", cursor: "pointer", border: "none", font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: mode === m ? "#fff" : "#5b6e82", background: mode === m ? "linear-gradient(120deg,#2fc4bc,#2f7fd6)" : "transparent", borderRadius: 999, padding: "10px 12px" }}
             >
               {m === "signin" ? "Sign in" : "Sign up"}
@@ -119,7 +132,10 @@ export default function AuthModal({ authKind, initialMode = "signin", reason, on
             <>
               <div>
                 <div style={label}>Full name</div>
-                <input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder="Your name" style={input} />
+                <input value={name} onChange={(e) => { setName(e.target.value); setConfirming(false); }} autoComplete="name" placeholder="As it should appear on your certificate" style={input} />
+                <div style={{ font: "500 11.5px/1.55 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 6 }}>
+                  This is the name that will be printed on your certificate.
+                </div>
               </div>
               <div>
                 <div style={label}>Organisation</div>
@@ -143,6 +159,28 @@ export default function AuthModal({ authKind, initialMode = "signin", reason, on
             />
           </div>
 
+          {mode === "signup" && confirming && (
+            <div style={{ background: "#f7fafc", border: "1.5px solid rgba(27,143,136,.32)", borderRadius: 14, padding: "16px 18px", marginTop: 4 }}>
+              <div style={{ font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 8 }}>
+                Check your certificate name
+              </div>
+              <div style={{ font: "700 20px/1.35 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 8, wordBreak: "break-word" }}>
+                {name.trim()}
+              </div>
+              <div style={{ font: "500 12px/1.65 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
+                Your certificates will be printed exactly like this, and the name is fixed to them the moment they are
+                issued. Correcting it afterwards means the office withdrawing the certificate and issuing it again.
+              </div>
+              <button
+                type="button"
+                onClick={() => setConfirming(false)}
+                style={{ cursor: "pointer", border: "none", background: "transparent", padding: 0, marginTop: 10, font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88" }}
+              >
+                Change the name
+              </button>
+            </div>
+          )}
+
           {error && (
             <div role="alert" style={{ font: "600 12px/1.5 'Plus Jakarta Sans',sans-serif", color: "#a53f28", background: "rgba(226,86,74,.08)", border: "1px solid rgba(226,86,74,.28)", borderRadius: 10, padding: "10px 12px" }}>
               {error}
@@ -155,7 +193,13 @@ export default function AuthModal({ authKind, initialMode = "signin", reason, on
             className="lp-btn-grad"
             style={{ cursor: busy ? "wait" : "pointer", border: "none", textAlign: "center", marginTop: 7, background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "14px 20px", borderRadius: 999, opacity: busy ? 0.75 : 1 }}
           >
-            {busy ? "Please wait…" : mode === "signup" ? "Create account & continue" : "Sign in & continue"}
+            {busy
+              ? "Please wait…"
+              : mode === "signup"
+                ? confirming
+                  ? "That is my name — create my account"
+                  : "Create account & continue"
+                : "Sign in & continue"}
           </button>
         </form>
 

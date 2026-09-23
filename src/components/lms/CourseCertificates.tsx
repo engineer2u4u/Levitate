@@ -158,9 +158,10 @@ export default function CourseCertificates({
             </>
           ) : (
             <>
-              {note || "Your certificate number is issued once the whole course is complete."} The name printed will be
-              the one on your account — <strong style={{ color: "#0a1b33" }}>{name}</strong>
-              {org ? `, ${org}` : ""} — so correct it in your profile first if it needs changing.
+              {note || "Your certificate number is issued once the whole course is complete."} The name printed is the
+              one you gave when you signed up — <strong style={{ color: "#0a1b33" }}>{name}</strong>
+              {org ? `, ${org}` : ""}. Ask the programme team to correct it before you finish if it is wrong, because
+              the name is fixed to the certificate the moment it is issued.
             </>
           )}
         </div>
