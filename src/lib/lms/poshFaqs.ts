@@ -158,8 +158,8 @@ export const POCSO_FAQS: Faq[] = [
   {
     q: "What certificate do I receive?",
     a: [
-      "Two: a Levitate PeopleSoft Certificate of Training Completion carrying a verifiable certificate ID, the completion date and the programme hours, and a SHRM Certificate of Completion showing the Professional Development Credits earned toward SHRM-CP® and SHRM-SCP® recertification.",
-      "Levitate PeopleSoft is a SHRM Recertification Provider and a CPD-accredited, ISO 9001:2015 certified organisation.",
+      "A Levitate PeopleSoft Certificate of Training Completion, carrying a verifiable certificate ID, the completion date and the programme hours.",
+      "Levitate PeopleSoft is a CPD-accredited, ISO 9001:2015 certified organisation.",
     ],
   },
   {

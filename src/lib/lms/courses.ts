@@ -35,6 +35,8 @@ export const COURSES: Course[] = [
       name: "POCSO & Child Safety Facilitator Program (POCSO TTT)",
       closing: "under the **Protection of Children from Sexual Offences** (POCSO Act, 2012).",
       hours: "9 Hours",
+      // POCSO is not a SHRM-accredited programme, so it claims no PDCs.
+      shrm: false,
     },
   },
   {

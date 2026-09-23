@@ -31,7 +31,16 @@ const BADGES = [
  * The homepage runs straight into the next section and wants the gap closed;
  * above the footer the SHRM line would otherwise sit flush against it.
  */
-export default function Accreditations({ spaceBelow = false, maxWidth = 1240 }: { spaceBelow?: boolean; maxWidth?: number }) {
+export default function Accreditations({
+  spaceBelow = false, maxWidth = 1240, shrm = true,
+}: {
+  spaceBelow?: boolean;
+  maxWidth?: number;
+  /** False on a programme that earns no PDCs: the SHRM mark is a claim, and
+   *  the organisation holding it does not mean this programme carries it. */
+  shrm?: boolean;
+}) {
+  const badges = shrm ? BADGES : BADGES.filter((b) => !/shrm/i.test(b.src));
   return (
     <div className="site-page-sec" style={{ background: "#fff", padding: `76px 48px ${spaceBelow ? 76 : 0}px` }}>
       <div style={{ maxWidth, margin: "0 auto" }}>
@@ -69,8 +78,8 @@ export default function Accreditations({ spaceBelow = false, maxWidth = 1240 }: 
         {/* SHRM and CPD sit on their own line: they are issued badges, each
             with its own recognition statement, not monoline registration
             marks like the three above. */}
-        <Reveal className="site-accred-badges" style={{ display: "grid", gridTemplateColumns: "1fr 1px 1fr", gap: 44, marginTop: 48, alignItems: "stretch" }}>
-          {BADGES.map((badge, i) => (
+        <Reveal className="site-accred-badges" style={{ display: "grid", gridTemplateColumns: badges.length > 1 ? "1fr 1px 1fr" : "1fr", gap: 44, marginTop: 48, alignItems: "stretch" }}>
+          {badges.map((badge, i) => (
             <Fragment key={badge.src}>
               {/* Fades at both ends rather than butting into the whitespace. */}
               {i > 0 && <div className="site-accred-rule" aria-hidden />}

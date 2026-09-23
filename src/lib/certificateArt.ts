@@ -222,7 +222,7 @@ const SPECIMEN = { completedOn: "Sep 2026", certificateId: "2026-09-001" };
  * and Levitate's own on every programme, and CPD where the programme is
  * CPD-certified.
  */
-export function certificateCards(certificate: { name: string; closing: string; hours: string; cpd?: boolean }): CertificateCard[] {
+export function certificateCards(certificate: { name: string; closing: string; hours: string; cpd?: boolean; shrm?: boolean }): CertificateCard[] {
   const cards: CertificateCard[] = [
     {
       title: "SHRM Certificate of Completion",
@@ -254,6 +254,9 @@ export function certificateCards(certificate: { name: string; closing: string; h
       },
     },
   ];
+  // A programme that earns no PDCs shows no SHRM certificate: a specimen of
+  // one is a claim, and an unearned claim is the worst kind to print.
+  if (certificate.shrm === false) cards.splice(cards.findIndex((c) => c.issue.template === "shrm"), 1);
   if (certificate.cpd) {
     cards.push({
       title: "CPD Certificate",

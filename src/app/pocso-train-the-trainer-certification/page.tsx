@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "POCSO Train-the-Trainer Certification",
     description: fill(
-      "A founder-led POCSO and Child Safety Facilitator certification for schools, NGOs and child-facing organisations. Three evenings from {starts}, with SHRM PDCs and a trainer toolkit.",
+      "A founder-led POCSO and Child Safety Facilitator certification for schools, NGOs and child-facing organisations. Three evenings from {starts}, with a certificate and a trainer toolkit.",
       course,
     ),
     alternates: { canonical: "/pocso-train-the-trainer-certification/" },

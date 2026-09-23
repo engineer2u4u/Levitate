@@ -1,7 +1,14 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { hidesShrm } from "@/lib/shrm";
+
 /**
  * Site-wide accreditation ticker.
  *
- * Sits above everything in the root layout so it appears on every page. The
+ * Sits above everything in the root layout, so it appears on every page but
+ * the ones selling a programme that earns no PDCs: a SHRM banner across the
+ * top of a POCSO page reads as a claim about POCSO, whatever it says. The
  * track holds two copies of the full run of messages and translates -50%,
  * which is what makes the loop seamless; `marquee` is the shared keyframe in
  * globals.css.
@@ -19,6 +26,8 @@ const MESSAGES = [
 const DURATION = Math.round(MESSAGES.join("").length / 4.3);
 
 export default function ShrmMarquee() {
+  if (hidesShrm(usePathname())) return null;
+
   return (
     <div
       className="site-shrm-bar"

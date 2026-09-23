@@ -80,6 +80,9 @@ export type Course = {
     hours: string;
     /** Also awards a CPD certificate (The CPD Certification Service). */
     cpd?: boolean;
+    /** False for a programme that earns no SHRM PDCs: it then shows no SHRM
+     *  certificate and no PDC claim anywhere it is sold. */
+    shrm?: boolean;
   };
 };
 

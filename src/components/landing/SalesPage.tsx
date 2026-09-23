@@ -237,7 +237,7 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
         </div>
       </section>
 
-      <Accreditations spaceBelow={false} maxWidth={MAX} />
+      <Accreditations spaceBelow={false} maxWidth={MAX} shrm={course?.certificate.shrm !== false} />
 
       {/* ------------------------------------------------------------- WHY */}
       <Section tone="soft">

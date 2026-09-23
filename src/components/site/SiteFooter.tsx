@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { hidesShrm } from "@/lib/shrm";
 import { contact, services } from "@/lib/site";
 import Accreditations from "@/components/site/Accreditations";
 import ConsultationBand from "@/components/site/ConsultationBand";
@@ -42,13 +46,17 @@ export default function SiteFooter({
   /** Content width for the bands above the footer, to match the page. */
   bandWidth?: number;
 } = {}) {
+  // The SHRM mark goes with the page, not with the footer: on a programme
+  // that earns no PDCs it would be the only SHRM thing left standing.
+  const shrm = !hidesShrm(usePathname());
+
   return (
     <>
     {/* Both of these run above the footer, so every page carries them. The
         homepage does not use SiteFooter and places its own copies; the
         landing pages turn accreditations off here for the same reason. */}
     <ConsultationBand background="#f7fafc" maxWidth={bandWidth} />
-    {accreditations && <Accreditations spaceBelow maxWidth={bandWidth} />}
+    {accreditations && <Accreditations spaceBelow maxWidth={bandWidth} shrm={shrm} />}
     <div className="site-sec" style={{ background: "#eef3f7", borderTop: "1px solid #dbe5ec", padding: "64px 48px 32px" }}>
       <div style={{ maxWidth: 1240, margin: "0 auto" }}>
         <div className="site-footer-grid" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr 1fr 1.2fr", gap: 48, marginBottom: 48 }}>

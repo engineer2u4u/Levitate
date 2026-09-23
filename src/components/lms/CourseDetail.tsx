@@ -475,11 +475,18 @@ export default function CourseDetail({ slug }: { slug: string }) {
             )}
 
 
+            {/* Not every programme earns PDCs, so the SHRM statement is shown only
+                where it is true. Each certificate is drawn with this
+                programme's own name on it. */}
+
+
+
             {/* Every programme awards both certificates, so this sits outside
                 the brochure block rather than only on the courses that have
                 one. Each is drawn with this programme's own name on it. */}
             <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
               <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 18 }}>Certification &amp; recognition</div>
+              {course.certificate.shrm !== false && (
               <div style={{ background: "#f7fafc", borderLeft: "3px solid #1b8f88", borderRadius: "0 13px 13px 0", padding: "20px 22px", marginBottom: 18 }}>
                 <div style={{ font: "700 14px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 8 }}>{SHRM_ACCREDITATION.title}</div>
                 <p style={{ font: "400 13.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 12px" }}>{SHRM_ACCREDITATION.body}</p>
@@ -490,6 +497,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
                   ))}
                 </div>
               </div>
+              )}
 
               <CertificateGallery cards={certificates} equal columns={certificates.length === 3 ? 3 : 2} />
               <p style={{ font: "500 11.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#8296a9", margin: "14px 0 0" }}>
