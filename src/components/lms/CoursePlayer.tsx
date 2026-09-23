@@ -496,9 +496,14 @@ export default function CoursePlayer({ slug }: { slug: string }) {
               </>
             ) : state === "done" ? (
               <>
-                <button type="button" onClick={() => onUndo(item)} style={{ cursor: "pointer", border: "none", background: "transparent", font: `600 12.5px ${SANS}`, color: "#8296a9" }}>
+                {/* Once the whole course is complete it stays complete: there
+                    is a certificate behind it now, and unpicking an item would
+                    take that with it. */}
+                {!kit && (
+                  <button type="button" onClick={() => onUndo(item)} style={{ cursor: "pointer", border: "none", background: "transparent", font: `600 12.5px ${SANS}`, color: "#8296a9" }}>
                   Mark as not complete
                 </button>
+                )}
                 <button type="button" onClick={advance} disabled={isLast} className="lp-btn-grad" style={{ ...FOOT_PRIMARY, opacity: isLast ? 0.45 : 1, cursor: isLast ? "default" : "pointer" }}>
                   {isLast ? "Course complete" : "Proceed to next lesson →"}
                 </button>

@@ -9,7 +9,7 @@ const TABS = [
   { href: "/lms", label: "Courses" },
   { href: "/lms/dashboard", label: "My Learning" },
   { href: "/lms/sessions", label: "Live Sessions" },
-  { href: "/lms/certificates", label: "Certificates" },
+  { href: "/lms/certificates", label: "My Certificates" },
 ] as const;
 
 const initialsOf = (name: string) =>

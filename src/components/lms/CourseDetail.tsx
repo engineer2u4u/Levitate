@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ENROLMENT_OPEN, formatFee } from "@/lib/lms/courses";
 import { useCatalogCourse, useCourse } from "@/components/site/CatalogProvider";
@@ -12,6 +12,7 @@ import { enrol, isPaid } from "@/lib/lms/enrolments";
 import { contact } from "@/lib/site";
 import { outlineBySlug } from "@/lib/programOutlines";
 import { contentBySlug } from "@/lib/lms/courseContent";
+import { kitReleased, readProgress } from "@/lib/lms/courseProgress";
 import { BROCHURE_ASSETS_READY, brochureBySlug } from "@/lib/lms/brochures";
 import { SHRM_ACCREDITATION, certificateCards } from "@/lib/certificateArt";
 import { included, programBySlug } from "@/lib/programs";
@@ -51,12 +52,27 @@ export default function CourseDetail({ slug }: { slug: string }) {
   // Every certification is led by the founder; her card matches the homepage.
   const facilitator = founders[0];
   const { user, enrolments, openAuth } = useSession();
+  // Whether this learner has already finished it: a course someone has
+  // completed should not be inviting them to start it again.
+  const [completed, setCompleted] = useState(false);
   const router = useRouter();
   // Raised when somebody signs up in order to enrol. The account does not
   // exist while the modal is open, so the enrolment cannot be written there —
   // it waits here for the new user to arrive. A ref rather than state: this
   // is a one-shot intent, and nothing renders differently for it.
   const enrolOnSignIn = useRef(false);
+
+  useEffect(() => {
+    const content = contentBySlug(slug);
+    if (!user || !content) return;
+    let alive = true;
+    void readProgress(user.id, slug).then((p) => {
+      if (alive) setCompleted(kitReleased(content, p));
+    });
+    return () => {
+      alive = false;
+    };
+  }, [user, slug]);
 
   useEffect(() => {
     if (!enrolOnSignIn.current || !user) return;
@@ -112,7 +128,9 @@ export default function CourseDetail({ slug }: { slug: string }) {
   // Self-paced content opens once it is paid for — or straight away when it
   // carries no fee. Otherwise the normal enrol path runs first.
   const canStart = Boolean(selfPaced) && (enrolled || !course.feePaise);
-  const ctaLabel = canStart
+  const ctaLabel = completed
+    ? "Completed ✓"
+    : canStart
     ? "Start course →"
     : enrolled
     ? "Go to my course →"
@@ -122,7 +140,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
       ? "Enrol · Pay securely"
       // Paused in the admin, fee on request, or payments closed: enquire.
       : "Enquire about this program →";
-  const onCta = canStart
+  const onCta = canStart || completed
     ? () => router.push(`/lms/learn/${slug}`)
     : enrolled || canPay
       ? onEnrol

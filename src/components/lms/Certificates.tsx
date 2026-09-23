@@ -47,7 +47,7 @@ export default function Certificates() {
   return (
     <div style={{ background: "#f7fafc", padding: "38px 48px 90px", minHeight: "60vh" }} className="site-page-sec">
       <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-        <h1 style={{ font: `700 27px ${SANS}`, color: "#0a1b33", margin: "0 0 6px", letterSpacing: "-.02em" }}>Certificates</h1>
+        <h1 style={{ font: `700 27px ${SANS}`, color: "#0a1b33", margin: "0 0 6px", letterSpacing: "-.02em" }}>My certificates</h1>
         <p style={{ font: `500 13.5px/1.7 ${SANS}`, color: "#5b6e82", margin: "0 0 30px", maxWidth: 620 }}>
           Issued once a programme is complete, numbered in the certificate register, and yours to download whenever you
           need them.
@@ -66,6 +66,7 @@ export default function Certificates() {
                 one who has not. */}
             <CourseCertificates
               slug={enrolment.courseSlug}
+              variant="gallery"
               name={user.name}
               org={user.org}
               completedOn=""

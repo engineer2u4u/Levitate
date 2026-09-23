@@ -23,7 +23,7 @@ const SANS = "'Plus Jakarta Sans',sans-serif";
  * verifiable by nobody.
  */
 export default function CourseCertificates({
-  slug, name, org, completedOn, finished,
+  slug, name, org, completedOn, finished, variant = "cards",
 }: {
   slug: string;
   name: string;
@@ -32,6 +32,8 @@ export default function CourseCertificates({
   completedOn: string;
   /** Every item done, so the register will accept an issue. */
   finished: boolean;
+  /** "cards" lays them out to be read; "gallery" to be browsed and opened. */
+  variant?: "cards" | "gallery";
 }) {
   const course = courseBySlug(slug);
   const [issued, setIssued] = useState<Certificate | null>(null);
@@ -40,6 +42,8 @@ export default function CourseCertificates({
   // Starts true where a request is about to go out, so the card says it is
   // checking from the first render rather than flickering through "preview".
   const [asking, setAsking] = useState(finished && Boolean(course?.certificate));
+  // Which certificate is open full size, in the gallery.
+  const [open, setOpen] = useState<number | null>(null);
 
   // Asked for as soon as the course is finished: the register decides whether
   // there is one, and hands back the same row every time it is asked.
@@ -97,9 +101,6 @@ export default function CourseCertificates({
         <span style={{ font: `700 11px ${SANS}`, color: "#1b8f88", letterSpacing: ".16em", textTransform: "uppercase" }}>
           {cards.length} certificate{cards.length === 1 ? "" : "s"}
         </span>
-        <span style={{ font: `500 12.5px ${SANS}`, color: "#8296a9" }}>
-          Made out to {printedName}{org ? ` · ${org}` : ""}
-        </span>
         {issued && !revoked && (
           <span style={{ font: `700 11.5px ${SANS}`, color: "#136f6a", background: "rgba(47,196,188,.12)", border: "1px solid rgba(27,143,136,.3)", borderRadius: 999, padding: "6px 13px" }}>
             No. {issued.cert_no}
@@ -114,19 +115,34 @@ export default function CourseCertificates({
         </div>
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 18, alignItems: "start" }}>
-        {cards.map((card) => (
-          <CertificateCard
-            key={card.title}
-            title={card.title}
-            caption={card.caption}
-            issue={card.issue}
-            name={printedName}
-            downloadable={downloadable}
-            waiting={asking}
-          />
-        ))}
+      <div style={{ display: "grid", gridTemplateColumns: variant === "gallery" ? "repeat(auto-fill, minmax(240px, 1fr))" : "repeat(auto-fit, minmax(280px, 1fr))", gap: 18, alignItems: "start" }}>
+        {cards.map((card, i) =>
+          variant === "gallery" ? (
+            <GalleryTile key={card.title} title={card.title} issue={card.issue} onOpen={() => setOpen(i)} />
+          ) : (
+            <CertificateCard
+              key={card.title}
+              title={card.title}
+              caption={card.caption}
+              issue={card.issue}
+              name={printedName}
+              downloadable={downloadable}
+              waiting={asking}
+            />
+          ),
+        )}
       </div>
+
+      {open !== null && cards[open] && (
+        <CertificateViewer
+          title={cards[open].title}
+          caption={cards[open].caption}
+          issue={cards[open].issue}
+          name={printedName}
+          downloadable={downloadable}
+          onClose={() => setOpen(null)}
+        />
+      )}
 
       <div style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 12, padding: "12px 14px", marginTop: 18 }}>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none", marginTop: 2 }} aria-hidden>
@@ -148,6 +164,158 @@ export default function CourseCertificates({
             </>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * One certificate in the gallery: the artwork at thumbnail size, with the
+ * overlay saying what a click does. The plate is the thumbnail — a separate
+ * rendered image would be a second thing to keep in step with the first.
+ */
+function GalleryTile({ title, issue, onOpen }: { title: string; issue: CertificateIssue; onOpen: () => void }) {
+  const plate = CANVASES[issue.template];
+  const [hover, setHover] = useState(false);
+
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      onFocus={() => setHover(true)}
+      onBlur={() => setHover(false)}
+      style={{
+        display: "block", width: "100%", textAlign: "left", cursor: "pointer", padding: 14,
+        background: "#fff", border: `1px solid ${hover ? "rgba(27,143,136,.45)" : "#e3eaf0"}`,
+        borderRadius: 16, transition: "border-color .15s ease, transform .15s ease, box-shadow .15s ease",
+        transform: hover ? "translateY(-2px)" : "none",
+        boxShadow: hover ? "0 14px 30px rgba(10,27,51,.14)" : "0 2px 10px rgba(10,27,51,.05)",
+      }}
+    >
+      <div style={{ position: "relative", height: 170, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", borderRadius: 10 }}>
+        <div style={{ width: Math.round(170 * (plate.w / plate.h)), maxWidth: "100%", border: "1px solid #eef2f6", borderRadius: 8, overflow: "hidden" }}>
+          <CertificatePlate issue={issue} />
+        </div>
+        <span
+          aria-hidden
+          style={{
+            position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
+            background: "rgba(10,31,56,.62)", opacity: hover ? 1 : 0, transition: "opacity .15s ease",
+          }}
+        >
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8, font: `700 12.5px ${SANS}`, color: "#fff", background: "rgba(255,255,255,.16)", border: "1px solid rgba(255,255,255,.4)", borderRadius: 999, padding: "9px 16px" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" />
+            </svg>
+            View and download
+          </span>
+        </span>
+      </div>
+      <div style={{ font: `700 13px/1.45 ${SANS}`, color: "#0a1b33", marginTop: 12 }}>{title}</div>
+      <div style={{ font: `600 11.5px ${SANS}`, color: "#8296a9", marginTop: 3 }}>
+        {issue.certificateId ? `No. ${issue.certificateId}` : "Number pending"}
+      </div>
+    </button>
+  );
+}
+
+/** A certificate opened full size, with its downloads. */
+function CertificateViewer({
+  title, caption, issue, name, downloadable, onClose,
+}: {
+  title: string;
+  caption: string;
+  issue: CertificateIssue;
+  name: string;
+  downloadable: boolean;
+  onClose: () => void;
+}) {
+  const holder = useRef<HTMLDivElement | null>(null);
+  const [busy, setBusy] = useState<"png" | "pdf" | null>(null);
+  const [failed, setFailed] = useState("");
+
+  // Escape closes it, because a picture over the whole screen needs a way out
+  // that is not hunting for the cross.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const download = async (format: "png" | "pdf") => {
+    const svg = holder.current?.querySelector("svg");
+    if (!svg || busy) return;
+    setBusy(format);
+    setFailed("");
+    try {
+      const stem = fileStem(name, issue.courseName, title);
+      if (format === "png") await downloadCertificatePng(svg, stem);
+      else await downloadCertificatePdf(svg, stem);
+    } catch (e) {
+      setFailed((e as Error).message || "The download could not be prepared.");
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, zIndex: 80, background: "rgba(8,19,33,.72)",
+        display: "flex", alignItems: "center", justifyContent: "center", padding: "clamp(16px,4vw,48px)",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#fff", borderRadius: 20, padding: "clamp(18px,2.5vw,28px)",
+          maxWidth: 1000, width: "100%", maxHeight: "92vh", overflowY: "auto",
+          boxShadow: "0 30px 80px rgba(3,10,20,.45)",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 16 }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ font: `700 17px/1.35 ${SANS}`, color: "#0a1b33" }}>{title}</div>
+            <div style={{ font: `400 12.5px/1.6 ${SANS}`, color: "#5b6e82", marginTop: 4 }}>{caption}</div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            style={{ flex: "none", cursor: "pointer", border: "1px solid #e3eaf0", background: "#fff", color: "#5b6e82", font: `400 17px ${SANS}`, width: 34, height: 34, borderRadius: 10, lineHeight: 1 }}
+          >
+            ✕
+          </button>
+        </div>
+
+        <div ref={holder} style={{ border: "1px solid #eef2f6", borderRadius: 12, overflow: "hidden", boxShadow: "0 10px 28px rgba(10,27,51,.12)" }}>
+          <CertificatePlate issue={issue} />
+        </div>
+
+        {downloadable ? (
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center", marginTop: 18 }}>
+            <DownloadButton label="Download PDF" busy={busy === "pdf"} disabled={busy !== null} onClick={() => download("pdf")} primary />
+            <DownloadButton label="Download PNG" busy={busy === "png"} disabled={busy !== null} onClick={() => download("png")} />
+          </div>
+        ) : (
+          <div style={{ font: `600 12.5px ${SANS}`, color: "#8296a9", marginTop: 18 }}>
+            Finish the course and this is yours to download.
+          </div>
+        )}
+
+        {failed && (
+          <div role="alert" style={{ font: `600 12px/1.6 ${SANS}`, color: "#a53f28", background: "rgba(226,86,74,.08)", border: "1px solid rgba(226,86,74,.28)", borderRadius: 10, padding: "10px 12px", marginTop: 12 }}>
+            {failed}
+          </div>
+        )}
       </div>
     </div>
   );

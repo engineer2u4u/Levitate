@@ -132,7 +132,7 @@ function EnrolmentCard({ e, userId }: { e: Enrolment; userId: string }) {
         </div>
         <div style={{ marginTop: 9 }}>
           {paid ? (
-            <Link href={href} style={{ font: `600 11.5px ${SANS}`, color: "#1b8f88" }}>{content ? "Continue →" : "Course page →"}</Link>
+            <Link href={href} style={{ font: `600 11.5px ${SANS}`, color: "#1b8f88" }}>{content ? (percent === 100 ? "Review →" : "Continue →") : "Course page →"}</Link>
           ) : e.paymentLink ? (
             <a href={e.paymentLink} target="_blank" rel="noopener noreferrer" style={{ font: `700 11.5px ${SANS}`, color: "#1b8f88" }}>Complete payment ↗</a>
           ) : (
