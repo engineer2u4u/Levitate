@@ -16,9 +16,7 @@ import {
   type QuizAttempt,
   quizPassed,
   recordQuizAttempt,
-  recordVideoProgress,
   startCourse,
-  VIDEO_WATCHED_RATIO,
   uncompleteItem,
   type CourseProgress,
 } from "@/lib/lms/courseProgress";
@@ -29,6 +27,13 @@ import { supabaseConfigured } from "@/lib/lms/supabase";
 import { submitEnquiry } from "@/lib/submitEnquiry";
 
 const SANS = "'Plus Jakarta Sans',sans-serif";
+
+/**
+ * How much of a film counts as watched. Playback, not attention: a video
+ * left running in another tab reaches the end like any other. It is a floor
+ * under skipping for the visit, nothing that is kept or reported.
+ */
+const WATCHED_ENOUGH = 0.9;
 
 /**
  * The learning screen: contents on the left, the current item on the right.
@@ -64,14 +69,13 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   const [readTo, setReadTo] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  // How far the film on screen has played, before it is written down.
-  const [watch, setWatch] = useState<{ id: string; fraction: number }>({ id: "", fraction: 0 });
+  // How far each film on this screen has played. Deliberately nowhere else:
+  // watching is not progress to be kept, only a gate for the visit, so a
+  // reload starts the film again.
+  const [watched, setWatched] = useState<Record<string, number>>({});
   // Films that cannot play at all — a broken or blocked video must not hold
   // the learner behind a gate that can never open.
   const [unplayable, setUnplayable] = useState<string[]>([]);
-  // The furthest point already written down per film, so a tick a second does
-  // not become a database write a second.
-  const saved = useRef<Record<string, number>>({});
 
   const items = useMemo(() => (course ? flatItems(course) : []), [course]);
 
@@ -146,26 +150,13 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   );
 
   /**
-   * Playback position, once a second while a film runs. Held in state so the
-   * gate opens as it is watched, and written down at quarters — and at the
-   * pass mark itself — so it survives a reload without a write per tick.
+   * Playback position, once a second while a film runs. The furthest point
+   * reached is kept for the visit — so moving between items and back does not
+   * demand a rewatch — and goes no further than this component.
    */
-  const onVideoProgress = useCallback(
-    (itemId: string, fraction: number) => {
-      setWatch((w) => (w.id === itemId && w.fraction >= fraction ? w : { id: itemId, fraction }));
-      if (!course || !user) return;
-      const quarter = Math.floor(fraction / 0.25) * 0.25;
-      const mark = fraction >= VIDEO_WATCHED_RATIO ? Math.max(quarter, VIDEO_WATCHED_RATIO) : quarter;
-      if (mark <= 0 || mark <= (saved.current[itemId] ?? 0)) return;
-      saved.current[itemId] = mark;
-      void recordVideoProgress(user.id, course, itemId, fraction)
-        .then(setProgress)
-        // Not worth an error banner mid-film: the gate still holds on what
-        // this session has watched, and the next milestone tries again.
-        .catch(() => { saved.current[itemId] = 0; });
-    },
-    [course, user],
-  );
+  const onVideoProgress = useCallback((itemId: string, fraction: number) => {
+    setWatched((w) => (fraction > (w[itemId] ?? 0) ? { ...w, [itemId]: fraction } : w));
+  }, []);
 
   const onVideoUnavailable = useCallback((itemId: string) => {
     setUnplayable((list) => (list.includes(itemId) ? list : [...list, itemId]));
@@ -262,15 +253,12 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   // A reading hands over its Proceed button once its end has been on screen.
   const unread = item.kind === "reading" && !item.acknowledgement && readTo !== item.id;
   // A film hands it over once 90% of it has played.
-  const played = Math.max(
-    progress?.videoProgress[item.id] ?? 0,
-    watch.id === item.id ? watch.fraction : 0,
-  );
+  const played = watched[item.id] ?? 0;
   const unwatched =
     Boolean(item.videoId) &&
     !item.watchOptional &&
     !unplayable.includes(item.id) &&
-    played < VIDEO_WATCHED_RATIO;
+    played < WATCHED_ENOUGH;
 
   const proceed = () => {
     if (saving) return;

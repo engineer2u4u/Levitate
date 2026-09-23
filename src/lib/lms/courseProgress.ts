@@ -35,21 +35,9 @@ export type CourseProgress = {
   courseSlug: string;
   completedItems: string[];
   quizAttempts: Record<string, QuizAttempt>;
-  /** How much of each film has been watched, 0–1, keyed by item id. The
-   *  furthest point reached, not the last position. */
-  videoProgress: Record<string, number>;
   startedAt: string;
   completedAt: string | null;
 };
-
-/**
- * How much of a film counts as watched. Playback, not attention: a video
- * left running in another tab reaches the end like any other. It is a floor
- * under skipping, not a proof that anyone was looking.
- */
-export const VIDEO_WATCHED_RATIO = 0.9;
-export const videoWatched = (p: CourseProgress | null, itemId: string) =>
-  (p?.videoProgress?.[itemId] ?? 0) >= VIDEO_WATCHED_RATIO;
 
 export const isShared = supabaseConfigured;
 
@@ -57,7 +45,6 @@ const EMPTY = (slug: string): CourseProgress => ({
   courseSlug: slug,
   completedItems: [],
   quizAttempts: {},
-  videoProgress: {},
   startedAt: new Date().toISOString(),
   completedAt: null,
 });
@@ -136,7 +123,6 @@ type Row = {
   course_slug: string;
   completed_items: string[];
   quiz_attempts: Record<string, QuizAttempt>;
-  video_progress?: Record<string, number> | null;
   started_at: string;
   completed_at: string | null;
 };
@@ -145,26 +131,9 @@ const fromRow = (r: Row): CourseProgress => ({
   courseSlug: r.course_slug,
   completedItems: r.completed_items ?? [],
   quizAttempts: r.quiz_attempts ?? {},
-  videoProgress: r.video_progress ?? {},
   startedAt: r.started_at,
   completedAt: r.completed_at,
 });
-
-/**
- * Whether this database has the video_progress column yet.
- *
- * The column arrives with a migration in the admin repo, and the site may be
- * deployed before it lands. Rather than failing every write until then, the
- * first read or write that PostgREST rejects for that column turns it off and
- * everything else carries on: films are then gated for the session but the
- * watched fraction does not survive a reload.
- */
-let videoColumn = true;
-const missingVideoColumn = (message: string) =>
-  /video_progress/.test(message) && /column|schema cache/i.test(message);
-
-const COLUMNS = () =>
-  `course_slug, completed_items, quiz_attempts, started_at, completed_at${videoColumn ? ", video_progress" : ""}`;
 
 export async function readProgress(userId: string, slug: string): Promise<CourseProgress | null> {
   if (!userId) return null;
@@ -181,22 +150,16 @@ export async function readProgress(userId: string, slug: string): Promise<Course
   const supabase = await getClient();
   const { data, error } = await supabase
     .from("course_progress")
-    .select(COLUMNS())
+    .select("course_slug, completed_items, quiz_attempts, started_at, completed_at")
     // Row-level security already limits a learner to their own rows, but staff
     // can read everyone's — without this, a staff account opening a course would
     // get every learner's row and no single answer.
     .eq("user_id", userId)
     .eq("course_slug", slug)
     .maybeSingle();
-  if (error && missingVideoColumn(error.message)) {
-    videoColumn = false;
-    return readProgress(userId, slug);
-  }
   // A learner with no row yet is the normal first visit, not a failure.
   if (error || !data) return null;
-  // The column list is built at run time — whether video_progress is in it
-  // depends on the database — so the row's shape is ours to assert.
-  return fromRow(data as unknown as Row);
+  return fromRow(data as Row);
 }
 
 async function save(userId: string, next: CourseProgress): Promise<CourseProgress> {
@@ -219,14 +182,9 @@ async function save(userId: string, next: CourseProgress): Promise<CourseProgres
       completed_items: next.completedItems,
       quiz_attempts: next.quizAttempts,
       completed_at: next.completedAt,
-      ...(videoColumn ? { video_progress: next.videoProgress } : {}),
     },
     { onConflict: "user_id,course_slug" },
   );
-  if (error && missingVideoColumn(error.message)) {
-    videoColumn = false;
-    return save(userId, next);
-  }
   if (error) throw new Error(error.message);
   return next;
 }
@@ -276,27 +234,6 @@ export async function recordQuizAttempt(
 ): Promise<CourseProgress> {
   const current = (await readProgress(userId, c.slug)) ?? EMPTY(c.slug);
   return save(userId, { ...current, quizAttempts: { ...current.quizAttempts, [itemId]: attempt } });
-}
-
-/**
- * Records how far into a film the learner has reached. Only ever forward:
- * rewatching the first minute must not undo an hour already watched, and the
- * gate asks how far they got, not where they are now.
- */
-export async function recordVideoProgress(
-  userId: string,
-  c: CourseContent,
-  itemId: string,
-  fraction: number,
-): Promise<CourseProgress> {
-  const current = (await readProgress(userId, c.slug)) ?? EMPTY(c.slug);
-  const seen = current.videoProgress[itemId] ?? 0;
-  const next = Math.min(1, Math.max(seen, fraction));
-  if (next <= seen) return current;
-  return save(userId, {
-    ...current,
-    videoProgress: { ...current.videoProgress, [itemId]: Math.round(next * 100) / 100 },
-  });
 }
 
 /** Undo, for a learner who marked something complete by mistake. */
