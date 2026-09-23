@@ -24,6 +24,7 @@ import { courseBySlug } from "@/lib/lms/courses";
 import { moduleGate, useCourseAccess } from "@/lib/lms/access";
 import { supabaseConfigured } from "@/lib/lms/supabase";
 import { submitEnquiry } from "@/lib/submitEnquiry";
+import CourseCertificates from "./CourseCertificates";
 
 const SANS = "'Plus Jakarta Sans',sans-serif";
 
@@ -33,6 +34,14 @@ const SANS = "'Plus Jakarta Sans',sans-serif";
  * under skipping for the visit, nothing that is kept or reported.
  */
 const WATCHED_ENOUGH = 0.9;
+
+/** "Sep 2026" — how a certificate dates itself. */
+const monthYear = (iso: string | number) =>
+  new Date(iso).toLocaleDateString("en-US", { month: "short", year: "numeric" });
+
+// Read once when the module loads rather than during a render, which must
+// stay pure. A page left open across midnight is not worth more than that.
+const TODAY = monthYear(Date.now());
 
 /**
  * The learning screen: contents on the left, the current item on the right.
@@ -245,6 +254,9 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   const isLast = active === items.length - 1;
   const advance = () => setActive((i) => Math.min(i + 1, items.length - 1));
   const sat = attempt && attempt.id === item.id ? attempt.sat : null;
+  // What the certificates are dated: the day the course was finished, or
+  // today while the last item is being finished.
+  const completedOn = progress?.completedAt ? monthYear(progress.completedAt) : TODAY;
   // A reading hands over its Proceed button once its end has been on screen.
   const unread = item.kind === "reading" && !item.acknowledgement && readTo !== item.id;
   // A film hands it over once 90% of it has played.
@@ -411,7 +423,10 @@ export default function CoursePlayer({ slug }: { slug: string }) {
             state={state}
             nextSession={nextSession}
             sat={sat}
-            who={{ id: user.id, name: user.name, email: user.email }}
+            who={{ id: user.id, name: user.name, email: user.email, org: user.org }}
+            slug={slug}
+            completedOn={completedOn}
+            finished={kit}
             onComplete={onComplete}
             onQuizSubmit={onQuizSubmit}
             onReachEnd={setReadTo}
@@ -498,11 +513,16 @@ const KIND_LABEL: Record<CourseItem["kind"], string> = {
 const itemMeta = (it: CourseItem) => it.meta ?? `${KIND_LABEL[it.kind]} · ${it.minutes} min`;
 
 function ItemView({
-  item, state, nextSession, sat, who, onComplete, onQuizSubmit, onReachEnd, onVideoProgress, onVideoUnavailable,
+  item, state, nextSession, sat, who, slug, completedOn, finished, onComplete, onQuizSubmit, onReachEnd, onVideoProgress, onVideoUnavailable,
 }: {
   item: CourseItem;
   state: ItemState;
-  who: { id: string; name: string; email: string };
+  who: { id: string; name: string; email: string; org: string };
+  slug: string;
+  /** "Sep 2026" — what the certificates are dated. */
+  completedOn: string;
+  /** Every item in the course is done, so a certificate can be issued. */
+  finished: boolean;
   nextSession: string;
   /** The quiz just sat on this visit, if any. Nothing stored. */
   sat: QuizAttempt | null;
@@ -590,6 +610,17 @@ function ItemView({
             ? <Checklist key={item.id} item={item} userId={who.id} />
             : item.body.map((para, i) => <Para key={i} text={para} />)}
         </div>
+      )}
+
+      {item.certificates && (
+        <CourseCertificates
+          slug={slug}
+          name={who.name}
+          org={who.org}
+          completedOn={completedOn}
+          ready={state !== "preview"}
+        finished={finished}
+        />
       )}
 
       {item.feedback && state !== "preview" && (

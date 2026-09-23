@@ -35,7 +35,11 @@ export default function CertificatePlate({ issue }: { issue: CertificateIssue })
       xmlns="http://www.w3.org/2000/svg"
       style={{ display: "block", width: "100%", height: "auto", background: "#fff" }}
       role="img"
-      aria-label={`Specimen ${LABELS[issue.template]} for ${issue.courseName}`}
+      aria-label={
+        issue.recipientName
+          ? `${LABELS[issue.template]} for ${issue.recipientName} — ${issue.courseName}`
+          : `Specimen ${LABELS[issue.template]} for ${issue.courseName}`
+      }
     >
       {issue.template === "shrm" ? <Shrm issue={issue} /> : issue.template === "cpd" ? <Cpd issue={issue} /> : <Excellence issue={issue} />}
     </svg>
