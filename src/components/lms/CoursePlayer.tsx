@@ -15,7 +15,6 @@ import {
   passMark,
   type QuizAttempt,
   quizPassed,
-  recordQuizAttempt,
   startCourse,
   uncompleteItem,
   type CourseProgress,
@@ -73,6 +72,9 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   // watching is not progress to be kept, only a gate for the visit, so a
   // reload starts the film again.
   const [watched, setWatched] = useState<Record<string, number>>({});
+  // The quiz just sat, kept only so the verdict and the footer agree. Never
+  // written down: a score is not a record here, only a gate.
+  const [attempt, setAttempt] = useState<{ id: string; sat: QuizAttempt } | null>(null);
   // Films that cannot play at all — a broken or blocked video must not hold
   // the learner behind a gate that can never open.
   const [unplayable, setUnplayable] = useState<string[]>([]);
@@ -111,10 +113,10 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   }, [course, user]);
 
   const onComplete = useCallback(
-    async (item: CourseItem, attempt?: { score: number; total: number }) => {
+    async (item: CourseItem) => {
       if (!course || !user) return;
       try {
-        const next = await completeItem(user.id, course, item.id, attempt);
+        const next = await completeItem(user.id, course, item.id);
         setProgress(next);
         // Deliberately stays put. Moving between items is the Next button's
         // job and nothing else's, so a quiz can show its score before the
@@ -128,23 +130,16 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   );
 
   /**
-   * A quiz moves the course on only at 70% or better. A lower score is still
-   * written down — it is the team's window on where people struggle — but the
-   * item stays open, so the learner retakes it rather than carrying a fail
-   * forward.
+   * A quiz moves the course on at 70% or better, and nothing else is kept: a
+   * pass completes the item like any other, a fail leaves it open. The score
+   * itself lives here, dying with the page, so coming back is a fresh quiz
+   * rather than an old mark against someone's name.
    */
   const onQuizSubmit = useCallback(
-    async (item: CourseItem, attempt: QuizAttempt) => {
+    async (item: CourseItem, sat: QuizAttempt) => {
       if (!course || !user) return;
-      if (quizPassed(attempt)) {
-        await onComplete(item, attempt);
-        return;
-      }
-      try {
-        setProgress(await recordQuizAttempt(user.id, course, item.id, attempt));
-      } catch (e) {
-        setError((e as Error).message);
-      }
+      setAttempt({ id: item.id, sat });
+      if (quizPassed(sat)) await onComplete(item);
     },
     [course, user, onComplete],
   );
@@ -249,7 +244,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   const frontier = frontierIndex(items, progress);
   const isLast = active === items.length - 1;
   const advance = () => setActive((i) => Math.min(i + 1, items.length - 1));
-  const attempt = progress?.quizAttempts[item.id] ?? null;
+  const sat = attempt && attempt.id === item.id ? attempt.sat : null;
   // A reading hands over its Proceed button once its end has been on screen.
   const unread = item.kind === "reading" && !item.acknowledgement && readTo !== item.id;
   // A film hands it over once 90% of it has played.
@@ -415,7 +410,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
             item={item}
             state={state}
             nextSession={nextSession}
-            attempt={attempt}
+            sat={sat}
             who={{ id: user.id, name: user.name, email: user.email }}
             onComplete={onComplete}
             onQuizSubmit={onQuizSubmit}
@@ -458,8 +453,8 @@ export default function CoursePlayer({ slug }: { slug: string }) {
               <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>Sign the acknowledgement above to continue.</span>
             ) : item.kind === "quiz" ? (
               <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>
-                {attempt
-                  ? `Score ${passMark(attempt.total)} of ${attempt.total} or better to continue — retake the quiz above.`
+                {sat
+                  ? `Score ${passMark(sat.total)} of ${sat.total} or better to continue — retake the quiz above.`
                   : "Submit the quiz to continue."}
               </span>
             ) : unwatched ? (
@@ -503,14 +498,15 @@ const KIND_LABEL: Record<CourseItem["kind"], string> = {
 const itemMeta = (it: CourseItem) => it.meta ?? `${KIND_LABEL[it.kind]} · ${it.minutes} min`;
 
 function ItemView({
-  item, state, nextSession, attempt, who, onComplete, onQuizSubmit, onReachEnd, onVideoProgress, onVideoUnavailable,
+  item, state, nextSession, sat, who, onComplete, onQuizSubmit, onReachEnd, onVideoProgress, onVideoUnavailable,
 }: {
   item: CourseItem;
   state: ItemState;
   who: { id: string; name: string; email: string };
   nextSession: string;
-  attempt: QuizAttempt | null;
-  onComplete: (item: CourseItem, attempt?: QuizAttempt) => void;
+  /** The quiz just sat on this visit, if any. Nothing stored. */
+  sat: QuizAttempt | null;
+  onComplete: (item: CourseItem) => void;
   onQuizSubmit: (item: CourseItem, attempt: QuizAttempt) => Promise<void>;
   onReachEnd: (itemId: string) => void;
   onVideoProgress: (itemId: string, fraction: number) => void;
@@ -621,8 +617,17 @@ function ItemView({
               The questions open once you reach this item. You need {passMark(item.questions.length)} of {item.questions.length} right to move on — 70%, to the nearest whole question — and you can retake the quiz as often as you need.
             </p>
           </div>
+        ) : state === "done" && !sat ? (
+          <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, font: `700 13px ${SANS}`, color: "#136f6a", background: "rgba(47,196,188,.12)", border: "1px solid rgba(27,143,136,.35)", borderRadius: 999, padding: "10px 18px", marginBottom: 14 }}>
+              <Tick /> Passed
+            </div>
+            <p style={{ font: `400 14px/1.7 ${SANS}`, color: "#5b6e82", margin: 0 }}>
+              You passed this quiz, so it is complete. The score itself is not kept.
+            </p>
+          </div>
         ) : (
-          <QuizView item={item} attempt={attempt} onSubmit={(a) => onQuizSubmit(item, a)} />
+          <QuizView item={item} attempt={sat} settled={state === "done"} onSubmit={(a) => onQuizSubmit(item, a)} />
         )
       )}
 
@@ -803,25 +808,24 @@ function EndMarker({ id, onSee }: { id: string; onSee: (itemId: string) => void 
 /** 70% carries the item. Anything less is recorded and handed back with a
  *  Retake — the score is a gate, and the learner can always try again. */
 function QuizView({
-  item, attempt, onSubmit,
+  item, attempt, settled, onSubmit,
 }: {
   item: CourseItem;
+  /** The attempt just made, from the player's own state. Never stored. */
   attempt: QuizAttempt | null;
+  /** The item is already complete, so the result is final — no retake. */
+  settled: boolean;
   onSubmit: (a: QuizAttempt) => Promise<void> | void;
 }) {
   const questions = item.questions ?? [];
   const [picked, setPicked] = useState<Record<number, number>>({});
   const [shown, setShown] = useState(false);
   const [marking, setMarking] = useState(false);
-  // The attempt just marked, held here so the result is the one that was sat.
-  // Reading it from the stored progress instead showed the previous score for
-  // as long as the write took, and a retake flashed the old mark first.
-  const [result, setResult] = useState<QuizAttempt | null>(null);
 
   const answered = Object.keys(picked).length;
   const score = questions.reduce((n, q, i) => n + (picked[i] === q.answer ? 1 : 0), 0);
 
-  const verdict = result ?? attempt;
+  const verdict = attempt;
   if (verdict && !shown) {
     const passed = quizPassed(verdict);
     const need = passMark(verdict.total);
@@ -858,17 +862,19 @@ function QuizView({
             </h3>
             <p style={{ font: `400 15px/1.75 ${SANS}`, color: "#5b6e82", margin: "0 0 22px", maxWidth: 560 }}>
               {passed
-                ? `The pass mark was ${need} of ${verdict.total}. Your score is recorded; you can retake the quiz, and the most recent attempt is what the team sees.`
-                : `The pass mark is 70% of the questions, to the nearest whole question. Your attempt is recorded either way. Go back over the material and retake the quiz to carry on.`}
+                ? `The pass mark was ${need} of ${verdict.total}, and this item is now complete. The score is not kept — it is the pass that counts.`
+                : `The pass mark is 70% of the questions, to the nearest whole question. Nothing is recorded either way. Go back over the material and retake the quiz to carry on.`}
             </p>
-            <button
-              type="button"
-              onClick={() => { setResult(null); setPicked({}); setShown(true); }}
-              className="lp-btn-outline"
-              style={{ cursor: "pointer", background: "#fff", border: "1.5px solid rgba(10,27,51,.28)", color: "#0a1b33", font: `700 14px ${SANS}`, padding: "14px 26px", borderRadius: 999 }}
-            >
-              Retake quiz
-            </button>
+            {!settled && (
+              <button
+                type="button"
+                onClick={() => { setPicked({}); setShown(true); }}
+                className="lp-btn-outline"
+                style={{ cursor: "pointer", background: "#fff", border: "1.5px solid rgba(10,27,51,.28)", color: "#0a1b33", font: `700 14px ${SANS}`, padding: "14px 26px", borderRadius: 999 }}
+              >
+                Retake quiz
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -934,7 +940,6 @@ function QuizView({
           // The verdict appears once the attempt is recorded, carrying the
           // score just sat — never the one before it.
           void Promise.resolve(onSubmit(sat)).finally(() => {
-            setResult(sat);
             setShown(false);
             setMarking(false);
           });

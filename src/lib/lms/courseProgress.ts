@@ -24,7 +24,7 @@ export type QuizAttempt = { score: number; total: number };
  * rounding up quietly raises the bar on exactly those: a 3-question check
  * would demand 100% and a 4-question one 75%, so "70%" would only mean 70% on
  * the 20-question final. Kept here rather than in the screen because the
- * player and anything that reports on attempts have to agree on what a pass is.
+ * player and the screen that reports a pass have to agree on what one is.
  */
 export const QUIZ_PASS_RATIO = 0.7;
 export const passMark = (total: number) => Math.round(total * QUIZ_PASS_RATIO);
@@ -34,7 +34,6 @@ export const quizPassed = (a: QuizAttempt | null | undefined) =>
 export type CourseProgress = {
   courseSlug: string;
   completedItems: string[];
-  quizAttempts: Record<string, QuizAttempt>;
   startedAt: string;
   completedAt: string | null;
 };
@@ -44,7 +43,6 @@ export const isShared = supabaseConfigured;
 const EMPTY = (slug: string): CourseProgress => ({
   courseSlug: slug,
   completedItems: [],
-  quizAttempts: {},
   startedAt: new Date().toISOString(),
   completedAt: null,
 });
@@ -122,7 +120,6 @@ const localKey = (userId: string, slug: string) => `lvt.lms.progress.${userId}.$
 type Row = {
   course_slug: string;
   completed_items: string[];
-  quiz_attempts: Record<string, QuizAttempt>;
   started_at: string;
   completed_at: string | null;
 };
@@ -130,7 +127,6 @@ type Row = {
 const fromRow = (r: Row): CourseProgress => ({
   courseSlug: r.course_slug,
   completedItems: r.completed_items ?? [],
-  quizAttempts: r.quiz_attempts ?? {},
   startedAt: r.started_at,
   completedAt: r.completed_at,
 });
@@ -150,7 +146,7 @@ export async function readProgress(userId: string, slug: string): Promise<Course
   const supabase = await getClient();
   const { data, error } = await supabase
     .from("course_progress")
-    .select("course_slug, completed_items, quiz_attempts, started_at, completed_at")
+    .select("course_slug, completed_items, started_at, completed_at")
     // Row-level security already limits a learner to their own rows, but staff
     // can read everyone's — without this, a staff account opening a course would
     // get every learner's row and no single answer.
@@ -180,7 +176,6 @@ async function save(userId: string, next: CourseProgress): Promise<CourseProgres
       user_id: userId,
       course_slug: next.courseSlug,
       completed_items: next.completedItems,
-      quiz_attempts: next.quizAttempts,
       completed_at: next.completedAt,
     },
     { onConflict: "user_id,course_slug" },
@@ -204,36 +199,18 @@ export async function completeItem(
   userId: string,
   c: CourseContent,
   itemId: string,
-  attempt?: QuizAttempt,
 ): Promise<CourseProgress> {
   const current = (await readProgress(userId, c.slug)) ?? EMPTY(c.slug);
   const completedItems = current.completedItems.includes(itemId)
     ? current.completedItems
     : [...current.completedItems, itemId];
-  const quizAttempts = attempt ? { ...current.quizAttempts, [itemId]: attempt } : current.quizAttempts;
   const next: CourseProgress = {
     ...current,
     completedItems,
-    quizAttempts,
     completedAt:
       completedItems.length >= totalItems(c) ? current.completedAt ?? new Date().toISOString() : null,
   };
   return save(userId, next);
-}
-
-/**
- * Records a quiz attempt without completing the item — what a score under the
- * pass mark earns. The attempt still reaches the admin, because a learner who
- * keeps missing the mark is worth seeing; the course simply does not move on.
- */
-export async function recordQuizAttempt(
-  userId: string,
-  c: CourseContent,
-  itemId: string,
-  attempt: QuizAttempt,
-): Promise<CourseProgress> {
-  const current = (await readProgress(userId, c.slug)) ?? EMPTY(c.slug);
-  return save(userId, { ...current, quizAttempts: { ...current.quizAttempts, [itemId]: attempt } });
 }
 
 /** Undo, for a learner who marked something complete by mistake. */
