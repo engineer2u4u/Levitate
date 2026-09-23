@@ -23,7 +23,7 @@
 import type { Course } from "./lms/types";
 import { COURSES, formatFee } from "./lms/courses";
 import { batches as SITE_BATCHES } from "./site";
-import { MASTERCLASS } from "./masterclass";
+import { MASTERCLASSES, type MasterclassOffer } from "./masterclass";
 
 /* ------------------------------------------------------------------ types */
 
@@ -220,9 +220,12 @@ const FALLBACK_SESSIONS: Record<string, CatalogSession[]> = {
   ],
   "pocso-child-safety": [at("2026-10-24", "18:00", "20:00")],
   "inclusive-workplace": [{ startsOn: "2026-10-10", timeLabel: "11:00 AM – 1:00 PM", topic: "", startsAt: null, endsAt: null }],
-  [MASTERCLASS.slug]: [
-    { startsOn: MASTERCLASS.startsAt.slice(0, 10), timeLabel: MASTERCLASS.time, topic: "", startsAt: MASTERCLASS.startsAt, endsAt: MASTERCLASS.endsAt },
-  ],
+  ...Object.fromEntries(
+    MASTERCLASSES.map((m) => [
+      m.slug,
+      [{ startsOn: m.startsAt.slice(0, 10), timeLabel: m.time, topic: "", startsAt: m.startsAt, endsAt: m.endsAt }],
+    ]),
+  ),
 };
 
 /** site.ts keys its batch cards by title; the catalogue keys everything by slug. */
@@ -266,35 +269,36 @@ function fromCode(c: Course, i: number): CatalogCourse {
   };
 }
 
-/** The masterclass has its own page rather than a course in code. */
-const MASTERCLASS_FALLBACK: CatalogCourse = {
-  slug: MASTERCLASS.slug,
-  title: `${MASTERCLASS.title} ${MASTERCLASS.titleRest}`,
-  short: "PoSH 2026 Masterclass",
+/** A masterclass has its own page rather than a course in code. */
+const masterclassFallback = (m: MasterclassOffer): CatalogCourse => ({
+  slug: m.slug,
+  title: `${m.title} ${m.titleRest}`,
+  short: m.short,
   tag: "Masterclass",
   category: "Masterclass",
-  desc: MASTERCLASS.sub,
+  desc: m.sub,
   mode: "Live masterclass",
-  duration: MASTERCLASS.duration,
+  duration: m.duration,
   status: "enrolling",
   hidden: true,
-  feePaise: MASTERCLASS.feePaise,
-  listPricePaise: MASTERCLASS.standardPaise,
-  priceNote: "Early bird · incl. of taxes",
+  feePaise: m.feePaise,
+  listPricePaise: m.standardPaise,
+  // Only one of them runs an early bird; the other has a single fee.
+  priceNote: m.standardPaise > m.feePaise ? "Early bird · incl. of taxes" : "Incl. of taxes",
   modulesLabel: "",
-  hoursLabel: MASTERCLASS.duration,
+  hoursLabel: m.duration,
   facilitator: "Parichita Kotnala",
   img: "",
   sortOrder: 50,
   startsLabel: "",
   batchStartsOn: null,
   batch: null,
-  sessions: FALLBACK_SESSIONS[MASTERCLASS.slug],
-};
+  sessions: FALLBACK_SESSIONS[m.slug],
+});
 
 export const FALLBACK_CATALOG: Catalog = {
   source: "fallback",
-  courses: [...COURSES.map(fromCode), MASTERCLASS_FALLBACK].map(finish),
+  courses: [...COURSES.map(fromCode), ...MASTERCLASSES.map(masterclassFallback)].map(finish),
 };
 
 /* --------------------------------------------------------------- database */

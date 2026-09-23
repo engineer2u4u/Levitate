@@ -5,7 +5,7 @@ import { useMemo, useState, useSyncExternalStore, type CSSProperties, type FormE
 import Link from "next/link";
 import Accreditations from "@/components/site/Accreditations";
 import FaqAccordion from "@/components/site/FaqAccordion";
-import { MASTERCLASS as M, MASTERCLASS_FAQS, type ThemeIcon } from "@/lib/masterclass";
+import type { MasterclassOffer, ThemeIcon } from "@/lib/masterclass";
 import { useCatalogCourse } from "@/components/site/CatalogProvider";
 import { dateCompact, dateFull, firstSession, startsText } from "@/lib/catalog";
 import { formatPaise, razorpayGateway } from "@/lib/lms/payment";
@@ -50,7 +50,7 @@ type Facts = {
  * constants as the fallback. The payment server reads the same row, so what
  * this shows and what it charges agree.
  */
-function useFacts(): Facts {
+function useFacts(M: MasterclassOffer): Facts {
   const entry = useCatalogCourse(M.slug);
   return useMemo(() => {
     const s = entry ? firstSession(entry) : null;
@@ -66,9 +66,9 @@ function useFacts(): Facts {
       dateShort: dateCompact(startsOn),
       time: s?.timeLabel || M.time,
       duration: entry?.duration || M.duration,
-      checkoutTitle: `PoSH 2026 Masterclass · ${date}`,
+      checkoutTitle: `${M.checkoutPrefix} · ${date}`,
     };
-  }, [entry]);
+  }, [entry, M]);
 }
 
 /**
@@ -82,21 +82,21 @@ function useClosed(startsAt: string) {
   return useSyncExternalStore(subscribeNever, () => Date.now() >= closesAt, () => false);
 }
 
-const item = (f: Facts) => ({ item_id: M.slug, item_name: f.checkoutTitle, price: f.feePaise / 100, quantity: 1 });
+const item = (M: MasterclassOffer, f: Facts) => ({ item_id: M.slug, item_name: f.checkoutTitle, price: f.feePaise / 100, quantity: 1 });
 
 const scrollToRegister = () => {
   document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" });
 };
 
-export default function MasterclassPage() {
-  const facts = useFacts();
+export default function MasterclassPage({ offer: M }: { offer: MasterclassOffer }) {
+  const facts = useFacts(M);
   const closed = useClosed(facts.startsAt);
-  const poshEntry = useCatalogCourse("posh-trainer");
-  const poshStarts = poshEntry ? startsText(poshEntry) : "";
-  const waHref = `${contact.whatsapp}?text=${encodeURIComponent(`Hi, I have a question about the PoSH 2026 masterclass on ${facts.date}.`)}`;
+  const crossEntry = useCatalogCourse(M.crossSell.startsFrom ?? "");
+  const crossStarts = crossEntry ? startsText(crossEntry) : "";
+  const waHref = `${contact.whatsapp}?text=${encodeURIComponent(`Hi, I have a question about the ${M.short} on ${facts.date}.`)}`;
 
   // FAQ answers carry {when}, {date}, {fee} and {list_fee}.
-  const faqs = MASTERCLASS_FAQS.map((f) => ({
+  const faqs = M.faqs.map((f) => ({
     ...f,
     a: f.a.map((t) =>
       t
@@ -128,7 +128,16 @@ export default function MasterclassPage() {
             <div style={{ font: `700 clamp(24px,2.8vw,36px)/1.18 ${SANS}`, color: "#5fe0d6", margin: "0 0 18px", letterSpacing: "-.015em" }}>
               {M.titleRest}
             </div>
-            <p style={{ font: T.lead, fontSize: 17, color: "rgba(255,255,255,.82)", margin: "0 0 30px", maxWidth: 560 }}>{M.sub}</p>
+            <p style={{ font: T.lead, fontSize: 17, color: "rgba(255,255,255,.82)", margin: `0 0 ${M.intro ? 16 : 30}px`, maxWidth: 560 }}>{M.sub}</p>
+            {M.intro && (
+              <p style={{ font: T.body, color: "rgba(255,255,255,.72)", margin: "0 0 24px", maxWidth: 560 }}>{M.intro}</p>
+            )}
+            {M.scenario && (
+              <div style={{ background: "rgba(255,255,255,.06)", border: "1px solid rgba(95,224,214,.28)", borderLeft: "3px solid #5fe0d6", borderRadius: "0 14px 14px 0", padding: "18px 20px", margin: "0 0 26px", maxWidth: 560 }}>
+                <div style={{ font: `700 16px/1.5 ${SANS}`, color: "#fff", marginBottom: 8 }}>{M.scenario.q}</div>
+                <p style={{ font: T.body, color: "rgba(255,255,255,.72)", margin: 0 }}>{M.scenario.body}</p>
+              </div>
+            )}
 
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 30 }}>
               <Fact icon="calendar" k="Date" v={facts.dateShort} />
@@ -143,6 +152,16 @@ export default function MasterclassPage() {
               </button>
             )}
 
+            {M.chips && (
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 26 }}>
+                {M.chips.map((c) => (
+                  <span key={c} style={{ font: `600 12.5px ${SANS}`, color: "#bff3ee", background: "rgba(95,224,214,.12)", border: "1px solid rgba(95,224,214,.3)", borderRadius: 999, padding: "8px 14px" }}>
+                    {c}
+                  </span>
+                ))}
+              </div>
+            )}
+
             <div style={{ display: "inline-flex", alignItems: "center", gap: 14, background: "#fff", borderRadius: 14, padding: "10px 16px", flexWrap: "wrap" }}>
               <img src="/assets/accreditations/shrm.png" alt="SHRM Recertification Provider" height={42} style={{ height: 42, width: "auto" }} />
               <img src="/assets/accreditations/cpd-member.png" alt="CPD Member — The CPD Certification Service" height={42} style={{ height: 42, width: "auto" }} />
@@ -153,17 +172,14 @@ export default function MasterclassPage() {
             </div>
           </div>
 
-          <RegisterCard closed={closed} facts={facts} />
+          <RegisterCard offer={M} closed={closed} facts={facts} />
         </div>
       </section>
 
       {/* ------------------------------------------------------- THE AGENDA */}
       <Section>
-        <H2 eyebrow="What the two hours cover">Three shifts every PoSH programme now has to answer to</H2>
-        <p style={{ font: T.lead, color: "#5b6e82", margin: "14px 0 34px", maxWidth: MEASURE }}>
-          The law has not stood still since 2013, and neither has the workplace. This masterclass brings your understanding up to date on where PoSH compliance
-          stands in 2026 — and what that asks of you.
-        </p>
+        <H2 eyebrow={M.agenda.eyebrow}>{M.agenda.heading}</H2>
+        <p style={{ font: T.lead, color: "#5b6e82", margin: "14px 0 34px", maxWidth: MEASURE }}>{M.agenda.intro}</p>
         <div className="site-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 18 }}>
           {M.themes.map((t, i) => (
             <div key={t.title} style={{ background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 18, padding: "28px 26px", display: "flex", flexDirection: "column" }}>
@@ -192,9 +208,9 @@ export default function MasterclassPage() {
       <Section tone="soft">
         <div className="lp-hero-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" }}>
           <div>
-            <H2 eyebrow="Who should attend">Built for the people who own PoSH in an organisation</H2>
+            <H2 eyebrow="Who should attend">{M.audience.heading}</H2>
             <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 28 }}>
-              {M.audience.map((a) => (
+              {M.audience.items.map((a) => (
                 <div key={a} style={{ display: "flex", gap: 14, alignItems: "center", background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "15px 18px" }}>
                   <span aria-hidden style={{ ...iconTile, width: 38, height: 38, borderRadius: 10 }}>
                     <Glyph name="person" size={20} />
@@ -202,6 +218,9 @@ export default function MasterclassPage() {
                   <span style={{ font: T.item, color: "#0a1b33" }}>{a}</span>
                 </div>
               ))}
+              {M.audience.note && (
+                <p style={{ font: T.body, color: "#5b6e82", margin: "6px 0 0" }}>{M.audience.note}</p>
+              )}
             </div>
           </div>
 
@@ -215,18 +234,13 @@ export default function MasterclassPage() {
               <div style={{ padding: "24px 24px 22px" }}>
                 <div style={{ font: T.eyebrow, color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 10 }}>Your facilitator</div>
                 <div style={{ font: `700 21px ${SANS}`, color: "#0a1b33" }}>Parichita Kotnala</div>
-                <div style={{ font: T.small, color: "#1b8f88", fontWeight: 600, marginTop: 2 }}>Founder &amp; Managing Partner, Levitate PeopleSoft</div>
+                <div style={{ font: T.small, color: "#1b8f88", fontWeight: 600, marginTop: 2 }}>{M.facilitator.strap}</div>
               </div>
             </div>
             <div style={{ padding: "4px 26px 26px", display: "flex", flexDirection: "column", gap: 12 }}>
-              <p style={{ font: T.body, color: "#5b6e82", margin: "18px 0 0" }}>
-                A global HR leader and learning facilitator with 15 years of strategic HR experience, partnering with leaders and teams across India, the United
-                Kingdom, Europe, the United States and Canada.
-              </p>
-              <p style={{ font: T.body, color: "#5b6e82", margin: 0 }}>
-                She is an internationally certified PoSH and POCSO Educator and Trainer, and an alumna of XLRI – Xavier School of Management and the Indian Society
-                for Training &amp; Development.
-              </p>
+              {M.facilitator.paragraphs.map((p, i) => (
+                <p key={p} style={{ font: T.body, color: "#5b6e82", margin: i === 0 ? "18px 0 0" : 0 }}>{p}</p>
+              ))}
               <Link href="/parichita-kotnala/" style={{ font: `700 14px ${SANS}`, color: "#1b8f88", marginTop: 4 }}>
                 Read her full profile →
               </Link>
@@ -234,6 +248,12 @@ export default function MasterclassPage() {
           </div>
         </div>
       </Section>
+
+      {M.recognition && (
+        <Section flush>
+          <p style={{ font: T.lead, color: "#5b6e82", margin: 0, maxWidth: MEASURE }}>{M.recognition}</p>
+        </Section>
+      )}
 
       <Accreditations spaceBelow maxWidth={MAX} />
 
@@ -246,13 +266,13 @@ export default function MasterclassPage() {
       <Section tone="soft" flush>
         <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 18, padding: "28px 30px", display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap" }}>
           <div style={{ flex: 1, minWidth: 260 }}>
-            <div style={{ font: T.cardTitle, color: "#0a1b33", marginBottom: 6 }}>Ready to deliver PoSH training yourself?</div>
+            <div style={{ font: T.cardTitle, color: "#0a1b33", marginBottom: 6 }}>{M.crossSell.title}</div>
             <p style={{ font: T.body, color: "#5b6e82", margin: 0 }}>
-              The PoSH Train-the-Trainer Certification — 15 learning hours across 15 modules{poshStarts ? `, with a batch starting ${poshStarts}` : ""}.
+              {M.crossSell.body}{crossStarts ? `, with a batch starting ${crossStarts}` : ""}.
             </p>
           </div>
-          <Link href="/posh-train-the-trainer-certification/" style={{ ...ctaGhost, color: "#0a1b33", borderColor: "rgba(10,27,51,.24)", whiteSpace: "nowrap" }}>
-            See the certification
+          <Link href={M.crossSell.href} style={{ ...ctaGhost, color: "#0a1b33", borderColor: "rgba(10,27,51,.24)", whiteSpace: "nowrap" }}>
+            {M.crossSell.cta}
           </Link>
         </div>
       </Section>
@@ -269,7 +289,9 @@ export default function MasterclassPage() {
           <p style={{ font: T.lead, color: "rgba(255,255,255,.78)", margin: "0 auto 28px", maxWidth: MEASURE }}>
             {closed
               ? "Message us to hear about the next session."
-              : `Early-bird fee, including taxes — against a standard fee of ${formatPaise(facts.standardPaise)}. Two hours that bring your PoSH practice up to date.`}
+              : facts.standardPaise > facts.feePaise
+                ? `Early-bird fee, including taxes — against a standard fee of ${formatPaise(facts.standardPaise)}. ${M.closing}`
+                : `Including taxes. ${M.closing}`}
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             {!closed && (
@@ -297,13 +319,13 @@ type Done = { name: string; email: string; paymentId: string; amountPaise: numbe
 /** Google Calendar wants UTC in its compact form: 20260925T123000Z. */
 const calStamp = (iso: string) => new Date(iso).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
 
-const calendarUrl = (f: Facts) =>
+const calendarUrl = (M: MasterclassOffer, f: Facts) =>
   "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-  `&text=${encodeURIComponent(`${M.title} ${M.titleRest} — Levitate PeopleSoft masterclass`)}` +
+  `&text=${encodeURIComponent(`${M.short} — Levitate PeopleSoft`)}` +
   `&dates=${calStamp(f.startsAt)}/${calStamp(f.endsAt)}` +
   `&details=${encodeURIComponent("Your seat is reserved. Levitate PeopleSoft will email everything you need for the session beforehand.")}`;
 
-function RegisterCard({ closed, facts }: { closed: boolean; facts: Facts }) {
+function RegisterCard({ offer: M, closed, facts }: { offer: MasterclassOffer; closed: boolean; facts: Facts }) {
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState<Done | null>(null);
@@ -328,7 +350,7 @@ function RegisterCard({ closed, facts }: { closed: boolean; facts: Facts }) {
 
     setError("");
     setPaying(true);
-    track("begin_checkout", { currency: "INR", value: facts.feePaise / 100, items: [item(facts)] });
+    track("begin_checkout", { currency: "INR", value: facts.feePaise / 100, items: [item(M, facts)] });
 
     const res = await razorpayGateway.pay({
       courseSlug: M.slug,
@@ -349,7 +371,7 @@ function RegisterCard({ closed, facts }: { closed: boolean; facts: Facts }) {
 
     const live = res.live === true;
     // meta_event_id pairs this with the server's own report of the sale.
-    track("purchase", { transaction_id: res.paymentId, value: res.amountPaise / 100, currency: "INR", items: [item(facts)], meta_event_id: res.metaEventId });
+    track("purchase", { transaction_id: res.paymentId, value: res.amountPaise / 100, currency: "INR", items: [item(M, facts)], meta_event_id: res.metaEventId });
 
     // Into the admin's enquiry list and the office inbox. Not awaited: the
     // payment is verified and the seat is theirs whether or not this lands,
@@ -391,7 +413,7 @@ function RegisterCard({ closed, facts }: { closed: boolean; facts: Facts }) {
         </div>
         <h2 style={{ font: `800 26px/1.2 ${SANS}`, color: "#0a1b33", margin: "0 0 8px", letterSpacing: "-.02em" }}>You&apos;re registered</h2>
         <p style={{ font: T.body, color: "#5b6e82", margin: "0 0 20px" }}>
-          Thank you, {done.name.split(" ")[0]}. Your seat for {M.title} {M.titleRest} on {facts.day}, {facts.date} is reserved.
+          Thank you, {done.name.split(" ")[0]}. Your seat for {M.short} on {facts.day}, {facts.date} is reserved.
         </p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 8, background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 14, padding: "14px 16px", marginBottom: 18 }}>
@@ -405,7 +427,7 @@ function RegisterCard({ closed, facts }: { closed: boolean; facts: Facts }) {
         </p>
 
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <a href={calendarUrl(facts)} target="_blank" rel="noopener noreferrer" className="lp-btn-grad" style={{ ...ctaPrimary, display: "inline-block", fontSize: 14, padding: "13px 22px" }}>
+          <a href={calendarUrl(M, facts)} target="_blank" rel="noopener noreferrer" className="lp-btn-grad" style={{ ...ctaPrimary, display: "inline-block", fontSize: 14, padding: "13px 22px" }}>
             Add to Google Calendar
           </a>
           <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" style={{ ...ctaGhost, color: "#0a1b33", borderColor: "rgba(10,27,51,.24)", fontSize: 14, padding: "12px 20px" }}>
@@ -418,22 +440,35 @@ function RegisterCard({ closed, facts }: { closed: boolean; facts: Facts }) {
     );
   }
 
+  const earlyBird = facts.standardPaise > facts.feePaise;
+
   return (
     <div id="register" style={card}>
+      {/* An early bird is only an early bird against a higher standard fee.
+          Where there is one fee, saying "Early Bird" over a price struck
+          through at the same number invents a discount nobody is getting. */}
       <div style={{ display: "flex", alignItems: "stretch", gap: 18, paddingBottom: 20, marginBottom: 20, borderBottom: "1px solid #eef2f6", flexWrap: "wrap" }}>
         <div>
-          <div style={{ font: `700 13px ${SANS}`, color: "#b07d1e", letterSpacing: ".04em" }}>Early Bird</div>
-          <div style={{ font: `800 40px/1.05 ${SANS}`, color: "#0a1b33", letterSpacing: "-.02em", margin: "4px 0 6px" }}>{formatPaise(facts.feePaise)}</div>
-          <div style={{ font: `700 10.5px ${SANS}`, color: "#5b6e82", letterSpacing: ".16em", textTransform: "uppercase" }}>Limited period offer</div>
-        </div>
-        <div style={{ width: 1, background: "#eef2f6" }} />
-        <div style={{ paddingTop: 2 }}>
-          <div style={{ font: `600 13px ${SANS}`, color: "#8296a9" }}>Standard Fee</div>
-          <div style={{ font: `700 22px ${SANS}`, color: "#a9b8c6", textDecoration: "line-through", textDecorationColor: "#d9534f", margin: "6px 0 6px" }}>
-            {formatPaise(facts.standardPaise)}
+          <div style={{ font: `700 13px ${SANS}`, color: earlyBird ? "#b07d1e" : "#1b8f88", letterSpacing: ".04em" }}>
+            {earlyBird ? "Early Bird" : "Your seat"}
           </div>
-          <div style={{ font: `600 10.5px ${SANS}`, color: "#8296a9", letterSpacing: ".1em", textTransform: "uppercase" }}>Incl. of taxes</div>
+          <div style={{ font: `800 40px/1.05 ${SANS}`, color: "#0a1b33", letterSpacing: "-.02em", margin: "4px 0 6px" }}>{formatPaise(facts.feePaise)}</div>
+          <div style={{ font: `700 10.5px ${SANS}`, color: "#5b6e82", letterSpacing: ".16em", textTransform: "uppercase" }}>
+            {earlyBird ? "Limited period offer" : "Incl. of taxes"}
+          </div>
         </div>
+        {earlyBird && (
+          <>
+            <div style={{ width: 1, background: "#eef2f6" }} />
+            <div style={{ paddingTop: 2 }}>
+              <div style={{ font: `600 13px ${SANS}`, color: "#8296a9" }}>Standard Fee</div>
+              <div style={{ font: `700 22px ${SANS}`, color: "#a9b8c6", textDecoration: "line-through", textDecorationColor: "#d9534f", margin: "6px 0 6px" }}>
+                {formatPaise(facts.standardPaise)}
+              </div>
+              <div style={{ font: `600 10.5px ${SANS}`, color: "#8296a9", letterSpacing: ".1em", textTransform: "uppercase" }}>Incl. of taxes</div>
+            </div>
+          </>
+        )}
       </div>
 
       {closed ? (
@@ -596,6 +631,9 @@ function ThemeGlyph({ name }: { name: ThemeIcon }) {
       {name === "gavel" && (<><path d="M14.5 3.5l6 6M11.5 6.5l6 6M13 5l-4.5 4.5 6 6L19 11" {...p} /><path d="M10.5 13.5L3.5 20.5M3 21h9" {...p} /></>)}
       {name === "building" && (<><rect x="4" y="3" width="11" height="18" rx="1.5" {...p} /><path d="M15 9h4.5a.5.5 0 0 1 .5.5V21M8 7h3M8 11h3M8 15h3M2.5 21h19" {...p} /></>)}
       {name === "spark" && (<><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" {...p} /><path d="M19 16l.7 1.8 1.8.7-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7z" {...p} /></>)}
+      {name === "compass" && (<><circle cx="12" cy="12" r="9" {...p} /><path d="M15.2 8.8l-2 4.4-4.4 2 2-4.4z" {...p} /></>)}
+      {name === "dialogue" && (<><path d="M4 5.5h11a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H9l-4 3v-3a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2z" {...p} /><path d="M19 9.5h1a2 2 0 0 1 2 2v5l-3-2.5" {...p} /></>)}
+      {name === "scales" && (<><path d="M12 4v16M7 20h10M4 8h16l-3 5a3.4 3.4 0 0 1-6 0zM4 8l3 5a3.4 3.4 0 0 0 6 0" {...p} /><circle cx="12" cy="5" r="1.4" {...p} /></>)}
     </svg>
   );
 }

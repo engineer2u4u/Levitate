@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { contact, services, type NavKey } from "@/lib/site";
-import { useCatalogCourse, useVisibleCourses } from "@/components/site/CatalogProvider";
-import { firstSession } from "@/lib/catalog";
-import { MASTERCLASS } from "@/lib/masterclass";
+import { useCatalog, useVisibleCourses } from "@/components/site/CatalogProvider";
+import { catalogCourse, firstSession } from "@/lib/catalog";
+import { MASTERCLASSES } from "@/lib/masterclass";
 import { LMS_TESTING } from "@/lib/lms/testMode";
 
 function MailIcon({ size = 13 }: { size?: number }) {
@@ -42,18 +42,27 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
   // The Certifications menu lists what the admin has published.
   const COURSES = useVisibleCourses();
 
-  // The masterclass is hidden from the catalogue — it is a one-off, not a
-  // programme — so it gets its own entry at the end of the menu, gone once its
-  // session in the admin has ended (the code's time until that loads) rather
-  // than advertising something already over.
-  const masterclass = useCatalogCourse(MASTERCLASS.slug);
-  const mcSession = masterclass ? firstSession(masterclass) : null;
-  const mcEndsAt = mcSession?.endsAt ?? MASTERCLASS.endsAt;
-  // Shown in the exported HTML; the browser hides it once the clock says the
-  // session is over. Read through an external-store snapshot so the two agree
-  // at hydration instead of flashing.
-  const mcOver = useSyncExternalStore(noSubscribe, () => Date.now() > new Date(mcEndsAt).getTime(), () => false);
+  // Masterclasses are hidden from the catalogue — each is a one-off, not a
+  // programme — so they have a menu of their own. A session that has already
+  // happened leaves it rather than advertising something already over.
+  const catalog = useCatalog();
+  const mcEnds = MASTERCLASSES.map((m) => {
+    const entry = catalogCourse(catalog, m.slug);
+    const session = entry ? firstSession(entry) : null;
+    return session?.endsAt ?? m.endsAt;
+  });
+  // Shown in the exported HTML; the browser hides what is over once the clock
+  // says so. Read through an external-store snapshot so the two agree at
+  // hydration instead of flashing — and as one string per state rather than a
+  // timestamp, which would be a new value on every render and never settle.
+  const over = useSyncExternalStore(
+    noSubscribe,
+    () => mcEnds.map((at) => (Date.now() > new Date(at).getTime() ? "1" : "0")).join(""),
+    () => "0".repeat(MASTERCLASSES.length),
+  );
+  const masterclasses = MASTERCLASSES.filter((_, i) => over[i] !== "1");
   const [svcOpen, setSvcOpen] = useState(false);
+  const [mcOpen, setMcOpen] = useState(false);
   const [certOpen, setCertOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   // Header starts large and compacts once the page is scrolled.
@@ -138,12 +147,38 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
                 {COURSES.map((c) => (
                   <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setCertOpen(false)} className="site-dropitem" style={{ padding: "11px 14px", borderRadius: 10, font: "600 13.5px/1.4 'Plus Jakarta Sans',sans-serif", display: "block", color: "#0a1b33" }}>{c.title}</Link>
                 ))}
-                {!mcOver && (
-                  <Link href={MASTERCLASS.path} onClick={() => setCertOpen(false)} className="site-dropitem" style={{ padding: "11px 14px", borderRadius: 10, font: "600 13.5px/1.4 'Plus Jakarta Sans',sans-serif", display: "block", color: "#0a1b33" }}>PoSH 2026 Masterclass</Link>
-                )}
               </div>
             </div>
           </div>
+          {/* Masterclasses are one-off sessions rather than programmes, so
+              they sit in a menu of their own rather than at the end of the
+              certifications. The menu goes altogether once none are upcoming. */}
+          {masterclasses.length > 0 && (
+            <div onMouseEnter={() => setMcOpen(true)} onMouseLeave={() => setMcOpen(false)} style={{ position: "relative", display: "flex", alignItems: "center" }}>
+              <button
+                type="button"
+                className="site-navlink"
+                aria-expanded={mcOpen}
+                aria-haspopup="true"
+                onClick={() => setMcOpen((o) => !o)}
+                style={{ ...(active === "masterclass" ? topActive : topIdle), display: "inline-flex", alignItems: "center", gap: 8, border: "none", background: "transparent", padding: 0, cursor: "pointer", font: "inherit" }}
+              >
+                Masterclass
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
+              </button>
+              <div style={{ position: "absolute", top: "100%", left: -16, paddingTop: 16, minWidth: 330, display: mcOpen ? "block" : "none" }}>
+                <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: 8, boxShadow: "0 22px 48px rgba(10,27,51,.16)", display: "flex", flexDirection: "column", gap: 2 }}>
+                  {masterclasses.map((m) => (
+                    <Link key={m.slug} href={m.path} onClick={() => setMcOpen(false)} className="site-dropitem" style={{ padding: "11px 14px", borderRadius: 10, display: "block", color: "#0a1b33" }}>
+                      <span style={{ display: "block", font: "600 13.5px/1.4 'Plus Jakarta Sans',sans-serif" }}>{m.short}</span>
+                      <span style={{ display: "block", font: "500 11.5px/1.4 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 3 }}>{m.dateShort} · {m.time}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* The LMS is not open to the public yet, so it is not advertised in
               the nav. The routes still resolve for anyone working on it, and a
               testing build puts the link back. */}
@@ -208,8 +243,15 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
             {COURSES.map((c) => (
               <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064", lineHeight: 1.4 }}>{c.title}</Link>
             ))}
-            {!mcOver && (
-              <Link href={MASTERCLASS.path} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064", lineHeight: 1.4 }}>PoSH 2026 Masterclass</Link>
+            {masterclasses.length > 0 && (
+              <>
+                <div className="site-mlink" style={{ color: "#0a1b33", display: "flex", alignItems: "center", gap: 8 }}>Masterclass</div>
+                {masterclasses.map((m) => (
+                  <Link key={m.slug} href={m.path} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064", lineHeight: 1.4 }}>
+                    {m.short}
+                  </Link>
+                ))}
+              </>
             )}
             <Link href="/about-us" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "about" ? "#1b8f88" : "#0a1b33" }}>About Us</Link>
             <Link href="/parichita-kotnala" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "parichita" ? "#1b8f88" : "#0a1b33" }}>Parichita Kotnala</Link>
