@@ -133,12 +133,45 @@ const toUser = (u: { id: string; email?: string; user_metadata?: SupaMeta } | nu
       }
     : null;
 
+/**
+ * Whether this account belongs to the admin portal rather than the LMS.
+ *
+ * The portal lives at /admin-panel on this same domain, so it shares this
+ * origin — and therefore the one Supabase session in localStorage. Signing in
+ * there would otherwise appear here as a signed-in learner, which is wrong
+ * twice over: staff hold no enrolment, and a learner screen is not where an
+ * admin's own progress or certificates should be invented.
+ *
+ * Read from the caller's own profile row, which is all RLS lets them see. A
+ * failed read is treated as "not staff": the honest default for a learner
+ * whose profile has not been written yet, and nothing is granted by it — every
+ * course still needs a paid enrolment, which staff do not have.
+ */
+async function isStaffAccount(userId: string): Promise<boolean> {
+  try {
+    const { data } = await (await getClient())
+      .from("profiles")
+      .select("role")
+      .eq("id", userId)
+      .maybeSingle();
+    const role = (data as { role?: string } | null)?.role ?? "learner";
+    return role === "admin" || role === "viewer";
+  } catch {
+    return false;
+  }
+}
+
 export const supabaseAuth: AuthAdapter = {
   kind: "supabase",
 
   async getUser() {
     const { data } = await (await getClient()).auth.getUser();
-    return toUser(data.user);
+    const user = toUser(data.user);
+    // Staff are simply not signed in as far as the LMS is concerned. Their
+    // session is left alone rather than ended, because ending it would sign
+    // them out of the admin portal in the other tab.
+    if (user && (await isStaffAccount(user.id))) return null;
+    return user;
   },
 
   async signIn(email, password) {
@@ -148,7 +181,16 @@ export const supabaseAuth: AuthAdapter = {
     });
     if (error) return { ok: false, error: error.message };
     const user = toUser(data.user);
-    return user ? { ok: true, user } : { ok: false, error: "Sign-in failed." };
+    if (!user) return { ok: false, error: "Sign-in failed." };
+    if (await isStaffAccount(user.id)) {
+      // Deliberately the same words Supabase gives for a wrong password, so
+      // the refusal says nothing about the account behind it. Naming it as
+      // staff would tell anyone who tried an address that it belongs to
+      // someone who can open the admin portal — a hint worth having if you
+      // are guessing at passwords, and of no use to a real learner.
+      return { ok: false, error: "Invalid login credentials" };
+    }
+    return { ok: true, user };
   },
 
   async signUp({ name, email, password, org }) {
@@ -174,11 +216,23 @@ export const supabaseAuth: AuthAdapter = {
 
   onChange(cb) {
     let unsub = () => {};
+    let live = true;
     void getClient().then((c) => {
-      const { data } = c.auth.onAuthStateChange((_e, session) => cb(toUser(session?.user ?? null)));
+      const { data } = c.auth.onAuthStateChange((_e, session) => {
+        const user = toUser(session?.user ?? null);
+        if (!user) return cb(null);
+        // Same rule as getUser: an admin signing in next door does not become
+        // a learner here. Checked per change, since the session is shared.
+        void isStaffAccount(user.id).then((staff) => {
+          if (live) cb(staff ? null : user);
+        });
+      });
       unsub = () => data.subscription.unsubscribe();
     });
-    return () => unsub();
+    return () => {
+      live = false;
+      unsub();
+    };
   },
 };
 
