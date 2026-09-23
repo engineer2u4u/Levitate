@@ -491,7 +491,9 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                 style={{ ...FOOT_PRIMARY, cursor: saving ? "wait" : "pointer", opacity: saving ? 0.8 : 1, display: "inline-flex", alignItems: "center", gap: 9 }}
               >
                 {saving && <Spinner />}
-                {saving ? "Saving your progress…" : "Proceed to next lesson →"}
+                {/* Nothing follows the last item, so the button names what it
+                    actually does rather than pointing at a next lesson. */}
+                {saving ? "Saving your progress…" : isLast ? "Finish course" : "Proceed to next lesson →"}
               </button>
             )}
           </div>
