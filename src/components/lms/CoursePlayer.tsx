@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { contentBySlug, flatItems, totalMinutes, type CourseItem } from "@/lib/lms/courseContent";
+import { contentBySlug, flatItems, totalMinutes, type CourseContent, type CourseItem } from "@/lib/lms/courseContent";
 import {
   completeItem,
   courseStats,
@@ -87,6 +87,9 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   // Films that cannot play at all — a broken or blocked video must not hold
   // the learner behind a gate that can never open.
   const [unplayable, setUnplayable] = useState<string[]>([]);
+  // The last page: the reading kit and the certificates, reached by finishing
+  // the course or from the rail once it is unlocked.
+  const [onKit, setOnKit] = useState(false);
 
   const items = useMemo(() => (course ? flatItems(course) : []), [course]);
 
@@ -98,7 +101,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
     if (typeof window !== "undefined" && window.matchMedia("(max-width: 900px)").matches) {
       window.scrollTo({ top: 0 });
     }
-  }, [active]);
+  }, [active, onKit]);
 
   // Load once the learner is known, and land them on the first unfinished item.
   useEffect(() => {
@@ -272,7 +275,10 @@ export default function CoursePlayer({ slug }: { slug: string }) {
     setSaving(true);
     void onComplete(item).then(() => {
       setSaving(false);
-      advance();
+      // Nothing follows the last item but the kit, so that is where finishing
+      // the course goes.
+      if (isLast) setOnKit(true);
+      else advance();
     });
   };
 
@@ -350,6 +356,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                           }
                           onClick={() => {
                             setActive(idx);
+                            setOnKit(false);
                             setMenuOpen(false);
                           }}
                           className="lms-item-row"
@@ -385,13 +392,29 @@ export default function CoursePlayer({ slug }: { slug: string }) {
             {/* The kit is listed from the start so the goal is visible, but it
                 only opens once every item is done. */}
             <div style={{ padding: "14px 22px 4px", marginTop: 8, borderTop: "1px solid #e3eaf0" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, paddingTop: 12 }}>
-                <div style={{ font: `700 12.5px ${SANS}`, color: kit ? "#0a1b33" : "#a9b8c6", flex: 1 }}>Reading kit</div>
-                {kit ? <Tick /> : <LockIcon />}
-              </div>
-              <div style={{ font: `500 11.5px/1.5 ${SANS}`, color: "#8296a9", marginTop: 4 }}>
-                {kit ? "Released — yours to keep" : "Unlocks when the course is complete"}
-              </div>
+              <button
+                type="button"
+                disabled={!kit}
+                onClick={() => {
+                  setOnKit(true);
+                  setMenuOpen(false);
+                }}
+                className="lms-item-row"
+                style={{
+                  display: "block", width: "100%", textAlign: "left", border: "none",
+                  borderRadius: 10, padding: 12, marginTop: 6,
+                  background: onKit ? "#eef4f7" : "transparent",
+                  cursor: kit ? "pointer" : "not-allowed",
+                }}
+              >
+                <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ font: `${onKit ? 800 : 700} 12.5px ${SANS}`, color: kit ? "#0a1b33" : "#a9b8c6", flex: 1 }}>Reading kit</span>
+                  {kit ? <Tick /> : <LockIcon />}
+                </span>
+                <span style={{ display: "block", font: `500 11.5px/1.5 ${SANS}`, color: "#8296a9", marginTop: 4 }}>
+                  {kit ? "Released — yours to keep" : "Unlocks when the course is complete"}
+                </span>
+              </button>
             </div>
           </nav>
         </aside>
@@ -416,23 +439,27 @@ export default function CoursePlayer({ slug }: { slug: string }) {
             </div>
           )}
 
-          {kit && <KitBanner course={course} />}
-
+          {onKit ? (
+            <KitPage
+              course={course}
+              slug={slug}
+              who={{ id: user.id, name: user.name, email: user.email, org: user.org }}
+              completedOn={completedOn}
+            />
+          ) : (
           <ItemView
             item={item}
             state={state}
             nextSession={nextSession}
             sat={sat}
             who={{ id: user.id, name: user.name, email: user.email, org: user.org }}
-            slug={slug}
-            completedOn={completedOn}
-            finished={kit}
             onComplete={onComplete}
             onQuizSubmit={onQuizSubmit}
             onReachEnd={setReadTo}
             onVideoProgress={onVideoProgress}
             onVideoUnavailable={onVideoUnavailable}
           />
+          )}
           </div>
           </div>
 
@@ -440,7 +467,19 @@ export default function CoursePlayer({ slug }: { slug: string }) {
               learner has already passed is reachable from the list on the
               left; going further than they have been is this button. */}
           <div className="lms-player-foot">
-            {state === "scheduled" ? (
+            {onKit ? (
+              <>
+                <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9", marginRight: "auto" }}>
+                  Course complete. These are yours to keep.
+                </span>
+                <button type="button" onClick={() => setOnKit(false)} className="lp-btn-outline" style={FOOT_GHOST}>
+                  Back to the course
+                </button>
+                <Link href="/lms/" className="lp-btn-grad" style={{ ...FOOT_PRIMARY, display: "inline-block", textDecoration: "none" }}>
+                  My Learning →
+                </Link>
+              </>
+            ) : state === "scheduled" ? (
               <span style={{ font: `600 12.5px/1.5 ${SANS}`, color: "#8296a9" }}>
                 This module opens after the next live session{nextSession ? ` (${nextSession})` : ""}.
               </span>
@@ -515,16 +554,11 @@ const KIND_LABEL: Record<CourseItem["kind"], string> = {
 const itemMeta = (it: CourseItem) => it.meta ?? `${KIND_LABEL[it.kind]} · ${it.minutes} min`;
 
 function ItemView({
-  item, state, nextSession, sat, who, slug, completedOn, finished, onComplete, onQuizSubmit, onReachEnd, onVideoProgress, onVideoUnavailable,
+  item, state, nextSession, sat, who, onComplete, onQuizSubmit, onReachEnd, onVideoProgress, onVideoUnavailable,
 }: {
   item: CourseItem;
   state: ItemState;
   who: { id: string; name: string; email: string; org: string };
-  slug: string;
-  /** "Sep 2026" — what the certificates are dated. */
-  completedOn: string;
-  /** Every item in the course is done, so a certificate can be issued. */
-  finished: boolean;
   nextSession: string;
   /** The quiz just sat on this visit, if any. Nothing stored. */
   sat: QuizAttempt | null;
@@ -612,17 +646,6 @@ function ItemView({
             ? <Checklist key={item.id} item={item} userId={who.id} />
             : item.body.map((para, i) => <Para key={i} text={para} />)}
         </div>
-      )}
-
-      {item.certificates && (
-        <CourseCertificates
-          slug={slug}
-          name={who.name}
-          org={who.org}
-          completedOn={completedOn}
-          ready={state !== "preview"}
-        finished={finished}
-        />
       )}
 
       {item.feedback && state !== "preview" && (
@@ -998,28 +1021,75 @@ function QuizView({
   );
 }
 
-function KitBanner({ course }: { course: { readingKit: { title: string; meta: string }[] } }) {
+/**
+ * The last page: the reading kit and the certificates.
+ *
+ * Both were previously shown alongside the course — the kit as a banner over
+ * every item once it unlocked, which put a finished-course announcement at the
+ * top of material the learner was still working through. They live here
+ * instead, at the end, where someone who has finished comes to collect.
+ */
+function KitPage({
+  course, slug, who, completedOn,
+}: {
+  course: CourseContent;
+  slug: string;
+  who: { id: string; name: string; email: string; org: string };
+  completedOn: string;
+}) {
   return (
-    <div style={{ background: "linear-gradient(120deg,#0c2a45,#0a1f38)", borderRadius: 20, padding: "28px 32px", marginBottom: 26 }}>
-      <div style={{ font: `700 11px ${SANS}`, color: "#7fe3dc", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 8 }}>Course complete</div>
-      <div style={{ font: `700 20px ${SANS}`, color: "#fff", marginBottom: 6 }}>Your reading kit is unlocked</div>
-      <p style={{ font: `400 13.5px/1.7 ${SANS}`, color: "rgba(255,255,255,.72)", margin: "0 0 18px", maxWidth: 560 }}>
-        Every item is finished. These materials are yours to keep.
-      </p>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }} className="site-grid-2">
-        {course.readingKit.map((f) => (
-          <div key={f.title} style={{ display: "flex", alignItems: "center", gap: 11, background: "rgba(255,255,255,.08)", border: "1px solid rgba(127,227,220,.3)", borderRadius: 12, padding: "12px 14px" }}>
-            <span aria-hidden style={{ flex: "none", width: 28, height: 28, borderRadius: 8, background: "rgba(127,227,220,.16)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7fe3dc" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12" /><path d="M7 12l5 5 5-5" /><path d="M4 20h16" /></svg>
-            </span>
-            <span>
-              <span style={{ display: "block", font: `700 12.5px ${SANS}`, color: "#fff" }}>{f.title}</span>
-              <span style={{ display: "block", font: `500 11px ${SANS}`, color: "rgba(255,255,255,.6)" }}>{f.meta}</span>
-            </span>
-          </div>
-        ))}
+    <>
+      <div style={{ background: "linear-gradient(120deg,#0c2a45,#0a1f38)", borderRadius: 20, padding: "30px 34px", marginBottom: 26 }}>
+        <div style={{ font: `700 11px ${SANS}`, color: "#7fe3dc", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 8 }}>Course complete</div>
+        <div style={{ font: `700 clamp(20px,2.4vw,26px) ${SANS}`, color: "#fff", marginBottom: 6 }}>Your reading kit is unlocked</div>
+        <p style={{ font: `400 13.5px/1.7 ${SANS}`, color: "rgba(255,255,255,.72)", margin: "0 0 20px", maxWidth: 560 }}>
+          Every item is finished. These materials are yours to keep — download them now or come back for them whenever
+          you need them.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }} className="site-grid-2">
+          {course.readingKit.map((file) => {
+            const inside = (
+              <>
+                <span aria-hidden style={{ flex: "none", width: 28, height: 28, borderRadius: 8, background: "rgba(127,227,220,.16)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7fe3dc" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v12" /><path d="M7 12l5 5 5-5" /><path d="M4 20h16" /></svg>
+                </span>
+                <span>
+                  <span style={{ display: "block", font: `700 12.5px ${SANS}`, color: "#fff" }}>{file.title}</span>
+                  <span style={{ display: "block", font: `500 11px ${SANS}`, color: "rgba(255,255,255,.6)" }}>{file.meta}</span>
+                </span>
+              </>
+            );
+            const style = {
+              display: "flex", alignItems: "center", gap: 11,
+              background: "rgba(255,255,255,.08)", border: "1px solid rgba(127,227,220,.3)",
+              borderRadius: 12, padding: "12px 14px", textDecoration: "none",
+            } as const;
+            // A file with nowhere to download from is listed, not linked —
+            // better than a link that goes nowhere.
+            return file.href ? (
+              <a key={file.title} href={file.href} download style={style}>{inside}</a>
+            ) : (
+              <div key={file.title} style={style}>{inside}</div>
+            );
+          })}
+        </div>
       </div>
-    </div>
+
+      <div style={{ font: `700 11px ${SANS}`, color: "#1b8f88", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 10 }}>
+        Completion
+      </div>
+      <h2 style={{ font: `700 clamp(22px,2.4vw,30px)/1.2 ${SANS}`, color: "#0a1b33", margin: "0 0 20px", letterSpacing: "-.02em" }}>
+        Your certificates
+      </h2>
+      <CourseCertificates
+        slug={slug}
+        name={who.name}
+        org={who.org}
+        completedOn={completedOn}
+        ready
+        finished
+      />
+    </>
   );
 }
 

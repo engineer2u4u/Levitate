@@ -34,8 +34,6 @@ export type CourseItem = {
   meta?: string;
   /** Reading: paragraphs. A heading is a line that starts with "## ". */
   body?: string[];
-  /** Shows the learner their own certificates, filled in and downloadable. */
-  certificates?: boolean;
   /** Puts the delegate feedback form under the body. The item completes when
    *  the form is sent, the way an acknowledgement completes when signed. */
   feedback?: boolean;
