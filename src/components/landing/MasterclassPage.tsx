@@ -249,13 +249,7 @@ export default function MasterclassPage({ offer: M }: { offer: MasterclassOffer 
         </div>
       </Section>
 
-      {M.recognition && (
-        <Section flush>
-          <p style={{ font: T.lead, color: "#5b6e82", margin: 0, maxWidth: MEASURE }}>{M.recognition}</p>
-        </Section>
-      )}
-
-      <Accreditations spaceBelow maxWidth={MAX} />
+      <Accreditations spaceBelow maxWidth={MAX} intro={M.recognition} />
 
       {/* ------------------------------------------------------------ FAQ */}
       <Section tone="soft">

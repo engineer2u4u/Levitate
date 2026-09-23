@@ -32,10 +32,13 @@ const BADGES = [
  * above the footer the SHRM line would otherwise sit flush against it.
  */
 export default function Accreditations({
-  spaceBelow = false, maxWidth = 1240, shrm = true,
+  spaceBelow = false, maxWidth = 1240, shrm = true, intro,
 }: {
   spaceBelow?: boolean;
   maxWidth?: number;
+  /** A line of the page's own, set under the heading rather than left to
+   *  float between sections with nothing around it. */
+  intro?: string;
   /** False on a programme that earns no PDCs: the SHRM mark is a claim, and
    *  the organisation holding it does not mean this programme carries it. */
   shrm?: boolean;
@@ -47,6 +50,9 @@ export default function Accreditations({
         <Reveal style={{ textAlign: "center", marginBottom: 40 }}>
           <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>Accreditations</div>
           <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em" }}>Accreditation | Global and Industry Recognition</h2>
+          {intro && (
+            <p style={{ font: "400 15.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "16px auto 0", maxWidth: 760 }}>{intro}</p>
+          )}
         </Reveal>
 
         <div className="site-accred-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 22, maxWidth: 900, margin: "0 auto" }}>
