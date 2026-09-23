@@ -465,7 +465,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                 </button>
               </>
             ) : item.feedback ? (
-              <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>Send your feedback above to continue.</span>
+              <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>Submit your feedback above to continue.</span>
             ) : item.acknowledgement ? (
               <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>Sign the acknowledgement above to continue.</span>
             ) : item.kind === "quiz" ? (
@@ -1097,36 +1097,17 @@ function FeedbackForm({
 
       <h3 style={{ font: `700 19px ${SANS}`, color: "#0a1b33", margin: "0 0 4px" }}>Delegate Feedback Form</h3>
       <p style={{ font: `500 13px/1.7 ${SANS}`, color: "#8296a9", margin: "0 0 22px" }}>
-        PoSH Train-the-Trainer Certification Programme · 1 poor to 5 excellent
+        PoSH Train-the-Trainer Certification Programme · one star poor to five excellent
       </p>
 
       {RATED.map((area) => (
         <div key={area} style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap", padding: "12px 0", borderTop: "1px solid #eef2f6" }}>
           <div style={{ flex: "1 1 240px", font: `600 14px/1.5 ${SANS}`, color: "#0a1b33" }}>{area}</div>
-          <div role="radiogroup" aria-label={area} style={{ display: "flex", gap: 8 }}>
-            {[1, 2, 3, 4, 5].map((n) => {
-              const on = ratings[area] === n;
-              return (
-                <button
-                  key={n}
-                  type="button"
-                  role="radio"
-                  aria-checked={on}
-                  title={SCALE[n - 1]}
-                  onClick={() => setRatings((r) => ({ ...r, [area]: n }))}
-                  style={{
-                    width: 42, height: 42, borderRadius: 12, cursor: "pointer",
-                    border: `2px solid ${on ? "#1b8f88" : "#e3eaf0"}`,
-                    background: on ? "rgba(47,196,188,.16)" : "#f7fafc",
-                    boxShadow: on ? "0 2px 10px rgba(27,143,136,.18)" : "none",
-                    font: `${on ? 800 : 600} 14.5px ${SANS}`, color: on ? "#0e5d59" : "#5b6e82",
-                  }}
-                >
-                  {n}
-                </button>
-              );
-            })}
-          </div>
+          <Stars
+            area={area}
+            value={ratings[area] ?? 0}
+            onChange={(n) => setRatings((r) => ({ ...r, [area]: n }))}
+          />
         </div>
       ))}
 
@@ -1166,7 +1147,7 @@ function FeedbackForm({
         }}
       >
         {busy && <Spinner />}
-        {busy ? "Sending your feedback…" : "Send feedback"}
+        {busy ? "Submitting your feedback…" : "Submit feedback"}
       </button>
       {!ready && (
         <div style={{ font: `500 12px ${SANS}`, color: "#8296a9", marginTop: 10 }}>
@@ -1176,6 +1157,63 @@ function FeedbackForm({
     </form>
   );
 }
+
+/**
+ * Five stars, one rating.
+ *
+ * Still radio buttons underneath — the label says "3 of 5, Good", so this
+ * reads to a screen reader as the scale it is rather than as five pictures.
+ * Hovering fills the stars up to the one under the pointer, which is how
+ * everyone expects a star rating to behave.
+ */
+function Stars({ area, value, onChange }: { area: string; value: number; onChange: (n: number) => void }) {
+  const [hover, setHover] = useState(0);
+  const lit = hover || value;
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <div
+        role="radiogroup"
+        aria-label={area}
+        onMouseLeave={() => setHover(0)}
+        style={{ display: "flex", gap: 2 }}
+      >
+        {[1, 2, 3, 4, 5].map((n) => (
+          <button
+            key={n}
+            type="button"
+            role="radio"
+            aria-checked={value === n}
+            aria-label={`${n} of 5 — ${SCALE[n - 1]}`}
+            title={SCALE[n - 1]}
+            onClick={() => onChange(n)}
+            onMouseEnter={() => setHover(n)}
+            onFocus={() => setHover(n)}
+            onBlur={() => setHover(0)}
+            style={{ cursor: "pointer", border: "none", background: "transparent", padding: 3, lineHeight: 0, borderRadius: 8 }}
+          >
+            <Star filled={n <= lit} />
+          </button>
+        ))}
+      </div>
+      {/* The word, so a rating is never only a count of shapes. */}
+      <span style={{ font: `600 12.5px ${SANS}`, color: value ? "#0a1b33" : "#a9b8c6", minWidth: 74 }}>
+        {value ? SCALE[value - 1] : "Not rated"}
+      </span>
+    </div>
+  );
+}
+
+const Star = ({ filled }: { filled: boolean }) => (
+  <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden style={{ display: "block" }}>
+    <path
+      d="M12 2.6l2.9 5.88 6.49.95-4.7 4.58 1.11 6.46L12 17.42l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.95L12 2.6z"
+      fill={filled ? "#f0b429" : "#fff"}
+      stroke={filled ? "#db9a16" : "#c4d2de"}
+      strokeWidth={1.6}
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
 function FeedbackText({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
