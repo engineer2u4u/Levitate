@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import CertificatePlate from "@/components/site/CertificatePlate";
-import { certificateCards, type CertificateIssue } from "@/lib/certificateArt";
+import { CANVASES, certificateCards, type CertificateIssue } from "@/lib/certificateArt";
 import { downloadCertificatePdf, downloadCertificatePng, fileStem } from "@/lib/lms/certificateExport";
 import { issueCertificate, isRevoked, type Certificate } from "@/lib/lms/certificates";
 import { courseBySlug } from "@/lib/lms/courses";
@@ -157,6 +157,8 @@ function CertificateCard({
   ready: boolean;
 }) {
   const holder = useRef<HTMLDivElement | null>(null);
+  const plate = CANVASES[issue.template];
+  const portrait = plate.h > plate.w;
   const [busy, setBusy] = useState<"png" | "pdf" | null>(null);
   const [failed, setFailed] = useState("");
 
@@ -181,7 +183,20 @@ function CertificateCard({
       <div style={{ font: `700 15px/1.4 ${SANS}`, color: "#0a1b33", marginBottom: 4 }}>{title}</div>
       <div style={{ font: `400 13px/1.65 ${SANS}`, color: "#5b6e82", marginBottom: 16 }}>{caption}</div>
 
-      <div ref={holder} style={{ borderRadius: 12, overflow: "hidden", border: "1px solid #eef2f6", boxShadow: "0 10px 28px rgba(10,27,51,.10)" }}>
+      {/* Capped rather than run to the column's full width: three certificates
+          at 1200px each is a scroll, not a page. Portrait sits narrower so the
+          CPD certificate takes about the same room as the landscape pair. */}
+      <div
+        ref={holder}
+        style={{
+          width: "100%",
+          maxWidth: portrait ? 380 : 600,
+          borderRadius: 12,
+          overflow: "hidden",
+          border: "1px solid #eef2f6",
+          boxShadow: "0 10px 28px rgba(10,27,51,.10)",
+        }}
+      >
         <CertificatePlate issue={issue} />
       </div>
 
