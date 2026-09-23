@@ -641,10 +641,14 @@ function ItemView({
       )}
 
       {item.body && (
-        <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px", marginBottom: 24 }}>
-          {item.checklist
-            ? <Checklist key={item.id} item={item} userId={who.id} />
-            : item.body.map((para, i) => <Para key={i} text={para} />)}
+        <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "clamp(28px,3vw,40px) clamp(24px,3vw,44px)", marginBottom: 24 }}>
+          {/* Capped for line length: the pane is as wide as the window, and
+              prose set across all of it is tiring to read back across. */}
+          <div style={{ maxWidth: 760 }}>
+            {item.checklist
+              ? <Checklist key={item.id} item={item} userId={who.id} />
+              : item.body.map((para, i) => <Para key={i} text={para} />)}
+          </div>
         </div>
       )}
 
@@ -890,6 +894,8 @@ function QuizView({
 }) {
   const questions = item.questions ?? [];
   const [picked, setPicked] = useState<Record<number, number>>({});
+  // Which question is on screen: the quiz is asked one at a time.
+  const [at, setAt] = useState(0);
   const [shown, setShown] = useState(false);
   const [marking, setMarking] = useState(false);
 
@@ -939,7 +945,7 @@ function QuizView({
             {!settled && (
               <button
                 type="button"
-                onClick={() => { setPicked({}); setShown(true); }}
+                onClick={() => { setPicked({}); setAt(0); setShown(true); }}
                 className="lp-btn-outline"
                 style={{ cursor: "pointer", background: "#fff", border: "1.5px solid rgba(10,27,51,.28)", color: "#0a1b33", font: `700 14px ${SANS}`, padding: "14px 26px", borderRadius: 999 }}
               >
@@ -952,85 +958,135 @@ function QuizView({
     );
   }
 
-  return (
-    <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
-      {questions.map((q, qi) => (
-        <div key={q.q} style={{ marginBottom: 26 }}>
-          <div style={{ font: `700 14.5px/1.55 ${SANS}`, color: "#0a1b33", marginBottom: 12 }}>
-            {qi + 1}. {q.q}
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {q.options.map((opt, oi) => {
-              const chosen = picked[qi] === oi;
-              return (
-                <button
-                  key={opt}
-                  type="button"
-                  onClick={() => setPicked((p) => ({ ...p, [qi]: oi }))}
-                  style={{
-                    display: "flex", alignItems: "center", gap: 11,
-                    textAlign: "left", cursor: "pointer", borderRadius: 12, padding: "12px 15px",
-                    border: `2px solid ${chosen ? "#1b8f88" : "#e3eaf0"}`,
-                    background: chosen ? "rgba(47,196,188,.16)" : "#f7fafc",
-                    boxShadow: chosen ? "0 2px 12px rgba(27,143,136,.18)" : "none",
-                    font: `${chosen ? 700 : 500} 13.5px/1.5 ${SANS}`,
-                    color: chosen ? "#0e5d59" : "#0a1b33",
-                    transition: "background .15s ease, border-color .15s ease",
-                  }}
-                >
-                  {/* The answer someone picked has to be obvious at a glance,
-                      not a shade of the one they did not. */}
-                  <span
-                    aria-hidden
-                    style={{
-                      flex: "none", width: 18, height: 18, borderRadius: "50%",
-                      border: `2px solid ${chosen ? "#1b8f88" : "#c4d2de"}`,
-                      background: chosen ? "#1b8f88" : "#fff",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                    }}
-                  >
-                    {chosen && <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#fff" }} />}
-                  </span>
-                  <span style={{ flex: 1 }}>{opt}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      ))}
+  const q = questions[at];
+  const chosenHere = picked[at];
+  const lastOne = at === questions.length - 1;
 
-      <button
-        type="button"
-        disabled={answered < questions.length || marking}
-        // Back to the verdict, not to the filled-in form: a retake has to say
-        // whether it passed as plainly as the first attempt did.
-        onClick={() => {
-          if (marking) return;
-          const sat = { score, total: questions.length };
-          setMarking(true);
-          // The verdict appears once the attempt is recorded, carrying the
-          // score just sat — never the one before it.
-          void Promise.resolve(onSubmit(sat)).finally(() => {
-            setShown(false);
-            setMarking(false);
-          });
-        }}
-        className="lp-btn-grad"
-        style={{
-          display: "inline-flex", alignItems: "center", gap: 9,
-          cursor: answered < questions.length ? "not-allowed" : marking ? "wait" : "pointer", border: "none",
-          background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff",
-          font: `700 14px ${SANS}`, padding: "14px 28px", borderRadius: 999,
-          opacity: answered < questions.length ? 0.5 : marking ? 0.8 : 1,
-        }}
-      >
-        {marking && <Spinner />}
-        {marking ? "Marking your answers…" : "Submit answers"}
-      </button>
-      <div style={{ font: `500 12px ${SANS}`, color: "#8296a9", marginTop: 10 }}>
-        {answered < questions.length
-          ? `Answer all ${questions.length} questions to submit.`
-          : `You need ${passMark(questions.length)} of ${questions.length} right to pass.`}
+  return (
+    <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "clamp(28px,3vw,40px) clamp(24px,3vw,44px)" }}>
+      {/* One question at a time: twenty of them on a single page is a wall to
+          scroll rather than a question to think about. */}
+      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18 }}>
+        <span style={{ font: `700 11px ${SANS}`, color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+          Question {at + 1} of {questions.length}
+        </span>
+        <span style={{ flex: 1, height: 6, borderRadius: 999, background: "#e3eaf0", overflow: "hidden" }}>
+          <span style={{ display: "block", width: `${((at + 1) / questions.length) * 100}%`, height: "100%", background: "linear-gradient(90deg,#2fc4bc,#2f7fd6)", transition: "width .25s ease" }} />
+        </span>
+        <span style={{ font: `600 11.5px ${SANS}`, color: "#8296a9", whiteSpace: "nowrap" }}>
+          {answered} answered
+        </span>
+      </div>
+
+      <div style={{ font: `700 19px/1.5 ${SANS}`, color: "#0a1b33", marginBottom: 18, maxWidth: 760 }}>
+        {q.q}
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 760 }}>
+        {q.options.map((opt, oi) => {
+          const chosen = chosenHere === oi;
+          return (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => setPicked((p) => ({ ...p, [at]: oi }))}
+              style={{
+                display: "flex", alignItems: "center", gap: 12,
+                textAlign: "left", cursor: "pointer", borderRadius: 12, padding: "15px 17px",
+                border: `2px solid ${chosen ? "#1b8f88" : "#e3eaf0"}`,
+                background: chosen ? "rgba(47,196,188,.16)" : "#f7fafc",
+                boxShadow: chosen ? "0 2px 12px rgba(27,143,136,.18)" : "none",
+                font: `${chosen ? 700 : 500} 15px/1.6 ${SANS}`,
+                color: chosen ? "#0e5d59" : READING_INK,
+                transition: "background .15s ease, border-color .15s ease",
+              }}
+            >
+              {/* The answer someone picked has to be obvious at a glance,
+                  not a shade of the one they did not. */}
+              <span
+                aria-hidden
+                style={{
+                  flex: "none", width: 20, height: 20, borderRadius: "50%",
+                  border: `2px solid ${chosen ? "#1b8f88" : "#c4d2de"}`,
+                  background: chosen ? "#1b8f88" : "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}
+              >
+                {chosen && <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#fff" }} />}
+              </span>
+              <span style={{ flex: 1 }}>{opt}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginTop: 26 }}>
+        <button
+          type="button"
+          disabled={at === 0 || marking}
+          onClick={() => setAt((i) => Math.max(0, i - 1))}
+          className="lp-btn-outline"
+          style={{
+            cursor: at === 0 ? "not-allowed" : "pointer", background: "#fff",
+            border: "1.5px solid rgba(10,27,51,.24)", color: "#0a1b33",
+            font: `700 13.5px ${SANS}`, padding: "13px 22px", borderRadius: 999,
+            opacity: at === 0 ? 0.45 : 1,
+          }}
+        >
+          ← Back
+        </button>
+
+        {lastOne ? (
+          <button
+            type="button"
+            disabled={answered < questions.length || marking}
+            onClick={() => {
+              if (marking) return;
+              const sat = { score, total: questions.length };
+              setMarking(true);
+              // The verdict appears once the attempt is recorded, carrying the
+              // score just sat — never the one before it.
+              void Promise.resolve(onSubmit(sat)).finally(() => {
+                setShown(false);
+                setMarking(false);
+              });
+            }}
+            className="lp-btn-grad"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 9,
+              cursor: answered < questions.length ? "not-allowed" : marking ? "wait" : "pointer", border: "none",
+              background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff",
+              font: `700 14px ${SANS}`, padding: "14px 28px", borderRadius: 999,
+              opacity: answered < questions.length ? 0.5 : marking ? 0.8 : 1,
+            }}
+          >
+            {marking && <Spinner />}
+            {marking ? "Marking your answers…" : "Submit answers"}
+          </button>
+        ) : (
+          <button
+            type="button"
+            disabled={chosenHere === undefined}
+            onClick={() => setAt((i) => Math.min(questions.length - 1, i + 1))}
+            className="lp-btn-grad"
+            style={{
+              cursor: chosenHere === undefined ? "not-allowed" : "pointer", border: "none",
+              background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff",
+              font: `700 14px ${SANS}`, padding: "14px 28px", borderRadius: 999,
+              opacity: chosenHere === undefined ? 0.5 : 1,
+            }}
+          >
+            Next question →
+          </button>
+        )}
+
+        <span style={{ font: `500 12.5px ${SANS}`, color: "#8296a9" }}>
+          {chosenHere === undefined
+            ? "Choose an answer to carry on."
+            : lastOne && answered < questions.length
+              ? `${questions.length - answered} still unanswered — go back for them.`
+              : `You need ${passMark(questions.length)} of ${questions.length} right to pass.`}
+        </span>
       </div>
     </div>
   );
@@ -1472,7 +1528,7 @@ function Checklist({ item, userId }: { item: CourseItem; userId: string }) {
               onChange={(e) => write({ ...ticked, [i]: e.target.checked })}
               style={{ flex: "none", width: 16, height: 16, marginTop: 5, accentColor: "#1b8f88", cursor: "pointer" }}
             />
-            <span style={{ font: `400 14.5px/1.75 ${SANS}`, color: ticked[i] ? "#a9b8c6" : "#5b6e82", textDecoration: ticked[i] ? "line-through" : "none" }}>
+            <span style={{ font: `400 15.5px/1.8 ${SANS}`, color: ticked[i] ? "#a9b8c6" : READING_INK, textDecoration: ticked[i] ? "line-through" : "none" }}>
               {bold(text.slice(2))}
             </span>
           </label>
@@ -1484,19 +1540,26 @@ function Checklist({ item, userId }: { item: CourseItem; userId: string }) {
   );
 }
 
+/**
+ * Course text is read, not skimmed, so it is set like something to read:
+ * near-black rather than the grey used for interface copy, a size that does
+ * not ask the reader to lean in, and generous leading.
+ */
+export const READING_INK = "#16202e";
+
 function Para({ text }: { text: string }) {
   if (text.startsWith("## "))
-    return <h3 style={{ font: `700 17px ${SANS}`, color: "#0a1b33", margin: "26px 0 12px" }}>{bold(text.slice(3))}</h3>;
+    return <h3 style={{ font: `700 19.5px/1.4 ${SANS}`, color: "#0a1b33", margin: "34px 0 14px" }}>{bold(text.slice(3))}</h3>;
 
   if (text.startsWith("- "))
     return (
-      <div style={{ display: "flex", gap: 11, margin: "0 0 9px" }}>
-        <span aria-hidden style={{ flex: "none", width: 5, height: 5, borderRadius: "50%", background: "#2fc4bc", marginTop: 9 }} />
-        <span style={{ font: `400 14.5px/1.75 ${SANS}`, color: "#5b6e82" }}>{bold(text.slice(2))}</span>
+      <div style={{ display: "flex", gap: 12, margin: "0 0 12px" }}>
+        <span aria-hidden style={{ flex: "none", width: 6, height: 6, borderRadius: "50%", background: "#2fc4bc", marginTop: 11 }} />
+        <span style={{ font: `400 16px/1.85 ${SANS}`, color: READING_INK }}>{bold(text.slice(2))}</span>
       </div>
     );
 
-  return <p style={{ font: `400 14.5px/1.85 ${SANS}`, color: "#5b6e82", margin: "0 0 14px" }}>{bold(text)}</p>;
+  return <p style={{ font: `400 16px/1.9 ${SANS}`, color: READING_INK, margin: "0 0 18px" }}>{bold(text)}</p>;
 }
 
 /**
@@ -1509,9 +1572,9 @@ function Para({ text }: { text: string }) {
 function bold(text: string) {
   return text.split(/(\*\*[^*]+\*\*|\*[^*\s][^*]*\*)/g).map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**"))
-      return <strong key={i} style={{ color: "#0a1b33", fontWeight: 700 }}>{part.slice(2, -2)}</strong>;
+      return <strong key={i} style={{ color: "#05080d", fontWeight: 700 }}>{part.slice(2, -2)}</strong>;
     if (part.startsWith("*") && part.endsWith("*") && part.length > 2)
-      return <em key={i} style={{ color: "#3d5064" }}>{part.slice(1, -1)}</em>;
+      return <em key={i} style={{ color: "#16202e" }}>{part.slice(1, -1)}</em>;
     return part;
   });
 }
