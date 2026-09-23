@@ -16,7 +16,9 @@ import {
   type QuizAttempt,
   quizPassed,
   recordQuizAttempt,
+  recordVideoProgress,
   startCourse,
+  VIDEO_WATCHED_RATIO,
   uncompleteItem,
   type CourseProgress,
 } from "@/lib/lms/courseProgress";
@@ -62,6 +64,14 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   const [readTo, setReadTo] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  // How far the film on screen has played, before it is written down.
+  const [watch, setWatch] = useState<{ id: string; fraction: number }>({ id: "", fraction: 0 });
+  // Films that cannot play at all — a broken or blocked video must not hold
+  // the learner behind a gate that can never open.
+  const [unplayable, setUnplayable] = useState<string[]>([]);
+  // The furthest point already written down per film, so a tick a second does
+  // not become a database write a second.
+  const saved = useRef<Record<string, number>>({});
 
   const items = useMemo(() => (course ? flatItems(course) : []), [course]);
 
@@ -134,6 +144,32 @@ export default function CoursePlayer({ slug }: { slug: string }) {
     },
     [course, user, onComplete],
   );
+
+  /**
+   * Playback position, once a second while a film runs. Held in state so the
+   * gate opens as it is watched, and written down at quarters — and at the
+   * pass mark itself — so it survives a reload without a write per tick.
+   */
+  const onVideoProgress = useCallback(
+    (itemId: string, fraction: number) => {
+      setWatch((w) => (w.id === itemId && w.fraction >= fraction ? w : { id: itemId, fraction }));
+      if (!course || !user) return;
+      const quarter = Math.floor(fraction / 0.25) * 0.25;
+      const mark = fraction >= VIDEO_WATCHED_RATIO ? Math.max(quarter, VIDEO_WATCHED_RATIO) : quarter;
+      if (mark <= 0 || mark <= (saved.current[itemId] ?? 0)) return;
+      saved.current[itemId] = mark;
+      void recordVideoProgress(user.id, course, itemId, fraction)
+        .then(setProgress)
+        // Not worth an error banner mid-film: the gate still holds on what
+        // this session has watched, and the next milestone tries again.
+        .catch(() => { saved.current[itemId] = 0; });
+    },
+    [course, user],
+  );
+
+  const onVideoUnavailable = useCallback((itemId: string) => {
+    setUnplayable((list) => (list.includes(itemId) ? list : [...list, itemId]));
+  }, []);
 
   const onUndo = useCallback(
     async (item: CourseItem) => {
@@ -225,6 +261,16 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   const attempt = progress?.quizAttempts[item.id] ?? null;
   // A reading hands over its Proceed button once its end has been on screen.
   const unread = item.kind === "reading" && !item.acknowledgement && readTo !== item.id;
+  // A film hands it over once 90% of it has played.
+  const played = Math.max(
+    progress?.videoProgress[item.id] ?? 0,
+    watch.id === item.id ? watch.fraction : 0,
+  );
+  const unwatched =
+    Boolean(item.videoId) &&
+    !item.watchOptional &&
+    !unplayable.includes(item.id) &&
+    played < VIDEO_WATCHED_RATIO;
 
   const proceed = () => {
     if (saving) return;
@@ -385,6 +431,8 @@ export default function CoursePlayer({ slug }: { slug: string }) {
             onComplete={onComplete}
             onQuizSubmit={onQuizSubmit}
             onReachEnd={setReadTo}
+            onVideoProgress={onVideoProgress}
+            onVideoUnavailable={onVideoUnavailable}
           />
           </div>
           </div>
@@ -423,6 +471,10 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                   ? `Score ${passMark(attempt.total)} of ${attempt.total} or better to continue — retake the quiz above.`
                   : "Submit the quiz to continue."}
               </span>
+            ) : unwatched ? (
+              <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>
+                Watch the film to continue — {Math.round(played * 100)}% watched.
+              </span>
             ) : unread ? (
               /* The button is withheld, not disabled: a reading is finished by
                  reading it, and a greyed-out control invites clicking at it. */
@@ -460,7 +512,7 @@ const KIND_LABEL: Record<CourseItem["kind"], string> = {
 const itemMeta = (it: CourseItem) => it.meta ?? `${KIND_LABEL[it.kind]} · ${it.minutes} min`;
 
 function ItemView({
-  item, state, nextSession, attempt, onComplete, onQuizSubmit, onReachEnd,
+  item, state, nextSession, attempt, onComplete, onQuizSubmit, onReachEnd, onVideoProgress, onVideoUnavailable,
 }: {
   item: CourseItem;
   state: ItemState;
@@ -469,6 +521,8 @@ function ItemView({
   onComplete: (item: CourseItem, attempt?: QuizAttempt) => void;
   onQuizSubmit: (item: CourseItem, attempt: QuizAttempt) => void;
   onReachEnd: (itemId: string) => void;
+  onVideoProgress: (itemId: string, fraction: number) => void;
+  onVideoUnavailable: (itemId: string) => void;
 }) {
   if (state === "scheduled") {
     return (
@@ -512,13 +566,24 @@ function ItemView({
           a videoId shows it above the text it belongs to. */}
       {(item.kind === "video" || item.videoId) && (
         <div style={{ position: "relative", paddingTop: "56.25%", borderRadius: 16, overflow: "hidden", background: "#0a1b33", marginBottom: 26 }}>
-          {item.videoId ? (
-            <iframe
-              src={`https://www.youtube-nocookie.com/embed/${item.videoId}${item.videoBare ? "?controls=0&modestbranding=1&rel=0&iv_load_policy=3" : ""}`}
+          {item.videoId && state === "preview" ? (
+            /* Looking ahead is for seeing what is coming, not for watching it
+               early — and a film played here would count towards nothing. */
+            <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 10, padding: 24, textAlign: "center", color: "rgba(255,255,255,.72)" }}>
+              <LockIcon size={26} />
+              <div style={{ font: `700 13px ${SANS}`, color: "#fff" }}>
+                The film opens when you complete the previous session
+              </div>
+            </div>
+          ) : item.videoId ? (
+            <FilmFrame
+              key={item.id}
+              itemId={item.id}
+              videoId={item.videoId}
               title={item.title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none" }}
+              bare={item.videoBare === true}
+              onProgress={onVideoProgress}
+              onUnavailable={onVideoUnavailable}
             />
           ) : (
             /* Course footage is not hosted yet. A placeholder that says so
@@ -571,6 +636,138 @@ function ItemView({
 
       <EndMarker id={item.id} onSee={onReachEnd} />
     </>
+  );
+}
+
+/* ------------------------------------------------------------------ film */
+
+type YTPlayer = { getCurrentTime: () => number; getDuration: () => number; destroy?: () => void };
+type YTNamespace = {
+  Player: new (el: HTMLElement, opts: Record<string, unknown>) => YTPlayer;
+  PlayerState: { ENDED: number };
+};
+
+let ytApi: Promise<YTNamespace> | null = null;
+
+/**
+ * YouTube's iframe API, loaded once for the page.
+ *
+ * A plain embed cannot be asked how far it has played; this one can, which is
+ * what lets a film hold the Proceed button. The player itself still runs on
+ * youtube-nocookie.com — only the API script has to come from youtube.com.
+ */
+function loadYouTubeApi(): Promise<YTNamespace> {
+  ytApi ??= new Promise<YTNamespace>((resolve, reject) => {
+    const w = window as unknown as { YT?: YTNamespace; onYouTubeIframeAPIReady?: () => void };
+    if (w.YT?.Player) return resolve(w.YT);
+    const previous = w.onYouTubeIframeAPIReady;
+    w.onYouTubeIframeAPIReady = () => {
+      previous?.();
+      if (w.YT?.Player) resolve(w.YT);
+      else reject(new Error("The video player did not load."));
+    };
+    const el = document.createElement("script");
+    el.src = "https://www.youtube.com/iframe_api";
+    el.onerror = () => reject(new Error("The video player could not be loaded."));
+    document.head.appendChild(el);
+  });
+  return ytApi;
+}
+
+/**
+ * A film that reports how much of itself has been played.
+ *
+ * The player is mounted into a node this component makes rather than one React
+ * renders, because YouTube replaces the element it is given with its own
+ * iframe — React must not be reconciling a node that is no longer there.
+ *
+ * If the API or the video will not load, it says so and reports the film
+ * unplayable: a video that can never report progress must not be allowed to
+ * trap a learner behind a gate it cannot open.
+ */
+function FilmFrame({
+  itemId, videoId, title, bare, onProgress, onUnavailable,
+}: {
+  itemId: string;
+  videoId: string;
+  title: string;
+  bare: boolean;
+  onProgress: (itemId: string, fraction: number) => void;
+  onUnavailable: (itemId: string) => void;
+}) {
+  const holder = useRef<HTMLDivElement | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    const host = holder.current;
+    if (!host) return;
+    let cancelled = false;
+    let player: YTPlayer | null = null;
+    let timer: number | undefined;
+    const mount = document.createElement("div");
+    mount.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
+    host.appendChild(mount);
+
+    loadYouTubeApi()
+      .then((YT) => {
+        if (cancelled) return;
+        player = new YT.Player(mount, {
+          videoId,
+          host: "https://www.youtube-nocookie.com",
+          width: "100%",
+          height: "100%",
+          playerVars: {
+            controls: bare ? 0 : 1,
+            modestbranding: 1,
+            rel: 0,
+            iv_load_policy: 3,
+            playsinline: 1,
+          },
+          events: {
+            onReady: () => {
+              timer = window.setInterval(() => {
+                if (!player) return;
+                const length = player.getDuration();
+                if (length > 0) onProgress(itemId, player.getCurrentTime() / length);
+              }, 1000);
+            },
+            onStateChange: (e: { data: number }) => {
+              // The last seconds are titles; ending it counts as watching it.
+              if (e.data === YT.PlayerState.ENDED) onProgress(itemId, 1);
+            },
+            onError: () => onUnavailable(itemId),
+          },
+        });
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setFailed(true);
+        onUnavailable(itemId);
+      });
+
+    return () => {
+      cancelled = true;
+      if (timer) window.clearInterval(timer);
+      try {
+        player?.destroy?.();
+      } catch {
+        /* already gone with the iframe */
+      }
+      host.replaceChildren();
+    };
+  }, [itemId, videoId, bare, onProgress, onUnavailable]);
+
+  return (
+    <div ref={holder} style={{ position: "absolute", inset: 0 }}>
+      {failed && (
+        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 8, padding: 24, textAlign: "center", color: "rgba(255,255,255,.72)" }}>
+          <div style={{ font: `700 13px ${SANS}`, color: "#fff" }}>The film could not be loaded</div>
+          <div style={{ font: `500 12px/1.6 ${SANS}`, maxWidth: 420 }}>
+            Watch “{title}” on YouTube if you can — it is not holding you here.
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 

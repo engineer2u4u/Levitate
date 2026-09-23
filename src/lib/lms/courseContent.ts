@@ -41,6 +41,10 @@ export type CourseItem = {
    *  through. YouTube still draws its own play button on the first frame —
    *  only autoplay removes that, and a narrated film should not autoplay. */
   videoBare?: boolean;
+  /** Lets the learner past a film without watching it. Films hold the Proceed
+   *  button until 90% is played, which is the point of putting one in a
+   *  course; this is for the ones that are genuinely optional viewing. */
+  watchOptional?: boolean;
   questions?: QuizQuestion[];
   /**
    * Material the learner must agree to, not merely read. Renders a name field
