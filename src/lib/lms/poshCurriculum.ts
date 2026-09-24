@@ -38,7 +38,7 @@ export const POSH_CURRICULUM: Curriculum = {
       ],
     },
     {
-      id: "s1", num: "01", title: "Week 1 · Legal Foundations", release: "Unlocks after Live Session 1 · 3 October",
+      id: "s1", num: "01", title: "Week 1 · Legal Foundations", release: "Unlocks after Live Session 1 · 10 October",
       lessons: [
         { id: "l1-1", kind: "VID", title: "M1 · Purpose, Culture and the Certification Journey", meta: "Video · 22 min", desc: "Why PoSH facilitation is a culture role before it is a compliance role, and what the certification journey asks of you." },
         { id: "l1-2", kind: "VID", title: "M2 · India's Evolving PoSH Landscape", meta: "Video · 26 min", desc: "How expectations, judgments and workplace practice have shifted since 2013 — and what that means for trainers." },
@@ -69,12 +69,12 @@ export const POSH_CURRICULUM: Curriculum = {
     },
   ],
   sessions: [
-    { n: 1, day: "03", month: "Oct", date: "Sat 3 October", time: "6:00 – 8:00 PM", topic: "Foundations & the CLEAR framework" },
-    { n: 2, day: "04", month: "Oct", date: "Sun 4 October", time: "6:00 – 8:00 PM", topic: "Legal genesis & applied definitions" },
-    { n: 3, day: "10", month: "Oct", date: "Sat 10 October", time: "6:00 – 8:00 PM", topic: "Recognition, coverage & jurisdiction" },
-    { n: 4, day: "11", month: "Oct", date: "Sun 11 October", time: "6:00 – 8:00 PM", topic: "IC governance & fair inquiry practice" },
-    { n: 5, day: "17", month: "Oct", date: "Sat 17 October", time: "6:00 – 8:00 PM", topic: "Case laboratory · live inquiry simulation" },
-    { n: 6, day: "18", month: "Oct", date: "Sun 18 October", time: "6:00 – 8:00 PM", topic: "Trainer craft & facilitation assessment" },
+    { n: 1, day: "10", month: "Oct", date: "Sat 10 October", time: "6:00 – 8:00 PM", topic: "Foundations & the CLEAR framework" },
+    { n: 2, day: "11", month: "Oct", date: "Sun 11 October", time: "6:00 – 8:00 PM", topic: "Legal genesis & applied definitions" },
+    { n: 3, day: "17", month: "Oct", date: "Sat 17 October", time: "6:00 – 8:00 PM", topic: "Recognition, coverage & jurisdiction" },
+    { n: 4, day: "18", month: "Oct", date: "Sun 18 October", time: "6:00 – 8:00 PM", topic: "IC governance & fair inquiry practice" },
+    { n: 5, day: "24", month: "Oct", date: "Sat 24 October", time: "6:00 – 8:00 PM", topic: "Case laboratory · live inquiry simulation" },
+    { n: 6, day: "25", month: "Oct", date: "Sun 25 October", time: "6:00 – 8:00 PM", topic: "Trainer craft & facilitation assessment" },
   ],
   quizzes: [
     {

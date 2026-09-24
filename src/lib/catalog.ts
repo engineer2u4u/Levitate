@@ -211,12 +211,12 @@ const at = (day: string, from: string, to: string): CatalogSession => ({
 
 const FALLBACK_SESSIONS: Record<string, CatalogSession[]> = {
   "posh-trainer": [
-    { ...at("2026-10-03", "18:00", "20:00"), topic: "Foundations & the CLEAR framework" },
-    { ...at("2026-10-04", "18:00", "20:00"), topic: "Legal genesis & applied definitions" },
-    { ...at("2026-10-10", "18:00", "20:00"), topic: "Recognition, coverage & jurisdiction" },
-    { ...at("2026-10-11", "18:00", "20:00"), topic: "IC governance & fair inquiry practice" },
-    { ...at("2026-10-17", "18:00", "20:00"), topic: "Case laboratory · live inquiry simulation" },
-    { ...at("2026-10-18", "18:00", "20:00"), topic: "Trainer craft & facilitation assessment" },
+    { ...at("2026-10-10", "18:00", "20:00"), topic: "Foundations & the CLEAR framework" },
+    { ...at("2026-10-11", "18:00", "20:00"), topic: "Legal genesis & applied definitions" },
+    { ...at("2026-10-17", "18:00", "20:00"), topic: "Recognition, coverage & jurisdiction" },
+    { ...at("2026-10-18", "18:00", "20:00"), topic: "IC governance & fair inquiry practice" },
+    { ...at("2026-10-24", "18:00", "20:00"), topic: "Case laboratory · live inquiry simulation" },
+    { ...at("2026-10-25", "18:00", "20:00"), topic: "Trainer craft & facilitation assessment" },
   ],
   "pocso-child-safety": [at("2026-10-24", "18:00", "20:00")],
   "inclusive-workplace": [{ startsOn: "2026-10-10", timeLabel: "11:00 AM – 1:00 PM", topic: "", startsAt: null, endsAt: null }],
