@@ -78,16 +78,16 @@ export const MASTERCLASS: MasterclassOffer = {
   titleRest: "The New Compliance & Workplace Reality",
   sub: "Judicial Developments, Evolving Workplaces & the AI × PoSH Intersection",
   short: "PoSH 2026 Masterclass",
-  checkoutTitle: "PoSH 2026 Masterclass · 3 October 2026",
+  checkoutTitle: "PoSH 2026 Masterclass · 4 October 2026",
   checkoutPrefix: "PoSH 2026 Masterclass",
 
-  date: "3 October 2026",
-  dateShort: "Sat, 3 Oct 2026",
-  day: "Saturday",
+  date: "4 October 2026",
+  dateShort: "Sun, 4 Oct 2026",
+  day: "Sunday",
   time: "11:30 AM – 1:30 PM IST",
   duration: "2 Hours",
-  startsAt: "2026-10-03T11:30:00+05:30",
-  endsAt: "2026-10-03T13:30:00+05:30",
+  startsAt: "2026-10-04T11:30:00+05:30",
+  endsAt: "2026-10-04T13:30:00+05:30",
 
   /** Early bird, open until the session starts. */
   feePaise: 199900,
