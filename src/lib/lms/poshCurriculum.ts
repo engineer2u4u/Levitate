@@ -69,12 +69,12 @@ export const POSH_CURRICULUM: Curriculum = {
     },
   ],
   sessions: [
-    { n: 1, day: "10", month: "Oct", date: "Sat 10 October", time: "6:00 – 8:00 PM", topic: "Foundations & the CLEAR framework" },
-    { n: 2, day: "11", month: "Oct", date: "Sun 11 October", time: "6:00 – 8:00 PM", topic: "Legal genesis & applied definitions" },
-    { n: 3, day: "17", month: "Oct", date: "Sat 17 October", time: "6:00 – 8:00 PM", topic: "Recognition, coverage & jurisdiction" },
-    { n: 4, day: "18", month: "Oct", date: "Sun 18 October", time: "6:00 – 8:00 PM", topic: "IC governance & fair inquiry practice" },
-    { n: 5, day: "24", month: "Oct", date: "Sat 24 October", time: "6:00 – 8:00 PM", topic: "Case laboratory · live inquiry simulation" },
-    { n: 6, day: "25", month: "Oct", date: "Sun 25 October", time: "6:00 – 8:00 PM", topic: "Trainer craft & facilitation assessment" },
+    { n: 1, day: "10", month: "Oct", date: "Sat 10 October", time: "6:30 – 8:30 PM", topic: "Foundations & the CLEAR framework" },
+    { n: 2, day: "11", month: "Oct", date: "Sun 11 October", time: "6:30 – 8:30 PM", topic: "Legal genesis & applied definitions" },
+    { n: 3, day: "17", month: "Oct", date: "Sat 17 October", time: "6:30 – 8:30 PM", topic: "Recognition, coverage & jurisdiction" },
+    { n: 4, day: "18", month: "Oct", date: "Sun 18 October", time: "6:30 – 8:30 PM", topic: "IC governance & fair inquiry practice" },
+    { n: 5, day: "24", month: "Oct", date: "Sat 24 October", time: "6:30 – 8:30 PM", topic: "Case laboratory · live inquiry simulation" },
+    { n: 6, day: "25", month: "Oct", date: "Sun 25 October", time: "6:30 – 8:30 PM", topic: "Trainer craft & facilitation assessment" },
   ],
   quizzes: [
     {

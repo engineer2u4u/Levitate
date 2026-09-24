@@ -78,7 +78,7 @@ export type Batch = {
  */
 export const batches: Batch[] = [
   { tag: "PoSH Train-the-Trainer", title: "PoSH TTT Certification", status: "Enrolling", open: true, short: "PoSH TTT", starts: "10 October",
-    rows: [{ k: "Batch starts", v: "10 October" }, { k: "Duration", v: "3 weeks" }, { k: "Batch type", v: "Weekend batch" }, { k: "Daily", v: "2 hours per day" }, { k: "Timing", v: "6:00 – 8:00 PM" }, { k: "Mode", v: "Live online" }],
+    rows: [{ k: "Batch starts", v: "10 October" }, { k: "Duration", v: "3 weeks" }, { k: "Batch type", v: "Weekend batch" }, { k: "Daily", v: "2 hours per day" }, { k: "Timing", v: "6:30 – 8:30 PM" }, { k: "Mode", v: "Live online" }],
     fee: "₹32,000", feeNote: "inclusive of taxes", cta: "Enrol for this batch" },
   { tag: "DEIB Train-the-Trainer", title: "Diversity, Equity, Inclusion & Belonging Batch", status: "Enrolling", open: true, short: "DEIB TTT", starts: "10 October",
     rows: [{ k: "Batch starts", v: "10 October" }, { k: "Duration", v: "20 + 5 hours" }, { k: "Guided LMS", v: "5 hours" }, { k: "Curriculum", v: "13 modules" }, { k: "Timing", v: "11:00 AM – 1:00 PM" }, { k: "Mode", v: "Live online" }],

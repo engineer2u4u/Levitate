@@ -201,22 +201,25 @@ function finish(c: CatalogCourse): CatalogCourse {
 /* --------------------------------------------------------------- fallback */
 
 /** Session dates as they stood on 12 September 2026. */
-const at = (day: string, from: string, to: string): CatalogSession => ({
+const at = (day: string, from: string, to: string, timeLabel = "6:00 – 8:00 PM"): CatalogSession => ({
   startsOn: day,
-  timeLabel: "6:00 – 8:00 PM",
+  timeLabel,
   topic: "",
   startsAt: `${day}T${from}:00+05:30`,
   endsAt: `${day}T${to}:00+05:30`,
 });
 
+/** PoSH TTT runs half an hour later than the other evening programmes. */
+const posh = (day: string) => at(day, "18:30", "20:30", "6:30 – 8:30 PM");
+
 const FALLBACK_SESSIONS: Record<string, CatalogSession[]> = {
   "posh-trainer": [
-    { ...at("2026-10-10", "18:00", "20:00"), topic: "Foundations & the CLEAR framework" },
-    { ...at("2026-10-11", "18:00", "20:00"), topic: "Legal genesis & applied definitions" },
-    { ...at("2026-10-17", "18:00", "20:00"), topic: "Recognition, coverage & jurisdiction" },
-    { ...at("2026-10-18", "18:00", "20:00"), topic: "IC governance & fair inquiry practice" },
-    { ...at("2026-10-24", "18:00", "20:00"), topic: "Case laboratory · live inquiry simulation" },
-    { ...at("2026-10-25", "18:00", "20:00"), topic: "Trainer craft & facilitation assessment" },
+    { ...posh("2026-10-10"), topic: "Foundations & the CLEAR framework" },
+    { ...posh("2026-10-11"), topic: "Legal genesis & applied definitions" },
+    { ...posh("2026-10-17"), topic: "Recognition, coverage & jurisdiction" },
+    { ...posh("2026-10-18"), topic: "IC governance & fair inquiry practice" },
+    { ...posh("2026-10-24"), topic: "Case laboratory · live inquiry simulation" },
+    { ...posh("2026-10-25"), topic: "Trainer craft & facilitation assessment" },
   ],
   "pocso-child-safety": [at("2026-10-24", "18:00", "20:00")],
   "inclusive-workplace": [{ startsOn: "2026-10-10", timeLabel: "11:00 AM – 1:00 PM", topic: "", startsAt: null, endsAt: null }],

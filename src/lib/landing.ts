@@ -116,7 +116,7 @@ export const POSH_LANDING: LandingOffer = {
       { k: "Guided LMS", v: "3 hours" },
       { k: "Curriculum", v: "15 modules" },
       { k: "Schedule", v: "3 weekends" },
-      { k: "Timing", v: "6:00 – 8:00 PM" },
+      { k: "Timing", v: "6:30 – 8:30 PM" },
       { k: "Mode", v: "Live online" },
     ],
   },
