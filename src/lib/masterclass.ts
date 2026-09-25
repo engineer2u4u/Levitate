@@ -224,7 +224,7 @@ export const HR_EDGE_MASTERCLASS: MasterclassOffer = {
     eyebrow: "What the two hours cover",
     heading: "Experience three essentials of HR business partnering",
     intro:
-      "Effective HR business partnering starts with understanding what the business is trying to achieve — and how people decisions affect that outcome. Built on HR EDGE's practical learning approach, this masterclass takes you through a workplace case to practise understanding the problem, advising the manager and recommending a way forward.",
+      "Effective HR business partnering starts with understanding what the business is trying to achieve — and how people decisions affect that outcome. Built on the EDGE Framework that HR EDGE teaches — Explore, Diagnose, Guide, Enable — this masterclass takes you through a workplace case to practise understanding the problem, advising the manager and recommending a way forward.",
   },
 
   themes: [
@@ -287,7 +287,7 @@ export const HR_EDGE_MASTERCLASS: MasterclassOffer = {
   crossSell: {
     title: "Ready to build your HR business-partnering capability further?",
     body:
-      "HR EDGE — the Certified MNC-Ready HR Practitioner Programme. Connected MNC workplace cases, business simulations, manager conversations and HR Decision Labs, with an assessed practitioner portfolio alongside résumé, LinkedIn and interview preparation. 6 weeks · 42 learning hours · live online. Separate programme enrolment applies.",
+      "HR EDGE — the Certified MNC-Ready HR Practitioner Programme, built on the EDGE Framework: Explore, Diagnose, Guide, Enable. Eight modules worked through a simulated MNC, from the business environment and workforce planning to employee relations, change and people analytics, closing with a career conversion lab. 6 weeks · 42 learning hours · 18 live sessions · live online. Separate programme enrolment applies.",
     href: "/lms/course/hr-edge/",
     cta: "Explore HR EDGE",
   },
@@ -326,7 +326,7 @@ export const HR_EDGE_MASTERCLASS: MasterclassOffer = {
     {
       q: "Is this the full HR EDGE programme?",
       a: [
-        "No. This is a standalone two-hour introduction to HR EDGE's practical learning approach. The full Certified MNC-Ready HR Practitioner Programme is a separate six-week, 42-hour learning journey.",
+        "No. This is a standalone two-hour introduction to the way HR EDGE teaches. The full Certified MNC-Ready HR Practitioner Programme is a separate six-week journey — 42 learning hours across 18 live sessions, built on the EDGE Framework: Explore, Diagnose, Guide, Enable. Previous MNC experience is not required.",
       ],
     },
     { q: "When is the masterclass?", a: ["{when}, live online."] },
