@@ -5,7 +5,7 @@
  * cannot describe the same programme differently — the individual page is the
  * one a visitor now lands on from the menu.
  */
-import { DEI_OUTLINE, POCSO_OUTLINE, POSH_OUTLINE, type ProgramOutline } from "@/lib/programOutlines";
+import { DEI_OUTLINE, HR_EDGE_OUTLINE, POCSO_OUTLINE, POSH_OUTLINE, type ProgramOutline } from "@/lib/programOutlines";
 
 /** What every programme includes, whichever one it is. */
 export const included = ["Facilitation practice & feedback", "Trainer toolkit: templates, guides, FAQs", "Workplace case studies & scenarios", "Assessment-linked certification"];
@@ -49,11 +49,12 @@ export const programs: Program[] = [
     ideal: "Educators, school counsellors, child-safety professionals, NGOs, HR professionals, trainers, institutional leaders and professionals working in child-facing environments.",
     pillarTitle: "The GUARD Child Safety Framework", pillars: [{ k: "G", v: "Ground Rules for Safety" }, { k: "U", v: "Understanding the Law" }, { k: "A", v: "Age-Appropriate Language" }, { k: "R", v: "Recognising Signals" }, { k: "D", v: "Disclosure & Reporting" }],
     curriculum: POCSO_OUTLINE },
-  { id: "hredge", slug: "hr-edge", num: "06", tag: "For Students", short: "HR Edge Certification", title: "HR Edge certification (HR Students)", sub: "Integrated DEIB, PoSH & Workplace Wellbeing Trainer Certification for Future HR Professionals",
-    p1: "A uniquely Levitate-designed certification for MBA-HR, PGDM-HR, HR postgraduate students and early-career HR professionals who want to enter the workplace with applied capability beyond their academic degree.",
-    p2: "The integrated program builds practical understanding of inclusion, respectful workplaces, PoSH awareness, employee wellbeing, psychological safety and responsible HR response — strengthening interview readiness and helping participants stand out as future-ready HR professionals.",
-    ideal: "MBA-HR and PGDM-HR students, HR postgraduates, early-career HR professionals, campus-to-corporate learners and students preparing for HR roles.",
-    pillarTitle: "The EDGE Readiness Framework", pillars: [{ k: "E", v: "Everyday Inclusion" }, { k: "D", v: "Dignity & PoSH Awareness" }, { k: "G", v: "Growth & Wellbeing" }, { k: "E", v: "Employable HR Judgment" }] },
+  { id: "hredge", slug: "hr-edge", num: "06", tag: "For Students", short: "HR EDGE", title: "HR EDGE — Certified MNC-Ready HR Practitioner Programme", sub: "Think like an HR Business Partner",
+    p1: "An applied certification programme for people preparing to contribute as an HR Business Partner: understand the business, ask better questions and make stronger people decisions. It builds the practical judgement to connect business priorities with people decisions, partner with managers, and explain a recommendation with confidence.",
+    p2: "Learning happens through the work HR actually does. Participants work a simulated MNC environment of connected situations involving business leaders, managers, employees and specialist HR teams — interpreting manager emails, organisation charts, workforce figures and case records, practising role-plays, stakeholder discussions and decision labs, and applying each concept between sessions through guided LMS work and reusable tools.",
+    ideal: "MBA-HR and PGDM-HR students and recent graduates entering corporate HR, early-career HR professionals building confidence in workplace decisions and manager conversations, HR operations and talent acquisition professionals broadening into business partnering, and aspiring HR Business Partners and People Partners. Previous MNC experience is not required.",
+    pillarTitle: "The EDGE Framework", pillars: [{ k: "E", v: "Explore — understand the situation before recommending a solution" }, { k: "D", v: "Diagnose — use evidence to understand what needs attention" }, { k: "G", v: "Guide — help managers make informed people decisions" }, { k: "E", v: "Enable — turn recommendations into responsible action" }],
+    curriculum: HR_EDGE_OUTLINE },
 ];
 
 export const programBySlug = (slug: string): Program | undefined =>

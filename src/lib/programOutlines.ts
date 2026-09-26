@@ -6,10 +6,16 @@
  * a syllabus the client sends over is edited once and cannot drift between the
  * two places a visitor might read it.
  */
+/** A title, or a title with the line that says what the module is for. */
+export type ProgramModule = string | { title: string; detail: string };
+
+export const moduleTitle = (m: ProgramModule) => (typeof m === "string" ? m : m.title);
+export const moduleDetail = (m: ProgramModule) => (typeof m === "string" ? "" : m.detail);
+
 export type ProgramOutline = {
   intro: string;
   facts: { k: string; v: string }[];
-  modules: string[];
+  modules: ProgramModule[];
   closing: string;
 };
 
@@ -90,11 +96,58 @@ export const DEI_OUTLINE: ProgramOutline = {
     "Build the inclusion knowledge, practical judgement and facilitation capability to lead meaningful workplace conversations across difference.",
 };
 
+export const HR_EDGE_OUTLINE: ProgramOutline = {
+  intro:
+    "An applied certification that builds the practical judgement to connect business priorities with people decisions, partner with managers and explain your recommendations with confidence. The programme builds from core concepts into practical application; previous MNC experience is not required.",
+  facts: [
+    { k: "Duration", v: "6 Weeks" },
+    { k: "Learning", v: "42 Hours" },
+    { k: "Live", v: "18 Sessions" },
+    { k: "Curriculum", v: "8 Modules" },
+  ],
+  modules: [
+    {
+      title: "Understanding Business and the MNC HR Environment",
+      detail: "How HR operates within multinational organisations, and how business priorities shape people decisions.",
+    },
+    {
+      title: "Strategic Workforce Planning and Organisation Design",
+      detail: "Translate business demand into workforce and skills requirements, weighing cost, capacity and organisational effectiveness.",
+    },
+    {
+      title: "Performance, Coaching and Manager Capability",
+      detail: "Support meaningful goals, effective feedback and fair performance decisions while strengthening manager capability.",
+    },
+    {
+      title: "Talent, Reward and Employee Experience",
+      detail: "Connect talent and reward decisions with capability, fairness, retention and employee experience.",
+    },
+    {
+      title: "Employee Relations, Workplace Dignity and Wellbeing",
+      detail: "A structured approach to sensitive employee situations, with professional boundaries and specialist responsibilities recognised.",
+    },
+    {
+      title: "Restructuring and Organisational Change",
+      detail: "The business rationale and the people impact of change, and how to support its implementation with clarity and care.",
+    },
+    {
+      title: "People Analytics, AI and Future Workforce Decisions",
+      detail: "Use people data and technology thoughtfully to improve the quality of HR recommendations.",
+    },
+    {
+      title: "MNC Career Conversion Lab",
+      detail: "Turn the learning into evidence: résumé positioning, LinkedIn, programme projects as proof of capability, behavioural and situational interviews, HRBP case interviews and assessment centres.",
+    },
+  ],
+  closing: "Explore. Diagnose. Guide. Enable.",
+};
+
 /** Keyed by course slug — the same slug the certifications cards link to. */
 export const OUTLINES: Record<string, ProgramOutline> = {
   "posh-trainer": POSH_OUTLINE,
   "pocso-child-safety": POCSO_OUTLINE,
   "inclusive-workplace": DEI_OUTLINE,
+  "hr-edge": HR_EDGE_OUTLINE,
 };
 
 export const outlineBySlug = (slug: string): ProgramOutline | undefined => OUTLINES[slug];

@@ -10,7 +10,7 @@ import { fill } from "@/lib/catalog";
 import { PAYMENT_OFF } from "@/lib/lms/payment";
 import { enrol, isPaid } from "@/lib/lms/enrolments";
 import { contact } from "@/lib/site";
-import { outlineBySlug } from "@/lib/programOutlines";
+import { moduleDetail, moduleTitle, outlineBySlug } from "@/lib/programOutlines";
 import { contentBySlug } from "@/lib/lms/courseContent";
 import { kitReleased, readProgress } from "@/lib/lms/courseProgress";
 import { BROCHURE_ASSETS_READY, brochureBySlug } from "@/lib/lms/brochures";
@@ -329,12 +329,15 @@ export default function CourseDetail({ slug }: { slug: string }) {
                     <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 14 }}>Programme modules</div>
                     <ol style={{ listStyle: "none", counterReset: "mod", margin: "0 0 22px", padding: 0, display: "flex", flexDirection: "column", gap: 10 }}>
                       {outline.modules.map((m, i) => (
-                        <li key={m} style={{ display: "flex", gap: 14, alignItems: "flex-start", background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 13, padding: "14px 16px" }}>
+                        <li key={moduleTitle(m)} style={{ display: "flex", gap: 14, alignItems: "flex-start", background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 13, padding: "14px 16px" }}>
                           <span aria-hidden style={{ flex: "none", width: 27, height: 27, borderRadius: 9, background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 12px 'Plus Jakarta Sans',sans-serif", display: "flex", alignItems: "center", justifyContent: "center" }}>
                             {i + 1}
                           </span>
                           <span style={{ font: "600 13.5px/1.55 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>
-                            <span style={{ color: "#8296a9", fontWeight: 700 }}>Module {i + 1} · </span>{m}
+                            <span style={{ color: "#8296a9", fontWeight: 700 }}>Module {i + 1} · </span>{moduleTitle(m)}
+                            {moduleDetail(m) && (
+                              <span style={{ display: "block", font: "400 13px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginTop: 4 }}>{moduleDetail(m)}</span>
+                            )}
                           </span>
                         </li>
                       ))}

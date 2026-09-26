@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState, type CSSProperties } from "react";
 import Reveal from "@/components/home/Reveal";
 import { included, programs } from "@/lib/programs";
+import { moduleTitle } from "@/lib/programOutlines";
 import UpcomingBatches from "@/components/site/UpcomingBatches";
 import BrandText from "@/components/site/BrandText";
 
@@ -150,9 +151,9 @@ export default function CertificationsPage() {
                       <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 14 }}>Programme Modules</div>
                       <ol className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 26px", listStyle: "none", margin: 0, padding: 0, counterReset: "mod" }}>
                         {p.curriculum.modules.map((m, i) => (
-                          <li key={m} style={{ display: "flex", gap: 12, alignItems: "baseline", padding: "11px 0", borderBottom: "1px solid #eef3f7" }}>
+                          <li key={moduleTitle(m)} style={{ display: "flex", gap: 12, alignItems: "baseline", padding: "11px 0", borderBottom: "1px solid #eef3f7" }}>
                             <span style={{ flex: "none", font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#2f7fd6", fontVariantNumeric: "tabular-nums" }}>{String(i + 1).padStart(2, "0")}</span>
-                            <span style={{ font: "500 13.5px/1.5 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>{m}</span>
+                            <span style={{ font: "500 13.5px/1.5 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>{moduleTitle(m)}</span>
                           </li>
                         ))}
                       </ol>

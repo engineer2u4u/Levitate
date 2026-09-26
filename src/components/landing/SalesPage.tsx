@@ -14,7 +14,7 @@ import { certificateCards } from "@/lib/certificateArt";
 import { courseBySlug, formatFee } from "@/lib/lms/courses";
 import { useCatalogCourse } from "@/components/site/CatalogProvider";
 import { fill } from "@/lib/catalog";
-import { outlineBySlug } from "@/lib/programOutlines";
+import { moduleTitle, outlineBySlug } from "@/lib/programOutlines";
 import { programBySlug } from "@/lib/programs";
 import { brochureBySlug } from "@/lib/lms/brochures";
 import TestimonialCards from "@/components/site/TestimonialCards";
@@ -275,11 +275,11 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
             style={{ ["--rows" as string]: moduleRows } as React.CSSProperties}
           >
             {modules.map((m, i) => (
-              <div key={m} style={{ display: "flex", gap: 14, alignItems: "flex-start", background: "#f7fafc", border: "1px solid #e9eff4", borderRadius: 14, padding: "16px 18px" }}>
+              <div key={moduleTitle(m)} style={{ display: "flex", gap: 14, alignItems: "flex-start", background: "#f7fafc", border: "1px solid #e9eff4", borderRadius: 14, padding: "16px 18px" }}>
                 <span style={{ flex: "none", width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `800 12px ${SANS}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span style={{ font: T.item, color: "#0a1b33", paddingTop: 3 }}>{m}</span>
+                <span style={{ font: T.item, color: "#0a1b33", paddingTop: 3 }}>{moduleTitle(m)}</span>
               </div>
             ))}
           </div>
