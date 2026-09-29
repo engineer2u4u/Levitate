@@ -60,6 +60,12 @@ export type Course = {
   status: CourseStatus;
   /** Fee in paise, so money is never held as a float. null = "On request". */
   feePaise: number | null;
+  /**
+   * Open without paying. Deliberately explicit: a fee of null means the price
+   * is quoted on request, not that the programme is free, and reading the
+   * absence of a price as permission would hand the content to anyone.
+   */
+  free?: boolean;
   /** The standard fee, shown struck through beside an offer. Never charged. */
   listPricePaise?: number | null;
   priceNote: string;

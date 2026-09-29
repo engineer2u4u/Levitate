@@ -11,7 +11,8 @@ export const COURSES: Course[] = [
     short: "PoSH Train-the-Trainer",
     desc: "Build legal understanding, inquiry competence and PoSH facilitation skills across 15 practice-led modules.",
     img: "/assets/workshop-tables.jpeg", status: "enrolling",
-    feePaise: 3200000, priceNote: "incl. taxes · from 10 Oct",
+    // Quoted on request rather than sold from the page.
+    feePaise: null, priceNote: "quoted on request",
     modulesLabel: "15 modules", hoursLabel: "15 learning hours", facilitator: "Parichita Kotnala",
     certificate: {
       name: "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
@@ -46,7 +47,8 @@ export const COURSES: Course[] = [
     short: "Inclusive Workplace",
     desc: "A 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, equipping participants to translate inclusion from concept into everyday workplace behaviour and facilitate DEIB learning with confidence.",
     img: "/assets/workshop-handsup.jpeg", status: "enrolling",
-    feePaise: 4000000, priceNote: "incl. taxes · from 10 October",
+    // Quoted on request rather than sold from the page.
+    feePaise: null, priceNote: "quoted on request",
     modulesLabel: "13 Modules", hoursLabel: "20 + 5 Hours", facilitator: "Parichita Kotnala",
     certificate: {
       name: "Inclusive Workplace Facilitator Program (DEIB TTT)",
@@ -106,7 +108,7 @@ export const COURSES: Course[] = [
     short: "Demo course",
     desc: "A sample course for exercising the learning flow: sequential unlocking, progress tracking and the reading kit released on completion.",
     img: "/assets/workshop-tables.jpeg", status: "enrolling",
-    feePaise: 100000, priceNote: "simulated payment · for testing",
+    feePaise: 100000, priceNote: "simulated payment · for testing", free: true,
     modulesLabel: "3 modules", hoursLabel: "45 min", facilitator: "Parichita Kotnala",
     hidden: true,
     certificate: {

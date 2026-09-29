@@ -120,7 +120,7 @@ export const POSH_LANDING: LandingOffer = {
       { k: "Mode", v: "Live online" },
     ],
   },
-  price: { amount: "{fee}", note: "inclusive of taxes" },
+  price: { amount: "{fee}", note: "quoted on request" },
   founderVideoId: "6TrFt7CMlUI",
   posterLabel: "Watch a PoSH session",
 
@@ -252,7 +252,7 @@ export const DEI_LANDING: LandingOffer = {
       { k: "Mode", v: "Live online" },
     ],
   },
-  price: { amount: "{fee}", note: "inclusive of taxes" },
+  price: { amount: "{fee}", note: "quoted on request" },
   founderVideoId: "ilnzye3waKU",
   posterLabel: "Watch a DEIB session",
   framework: true,

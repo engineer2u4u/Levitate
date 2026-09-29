@@ -55,9 +55,10 @@ const TODAY = monthYear(Date.now());
 export default function CoursePlayer({ slug }: { slug: string }) {
   const course = contentBySlug(slug);
   const { user, loading, openAuth, enrolments } = useSession();
-  // The catalogue entry is what carries the price; the content module only
-  // knows the syllabus. A course with no catalogue row is treated as free.
-  const fee = courseBySlug(slug)?.feePaise ?? 0;
+  // A programme is entered by being enrolled on it, not by having no price
+  // against it: "on request" is a price nobody has paid yet. A course with no
+  // catalogue row at all is treated as free, which is only the demo.
+  const free = courseBySlug(slug)?.free === true;
   const enrolled = enrolments.some((e) => e.courseSlug === slug);
   // What the database says this learner may reach: their batch, whether
   // payment is confirmed, and which modules are open. Without Supabase (a
@@ -219,7 +220,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   // wall: this is a static export, so the item text ships in the bundle either
   // way. Real gating needs signed URLs and content fetched per request. What
   // the database does control is progress, Zoom links and which modules open.
-  if (fee > 0 && !paid) {
+  if (!free && !paid) {
     const pending = access?.enrolment.status === "pending";
     return (
       <Shell>

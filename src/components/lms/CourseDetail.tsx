@@ -127,7 +127,7 @@ export default function CourseDetail({ slug }: { slug: string }) {
   const freeEntry = PAYMENT_OFF && canPay;
   // Self-paced content opens once it is paid for — or straight away when it
   // carries no fee. Otherwise the normal enrol path runs first.
-  const canStart = Boolean(selfPaced) && (enrolled || !course.feePaise);
+  const canStart = Boolean(selfPaced) && (enrolled || course.free === true);
   const ctaLabel = completed
     ? "Completed ✓"
     : canStart
