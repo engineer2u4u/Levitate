@@ -27,6 +27,8 @@ const TRAILING: Route[] = [
   { path: "/pocso-train-the-trainer-certification/", priority: 0.9, changeFrequency: "weekly" },
   { path: "/dei-train-the-trainer-certification/", priority: 0.9, changeFrequency: "weekly" },
   { path: "/posh-2026-masterclass/", priority: 0.9, changeFrequency: "weekly" },
+  { path: "/unconscious-bias-masterclass/", priority: 0.9, changeFrequency: "weekly" },
+  { path: "/hr-edge-masterclass/", priority: 0.9, changeFrequency: "weekly" },
   { path: "/services/train-the-trainer/", priority: 0.9, changeFrequency: "monthly" },
   { path: "/corporate-soft-skills-training-service/", priority: 0.9, changeFrequency: "monthly" },
   { path: "/services/institutional/", priority: 0.8, changeFrequency: "monthly" },

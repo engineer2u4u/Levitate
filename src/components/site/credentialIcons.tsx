@@ -11,7 +11,7 @@ export const CREDENTIALS: Credential[] = [
   {
     key: "iso",
     label: "ISO Certified",
-    sub: "ISO 9001:2015",
+    sub: "ISO 9001:2026",
     title: "ISO certified",
     paths: (
       <>

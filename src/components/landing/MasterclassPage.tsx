@@ -284,7 +284,7 @@ export default function MasterclassPage({ offer: M }: { offer: MasterclassOffer 
             {closed
               ? "Message us to hear about the next session."
               : facts.standardPaise > facts.feePaise
-                ? `Early-bird fee, including taxes — against a standard fee of ${formatPaise(facts.standardPaise)}. ${M.closing}`
+                ? `${(M.feeLabel ?? "Early-bird fee").replace(/^Early Bird$/, "Early-bird fee")}, including taxes — against a standard fee of ${formatPaise(facts.standardPaise)}. ${M.closing}`
                 : `Including taxes. ${M.closing}`}
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
@@ -444,7 +444,7 @@ function RegisterCard({ offer: M, closed, facts }: { offer: MasterclassOffer; cl
       <div style={{ display: "flex", alignItems: "stretch", gap: 18, paddingBottom: 20, marginBottom: 20, borderBottom: "1px solid #eef2f6", flexWrap: "wrap" }}>
         <div>
           <div style={{ font: `700 13px ${SANS}`, color: earlyBird ? "#b07d1e" : "#1b8f88", letterSpacing: ".04em" }}>
-            {earlyBird ? "Early Bird" : "Your seat"}
+            {earlyBird ? M.feeLabel ?? "Early Bird" : "Your seat"}
           </div>
           <div style={{ font: `800 40px/1.05 ${SANS}`, color: "#0a1b33", letterSpacing: "-.02em", margin: "4px 0 6px" }}>{formatPaise(facts.feePaise)}</div>
           <div style={{ font: `700 10.5px ${SANS}`, color: "#5b6e82", letterSpacing: ".16em", textTransform: "uppercase" }}>

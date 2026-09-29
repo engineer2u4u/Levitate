@@ -204,7 +204,7 @@ export const SHRM_ACCREDITATION = {
     "Levitate PeopleSoft is recognised by SHRM to offer Professional Development Credits (PDCs), applicable toward SHRM-CP® and SHRM-SCP® recertification, for participants who successfully complete our certification programmes.",
   note:
     "This accreditation reflects Levitate PeopleSoft's commitment to delivering globally benchmarked, practice-led learning that stands up to professional and institutional scrutiny — giving participants a credential that is recognised well beyond the classroom.",
-  badges: ["ISO 9001:2015 Certified", "DPIIT Recognised", "Udyam Registration"],
+  badges: ["ISO 9001:2026 Certified", "DPIIT Recognised", "Udyam Registration"],
 };
 
 /** One specimen certificate as the gallery renders it. */

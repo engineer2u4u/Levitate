@@ -55,6 +55,8 @@ export type MasterclassOffer = {
   feePaise: number;
   /** Shown struck through where it is higher than the fee. Never charged. */
   standardPaise: number;
+  /** What the offer calls its reduced fee. "Early Bird" unless it says otherwise. */
+  feeLabel?: string;
 
   agenda: { eyebrow: string; heading: string; intro: string };
   themes: readonly { icon: ThemeIcon; title: string; intro: string; points: readonly string[] }[];
@@ -340,5 +342,138 @@ export const HR_EDGE_MASTERCLASS: MasterclassOffer = {
   ],
 };
 
-/** Both, for anything that has to know every masterclass — the catalogue. */
-export const MASTERCLASSES: MasterclassOffer[] = [MASTERCLASS, HR_EDGE_MASTERCLASS];
+/* ------------------------------------------------------------------ DEIB */
+
+export const DEIB_MASTERCLASS: MasterclassOffer = {
+  slug: "deib-masterclass",
+  path: "/unconscious-bias-masterclass/",
+  eyebrow: "Live Masterclass",
+  title: "Unconscious Bias at Work",
+  titleRest: "How it shapes leadership, decisions & belonging",
+  sub: "Explore how everyday perceptions shape workplace decisions — and learn practical ways to support diversity, equity, inclusion and belonging.",
+  scenario: {
+    q: "“They're a better culture fit.” “She isn't ready for leadership.” “He speaks confidently — he must know his subject.”",
+    body: "What evidence sits behind these judgements?",
+  },
+  chips: ["Workplace examples", "Reflection", "Case discussion"],
+  short: "Unconscious Bias Masterclass",
+  checkoutTitle: "Unconscious Bias at Work · 10 October 2026",
+  checkoutPrefix: "Unconscious Bias Masterclass",
+
+  date: "10 October 2026",
+  dateShort: "Sat, 10 Oct 2026",
+  day: "Saturday",
+  time: "11:30 AM – 1:00 PM IST",
+  duration: "90 Minutes",
+  startsAt: "2026-10-10T11:30:00+05:30",
+  endsAt: "2026-10-10T13:00:00+05:30",
+
+  /** Special registration fee, open until the session starts. */
+  feePaise: 199900,
+  /** Shown struck through. Never charged. */
+  standardPaise: 349900,
+  feeLabel: "Special Fee",
+
+  agenda: {
+    eyebrow: "What the 90 minutes cover",
+    heading: "Understand the assumptions. Examine the decisions. Strengthen inclusion.",
+    intro:
+      "Through relatable workplace examples, reflection and case discussion, this masterclass helps you examine how bias can influence decisions — and what you can do differently.",
+  },
+
+  themes: [
+    {
+      icon: "compass",
+      title: "Recognising unconscious bias",
+      intro: "Understanding what may be shaping your judgement.",
+      points: [
+        "How assumptions and perceptions can influence thinking, decisions and interactions without our awareness",
+        "How familiarity, first impressions and existing beliefs can affect how we assess others",
+        "Recognising the difference between an observation, an interpretation and an assumption",
+      ],
+    },
+    {
+      icon: "scales",
+      title: "Bias in leadership and workplace decisions",
+      intro: "Examining who receives opportunities, recognition and a voice.",
+      points: [
+        "Where bias can appear in hiring, feedback, performance reviews and promotions",
+        "How assumptions about confidence, communication, age or caregiving can shape assessments of capability",
+        "Connecting everyday decisions with diversity, equity, inclusion and belonging",
+      ],
+    },
+    {
+      icon: "dialogue",
+      title: "Moving towards more inclusive decisions",
+      intro: "Turning reflection into practical action.",
+      points: [
+        "Asking better questions before reaching a judgement",
+        "Using clearer criteria and checking the evidence behind decisions",
+        "Exploring alternative perspectives through a workplace case, and identifying one change you can apply in your own work",
+      ],
+    },
+  ],
+
+  audience: {
+    heading: "For professionals who shape people's workplace experiences",
+    items: [
+      "HR professionals and HR business partners",
+      "L&D, culture and employee experience professionals",
+      "People managers, team leaders and business heads",
+      "Corporate trainers and independent consultants",
+      "DEIB champions and aspiring inclusion facilitators",
+    ],
+    note: "No prior DEIB training is required. The session introduces concepts in accessible language and connects them with everyday workplace situations.",
+  },
+
+  facilitator: {
+    strap: "Founder & Managing Partner, Levitate PeopleSoft · Global HR Leader",
+    paragraphs: [
+      "Parichita brings 15+ years of global HR experience, drawing on work with leaders and teams across different countries and workplace cultures.",
+      "An XLRI and ISTD alumna, she connects learning with the questions professionals face in practice: how we assess people, allocate opportunities, communicate expectations and build inclusive teams.",
+    ],
+  },
+
+  recognition:
+    "SHRM Recertification Provider · CPD Provider Member. Levitate PeopleSoft combines global HR experience with practical workplace learning, and eligible programmes offer applicable SHRM Professional Development Credits and approved CPD learning hours.",
+
+  crossSell: {
+    title: "Want to build your capability as a DEIB facilitator?",
+    body: "The Inclusive Workplace Facilitator Program — DEIB Train-the-Trainer Certification. Design DEIB learning, facilitate sensitive conversations, respond to resistance and guide practical workplace application using the BRIDGE Inclusion Framework",
+    href: "/dei-train-the-trainer-certification/",
+    cta: "Explore the DEIB programme",
+    startsFrom: "inclusive-workplace",
+  },
+
+  closing: "Recognise assumptions. Make fairer decisions. Start with the decisions you make every day.",
+
+  faqs: [
+    { q: "When is the masterclass?", a: ["{when}, live online."] },
+    { q: "What is the fee?", a: ["The special registration fee is {fee}, against a standard fee of {list_fee}."] },
+    {
+      q: "What will I take away?",
+      a: [
+        "A clearer understanding of how unconscious bias can appear at work, questions to help examine your assumptions, and practical approaches to support fairer decisions.",
+      ],
+    },
+    {
+      q: "Will the session be interactive?",
+      a: ["Yes. The session includes reflection, workplace examples and a case discussion to help you apply the concepts."],
+    },
+    {
+      q: "How do I register?",
+      a: [
+        "Reserve your seat on this page and pay online through Razorpay — UPI, debit and credit cards, or net banking. Your seat is held the moment the payment goes through, and we will be in touch before {date} with your joining details. If you would rather we took you through it, message us on WhatsApp.",
+      ],
+    },
+    {
+      q: "Can I register colleagues or team members?",
+      a: [
+        "Yes. Each registration is one seat, in the attendee's own name. For a group, message us with the number of participants and we will coordinate it with you.",
+      ],
+    },
+  ],
+};
+
+/** All three, for anything that has to know every masterclass — the catalogue. */
+export const MASTERCLASSES: MasterclassOffer[] = [MASTERCLASS, DEIB_MASTERCLASS, HR_EDGE_MASTERCLASS];

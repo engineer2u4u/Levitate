@@ -190,7 +190,7 @@ function rzp_price_for(string $slug): ?int
  * listed and stay open. Checked when an order is created, not at verification
  * — someone who opened checkout at 5:59 and paid at 6:01 has paid for a seat.
  */
-const RZP_CLOSE_AT_START = ['posh-masterclass-2026', 'hr-edge-masterclass'];
+const RZP_CLOSE_AT_START = ['posh-masterclass-2026', 'hr-edge-masterclass', 'deib-masterclass'];
 
 function rzp_is_closed(string $slug): bool
 {
@@ -236,12 +236,15 @@ const RZP_PRICES_PAISE = [
     'posh-masterclass-2026' => 199900,
     // One fee, no early bird.
     'hr-edge-masterclass' => 49900,
+    // The special fee; the ₹3,499 standard fee is only ever shown struck through.
+    'deib-masterclass' => 199900,
 ];
 
 /** Fallback start times for one-off sessions (see RZP_CLOSE_AT_START). */
 const RZP_CLOSES_AT = [
     'posh-masterclass-2026' => '2026-10-04T11:30:00+05:30',
     'hr-edge-masterclass'   => '2026-10-16T18:00:00+05:30',
+    'deib-masterclass'      => '2026-10-10T11:30:00+05:30',
 ];
 
 /** Fallback invoice titles. */
@@ -252,6 +255,7 @@ const RZP_COURSE_TITLES = [
     'demo-course'         => 'Demo · Workplace Facilitation Essentials',
     'posh-masterclass-2026' => 'PoSH 2026: The New Compliance & Workplace Reality — Masterclass, 4 October 2026',
     'hr-edge-masterclass'   => 'HR EDGE Masterclass: Think Like an HR Business Partner, 16 October 2026',
+    'deib-masterclass'      => 'Unconscious Bias at Work — Masterclass, 10 October 2026',
 ];
 
 /* ------------------------------------------------------------------ */
