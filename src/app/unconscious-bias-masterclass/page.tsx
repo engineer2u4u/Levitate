@@ -1,44 +1,23 @@
 import type { Metadata } from "next";
-import SiteHeader from "@/components/site/SiteHeader";
-import SiteFooter from "@/components/site/SiteFooter";
-import WhatsAppFloat from "@/components/site/WhatsAppFloat";
-import ScrollToTop from "@/components/home/ScrollToTop";
-import MasterclassPage from "@/components/landing/MasterclassPage";
-import { DEIB_MASTERCLASS as M } from "@/lib/masterclass";
-import { formatFee } from "@/lib/lms/courses";
-import { catalogCourse, dateFull, firstSession, loadCatalog } from "@/lib/catalog";
+import { DEIB_MASTERCLASS } from "@/lib/masterclass";
+import Moved from "./Moved";
 
-/** The date, time and fee in the description are the catalogue's, as the build read them. */
-export async function generateMetadata(): Promise<Metadata> {
-  const course = catalogCourse(await loadCatalog(), M.slug);
-  const session = course ? firstSession(course) : null;
-  const when = session?.startsOn ? ` ${dateFull(session.startsOn)}, ${session.timeLabel}.` : ` ${M.date}, ${M.time}.`;
-  const fee = formatFee(course ? course.feePaise : M.feePaise);
-  return {
-    title: "Unconscious Bias at Work — A Live DEIB Masterclass",
-    description: `A 90-minute masterclass with Parichita Kotnala on how unconscious bias shapes leadership, hiring, feedback and promotion decisions — and what to do differently.${when} Special fee ${fee}.`,
-    keywords: [
-      "unconscious bias training",
-      "DEIB masterclass",
-      "diversity equity inclusion belonging",
-      "inclusive leadership India",
-      "bias in hiring and promotion",
-      "HR masterclass India",
-      "workplace inclusion training",
-    ],
-    alternates: { canonical: M.path },
-  };
-}
+/**
+ * The masterclass used to live here, before it was named for what it is.
+ *
+ * The page stays as a forwarder rather than disappearing: the old address was
+ * live and may have been shared, and a static export leaves whatever it
+ * published on the server — so an address that simply stopped being built
+ * would keep serving the old page for ever. This one sends people on and
+ * tells the crawlers which address is the real one.
+ */
+export const metadata: Metadata = {
+  title: "DEIB Masterclass: Unconscious Bias at Work",
+  description: "This masterclass has moved to /deib-masterclass/.",
+  alternates: { canonical: DEIB_MASTERCLASS.path },
+  robots: { index: false, follow: true },
+};
 
 export default function Page() {
-  return (
-    <>
-      <SiteHeader active="masterclass" />
-      <MasterclassPage offer={M} />
-      {/* Accreditations already sit mid-page; the footer's copy would repeat them. */}
-      <SiteFooter accreditations={false} bandWidth={1180} />
-      <WhatsAppFloat />
-      <ScrollToTop />
-    </>
-  );
+  return <Moved to={DEIB_MASTERCLASS.path} />;
 }

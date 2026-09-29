@@ -346,8 +346,8 @@ export const HR_EDGE_MASTERCLASS: MasterclassOffer = {
 
 export const DEIB_MASTERCLASS: MasterclassOffer = {
   slug: "deib-masterclass",
-  path: "/unconscious-bias-masterclass/",
-  eyebrow: "Live Masterclass",
+  path: "/deib-masterclass/",
+  eyebrow: "DEIB Masterclass",
   title: "Unconscious Bias at Work",
   titleRest: "How it shapes leadership, decisions & belonging",
   sub: "Explore how everyday perceptions shape workplace decisions — and learn practical ways to support diversity, equity, inclusion and belonging.",
@@ -356,9 +356,9 @@ export const DEIB_MASTERCLASS: MasterclassOffer = {
     body: "What evidence sits behind these judgements?",
   },
   chips: ["Workplace examples", "Reflection", "Case discussion"],
-  short: "Unconscious Bias Masterclass",
-  checkoutTitle: "Unconscious Bias at Work · 10 October 2026",
-  checkoutPrefix: "Unconscious Bias Masterclass",
+  short: "DEIB Masterclass",
+  checkoutTitle: "DEIB Masterclass · Unconscious Bias at Work · 10 October 2026",
+  checkoutPrefix: "DEIB Masterclass",
 
   date: "10 October 2026",
   dateShort: "Sat, 10 Oct 2026",

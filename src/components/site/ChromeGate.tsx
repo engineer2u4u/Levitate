@@ -20,7 +20,7 @@ const LANDING_PAGES = [
   "/pocso-train-the-trainer-certification",
   "/dei-train-the-trainer-certification",
   "/posh-2026-masterclass",
-  "/unconscious-bias-masterclass",
+  "/deib-masterclass",
   "/hr-edge-masterclass",
 ];
 
