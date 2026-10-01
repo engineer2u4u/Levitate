@@ -93,7 +93,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
       },
       {
         num: "02",
-        t: "Inclusive Workplace Facilitator Program (DEIB TTT)",
+        t: "Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
         href: "/lms/course/inclusive-workplace",
         d: "Powered by the BRIDGE Inclusion Framework Train-the-Trainer Certification Diversity, Equity, Inclusion & Belonging — lead conversations on inclusion, unconscious bias, belonging and psychological safety, including managing resistance.",
       },

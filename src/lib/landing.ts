@@ -147,7 +147,7 @@ export const POSH_LANDING: LandingOffer = {
 
   bundle: {
     slug: "inclusive-workplace",
-    title: "Also running: Inclusive Workplace (DEIB)",
+    title: "Also running: the DEIB Facilitator Program",
     body:
       "The DEIB Train-the-Trainer certification starts {starts} — 20 + 5 hours anchored in the BRIDGE Inclusion Framework. Ask us about taking both.",
     href: "/dei-train-the-trainer-certification/",

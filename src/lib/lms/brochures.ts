@@ -193,7 +193,7 @@ export const DEI_BROCHURE: ProgramBrochure = {
   strapline: "Understand. Reflect. Apply. Facilitate. Transform.",
   meta: ["20 + 5 Hours · Total Certification", "13 Modules · Curriculum", "BRIDGE · Inclusion Framework", "Applied TTT · Format"],
   about:
-    "The Inclusive Workplace Facilitator Program (DEIB TTT) is a 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, equipping participants to translate inclusion from concept into everyday workplace behaviour and facilitate DEIB learning with confidence.",
+    "The Diversity, Equity, Inclusion and Belonging Facilitator Program TTT is a 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, equipping participants to translate inclusion from concept into everyday workplace behaviour and facilitate DEIB learning with confidence.",
 
   stats: [
     { n: "2,000+", label: "Professionals Trained" },
