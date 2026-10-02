@@ -38,6 +38,49 @@ function NewBadge() {
 /** No subscription: the clock is read once per render, which is all a menu needs. */
 const noSubscribe = () => () => {};
 
+/**
+ * A section of the phone menu: a heading that opens its own list.
+ *
+ * A button rather than a label, because on a phone the heading is the only
+ * thing there is to press — and the list underneath stays shut until it is.
+ */
+function MobileGroup({
+  label, badge, open, onToggle, children,
+}: {
+  label: string;
+  badge?: React.ReactNode;
+  open: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={open}
+        className="site-mlink"
+        style={{
+          display: "flex", alignItems: "center", gap: 8, width: "100%", textAlign: "left",
+          border: "none", borderBottom: "1px solid #eef3f7", background: "transparent",
+          font: "600 15px 'Plus Jakarta Sans',sans-serif", color: open ? "#1b8f88" : "#0a1b33", cursor: "pointer",
+        }}
+      >
+        <span style={{ flex: 1 }}>{label}</span>
+        {badge}
+        <svg
+          width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" aria-hidden
+          style={{ flex: "none", transform: open ? "rotate(180deg)" : "none", transition: "transform .18s ease" }}
+        >
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+      {open && children}
+    </>
+  );
+}
+
 export default function SiteHeader({ active }: { active?: NavKey }) {
   // The Certifications menu lists what the admin has published.
   const COURSES = useVisibleCourses();
@@ -63,6 +106,10 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
   const masterclasses = MASTERCLASSES.filter((_, i) => over[i] !== "1");
   const [svcOpen, setSvcOpen] = useState(false);
   const [mcOpen, setMcOpen] = useState(false);
+  // Which section of the phone menu is open. Nothing, until it is asked for:
+  // three lists unfurled at once is a page of links to scroll past before
+  // reaching About Us.
+  const [group, setGroup] = useState<"services" | "certifications" | "masterclass" | null>(null);
   const [certOpen, setCertOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   // Header starts large and compacts once the page is scrolled.
@@ -210,7 +257,7 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
           className="site-hamburger"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((o) => !o)}
+          onClick={() => { setMenuOpen((o) => !o); setGroup(null); }}
           style={{
             width: shrunk ? 44 : 52,
             height: shrunk ? 44 : 52,
@@ -233,25 +280,31 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
         {menuOpen && (
           <div className="site-mobile-menu" style={{ font: "600 15px 'Plus Jakarta Sans',sans-serif" }}>
             <Link href="/" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "home" ? "#1b8f88" : "#0a1b33" }}>Home</Link>
-            <div style={{ padding: "12px 6px 4px", font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", letterSpacing: ".14em", textTransform: "uppercase" }}>Services</div>
-            {services.map((s) => (
-              <Link key={s.key} href={s.href} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064" }}>{s.short}</Link>
-            ))}
-            <div style={{ padding: "12px 6px 4px", font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", letterSpacing: ".14em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 8 }}>
-              TTT Certification<NewBadge />
-            </div>
-            {COURSES.map((c) => (
-              <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064", lineHeight: 1.4 }}>{c.title}</Link>
-            ))}
+            <MobileGroup label="Services" open={group === "services"} onToggle={() => setGroup((g) => (g === "services" ? null : "services"))}>
+              {services.map((s) => (
+                <Link key={s.key} href={s.href} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064" }}>{s.short}</Link>
+              ))}
+            </MobileGroup>
+
+            <MobileGroup
+              label="TTT Certification"
+              badge={<NewBadge />}
+              open={group === "certifications"}
+              onToggle={() => setGroup((g) => (g === "certifications" ? null : "certifications"))}
+            >
+              {COURSES.map((c) => (
+                <Link key={c.slug} href={`/lms/course/${c.slug}`} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064", lineHeight: 1.4 }}>{c.title}</Link>
+              ))}
+            </MobileGroup>
+
             {masterclasses.length > 0 && (
-              <>
-                <div className="site-mlink" style={{ color: "#0a1b33", display: "flex", alignItems: "center", gap: 8 }}>Masterclass</div>
+              <MobileGroup label="Masterclass" open={group === "masterclass"} onToggle={() => setGroup((g) => (g === "masterclass" ? null : "masterclass"))}>
                 {masterclasses.map((m) => (
                   <Link key={m.slug} href={m.path} onClick={() => setMenuOpen(false)} className="site-mlink site-msub" style={{ color: "#3d5064", lineHeight: 1.4 }}>
                     {m.short}
                   </Link>
                 ))}
-              </>
+              </MobileGroup>
             )}
             <Link href="/about-us" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "about" ? "#1b8f88" : "#0a1b33" }}>About Us</Link>
             <Link href="/parichita-kotnala" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "parichita" ? "#1b8f88" : "#0a1b33" }}>Parichita Kotnala</Link>

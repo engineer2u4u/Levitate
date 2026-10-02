@@ -249,6 +249,15 @@ a:hover {
     border-bottom: 1px solid #e3eaf0;
     box-shadow: 0 14px 30px rgba(10, 27, 51, 0.1);
     padding: 8px 20px 16px;
+    /* The menu is taller than a phone once a group is open, so it scrolls
+       itself rather than running off the bottom of the screen with no way
+       to reach what is down there. */
+    /* Leaves room for the header the menu hangs from, so the bottom of the
+       list is on the screen rather than just below it. */
+    max-height: calc(100dvh - 160px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
   .site-mlink { padding: 13px 6px; border-bottom: 1px solid #eef3f7; }
   .site-msub { padding-left: 18px; font-size: 14px; }
