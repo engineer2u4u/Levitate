@@ -15,6 +15,17 @@ import { enquiryTopics } from "@/lib/site";
 const SEEN_KEY = "lvt.enquiry.seen";
 const DELAY_MS = 1200;
 
+/**
+ * Pages where asking for an enquiry would interrupt a purchase.
+ *
+ * Someone filling in a payment form has gone well past wanting to be asked
+ * whether they have a question, and the pop-up covers the pay button while
+ * they do it. They only meet it here by arriving straight at the checkout —
+ * anyone who came through the site has already dismissed it — but that is
+ * exactly the visitor least worth interrupting.
+ */
+const NO_POPUP = ["/lms/checkout"];
+
 const label: CSSProperties = {
   font: "700 10.5px 'Plus Jakarta Sans',sans-serif",
   color: "#5b6e82",
@@ -49,6 +60,7 @@ export default function EnquiryPopup() {
       // Private mode: treat as seen rather than nagging on every navigation.
     }
     if (seen) return;
+    if (NO_POPUP.some((path) => window.location.pathname.startsWith(path))) return;
     const t = setTimeout(() => setOpen(true), DELAY_MS);
     return () => clearTimeout(t);
   }, []);

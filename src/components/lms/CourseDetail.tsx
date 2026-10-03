@@ -102,21 +102,22 @@ export default function CourseDetail({ slug }: { slug: string }) {
 
   const onEnrol = () => {
     if (enrolled) return router.push(`/lms/learn/${slug}`);
-    if (!user) {
-      // Signing up first, because there is nobody to enrol until then.
-      return openAuth({
-        mode: "signup",
-        reason: PAYMENT_OFF
-          ? "Create an account to enrol — there is nothing to pay."
-          : "Create an account to enrol — you will land straight back on checkout.",
-        onDone: PAYMENT_OFF ? () => { enrolOnSignIn.current = true; } : goCheckout,
-      });
-    }
-    // Nothing to pay means nothing to check out: enrol and open the course.
+    // Free entry has nothing to charge, so there is no payment to identify
+    // anyone by: an account is the only way to hold the enrolment, and it is
+    // asked for here.
     if (PAYMENT_OFF) {
+      if (!user) {
+        return openAuth({
+          mode: "signup",
+          reason: "Create an account to enrol — there is nothing to pay.",
+          onDone: () => { enrolOnSignIn.current = true; },
+        });
+      }
       enrol(user.id, slug, null);
       return router.push(selfPaced ? `/lms/learn/${slug}` : `/lms/course/${slug}`);
     }
+    // Paying needs no account. The payment itself says who bought the seat,
+    // and the server records it against them.
     return goCheckout();
   };
 

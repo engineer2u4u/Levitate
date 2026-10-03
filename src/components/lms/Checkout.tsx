@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, type CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import { feeBreakdown } from "@/lib/lms/courses";
 import { useCourse } from "@/components/site/CatalogProvider";
 import { enrol, isPaid } from "@/lib/lms/enrolments";
@@ -37,12 +37,25 @@ const METHODS = [
 
 export default function Checkout({ slug }: { slug: string }) {
   const course = useCourse(slug);
-  const { user, loading, enrolments, openAuth, refreshEnrolments } = useSession();
+  const { user, loading, enrolments, refreshEnrolments } = useSession();
 
   const [method, setMethod] = useState<string>("upi");
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState("");
   const [receipt, setReceipt] = useState<{ orderId: string; paymentId: string; amountPaise: number } | null>(null);
+
+  /**
+   * Who is buying.
+   *
+   * An account fills these in; without one they are typed. Held as "what has
+   * been edited" rather than copied out of the account by an effect, so a
+   * session that arrives a moment after the first render still fills the form,
+   * and a buyer who corrects their name keeps the correction.
+   */
+  const [edited, setEdited] = useState<{ name?: string; email?: string; org?: string }>({});
+  const name = edited.name ?? user?.name ?? "";
+  const email = edited.email ?? user?.email ?? "";
+  const org = edited.org ?? user?.org ?? "";
 
   const [contact, setContact] = useState("+91 ");
   const [designation, setDesignation] = useState("");
@@ -56,16 +69,6 @@ export default function Checkout({ slug }: { slug: string }) {
   // Only a paid enrolment means there is nothing to pay. One still pending (the
   // office sent a link) can be paid here instead, and the server marks it paid.
   const alreadyEnrolled = enrolments.some((e) => e.courseSlug === slug && isPaid(e));
-
-  // A signed-out visitor who deep-links here gets the modal, not a dead end.
-  useEffect(() => {
-    if (!loading && !user) {
-      openAuth({
-        mode: "signup",
-        reason: "Sign in to complete your enrolment.",
-      });
-    }
-  }, [loading, user, openAuth]);
 
   if (!course) {
     return (
@@ -106,7 +109,7 @@ export default function Checkout({ slug }: { slug: string }) {
           </div>
           <h1 style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 10px", letterSpacing: "-.02em" }}>Payment successful — you&apos;re enrolled</h1>
           <p style={{ font: "400 14.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 26px" }}>
-            A confirmation with your receipt and joining instructions is on its way to {user?.email}.
+            A confirmation with your receipt and joining instructions is on its way to {email}.
           </p>
 
           <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, textAlign: "left", marginBottom: 26 }}>
@@ -123,15 +126,26 @@ export default function Checkout({ slug }: { slug: string }) {
             ))}
           </div>
 
+          {/* A course area is something an account has. Someone who paid
+              without one is told what actually happens next, rather than being
+              pointed at a dashboard that would ask them to sign in. */}
           <div style={{ background: "rgba(47,196,188,.09)", border: "1px solid rgba(27,143,136,.3)", borderRadius: 14, padding: "18px 20px", textAlign: "left", marginBottom: 26 }}>
-            <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#136f6a", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 8 }}>Released now</div>
+            <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#136f6a", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 8 }}>
+              {user ? "Released now" : "What happens next"}
+            </div>
             <div style={{ font: "500 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>
-              Orientation is open in the course area now. The rest of the modules open after each live session, and your session dates and Zoom links are under Live sessions.
+              {user
+                ? "Orientation is open in the course area now. The rest of the modules open after each live session, and your session dates and Zoom links are under Live sessions."
+                : "Your seat is reserved. We will email your session dates, the Zoom link and your course access to the address above before the first session."}
             </div>
           </div>
 
-          <Link href="/lms/dashboard" className="lp-btn-grad" style={{ display: "inline-block", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "14px 30px", borderRadius: 999 }}>
-            Go to My Learning
+          <Link
+            href={user ? "/lms/dashboard" : `/lms/course/${slug}`}
+            className="lp-btn-grad"
+            style={{ display: "inline-block", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "14px 30px", borderRadius: 999 }}
+          >
+            {user ? "Go to My Learning" : "Back to the programme"}
           </Link>
         </div>
       </div>
@@ -141,19 +155,6 @@ export default function Checkout({ slug }: { slug: string }) {
   /* ---------------- gates ---------------- */
   if (loading) {
     return <div style={{ background: "#f7fafc", padding: "80px 48px", minHeight: "50vh" }} />;
-  }
-
-  if (!user) {
-    return (
-      <div style={{ background: "#f7fafc", padding: "70px 48px", minHeight: "50vh" }} className="site-page-sec">
-        <div style={{ maxWidth: 560, margin: "0 auto", textAlign: "center" }}>
-          <h1 style={{ font: "700 21px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 10px" }}>Sign in to continue</h1>
-          <p style={{ font: "400 14px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
-            You need an account before enrolling in {course.title}.
-          </p>
-        </div>
-      </div>
-    );
   }
 
   if (alreadyEnrolled) {
@@ -180,6 +181,11 @@ export default function Checkout({ slug }: { slug: string }) {
 
   const pay = async () => {
     if (paying) return;
+    // An account would have supplied these; typed in, they are checked. The
+    // receipt and the joining instructions have nowhere else to go.
+    if (name.trim().length < 2) return setError("Please enter your full name.");
+    if (!/^[^@s]+@[^@s]+.[^@s]+$/.test(email.trim())) return setError("Please enter an email address we can send your receipt to.");
+    if (contact.replace(/[^0-9]/g, "").length < 10) return setError("Please enter a phone number with at least 10 digits.");
     setPaying(true);
     setError("");
     if (realMoney) track("begin_checkout", { currency: "INR", value: (course.feePaise as number) / 100, items: [item] });
@@ -187,9 +193,9 @@ export default function Checkout({ slug }: { slug: string }) {
       courseSlug: slug,
       courseTitle: course.title,
       amountPaise: course.feePaise as number,
-      customer: { name: user.name, email: user.email, contact },
+      customer: { name: name.trim(), email: email.trim(), contact },
       // Collected on this form and, until now, discarded when it unmounted.
-      billing: { gstin: gst.trim().toUpperCase(), address: address.trim(), designation: designation.trim(), stateCode: placeOfSupply },
+      billing: { gstin: gst.trim().toUpperCase(), address: address.trim(), designation: designation.trim(), stateCode: placeOfSupply, organisation: org.trim() },
     });
     setPaying(false);
     if (!res.ok) {
@@ -205,8 +211,12 @@ export default function Checkout({ slug }: { slug: string }) {
       // meta_event_id pairs this with the server's own report of the sale.
       track("purchase", { transaction_id: res.paymentId, value: res.amountPaise / 100, currency: "INR", items: [item], meta_event_id: res.metaEventId });
     }
-    enrol(user.id, slug, { orderId: res.orderId, paymentId: res.paymentId, amountPaise: res.amountPaise, at: res.at });
-    void refreshEnrolments();
+    // Only an account has a learning area to put this in. A guest's seat was
+    // recorded by the server during verification, against the email above.
+    if (user) {
+      enrol(user.id, slug, { orderId: res.orderId, paymentId: res.paymentId, amountPaise: res.amountPaise, at: res.at });
+      void refreshEnrolments();
+    }
     setReceipt({ orderId: res.orderId, paymentId: res.paymentId, amountPaise: res.amountPaise });
     window.scrollTo(0, 0);
   };
@@ -229,13 +239,17 @@ export default function Checkout({ slug }: { slug: string }) {
         <div className="lms-split" style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 26, alignItems: "start" }}>
           <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "32px 34px" }}>
             <div style={{ font: "700 19px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginBottom: 4 }}>Confirm your enrolment</div>
-            <div style={{ font: "500 13px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 26 }}>Details come from your Levitate account — edit anything that needs updating.</div>
+            <div style={{ font: "500 13px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 26 }}>
+              {user
+                ? "Details come from your Levitate account — edit anything that needs updating."
+                : "Your seat is confirmed by payment — there is no account to create. These details go on your receipt."}
+            </div>
 
             <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px 18px" }}>
-              <div><div style={fieldLabel}>Full name</div><input readOnly value={user.name} style={{ ...fieldInput, color: "#5b6e82" }} /></div>
-              <div><div style={fieldLabel}>Email</div><input readOnly value={user.email} style={{ ...fieldInput, color: "#5b6e82" }} /></div>
-              <div><div style={fieldLabel}>Mobile</div><input value={contact} onChange={(e) => setContact(e.target.value)} placeholder="+91 98110 24567" style={fieldInput} /></div>
-              <div><div style={fieldLabel}>Organisation</div><input readOnly value={user.org || "—"} style={{ ...fieldInput, color: "#5b6e82" }} /></div>
+              <div><div style={fieldLabel}>Full name</div><input readOnly={Boolean(user?.name)} value={name} onChange={(e) => setEdited((d) => ({ ...d, name: e.target.value }))} autoComplete="name" placeholder="Your full name" style={{ ...fieldInput, ...(user ? { color: "#5b6e82" } : null) }} /></div>
+              <div><div style={fieldLabel}>Email</div><input readOnly={Boolean(user)} value={email} onChange={(e) => setEdited((d) => ({ ...d, email: e.target.value }))} type="email" autoComplete="email" placeholder="you@example.com" style={{ ...fieldInput, ...(user ? { color: "#5b6e82" } : null) }} /></div>
+              <div><div style={fieldLabel}>Mobile</div><input value={contact} onChange={(e) => setContact(e.target.value)} placeholder="+91 98110 24567" autoComplete="tel" style={fieldInput} /></div>
+              <div><div style={fieldLabel}>Organisation</div><input readOnly={Boolean(user)} value={user ? org || "—" : org} onChange={(e) => setEdited((d) => ({ ...d, org: e.target.value }))} autoComplete="organization" placeholder="Where you work" style={{ ...fieldInput, ...(user ? { color: "#5b6e82" } : null) }} /></div>
               <div><div style={fieldLabel}>Designation</div><input value={designation} onChange={(e) => setDesignation(e.target.value)} placeholder="HR Manager" style={fieldInput} /></div>
               <div><div style={fieldLabel}>GST number (optional)</div><input value={gst} onChange={(e) => setGst(e.target.value)} placeholder="22AAAAA0000A1Z5" style={fieldInput} /></div>
               <div>
