@@ -218,9 +218,9 @@ export const HR_EDGE_MASTERCLASS: MasterclassOffer = {
   startsAt: "2026-10-16T18:00:00+05:30",
   endsAt: "2026-10-16T20:00:00+05:30",
 
-  feePaise: 49900,
+  feePaise: 149900,
   // One fee, so nothing is shown struck through.
-  standardPaise: 49900,
+  standardPaise: 149900,
 
   agenda: {
     eyebrow: "What the two hours cover",

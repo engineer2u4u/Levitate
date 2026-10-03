@@ -95,7 +95,14 @@ done
 # server asks, for every masterclass that has not yet run.
 say "asking the catalogue whether each masterclass can still be paid for"
 if ! node scripts/check-masterclass-prices.mjs; then
-  die "a masterclass page would take payments the server will refuse. Publish the course in the admin (or run the catalogue SQL) before deploying."
+  # Shipping a page that still cannot sell is sometimes the right order — a
+  # fee change has to be on the page before the catalogue starts charging it,
+  # or the Razorpay window would quote more than the page did.
+  if [ "${ALLOW_UNSOLD:-}" = "1" ]; then
+    say "shipping it anyway (ALLOW_UNSOLD=1) — publish the course before sending anyone to the page"
+  else
+    die "a masterclass page would take payments the server will refuse. Publish the course in the admin (or run the catalogue SQL) first, or re-run with ALLOW_UNSOLD=1 if the page is meant to go out ahead of it."
+  fi
 fi
 
 say "comparing the live root .htaccess with the build's"

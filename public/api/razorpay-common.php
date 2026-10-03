@@ -235,7 +235,7 @@ const RZP_PRICES_PAISE = [
     // fee on the page is shown struck through and is never charged.
     'posh-masterclass-2026' => 199900,
     // One fee, no early bird.
-    'hr-edge-masterclass' => 49900,
+    'hr-edge-masterclass' => 149900,
     // The special fee; the ₹3,499 standard fee is only ever shown struck through.
     'deib-masterclass' => 199900,
 ];
