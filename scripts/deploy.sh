@@ -93,15 +93,16 @@ done
 # the server says "This course is not open for payment", and nobody finds out
 # until a buyer does. So ask the catalogue the same question the payment
 # server asks, for every masterclass that has not yet run.
-say "asking the catalogue whether each masterclass can still be paid for"
+say "asking the catalogue whether each masterclass sells at the price its page shows"
 if ! node scripts/check-masterclass-prices.mjs; then
-  # Shipping a page that still cannot sell is sometimes the right order — a
-  # fee change has to be on the page before the catalogue starts charging it,
-  # or the Razorpay window would quote more than the page did.
-  if [ "${ALLOW_UNSOLD:-}" = "1" ]; then
-    say "shipping it anyway (ALLOW_UNSOLD=1) — publish the course before sending anyone to the page"
+  # Shipping a page the catalogue has not caught up with is sometimes the
+  # right order — a fee change has to reach the page before the catalogue
+  # starts charging it, or the Razorpay window would quote more than the
+  # page did.
+  if [ "${ALLOW_PRICE_GAP:-}" = "1" ]; then
+    say "shipping it anyway (ALLOW_PRICE_GAP=1) — put the catalogue right before sending anyone to the page"
   else
-    die "a masterclass page would take payments the server will refuse. Publish the course in the admin (or run the catalogue SQL) first, or re-run with ALLOW_UNSOLD=1 if the page is meant to go out ahead of it."
+    die "a masterclass page and the catalogue disagree — see above. Put the catalogue right in the admin (or with SQL) first, or re-run with ALLOW_PRICE_GAP=1 if the page is meant to go out ahead of it."
   fi
 fi
 

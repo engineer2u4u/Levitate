@@ -12,7 +12,8 @@
  * database's and can change after a build — and because a deploy is the moment
  * a page starts offering something.
  *
- * Exit 1 means at least one masterclass would sell what cannot be bought.
+ * Exit 1 means at least one masterclass would sell what cannot be bought, or
+ * would quote a figure the catalogue does not charge.
  * A masterclass whose session has passed is skipped: its page has closed
  * registration itself, so the catalogue no longer has to agree.
  */
@@ -20,9 +21,9 @@ import fs from "node:fs";
 
 const src = fs.readFileSync(new URL("../src/lib/masterclass.ts", import.meta.url), "utf8");
 
-/** Each offer declares its slug, then its start, in that order. */
-const offers = [...src.matchAll(/^ {2}slug: "([a-z0-9-]+)",[\s\S]*?^ {2}startsAt: "([^"]+)",/gm)].map(
-  ([, slug, startsAt]) => ({ slug, startsAt }),
+/** Each offer declares its slug, then its start, then the fee it advertises. */
+const offers = [...src.matchAll(/^ {2}slug: "([a-z0-9-]+)",[\s\S]*?^ {2}startsAt: "([^"]+)",[\s\S]*?^ {2}feePaise: (\d+),/gm)].map(
+  ([, slug, startsAt, feePaise]) => ({ slug, startsAt, feePaise: Number(feePaise) }),
 );
 
 if (!offers.length) {
@@ -41,7 +42,9 @@ if (!url || !key) {
 }
 
 let bad = 0;
-for (const { slug, startsAt } of offers) {
+const rupees = (paise) => "₹" + (paise / 100).toLocaleString("en-IN");
+
+for (const { slug, startsAt, feePaise } of offers) {
   if (Date.parse(startsAt) < Date.now()) {
     console.log(`    ${slug}: already run — skipped`);
     continue;
@@ -64,16 +67,20 @@ for (const { slug, startsAt } of offers) {
   const c = Array.isArray(rows) ? rows[0] : null;
   // The same three conditions as rzp_price_for().
   const why = !c
-    ? "the catalogue has no live course with this slug"
+    ? "the page would take payment but the catalogue has no live course with this slug"
     : c.site_status !== "enrolling"
-      ? `the catalogue has it as "${c.site_status}", not enrolling`
+      ? `the page would take payment but the catalogue has it as "${c.site_status}", not enrolling`
       : c.price_on_request
-        ? "its fee is set to on request"
+        ? "the page would take payment but its fee is set to on request"
         : !(c.price_paise > 0)
-          ? "its fee is zero"
-          : "";
+          ? "the page would take payment but its fee is zero"
+          // The page quotes one figure and Razorpay would ask for another.
+          // Whichever is right, nobody should be shown the wrong one.
+          : c.price_paise !== feePaise
+            ? `the page quotes ${rupees(feePaise)} but the catalogue would charge ${rupees(c.price_paise)}`
+            : "";
   if (why) {
-    console.error(`    ${slug}: the page would take payment but ${why}`);
+    console.error(`    ${slug}: ${why}`);
     bad += 1;
   } else {
     console.log(`    ${slug}: ₹${(c.price_paise / 100).toLocaleString("en-IN")} — payable`);

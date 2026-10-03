@@ -127,9 +127,9 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
   const waHref = `${contact.whatsapp}?text=${encodeURIComponent(fill(offer.whatsapp, entry))}`;
 
   /**
-   * The primary button now opens a conversation rather than a checkout. It
-   * carries the programme along, so the enquiry says which page it came from
-   * — otherwise every landing page's leads look alike in the admin.
+   * The enquiry, which leads the page while the programme is not yet selling.
+   * It carries the programme along, so the enquiry says which page it came
+   * from — otherwise every landing page's leads look alike in the admin.
    */
   const onEnquire = () => {
     track("enquire_click", { course: offer.slug, price });
@@ -138,6 +138,23 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
   };
 
   const onWhatsApp = () => track("whatsapp_click", { course: offer.slug, placement: "landing" });
+
+  /**
+   * A programme the catalogue has open and priced can be bought, so the page
+   * asks for the sale rather than for an enquiry.
+   *
+   * The checkout is the course page's, not a second one here: that is the path
+   * that signs the buyer in, takes the payment and puts the enrolment on their
+   * account. The same two conditions the batch cards use, and the same two the
+   * order endpoint applies — a button that cannot be honoured is worse than no
+   * button.
+   */
+  const enrolFee = entry?.status === "enrolling" ? entry.feePaise : null;
+
+  const onEnrol = () => {
+    track("reserve_seat_click", { course: offer.slug, price });
+    router.push(`/lms/course/${offer.slug}`);
+  };
 
   // Down the first column, then down the second — how a numbered list is read.
   const modules = outline?.modules ?? [];
@@ -177,9 +194,15 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
             </div>
 
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <button type="button" onClick={onEnquire} className="lp-btn-grad" style={ctaPrimary}>
-                Enquire Now
-              </button>
+              {enrolFee !== null ? (
+                <button type="button" onClick={onEnrol} className="lp-btn-grad" style={ctaPrimary}>
+                  Enrol · {formatFee(enrolFee)}
+                </button>
+              ) : (
+                <button type="button" onClick={onEnquire} className="lp-btn-grad" style={ctaPrimary}>
+                  Enquire Now
+                </button>
+              )}
               <a href={waHref} target="_blank" rel="noopener noreferrer" onClick={onWhatsApp} style={ctaGhost}>
                 Talk to the team
               </a>
