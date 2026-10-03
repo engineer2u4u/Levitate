@@ -293,3 +293,16 @@ export const DEI_LANDING: LandingOffer = {
   faqs: [],
   whatsapp: "Hi, I'd like to know more about the DEIB Train-the-Trainer certification starting {starts}.",
 };
+
+/**
+ * Where each programme is sold — the page that carries its registration.
+ *
+ * A card that links to "enrol" needs to know where enrolling happens, and the
+ * catalogue only knows slugs. Keeping the pairing here means a page that moves
+ * takes its links with it.
+ */
+export const LANDING_PATH: Record<string, string> = {
+  "posh-trainer": "/posh-train-the-trainer-certification/",
+  "pocso-child-safety": "/pocso-train-the-trainer-certification/",
+  "inclusive-workplace": "/dei-train-the-trainer-certification/",
+};

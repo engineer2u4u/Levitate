@@ -57,8 +57,14 @@ const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "565sP1Y5l58ASC
 
 export type EnquiryResult = { ok: true } | { ok: false; error: string };
 
-/** Which form an enquiry came from. Matches the check constraint on the table. */
-export type EnquiryForm = "popup" | "contact" | "service" | "kit" | "masterclass" | "other";
+/** Which form an enquiry came from. Matches the check constraint on the table.
+ *  A name the database has not been told about yet is stored as "other"
+ *  rather than failing — see the insert below. */
+export type EnquiryForm = "popup" | "contact" | "service" | "kit" | "masterclass" | "enrolment" | "other";
+
+/** Forms where the money has already been taken, so the row records a sale
+ *  rather than a lead. */
+const PAID: readonly EnquiryForm[] = ["masterclass", "enrolment"];
 
 const val = (data: FormData, key: string) => {
   const v = data.get(key);
@@ -204,9 +210,9 @@ export async function submitEnquiry(
   if (mailed.ok || stored) {
     // A lead for GA4, which attributes it to the session's source/medium on
     // its own, and which Google Ads can import as a conversion. Not for rows
-    // that are not enquiries, and not for the masterclass, whose paid
-    // registration already reports a purchase. Nothing personal is sent.
-    if (opts.store !== false && opts.form !== "masterclass") {
+    // that are not enquiries, and not for a paid registration, which already
+    // reports a purchase. Nothing personal is sent.
+    if (opts.store !== false && !PAID.includes(opts.form ?? "other")) {
       // One id for both reports of this lead — the pixel's, below, and the
       // server's, so Meta pairs them and counts one.
       const eventId = newEventId("generate_lead");

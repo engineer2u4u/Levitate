@@ -7,6 +7,7 @@ import BrandText from "@/components/site/BrandText";
 import { useCatalog } from "@/components/site/CatalogProvider";
 import { batchCards } from "@/lib/catalog";
 import { formatFee } from "@/lib/lms/courses";
+import { LANDING_PATH } from "@/lib/landing";
 
 /**
  * Live cohorts open for enrolment.
@@ -33,9 +34,13 @@ export default function UpcomingBatches({ background = "#f4f7f9" }: { background
           title: c.batch.title,
           status: c.batch.statusLabel,
           open: c.status === "enrolling",
-          // Live and priced: the card goes to the course page, where enrolment
-          // is. Paused, or fee on request: it goes to the enquiry form.
-          href: c.status === "enrolling" && c.feePaise !== null ? `/lms/course/${c.slug}` : "/contact",
+          // Live and priced: the card goes to the registration on the
+          // programme's own page, which takes the payment without an account.
+          // Paused, or fee on request: it goes to the enquiry form.
+          href:
+            c.status === "enrolling" && c.feePaise !== null
+              ? `${LANDING_PATH[c.slug] ?? `/lms/course/${c.slug}/`}#register`
+              : "/contact",
           rows: c.batch.rows,
           fee: formatFee(c.feePaise),
           feeNote: c.batch.feeNote,

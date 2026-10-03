@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Accreditations from "@/components/site/Accreditations";
 import BrandText from "@/components/site/BrandText";
 import CertificateGallery from "@/components/site/CertificateGallery";
@@ -13,7 +13,7 @@ import VideoTestimonials, { type PlayableClip } from "@/components/home/VideoTes
 import { certificateCards } from "@/lib/certificateArt";
 import { courseBySlug, formatFee } from "@/lib/lms/courses";
 import { useCatalogCourse } from "@/components/site/CatalogProvider";
-import { fill } from "@/lib/catalog";
+import { dateFull, fill, firstSession } from "@/lib/catalog";
 import { moduleTitle, outlineBySlug } from "@/lib/programOutlines";
 import { programBySlug } from "@/lib/programs";
 import { brochureBySlug } from "@/lib/lms/brochures";
@@ -22,37 +22,10 @@ import { contact } from "@/lib/site";
 import { track } from "@/lib/track";
 import type { LandingOffer, WhyIcon } from "@/lib/landing";
 import LeadGate from "./LeadGate";
+import RegisterCard, { useSeatClosed, type Seat } from "./RegisterCard";
+import { MAX, MEASURE, SANS, T, ctaGhost, ctaPrimary } from "./theme";
 
-export const SANS = "'Plus Jakarta Sans',sans-serif";
-
-/**
- * One content width for every section on the page.
- *
- * The sections used to run at 1180, 1080, 900, 860 and 780 — each chosen on
- * its own merits, and together a column whose edges wandered in and out as you
- * scrolled. Every section now shares one edge. Paragraphs keep a readable
- * measure inside it, so text does not run the full width; the boxes do.
- */
-export const MAX = 1180;
-export const MEASURE = 760;
-
-/**
- * One type scale.
- *
- * Body copy had drifted across 13.5, 14, 14.5 and 15px and card titles across
- * 15.5 and 16. The headings are set to match the shared sections this page
- * embeds — accreditations, testimonials, client logos — so the page reads as
- * one document rather than several stitched together.
- */
-export const T = {
-  eyebrow: `700 12px ${SANS}`,
-  h2: `700 clamp(26px,2.8vw,36px)/1.15 ${SANS}`,
-  lead: `400 16px/1.75 ${SANS}`,
-  cardTitle: `700 17px/1.35 ${SANS}`,
-  body: `400 15px/1.75 ${SANS}`,
-  item: `600 15px/1.55 ${SANS}`,
-  small: `500 13px/1.6 ${SANS}`,
-} as const;
+export { MAX, MEASURE, SANS, T, ctaGhost, ctaPrimary } from "./theme";
 
 /**
  * The skeleton the paid-ad sales pages share.
@@ -79,6 +52,8 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
   // The same letters and names the course page shows, so the two cannot drift.
   const program = offer.framework ? programBySlug(offer.slug) : undefined;
   const router = useRouter();
+  // The page this seat is sold from, recorded with the registration.
+  const path = usePathname() ?? "";
 
   const [clip, setClip] = useState<PlayableClip | null>(null);
   const certificates = course ? certificateCards(course.certificate) : [];
@@ -139,6 +114,7 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
 
   const onWhatsApp = () => track("whatsapp_click", { course: offer.slug, placement: "landing" });
 
+
   /**
    * A programme the catalogue has open and priced can be bought, so the page
    * asks for the sale rather than for an enquiry.
@@ -149,11 +125,43 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
    * order endpoint applies — a button that cannot be honoured is worse than no
    * button.
    */
-  const enrolFee = entry?.status === "enrolling" ? entry.feePaise : null;
+  const sitting = entry ? firstSession(entry) : null;
+  const [seatDay, seatDate] = dateFull(sitting?.startsOn ?? "").split(", ");
+
+  /**
+   * The seat this page sells, or null while the programme is not selling one.
+   *
+   * Every figure comes from the catalogue rather than the page's copy: the fee
+   * that will actually be charged, and the sitting registration closes at. A
+   * programme quoted on request, or paused in the admin, has no seat and the
+   * page goes back to asking for an enquiry — the same two conditions the
+   * batch cards and the order endpoint use.
+   */
+  const seat: Seat | null =
+    entry && entry.status === "enrolling" && entry.feePaise !== null && sitting?.startsAt && sitting.endsAt
+      ? {
+          slug: offer.slug,
+          short: entry.batch?.short || entry.short,
+          path,
+          checkoutTitle: `${entry.batch?.title || entry.short} · ${seatDate}`,
+          feePaise: entry.feePaise,
+          standardPaise: entry.listPricePaise ?? entry.feePaise,
+          day: seatDay,
+          date: seatDate,
+          startsAt: sitting.startsAt,
+          endsAt: sitting.endsAt,
+          closedNote: "This cohort has started. Message us to hear about the next one.",
+          formTag: "enrolment",
+        }
+      : null;
+
+  // Asked whether or not there is a seat, so the hook order cannot move with
+  // the catalogue's answer.
+  const closed = useSeatClosed(sitting?.startsAt ?? "");
 
   const onEnrol = () => {
     track("reserve_seat_click", { course: offer.slug, price });
-    router.push(`/lms/course/${offer.slug}`);
+    document.getElementById("register")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   // Down the first column, then down the second — how a numbered list is read.
@@ -194,9 +202,9 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
             </div>
 
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              {enrolFee !== null ? (
+              {seat ? (
                 <button type="button" onClick={onEnrol} className="lp-btn-grad" style={ctaPrimary}>
-                  Enrol · {formatFee(enrolFee)}
+                  Enrol · {formatFee(seat.feePaise)}
                 </button>
               ) : (
                 <button type="button" onClick={onEnquire} className="lp-btn-grad" style={ctaPrimary}>
@@ -259,6 +267,26 @@ export default function SalesPage({ offer }: { offer: LandingOffer }) {
           </div>
         </div>
       </section>
+
+      {/* ---------------------------------------------------------- REGISTER */}
+      {/* Only where there is a seat to sell. The card is the masterclasses':
+          a form and a payment, with no account between the two. */}
+      {seat && (
+        <section className="site-page-sec" style={{ background: "#0c2a45", padding: "56px 48px 64px" }}>
+          <div style={{ maxWidth: 620, margin: "0 auto" }}>
+            <div style={{ font: T.eyebrow, color: "#5fe0d6", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 12, textAlign: "center" }}>
+              Reserve your seat
+            </div>
+            <h2 style={{ font: `800 clamp(24px,2.6vw,32px)/1.2 ${SANS}`, color: "#fff", margin: "0 0 10px", letterSpacing: "-.02em", textAlign: "center" }}>
+              {seat.day}, {seat.date}
+            </h2>
+            <p style={{ font: T.body, color: "rgba(255,255,255,.72)", margin: "0 0 26px", textAlign: "center" }}>
+              Pay and your seat is confirmed. No account to create.
+            </p>
+            <RegisterCard seat={seat} closed={closed} />
+          </div>
+        </section>
+      )}
 
       <Accreditations spaceBelow={false} maxWidth={MAX} shrm={course?.certificate.shrm !== false} />
 
@@ -465,26 +493,6 @@ export function Section({ children, tone, flush = false }: { children: React.Rea
     </section>
   );
 }
-
-export const ctaPrimary: React.CSSProperties = {
-  cursor: "pointer",
-  border: "none",
-  background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)",
-  color: "#fff",
-  font: `700 15px ${SANS}`,
-  padding: "15px 30px",
-  borderRadius: 999,
-};
-
-export const ctaGhost: React.CSSProperties = {
-  display: "inline-block",
-  background: "transparent",
-  border: "1.5px solid rgba(255,255,255,.4)",
-  color: "#fff",
-  font: `700 15px ${SANS}`,
-  padding: "14px 26px",
-  borderRadius: 999,
-};
 
 /**
  * The fee as an offer: the price, and the standard fee struck through when
