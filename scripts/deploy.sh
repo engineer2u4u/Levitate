@@ -87,6 +87,17 @@ for f in razorpay-common.php razorpay-order.php razorpay-verify.php invoice.php 
   [ -f "out/api/$f" ] || die "out/api/$f is missing — the site would go live without a working payment or enquiry endpoint."
 done
 
+# A masterclass page carries a Pay button, but razorpay-order.php takes the
+# price from the catalogue rather than from the page — and a slug the database
+# does not publish is refused. The two can disagree silently: the page sells,
+# the server says "This course is not open for payment", and nobody finds out
+# until a buyer does. So ask the catalogue the same question the payment
+# server asks, for every masterclass that has not yet run.
+say "asking the catalogue whether each masterclass can still be paid for"
+if ! node scripts/check-masterclass-prices.mjs; then
+  die "a masterclass page would take payments the server will refuse. Publish the course in the admin (or run the catalogue SQL) before deploying."
+fi
+
 say "comparing the live root .htaccess with the build's"
 LIVE_HT="$(mktemp)"; trap 'rm -f "$LIVE_HT"' EXIT
 ssh_ "cat ${ROOT}/.htaccess" | tr -d '\r' > "$LIVE_HT"
