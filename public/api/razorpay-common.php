@@ -242,7 +242,7 @@ const RZP_PRICES_PAISE = [
 
 /** Fallback start times for one-off sessions (see RZP_CLOSE_AT_START). */
 const RZP_CLOSES_AT = [
-    'posh-masterclass-2026' => '2026-10-04T11:30:00+05:30',
+    'posh-masterclass-2026' => '2026-10-31T11:30:00+05:30',
     'hr-edge-masterclass'   => '2026-10-16T18:00:00+05:30',
     'deib-masterclass'      => '2026-10-10T11:30:00+05:30',
 ];
@@ -253,7 +253,7 @@ const RZP_COURSE_TITLES = [
     'pocso-child-safety'  => 'POCSO & Child Safety Facilitator Program (POCSO TTT)',
     'inclusive-workplace' => 'Diversity, Equity, Inclusion and Belonging Facilitator Program TTT',
     'demo-course'         => 'Demo · Workplace Facilitation Essentials',
-    'posh-masterclass-2026' => 'PoSH 2026: The New Compliance & Workplace Reality — Masterclass, 4 October 2026',
+    'posh-masterclass-2026' => 'PoSH 2026: The New Compliance & Workplace Reality — Masterclass, 31 October 2026',
     'hr-edge-masterclass'   => 'HR EDGE Masterclass: Think Like an HR Business Partner, 16 October 2026',
     'deib-masterclass'      => 'Unconscious Bias at Work — Masterclass, 10 October 2026',
 ];
