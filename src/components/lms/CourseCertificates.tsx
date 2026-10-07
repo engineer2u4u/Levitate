@@ -84,6 +84,15 @@ export default function CourseCertificates({
     ? new Date(issued.completed_on).toLocaleDateString("en-US", { month: "short", year: "numeric" })
     : completedOn;
 
+  /**
+   * The hours on a certificate belong to the cohort that ran, not to the
+   * programme in the abstract — a twelve-hour October and a fifteen-hour
+   * November are the same course. So a real certificate can legitimately
+   * differ from the specimen printed beside it, which looks like a mistake
+   * unless it is explained. Said only when the two actually disagree.
+   */
+  const runHours = issued?.hours && issued.hours !== course.certificate.hours ? issued.hours : "";
+
   const cards = certificateCards({ ...course.certificate, name: printedCourse }).map((card) => ({
     ...card,
     issue: {
@@ -161,6 +170,13 @@ export default function CourseCertificates({
               <strong style={{ color: "#0a1b33" }}>{printedName}</strong>. The name is the one held when your
               certificate was issued — speak to the programme team if it needs correcting, so the register and your
               copy stay in step.
+              {runHours ? (
+                <>
+                  {" "}
+                  The hours shown are the ones your cohort ran — <strong style={{ color: "#0a1b33" }}>{runHours}</strong> —
+                  which is why they may differ from the programme&apos;s published length.
+                </>
+              ) : null}
               {!issued.pdcs && !issued.cpd_hours ? " The PDC and CPD hours are filled in by the office." : ""}
             </>
           ) : (
