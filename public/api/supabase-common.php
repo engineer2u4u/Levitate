@@ -106,6 +106,28 @@ function lvt_sb_user(string $jwt): ?array
 }
 
 /**
+ * Whether this caller may act as the office.
+ *
+ * Asked of the database with the caller's own token, not with the service key:
+ * row level security lets someone read their own profile and no one else's, so
+ * a token that is not an admin's cannot answer yes here however it is shaped.
+ * Anything other than a clean 200 saying "admin" is a no — a lookup that fails
+ * must never open a door.
+ */
+function lvt_sb_is_admin(string $jwt, string $userId): bool
+{
+    if ($jwt === '' || !preg_match('/^[0-9a-f-]{36}$/i', $userId)) {
+        return false;
+    }
+    [$code, $rows] = lvt_sb_request(
+        'GET',
+        '/rest/v1/profiles?select=role&id=eq.' . rawurlencode($userId) . '&limit=1',
+        $jwt
+    );
+    return $code === 200 && is_array($rows) && (($rows[0]['role'] ?? '') === 'admin');
+}
+
+/**
  * The batch a course is selling now: the soonest upcoming or running batch
  * that is open for enrolment. False when Supabase could not be asked — the
  * caller decides whether that blocks a sale — and null when it answered that
