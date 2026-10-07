@@ -183,6 +183,13 @@ export type CertificateIssue = {
   pdcs: string;
   /** "No. CPD Hours/ Points" on the CPD certificate. */
   cpdHours: string;
+  /**
+   * True when this is a certificate someone actually holds, rather than a
+   * specimen on a programme page. A specimen shows "[Number]" where a figure
+   * will go; a real one has no figure to promise, so where the run earned
+   * nothing the line is left off the artwork altogether.
+   */
+  issued?: boolean;
   certificateId: string;
   /** Trailing clause on the Award certificate; falls back to the PoSH line. */
   closing?: string;

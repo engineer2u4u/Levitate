@@ -91,6 +91,12 @@ export default function CourseCertificates({
       recipientName: printedName,
       completedOn: printedDate,
       hours: issued?.hours || card.issue.hours,
+      pdcs: issued?.pdcs ?? "",
+      cpdHours: issued?.cpd_hours ?? "",
+      // A real certificate prints what the run earned and stays silent about
+      // what it did not; a specimen keeps its "[Number]" placeholders, which
+      // are honest about being a sample.
+      issued: Boolean(issued),
       certificateId: issued?.cert_no ?? "",
     } satisfies CertificateIssue,
   }));
@@ -154,7 +160,8 @@ export default function CourseCertificates({
               Issued as <strong style={{ color: "#0a1b33" }}>No. {issued.cert_no}</strong> to{" "}
               <strong style={{ color: "#0a1b33" }}>{printedName}</strong>. The name is the one held when your
               certificate was issued — speak to the programme team if it needs correcting, so the register and your
-              copy stay in step. The PDC and CPD hours are filled in by the office.
+              copy stay in step.
+              {!issued.pdcs && !issued.cpd_hours ? " The PDC and CPD hours are filled in by the office." : ""}
             </>
           ) : (
             <>

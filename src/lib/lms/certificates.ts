@@ -19,6 +19,17 @@ export type Certificate = {
   recipient_name: string;
   course_title: string;
   hours: string | null;
+  /**
+   * What this run of the course was worth, snapshotted like everything else.
+   *
+   * On the batch rather than the course, because a twelve-hour October and a
+   * fifteen-hour November are the same programme, and an accreditation can be
+   * granted for one cohort and not the next. Blank means this run carried
+   * none, which prints as nothing at all — a certificate claiming "PDCs: —"
+   * is worse than one that does not mention them.
+   */
+  pdcs: string | null;
+  cpd_hours: string | null;
   completed_on: string | null;
   issued_at: string;
   revoked_at: string | null;

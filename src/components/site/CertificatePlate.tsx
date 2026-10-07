@@ -91,12 +91,18 @@ function Shrm({ issue }: { issue: CertificateIssue }) {
         </text>
       ))}
 
+      {/* The patch stays either way: it covers the template's own specimen
+          text, which would otherwise show through. The sentence does not —
+          "And has earned  PDCs" with a hole in it claims less clearly than
+          saying nothing. */}
       <Patch r={M.pdcs} fill={colors.pdcs} />
-      <text x={S_MID} y="640" textAnchor="middle" fontFamily={SERIF} fontSize="27" fill={S_INK}>
-        And has earned{" "}
-        <tspan fontWeight="700" fill={S_NAVY}>{issue.pdcs || "[Number]"}</tspan>
-        {" "}PDCs towards SHRM recertification
-      </text>
+      {(issue.pdcs || !issue.issued) && (
+        <text x={S_MID} y="640" textAnchor="middle" fontFamily={SERIF} fontSize="27" fill={S_INK}>
+          And has earned{" "}
+          <tspan fontWeight="700" fill={S_NAVY}>{issue.pdcs || "[Number]"}</tspan>
+          {" "}PDCs towards SHRM recertification
+        </text>
+      )}
 
       <text x="1038" y="672" textAnchor="middle" fontFamily={SERIF} fontSize="26" fontWeight="700" fill={S_NAVY}>
         {issue.completedOn}
@@ -215,9 +221,11 @@ function Cpd({ issue }: { issue: CertificateIssue }) {
       <text x="1015" y="2024" fontFamily={SANS} fontSize="44" fontWeight="700" fill={C_INK}>
         {issue.completedOn || "—"}
       </text>
-      <text x="1015" y="2116" fontFamily={SANS} fontSize="44" fontWeight="700" fill={C_INK}>
-        {issue.cpdHours || "[Number]"}
-      </text>
+      {(issue.cpdHours || !issue.issued) && (
+        <text x="1015" y="2116" fontFamily={SANS} fontSize="44" fontWeight="700" fill={C_INK}>
+          {issue.cpdHours || "[Number]"}
+        </text>
+      )}
     </>
   );
 }
