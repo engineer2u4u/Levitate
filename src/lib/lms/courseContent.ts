@@ -54,6 +54,15 @@ export type CourseItem = {
   watchOptional?: boolean;
   questions?: QuizQuestion[];
   /**
+   * The quiz the certificate stands on, whose result is kept.
+   *
+   * Only one item in a course carries this. Stage quizzes stay unrecorded —
+   * a mark on a three-question check halfway through a module tells nobody
+   * anything — but the final assessment's score and the number of attempts
+   * are things the office has to be able to answer for.
+   */
+  assessment?: boolean;
+  /**
    * Material the learner must agree to, not merely read. Renders a name field
    * and a tick box after the body; the item cannot complete until both are in.
    */

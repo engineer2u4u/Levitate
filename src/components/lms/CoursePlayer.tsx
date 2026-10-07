@@ -20,6 +20,7 @@ import {
   type CourseProgress,
 } from "@/lib/lms/courseProgress";
 import { useSession } from "./useSession";
+import { recordAssessment } from "@/lib/lms/assessments";
 import { courseBySlug } from "@/lib/lms/courses";
 import { moduleGate, useCourseAccess } from "@/lib/lms/access";
 import { supabaseConfigured } from "@/lib/lms/supabase";
@@ -149,18 +150,34 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   );
 
   /**
-   * A quiz moves the course on at 70% or better, and nothing else is kept: a
-   * pass completes the item like any other, a fail leaves it open. The score
-   * itself lives here, dying with the page, so coming back is a fresh quiz
-   * rather than an old mark against someone's name.
+   * A quiz moves the course on at 70% or better. A stage quiz keeps nothing:
+   * the score lives here and dies with the page, so coming back is a fresh
+   * quiz rather than an old mark against someone's name.
+   *
+   * The final assessment is the exception, because it is the one the
+   * certificate stands on. Every attempt at it is recorded, passed or
+   * failed — a fail that is never written down makes "how many goes did this
+   * take" unanswerable, which is half of what the record is for.
+   *
+   * Not awaited. Someone who has passed has passed, and a register that
+   * cannot be reached is not their problem.
    */
   const onQuizSubmit = useCallback(
     async (item: CourseItem, sat: QuizAttempt) => {
       if (!course || !user) return;
       setAttempt({ id: item.id, sat });
+      if (item.assessment) {
+        void recordAssessment({
+          courseSlug: slug,
+          itemId: item.id,
+          score: sat.score,
+          total: sat.total,
+          passed: quizPassed(sat),
+        });
+      }
       if (quizPassed(sat)) await onComplete(item);
     },
-    [course, user, onComplete],
+    [course, user, slug, onComplete],
   );
 
   /**
@@ -509,9 +526,26 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                   Mark as not complete
                 </button>
                 )}
-                <button type="button" onClick={advance} disabled={isLast} className="lp-btn-grad" style={{ ...FOOT_PRIMARY, opacity: isLast ? 0.45 : 1, cursor: isLast ? "default" : "pointer" }}>
-                  {isLast ? "Course complete" : "Proceed to next lesson →"}
-                </button>
+                {/* The last item has nowhere to proceed to, and a greyed-out
+                    "Course complete" was read as something broken — which is
+                    the same objection this file already makes to disabling
+                    the Proceed button rather than withholding it. Finishing is
+                    also the one moment in a course worth marking, so it says
+                    so and offers the thing they have just earned. */}
+                {isLast ? (
+                  <>
+                    <span style={{ font: `700 12.5px ${SANS}`, color: "#136f6a", marginRight: "auto" }}>
+                      That is the whole course — well done.
+                    </span>
+                    <button type="button" onClick={() => setOnKit(true)} className="lp-btn-grad" style={{ ...FOOT_PRIMARY, cursor: "pointer" }}>
+                      Your certificate and kit →
+                    </button>
+                  </>
+                ) : (
+                  <button type="button" onClick={advance} className="lp-btn-grad" style={{ ...FOOT_PRIMARY, cursor: "pointer" }}>
+                    Proceed to next lesson →
+                  </button>
+                )}
               </>
             ) : item.feedback ? (
               <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>Submit your feedback above to continue.</span>

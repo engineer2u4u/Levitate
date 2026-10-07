@@ -565,6 +565,7 @@ export const POSH_CONTENT: CourseContent = {
       items: [
         {
           id: "p-final-assessment",
+          assessment: true,
           kind: "quiz",
           title: "PoSH Final Assessment",
           minutes: 30,
