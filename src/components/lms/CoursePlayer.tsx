@@ -31,9 +31,13 @@ import CourseCertificates from "./CourseCertificates";
 const SANS = "'Plus Jakarta Sans',sans-serif";
 
 /**
- * How much of a film counts as watched. Playback, not attention: a video
- * left running in another tab reaches the end like any other. It is a floor
- * under skipping for the visit, nothing that is kept or reported.
+ * How far through a film counts as watched.
+ *
+ * Reached, not attended to: a video left running in another tab gets there
+ * like any other, and so does the scrubber dragged to the end — which is the
+ * behaviour that was asked for. So this is a prompt to open the film rather
+ * than proof anyone sat through it, and it is kept for the visit only,
+ * reported nowhere.
  */
 const WATCHED_ENOUGH = 0.9;
 
@@ -520,18 +524,15 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                   : "Submit the quiz to continue."}
               </span>
             ) : unwatched ? (
-              /* Why the percentage is not what someone expects. Dragging to
-                 the end is the obvious move when a gate will not open, and it
-                 moves the number by one second — which reads as a broken
-                 counter unless the rule is written down. The same line says
-                 the count does not survive a reload, so a film watched most
-                 of the way through and then refreshed is not a second
-                 mystery. */
+              /* The count follows either watching or seeking, whichever has
+                 got further, so the only thing left to warn about is the
+                 reload — film progress is deliberately not stored, and a film
+                 watched most of the way through and then refreshed starts
+                 again. */
               <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9", display: "block", lineHeight: 1.5 }}>
                 Watch the film to continue — {Math.round(played * 100)}% watched.
                 <span style={{ display: "block", font: `500 11.5px/1.55 ${SANS}`, color: "#a2b1be", marginTop: 2 }}>
-                  Only time the film actually plays counts — skipping ahead does not, and the count starts again if you
-                  reload this page.
+                  The count starts again if you reload this page.
                 </span>
               </span>
             ) : unread ? (
@@ -787,11 +788,17 @@ function FilmFrame({
     let cancelled = false;
     let player: YTPlayer | null = null;
     let timer: number | undefined;
-    // Which seconds of the film have actually been on. Counting seconds
-    // covered rather than the furthest point reached is what lets the learner
-    // seek freely without seeking past the requirement: dragging to the end
-    // marks one second, not the film.
+    // Two readings of "how far through", and the film is credited with
+    // whichever is kinder.
+    //
+    // `seen` is the seconds that were actually on, which is the honest one: a
+    // learner who watches gets counted for what they watched, at any speed,
+    // in any order. `furthest` is simply the furthest point reached, so
+    // dragging the scrubber forward moves the number — asked for, and worth
+    // being clear about, since it means the gate can be satisfied by seeking
+    // rather than by watching.
     const seen = new Set<number>();
+    let furthest = 0;
     let last = -1;
     const mount = document.createElement("div");
     mount.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
@@ -830,7 +837,11 @@ function FilmFrame({
                   seen.add(now);
                 }
                 last = now;
-                onProgress(itemId, seen.size / Math.ceil(length));
+                // A position is a point, so the second landed on counts as
+                // reached — otherwise the end of a film never reads as 100%.
+                furthest = Math.max(furthest, now + 1);
+                const whole = Math.ceil(length);
+                onProgress(itemId, Math.min(1, Math.max(seen.size, furthest) / whole));
               }, 1000);
             },
             onError: () => onUnavailable(itemId),
