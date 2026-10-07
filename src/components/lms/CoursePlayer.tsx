@@ -520,8 +520,19 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                   : "Submit the quiz to continue."}
               </span>
             ) : unwatched ? (
-              <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>
+              /* Why the percentage is not what someone expects. Dragging to
+                 the end is the obvious move when a gate will not open, and it
+                 moves the number by one second — which reads as a broken
+                 counter unless the rule is written down. The same line says
+                 the count does not survive a reload, so a film watched most
+                 of the way through and then refreshed is not a second
+                 mystery. */
+              <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9", display: "block", lineHeight: 1.5 }}>
                 Watch the film to continue — {Math.round(played * 100)}% watched.
+                <span style={{ display: "block", font: `500 11.5px/1.55 ${SANS}`, color: "#a2b1be", marginTop: 2 }}>
+                  Only time the film actually plays counts — skipping ahead does not, and the count starts again if you
+                  reload this page.
+                </span>
               </span>
             ) : unread ? (
               /* The button is withheld, not disabled: a reading is finished by
@@ -668,6 +679,7 @@ function ItemView({
         <Acknowledgement
           statement={item.acknowledgement.statement}
           item={item}
+          who={who}
           signed={state === "done"}
           onSign={onComplete}
         />
@@ -1677,16 +1689,28 @@ function bold(text: string) {
 function Acknowledgement({
   statement,
   item,
+  who,
   signed,
   onSign,
 }: {
   statement: string;
   item: CourseItem;
+  who: { name: string; email: string };
   signed: boolean;
   onSign: (item: CourseItem) => void;
 }) {
   const formRef = useRef<HTMLFormElement>(null);
-  const [name, setName] = useState("");
+  /**
+   * The account's name, until it is typed over.
+   *
+   * Signing is not the place to retype a name the account already holds, and
+   * an empty box invites a different spelling of it — which then sits in the
+   * record beside a certificate printed from the account. Held as "what was
+   * typed" rather than copied in by an effect, so a session that resolves a
+   * moment late still fills the field.
+   */
+  const [typed, setTyped] = useState<string | null>(null);
+  const name = typed ?? who.name;
   const [agreed, setAgreed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [at, setAt] = useState("");
@@ -1742,12 +1766,24 @@ function Acknowledgement({
           name="name"
           required
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setTyped(e.target.value)}
           autoComplete="name"
           placeholder="Type your full name"
           style={{ display: "block", width: "100%", marginTop: 7, background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 11, padding: "13px 15px", font: `500 14px ${SANS}`, color: "#0a1b33", outline: "none" }}
         />
       </label>
+      {/* Correcting it here corrects this signature and nothing else: the
+          certificate is printed from the account, and fixed the moment it is
+          issued. Said plainly, because by then it cannot be undone. The link
+          goes to the enquiry form rather than to /admin-panel, which is
+          staff-only and would meet a learner with a login screen. */}
+      <div style={{ font: `500 11.5px/1.65 ${SANS}`, color: "#8296a9", marginTop: 8 }}>
+        This is the name on your account, and the name your certificate will be printed with. If it is wrong,{" "}
+        <a href="/contact/" target="_blank" rel="noopener noreferrer" style={{ color: "#1b8f88", fontWeight: 700 }}>
+          ask the programme team
+        </a>{" "}
+        to correct it before you finish the course — the name is fixed to the certificate the moment it is issued.
+      </div>
 
       <label style={{ display: "flex", gap: 11, alignItems: "flex-start", margin: "16px 0 20px", cursor: "pointer" }}>
         <input
