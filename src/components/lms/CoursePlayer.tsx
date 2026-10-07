@@ -1338,7 +1338,12 @@ function FeedbackForm({
         message,
         source: typeof window !== "undefined" ? window.location.pathname : "",
       },
-      { store: false },
+      // Recorded, not just emailed: feedback is meant to be read later and
+      // compared across a cohort, which an inbox does not do. Its own form
+      // name keeps it out of the leads in the admin — and means a submission
+      // survives the mail failing, which is what a learner was being shown
+      // as an error for something that had in fact worked.
+      { form: "feedback" },
     );
     setBusy(false);
     if (res.ok) onSent(item);

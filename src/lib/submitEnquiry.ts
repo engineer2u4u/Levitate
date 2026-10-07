@@ -60,11 +60,19 @@ export type EnquiryResult = { ok: true } | { ok: false; error: string };
 /** Which form an enquiry came from. Matches the check constraint on the table.
  *  A name the database has not been told about yet is stored as "other"
  *  rather than failing — see the insert below. */
-export type EnquiryForm = "popup" | "contact" | "service" | "kit" | "masterclass" | "enrolment" | "other";
+export type EnquiryForm = "popup" | "contact" | "service" | "kit" | "masterclass" | "enrolment" | "feedback" | "other";
 
-/** Forms where the money has already been taken, so the row records a sale
- *  rather than a lead. */
-const PAID: readonly EnquiryForm[] = ["masterclass", "enrolment"];
+/**
+ * Forms that are not leads, and must not be reported as one.
+ *
+ * Two different reasons. A masterclass or an enrolment is a sale, already
+ * reported as a purchase, and counting it again as a lead would have Google
+ * Ads bidding on the same event twice. Delegate feedback is not an enquiry at
+ * all — it comes from someone who has already finished the programme — and
+ * filing it as a lead would put a closed customer back at the top of the
+ * funnel.
+ */
+const NOT_A_LEAD: readonly EnquiryForm[] = ["masterclass", "enrolment", "feedback"];
 
 const val = (data: FormData, key: string) => {
   const v = data.get(key);
@@ -210,9 +218,9 @@ export async function submitEnquiry(
   if (mailed.ok || stored) {
     // A lead for GA4, which attributes it to the session's source/medium on
     // its own, and which Google Ads can import as a conversion. Not for rows
-    // that are not enquiries, and not for a paid registration, which already
-    // reports a purchase. Nothing personal is sent.
-    if (opts.store !== false && !PAID.includes(opts.form ?? "other")) {
+    // that are not enquiries, and not for the forms above. Nothing personal
+    // is sent.
+    if (opts.store !== false && !NOT_A_LEAD.includes(opts.form ?? "other")) {
       // One id for both reports of this lead — the pixel's, below, and the
       // server's, so Meta pairs them and counts one.
       const eventId = newEventId("generate_lead");
