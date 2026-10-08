@@ -543,26 +543,6 @@ export const POSH_CONTENT: CourseContent = {
 
     /* ================================================================== */
     {
-      id: "toolkit",
-      title: "Trainer Toolkit",
-      summary: "What you take away to run your own sessions.",
-      items: [
-        {
-          id: "p-toolkit",
-          kind: "reading",
-          title: "Trainer Toolkit",
-          minutes: 5,
-          meta: "Materials in preparation",
-          body: [
-            "Session plans, slide decks, facilitation guides and templates — the material you use to run PoSH sessions of your own once you are certified.",
-            "The toolkit is being assembled and will appear here. Everything in it is yours to use in your own practice.",
-          ],
-        },
-      ],
-    },
-
-    /* ================================================================== */
-    {
       id: "assessment",
       title: "Final Assessment",
       summary: "Twenty questions across the whole programme.",
