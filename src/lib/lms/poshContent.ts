@@ -36,6 +36,10 @@ export const POSH_CONTENT: CourseContent = {
       title: "Orientation and Pre-read",
       summary: "Read before the first live session.",
       items: [
+        // First thing a delegate meets: the facilitator introducing the
+        // programme, before any of the reading.
+        { id: "p-orientation-intro", kind: "video", title: "Programme Overview", minutes: 5, videoId: "7Y8FVmsAsz0" },
+
         {
           id: "p-orientation-agreement",
           kind: "reading",
