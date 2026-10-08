@@ -56,8 +56,20 @@ for p in "${PRESERVE[@]}"; do
   [ -e "out/$p" ] && die "out/$p exists. That path belongs to something else on the server and this deploy would overwrite it."
 done
 
-# A testing build puts the LMS in the public nav. It is never right for production.
-grep -q 'href="/lms/"' out/index.html && die "this is a testing build (the LMS is in the nav). Rebuild with NEXT_PUBLIC_LMS_TESTING unset."
+# A testing build is never right for production. It used to be spotted by the
+# LMS being in the nav, which stopped working as a signal the day the LMS was
+# published there deliberately. The note the masterclass pages carry in a
+# testing build is a signal that cannot be confused with a decision: the
+# string is compiled out entirely unless NEXT_PUBLIC_LMS_TESTING=1.
+#
+# What that flag would take with it matters more than the nav link ever did —
+# it drops the live-key requirement on payments, so a test card could buy a
+# real seat.
+# HTML only, deliberately. The note's text survives in the JS bundle even when
+# the flag is off — the branch is dead but the string is still in the chunk —
+# so searching everything condemns every build. What distinguishes the two is
+# whether it was RENDERED.
+grep -rqsF --include="*.html" "payments go to Razorpay test mode" out/ && die "this is a testing build (the masterclass pages render the test-payment note). Rebuild with NEXT_PUBLIC_LMS_TESTING unset."
 
 # Razorpay test keys are for localhost (npm run dev:pay). A build that baked one
 # in would hand live visitors a checkout that cannot take their money. Matched

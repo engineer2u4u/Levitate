@@ -25,9 +25,12 @@ const root = new URL("..", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "
 // compiler's own cache (.next/cache) is deliberately not in this list.
 const stale = ["server/app", "server/pages", "static", "export", "prerender-manifest.json", "app-build-manifest.json"];
 
+// The export too. next build writes into out/ without emptying it, so a chunk
+// from an earlier build stays there — and a chunk from an earlier *testing*
+// build is the one thing the deploy exists to keep off the server.
 let removed = 0;
-for (const path of stale) {
-  const full = join(root, ".next", path);
+for (const path of [...stale.map((p) => join(".next", p)), "out"]) {
+  const full = join(root, path);
   try {
     await access(full);
   } catch {

@@ -6,7 +6,6 @@ import { contact, services, type NavKey } from "@/lib/site";
 import { useCatalog, useVisibleCourses } from "@/components/site/CatalogProvider";
 import { catalogCourse, firstSession } from "@/lib/catalog";
 import { MASTERCLASSES } from "@/lib/masterclass";
-import { LMS_TESTING } from "@/lib/lms/testMode";
 
 function MailIcon({ size = 13 }: { size?: number }) {
   return (
@@ -226,10 +225,11 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
             </div>
           )}
 
-          {/* The LMS is not open to the public yet, so it is not advertised in
-              the nav. The routes still resolve for anyone working on it, and a
-              testing build puts the link back. */}
-          {LMS_TESTING && <Link href="/lms" className="site-navlink" style={active === "lms" ? topActive : { color: "#1b8f88" }}>LMS</Link>}
+          {/* Open to the public now. It is not behind LMS_TESTING any more:
+              that flag also drops the live-key requirement on payments and
+              reveals the demo course, so using it to publish a link would
+              have let a test card buy a seat. */}
+          <Link href="/lms" className="site-navlink" style={active === "lms" ? topActive : { color: "#1b8f88" }}>LMS</Link>
           <Link href="/about-us" className="site-navlink" style={active === "about" ? topActive : topIdle}>About Us</Link>
           <Link href="/parichita-kotnala" className="site-navlink" style={{ ...(active === "parichita" ? topActive : topIdle), whiteSpace: "nowrap" }}>Parichita Kotnala</Link>
           <Link href="/contact" className="site-navlink" style={active === "contact" ? topActive : topIdle}>Contact</Link>
@@ -306,6 +306,7 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
                 ))}
               </MobileGroup>
             )}
+            <Link href="/lms" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "lms" ? "#1b8f88" : "#0a1b33" }}>LMS</Link>
             <Link href="/about-us" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "about" ? "#1b8f88" : "#0a1b33" }}>About Us</Link>
             <Link href="/parichita-kotnala" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "parichita" ? "#1b8f88" : "#0a1b33" }}>Parichita Kotnala</Link>
             <Link href="/contact" onClick={() => setMenuOpen(false)} className="site-mlink" style={{ color: active === "contact" ? "#1b8f88" : "#0a1b33" }}>Contact</Link>
