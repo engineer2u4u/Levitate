@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --webpack",
     "dev:pay": "node scripts/dev-pay.mjs",
+    "prebuild": "node scripts/clear-prerender.mjs",
     "build": "next build --webpack",
     "dev:turbo": "next dev",
     "build:turbo": "next build",
