@@ -439,7 +439,7 @@ export const DEIB_MASTERCLASS: MasterclassOffer = {
 
   crossSell: {
     title: "Want to build your capability as a DEIB facilitator?",
-    body: "The Diversity, Equity, Inclusion and Belonging Facilitator Program TTT. Design DEIB learning, facilitate sensitive conversations, respond to resistance and guide practical workplace application using the BRIDGE Inclusion Framework",
+    body: "The Certified Diversity, Equity, Inclusion and Belonging Facilitator Program TTT. Design DEIB learning, facilitate sensitive conversations, respond to resistance and guide practical workplace application using the BRIDGE Inclusion Framework",
     href: "/dei-train-the-trainer-certification/",
     cta: "Explore the DEIB programme",
     startsFrom: "inclusive-workplace",

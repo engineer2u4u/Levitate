@@ -12,6 +12,7 @@ import {
   wrap,
   wrapRich,
   type CertificateIssue,
+  hoursLabel,
   type MaskRegion,
 } from "@/lib/certificateArt";
 
@@ -166,7 +167,7 @@ function Excellence({ issue }: { issue: CertificateIssue }) {
       <text x="776" y="543" fontFamily={SANS} fontSize="15" fontWeight="700" fill="#5b6b7c" letterSpacing="2.4">COMPLETED</text>
       <text x="950" y="543" fontFamily={SANS} fontSize="19" fontWeight="800" fill={E_INK}>{issue.completedOn || "—"}</text>
       <text x="1100" y="543" fontFamily={SANS} fontSize="18" fontWeight="400" fill="#c3cfdb">|</text>
-      <text x="1124" y="543" fontFamily={SANS} fontSize="19" fontWeight="800" fill={E_TEAL}>{issue.hours || "—"}</text>
+      <text x="1124" y="543" fontFamily={SANS} fontSize="19" fontWeight="800" fill={E_TEAL}>{hoursLabel(issue.hours) || "—"}</text>
 
       {/* These two sit on the blue panel — hence the sampled colours. */}
       <Patch r={M.certId} fill={colors.certId} />

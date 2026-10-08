@@ -189,7 +189,7 @@ export const POCSO_FAQS: Faq[] = [
  */
 export const DEI_FAQS: Faq[] = [
   {
-    q: "What is the Diversity, Equity, Inclusion and Belonging Facilitator Program TTT?",
+    q: "What is the Certified Diversity, Equity, Inclusion and Belonging Facilitator Program TTT?",
     a: [
       "It is a 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, built to translate inclusion from concept into everyday workplace behaviour.",
       "It is a facilitator certification rather than an awareness course: as much of it is about designing and running DEIB sessions as about the content of them.",

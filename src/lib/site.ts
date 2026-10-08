@@ -54,7 +54,7 @@ export const enquiryTopics: string[] = [
     "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
   "POCSO & Child Safety Facilitator Program (POCSO TTT)",
   "Corporate Leadership Facilitator Program (CLF TTT)",
-  "Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
+  "Certified Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
   "Workplace Wellbeing Facilitator Program (Mental Health & Wellbeing TTT)",
   "HR Edge certification (HR Students)",
   "Corporate Training",

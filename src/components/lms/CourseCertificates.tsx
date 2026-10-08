@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import CertificatePlate from "@/components/site/CertificatePlate";
-import { CANVASES, certificateCards, type CertificateIssue } from "@/lib/certificateArt";
+import { CANVASES, certificateCards, certificateDate, type CertificateIssue } from "@/lib/certificateArt";
 import { downloadCertificatePdf, downloadCertificatePng, fileStem } from "@/lib/lms/certificateExport";
 import { issueCertificate, isRevoked, type Certificate, type CertificateGap } from "@/lib/lms/certificates";
 import { courseBySlug } from "@/lib/lms/courses";
@@ -81,7 +81,7 @@ export default function CourseCertificates({
   const printedName = issued?.recipient_name || name;
   const printedCourse = issued?.course_title || course.certificate.name;
   const printedDate = issued?.completed_on
-    ? new Date(issued.completed_on).toLocaleDateString("en-US", { month: "short", year: "numeric" })
+    ? certificateDate(issued.completed_on)
     : completedOn;
 
   /**

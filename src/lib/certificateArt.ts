@@ -222,7 +222,7 @@ export type CertificateCard = {
 };
 
 /** Specimen values — the same on every programme, so nothing reads as real. */
-const SPECIMEN = { completedOn: "Sep 2026", certificateId: "2026-09-001" };
+const SPECIMEN = { completedOn: "18th Sep 2026", certificateId: "2026-09-001" };
 
 /**
  * The certificates a programme awards, carrying that programme's name: SHRM
@@ -283,4 +283,38 @@ export function certificateCards(certificate: { name: string; closing: string; h
     });
   }
   return cards;
+}
+
+/**
+ * The day a certificate was completed, written out in full.
+ *
+ * "Oct 2026" was all a certificate used to carry, which is not a date — two
+ * people finishing a month apart got the same line, and a document that has to
+ * stand up later should say which day it is talking about.
+ */
+export function certificateDate(iso: string | number | Date): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const day = d.getDate();
+  // 11th, 12th and 13th take "th" despite ending 1, 2 and 3.
+  const teen = day % 100 >= 11 && day % 100 <= 13;
+  const suffix = teen ? "th" : ["th", "st", "nd", "rd"][day % 10] ?? "th";
+  // en-US rather than en-GB: the latter writes September as "Sept", which sits
+  // oddly beside the three-letter months and beside the artwork's own specimen.
+  const month = d.toLocaleDateString("en-US", { month: "short" });
+  return `${day}${suffix} ${month} ${d.getFullYear()}`;
+}
+
+/**
+ * The hours as the artwork expects to read them.
+ *
+ * The figure comes from a batch, where it is kept as a number to be counted
+ * with — "12". The certificate's own specimen reads "12 Hours", and a bare
+ * number beside the completion date reads like part of it. A value that
+ * already names its unit is left exactly as it is.
+ */
+export function hoursLabel(value: string): string {
+  const v = value.trim();
+  if (!v) return "";
+  return /^d+(.d+)?$/.test(v) ? `${v} ${v === "1" ? "Hour" : "Hours"}` : v;
 }

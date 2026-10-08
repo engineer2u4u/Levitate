@@ -43,7 +43,7 @@ export const COURSES: Course[] = [
   {
     slug: "inclusive-workplace",
     tag: "DEIB · TTT", mode: "Live online · from 10 October",
-    title: "Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
+    title: "Certified Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
     short: "DEIB TTT",
     desc: "A 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, equipping participants to translate inclusion from concept into everyday workplace behaviour and facilitate DEIB learning with confidence.",
     img: "/assets/workshop-handsup.jpeg", status: "enrolling",
@@ -51,7 +51,7 @@ export const COURSES: Course[] = [
     feePaise: null, priceNote: "quoted on request",
     modulesLabel: "13 Modules", hoursLabel: "20 + 5 Hours", facilitator: "Parichita Kotnala",
     certificate: {
-      name: "Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
+      name: "Certified Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
       closing: "in **Diversity, Equity, Inclusion & Belonging** workplace facilitation.",
       hours: "20 + 5 Hours",
     },

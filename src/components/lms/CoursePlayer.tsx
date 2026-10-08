@@ -21,6 +21,7 @@ import {
 } from "@/lib/lms/courseProgress";
 import { useSession } from "./useSession";
 import { recordAssessment } from "@/lib/lms/assessments";
+import { certificateDate } from "@/lib/certificateArt";
 import { courseBySlug } from "@/lib/lms/courses";
 import { moduleGate, useCourseAccess } from "@/lib/lms/access";
 import { supabaseConfigured } from "@/lib/lms/supabase";
@@ -42,13 +43,9 @@ const SANS = "'Plus Jakarta Sans',sans-serif";
  */
 const WATCHED_ENOUGH = 0.9;
 
-/** "Sep 2026" — how a certificate dates itself. */
-const monthYear = (iso: string | number) =>
-  new Date(iso).toLocaleDateString("en-US", { month: "short", year: "numeric" });
-
 // Read once when the module loads rather than during a render, which must
 // stay pure. A page left open across midnight is not worth more than that.
-const TODAY = monthYear(Date.now());
+const TODAY = certificateDate(Date.now());
 
 /**
  * The learning screen: contents on the left, the current item on the right.
@@ -283,7 +280,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   const sat = attempt && attempt.id === item.id ? attempt.sat : null;
   // What the certificates are dated: the day the course was finished, or
   // today while the last item is being finished.
-  const completedOn = progress?.completedAt ? monthYear(progress.completedAt) : TODAY;
+  const completedOn = progress?.completedAt ? certificateDate(progress.completedAt) : TODAY;
   // A reading hands over its Proceed button once its end has been on screen.
   const unread = item.kind === "reading" && !item.acknowledgement && readTo !== item.id;
   // A film hands it over once 90% of it has played.

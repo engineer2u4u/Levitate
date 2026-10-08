@@ -93,7 +93,7 @@ export const certs: Cert[] = [
   {
     num: "02",
     tag: "DEIB · TTT",
-    title: "Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
+    title: "Certified Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
     sub: "Diversity, Equity, Inclusion & Belonging Certification",
     desc: "Lead meaningful conversations on inclusion, unconscious bias, belonging and psychological safety.",
   },
