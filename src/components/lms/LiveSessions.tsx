@@ -102,7 +102,18 @@ export default function LiveSessions() {
   }
 
   const paid = access.enrolment.status === "paid";
-  const nextId = access.sessions.find((s) => endOf(s) > now)?.id;
+  /**
+   * The sitting the card is about: the next one that has not finished, or the
+   * last one once they all have. One room serves the whole programme, so the
+   * join link, the date tile and the fifteen-minute window are all this
+   * sitting's rather than the first's.
+   */
+  const upcoming = access.sessions.find((sn) => endOf(sn) > now) ?? null;
+  const shown = upcoming ?? access.sessions[access.sessions.length - 1] ?? null;
+  const tile = shown?.starts_on ? dateTile(shown.starts_on) : { day: "—", month: "" };
+  const startsAt = Date.parse(upcoming?.starts_at ?? "");
+  const opensAt = Number.isFinite(startsAt) ? startsAt - JOIN_OPENS_MS : null;
+  const joinable = opensAt === null || tick >= opensAt;
 
   return (
     <div style={{ background: "#f7fafc", padding: "38px 48px 90px", minHeight: "60vh" }} className="site-page-sec">
@@ -127,68 +138,78 @@ export default function LiveSessions() {
           </div>
         )}
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {access.sessions.length === 0 && (
-            <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 16, padding: "24px", font: `500 13.5px ${SANS}`, color: "#5b6e82" }}>
-              The session dates for this batch have not been published yet.
-            </div>
-          )}
-          {access.sessions.map((s, i) => {
-            const held = endOf(s) <= now;
-            const next = s.id === nextId;
-            // The door opens a quarter of an hour before the session. A
-            // session with no start time recorded has no door: a gap in the
-            // data must not be what keeps someone out of a class they paid
-            // for.
-            const startsAt = Date.parse(s.starts_at ?? "");
-            const opensAt = Number.isFinite(startsAt) ? startsAt - JOIN_OPENS_MS : null;
-            const joinable = opensAt === null || tick >= opensAt;
-            const tile = s.starts_on ? dateTile(s.starts_on) : { day: "—", month: "" };
-            return (
-              <div key={s.id} style={{ background: "#fff", border: `1px solid ${next ? "rgba(27,143,136,.45)" : "#e3eaf0"}`, borderRadius: 16, padding: "22px 24px", display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap" }}>
-                <div style={{ textAlign: "center", background: held ? "rgba(47,196,188,.12)" : next ? "linear-gradient(135deg,#2fc4bc,#2f7fd6)" : "#f7fafc", border: `1px solid ${next ? "transparent" : held ? "rgba(27,143,136,.3)" : "#e3eaf0"}`, borderRadius: 13, padding: "12px 14px", minWidth: 64, flex: "none" }}>
-                  <div style={{ font: `700 19px ${SANS}`, color: next ? "#fff" : "#0a1b33" }}>{tile.day}</div>
-                  <div style={{ font: `700 10px ${SANS}`, color: next ? "rgba(255,255,255,.85)" : "#8296a9", letterSpacing: ".1em", textTransform: "uppercase" }}>{tile.month}</div>
-                </div>
-
-                <div style={{ flex: 1, minWidth: 230 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                    <div style={{ font: `700 16px ${SANS}`, color: "#0a1b33" }}>{s.topic || `Session ${i + 1}`}</div>
-                    <div style={{ font: `700 9.5px ${SANS}`, letterSpacing: ".1em", textTransform: "uppercase", color: held ? "#136f6a" : next ? "#1f5fa8" : "#8296a9", background: held ? "rgba(47,196,188,.12)" : next ? "rgba(47,127,214,.1)" : "#f4f7f9", border: `1px solid ${held ? "rgba(27,143,136,.35)" : next ? "rgba(47,127,214,.3)" : "#dbe5ec"}`, borderRadius: 999, padding: "4px 9px" }}>
-                      {held ? "Held" : next ? "Up next" : "Scheduled"}
-                    </div>
-                  </div>
-                  <div style={{ font: `500 12.5px ${SANS}`, color: "#5b6e82", marginTop: 6 }}>
-                    Session {i + 1} · {[s.date_label, s.time_label, s.mode].filter(Boolean).join(" · ")}
-                  </div>
-                  {paid && !held && (s.meeting_id || s.passcode) && (
-                    <div style={{ font: `500 11.5px ${SANS}`, color: "#8296a9", marginTop: 6 }}>
-                      {[s.meeting_id ? `Meeting ID ${s.meeting_id}` : "", s.passcode ? `Passcode ${s.passcode}` : ""].filter(Boolean).join(" · ")}
-                    </div>
-                  )}
-                </div>
-
-                {held && s.recording_url ? (
-                  <a href={s.recording_url} target="_blank" rel="noopener noreferrer" className="lp-btn-outline" style={{ background: "#fff", border: "1px solid #e3eaf0", color: "#0a1b33", font: `700 12.5px ${SANS}`, padding: "11px 20px", borderRadius: 999, whiteSpace: "nowrap" }}>
-                    Watch recording ↗
-                  </a>
-                ) : !held && s.join_url && joinable ? (
-                  <a href={s.join_url} target="_blank" rel="noopener noreferrer" className="lp-btn-grad" style={{ background: next ? GRAD : "#fff", border: `1px solid ${next ? "transparent" : "#e3eaf0"}`, color: next ? "#fff" : "#0a1b33", font: `700 12.5px ${SANS}`, padding: "11px 20px", borderRadius: 999, whiteSpace: "nowrap" }}>
-                    Join on Zoom ↗
-                  </a>
-                ) : !held && s.join_url ? (
-                  /* Withheld rather than greyed out — a dead button invites
-                     clicking at it, and says nothing about when to come back.
-                     The page is watching the clock, so this becomes the button
-                     on its own when the time comes. */
-                  <span style={{ font: `600 12px/1.4 ${SANS}`, color: "#8296a9", textAlign: "right", maxWidth: 170, whiteSpace: "normal" }}>
-                    {opensAt !== null ? joinOpensAt(opensAt, tick) : "Join opens 15 minutes before"}
-                  </span>
-                ) : null}
+        {access.sessions.length === 0 ? (
+          <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 16, padding: "24px", font: `500 13.5px ${SANS}`, color: "#5b6e82" }}>
+            The session dates for this batch have not been published yet.
+          </div>
+        ) : (
+          /* One card for the programme, not one per sitting.
+             A certification runs on a single Zoom room across all its dates,
+             so a card per date repeated the same link three times and asked
+             the learner to work out which one was today's. The room is the
+             programme's; the dates are a list inside it. */
+          <div style={{ background: "#fff", border: `1px solid ${upcoming ? "rgba(27,143,136,.45)" : "#e3eaf0"}`, borderRadius: 16, padding: "22px 24px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap" }}>
+              <div style={{ textAlign: "center", background: upcoming ? "linear-gradient(135deg,#2fc4bc,#2f7fd6)" : "rgba(47,196,188,.12)", border: `1px solid ${upcoming ? "transparent" : "rgba(27,143,136,.3)"}`, borderRadius: 13, padding: "12px 14px", minWidth: 64, flex: "none" }}>
+                <div style={{ font: `700 19px ${SANS}`, color: upcoming ? "#fff" : "#0a1b33" }}>{tile.day}</div>
+                <div style={{ font: `700 10px ${SANS}`, color: upcoming ? "rgba(255,255,255,.85)" : "#8296a9", letterSpacing: ".1em", textTransform: "uppercase" }}>{tile.month}</div>
               </div>
-            );
-          })}
-        </div>
+
+              <div style={{ flex: 1, minWidth: 230 }}>
+                <div style={{ font: `700 16px ${SANS}`, color: "#0a1b33" }}>{access.course.title}</div>
+                <div style={{ font: `500 12.5px ${SANS}`, color: "#5b6e82", marginTop: 6 }}>
+                  {upcoming
+                    ? `Next: ${[upcoming.date_label, upcoming.time_label, upcoming.mode].filter(Boolean).join(" · ")}`
+                    : "All sessions held"}
+                </div>
+                {paid && upcoming && (upcoming.meeting_id || upcoming.passcode) && (
+                  <div style={{ font: `500 11.5px ${SANS}`, color: "#8296a9", marginTop: 6 }}>
+                    {[upcoming.meeting_id ? `Meeting ID ${upcoming.meeting_id}` : "", upcoming.passcode ? `Passcode ${upcoming.passcode}` : ""].filter(Boolean).join(" · ")}
+                  </div>
+                )}
+              </div>
+
+              {/* The room, once — gated to a quarter of an hour before the next
+                  sitting rather than the first. */}
+              {upcoming?.join_url && joinable ? (
+                <a href={upcoming.join_url} target="_blank" rel="noopener noreferrer" className="lp-btn-grad" style={{ background: GRAD, border: "1px solid transparent", color: "#fff", font: `700 12.5px ${SANS}`, padding: "11px 20px", borderRadius: 999, whiteSpace: "nowrap" }}>
+                  Join on Zoom ↗
+                </a>
+              ) : upcoming?.join_url ? (
+                <span style={{ font: `600 12px/1.4 ${SANS}`, color: "#8296a9", textAlign: "right", maxWidth: 170, whiteSpace: "normal" }}>
+                  {opensAt !== null ? joinOpensAt(opensAt, tick) : "Join opens 15 minutes before"}
+                </span>
+              ) : null}
+            </div>
+
+            {/* Every date the programme runs, and every recording there is.
+                A recording is listed against its own date and stays listed —
+                it is the record of a session that happened, not something that
+                replaces the next one. */}
+            <div style={{ borderTop: "1px solid #eef2f6", marginTop: 18, paddingTop: 6 }}>
+              {access.sessions.map((s, i) => {
+                const held = endOf(s) <= now;
+                const isNext = s.id === upcoming?.id;
+                return (
+                  <div key={s.id} style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", padding: "10px 0", borderBottom: i === access.sessions.length - 1 ? "none" : "1px solid #f4f7f9" }}>
+                    <div style={{ font: `600 12.5px ${SANS}`, color: held ? "#8296a9" : "#0a1b33", minWidth: 210 }}>
+                      Session {i + 1} · {[s.date_label, s.time_label].filter(Boolean).join(" · ")}
+                    </div>
+                    <div style={{ font: `700 9.5px ${SANS}`, letterSpacing: ".1em", textTransform: "uppercase", color: held ? "#136f6a" : isNext ? "#1f5fa8" : "#8296a9", background: held ? "rgba(47,196,188,.12)" : isNext ? "rgba(47,127,214,.1)" : "#f4f7f9", border: `1px solid ${held ? "rgba(27,143,136,.35)" : isNext ? "rgba(47,127,214,.3)" : "#dbe5ec"}`, borderRadius: 999, padding: "4px 9px" }}>
+                      {held ? "Held" : isNext ? "Up next" : "Scheduled"}
+                    </div>
+                    {s.topic && <div style={{ font: `500 12px ${SANS}`, color: "#5b6e82" }}>{s.topic}</div>}
+                    {s.recording_url && (
+                      <a href={s.recording_url} target="_blank" rel="noopener noreferrer" style={{ marginLeft: "auto", font: `700 12px ${SANS}`, color: "#1b8f88", whiteSpace: "nowrap" }}>
+                        Watch recording ↗
+                      </a>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {course && (
           <div style={{ font: `500 12px ${SANS}`, color: "#8296a9", marginTop: 18 }}>
