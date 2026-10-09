@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { useCourse } from "@/components/site/CatalogProvider";
 import { dateTile } from "@/lib/catalog";
 import { useCourseAccess, type AccessSession } from "@/lib/lms/access";
@@ -10,6 +10,55 @@ import { useSession } from "./useSession";
 
 const SANS = "'Plus Jakarta Sans',sans-serif";
 const GRAD = "linear-gradient(120deg,#2fc4bc,#2f7fd6)";
+
+/** How long before a session starts that its Zoom link becomes live. */
+const JOIN_OPENS_MS = 15 * 60_000;
+
+/**
+ * The clock, ticking.
+ *
+ * The page reads the time once for "held" and "up next", which is right —
+ * neither should change under someone while they read. The join window is
+ * different: a learner sitting on this page at 5:44 waiting for a six o'clock
+ * session has to watch the button appear, not discover they had to reload.
+ *
+ * Half a minute is close enough for a fifteen-minute door, and the snapshot is
+ * a cached number rather than Date.now(), which would be a new value on every
+ * render and never settle.
+ */
+let clock = 0;
+const watchers = new Set<() => void>();
+let ticker: ReturnType<typeof setInterval> | undefined;
+
+function subscribeClock(onChange: () => void) {
+  watchers.add(onChange);
+  clock = Date.now();
+  ticker ??= setInterval(() => {
+    clock = Date.now();
+    watchers.forEach((w) => w());
+  }, 30_000);
+  return () => {
+    watchers.delete(onChange);
+    if (watchers.size === 0) {
+      clearInterval(ticker);
+      ticker = undefined;
+    }
+  };
+}
+
+/**
+ * What to say before the door opens.
+ *
+ * A time on its own only means something if it is today; "Join opens 5:45 PM"
+ * against a session three weeks out tells a learner nothing they can act on,
+ * so that one is told the rule instead.
+ */
+function joinOpensAt(at: number, now: number): string {
+  const until = at - now;
+  if (until > 20 * 3600_000) return "Join opens 15 minutes before";
+  const clockTime = new Date(at).toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit", timeZone: "Asia/Kolkata" });
+  return `Join opens at ${clockTime}`;
+}
 
 /** When a session is over: its end, else its start plus a day. */
 const endOf = (s: AccessSession) =>
@@ -31,6 +80,10 @@ export default function LiveSessions() {
   // Read once when the page opens: what is "held" and "next" does not need to
   // change under someone while they read it.
   const [now] = useState(Date.now);
+  // The join window does, so it has a clock of its own. Nothing is joinable in
+  // the prerendered HTML, which is the honest answer before a browser has a
+  // clock to ask.
+  const tick = useSyncExternalStore(subscribeClock, () => clock, () => 0);
 
   if (loading || (slug && accessLoading)) return <div style={{ background: "#f7fafc", minHeight: "60vh" }} />;
 
@@ -83,6 +136,13 @@ export default function LiveSessions() {
           {access.sessions.map((s, i) => {
             const held = endOf(s) <= now;
             const next = s.id === nextId;
+            // The door opens a quarter of an hour before the session. A
+            // session with no start time recorded has no door: a gap in the
+            // data must not be what keeps someone out of a class they paid
+            // for.
+            const startsAt = Date.parse(s.starts_at ?? "");
+            const opensAt = Number.isFinite(startsAt) ? startsAt - JOIN_OPENS_MS : null;
+            const joinable = opensAt === null || tick >= opensAt;
             const tile = s.starts_on ? dateTile(s.starts_on) : { day: "—", month: "" };
             return (
               <div key={s.id} style={{ background: "#fff", border: `1px solid ${next ? "rgba(27,143,136,.45)" : "#e3eaf0"}`, borderRadius: 16, padding: "22px 24px", display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap" }}>
@@ -112,10 +172,18 @@ export default function LiveSessions() {
                   <a href={s.recording_url} target="_blank" rel="noopener noreferrer" className="lp-btn-outline" style={{ background: "#fff", border: "1px solid #e3eaf0", color: "#0a1b33", font: `700 12.5px ${SANS}`, padding: "11px 20px", borderRadius: 999, whiteSpace: "nowrap" }}>
                     Watch recording ↗
                   </a>
-                ) : !held && s.join_url ? (
+                ) : !held && s.join_url && joinable ? (
                   <a href={s.join_url} target="_blank" rel="noopener noreferrer" className="lp-btn-grad" style={{ background: next ? GRAD : "#fff", border: `1px solid ${next ? "transparent" : "#e3eaf0"}`, color: next ? "#fff" : "#0a1b33", font: `700 12.5px ${SANS}`, padding: "11px 20px", borderRadius: 999, whiteSpace: "nowrap" }}>
                     Join on Zoom ↗
                   </a>
+                ) : !held && s.join_url ? (
+                  /* Withheld rather than greyed out — a dead button invites
+                     clicking at it, and says nothing about when to come back.
+                     The page is watching the clock, so this becomes the button
+                     on its own when the time comes. */
+                  <span style={{ font: `600 12px/1.4 ${SANS}`, color: "#8296a9", textAlign: "right", maxWidth: 170, whiteSpace: "normal" }}>
+                    {opensAt !== null ? joinOpensAt(opensAt, tick) : "Join opens 15 minutes before"}
+                  </span>
                 ) : null}
               </div>
             );
