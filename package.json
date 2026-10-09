@@ -10,7 +10,8 @@
     "dev:turbo": "next dev",
     "build:turbo": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "build:prod": "node scripts/build-prod.mjs"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

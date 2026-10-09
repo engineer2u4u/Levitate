@@ -25,11 +25,17 @@
 #     it, so a hand edit on the server — or a careless one here — matters to
 #     more than this site. Set ALLOW_HTACCESS=1 to ship a deliberate change.
 #
-# Build: payments and the LMS stay closed on the public site unless and until
-# that is decided, so production builds unset the testing and payment flags:
+# Build:
 #
-#   NEXT_PUBLIC_LMS_TESTING= NEXT_PUBLIC_PAYMENT_MODE= \
-#   NEXT_PUBLIC_RAZORPAY_KEY_ID= NEXT_PUBLIC_PAYMENT_API_BASE= npm run build
+#   npm run build:prod
+#
+# Not `npm run build` with the flags cleared on the command line. That worked
+# from bash and silently did not from PowerShell, where assigning an empty
+# string deletes the variable rather than setting it, handing control back to
+# the .env.local it was meant to override — which is how a build with the
+# live-key requirement dropped came within a guard of being deployed.
+# build:prod sets the values inside the build process, where no shell can
+# reinterpret them.
 
 set -euo pipefail
 
