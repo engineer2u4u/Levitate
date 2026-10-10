@@ -23,10 +23,13 @@ const SANS = "'Plus Jakarta Sans',sans-serif";
  * verifiable by nobody.
  */
 export default function CourseCertificates({
-  slug, name, org, completedOn, finished, variant = "cards",
+  slug, name, org, completedOn, finished, variant = "cards", onNotEarned,
 }: {
   slug: string;
   name: string;
+  /** Told when the register says this programme is not finished, so a list of
+   *  what a learner holds can drop the heading as well as the plates. */
+  onNotEarned?: (slug: string) => void;
   org: string;
   /** "Sep 2026" — when the course was finished, for the preview. */
   completedOn: string;
@@ -58,6 +61,7 @@ export default function CourseCertificates({
         } else {
           setNote(res.message);
           setGap(res.reason);
+          if (res.reason === "not-finished") onNotEarned?.(slug);
         }
       })
       .finally(() => {
@@ -66,9 +70,21 @@ export default function CourseCertificates({
     return () => {
       live = false;
     };
-  }, [finished, slug, name, course?.certificate]);
+  }, [finished, slug, name, course?.certificate, onNotEarned]);
 
   if (!course?.certificate) return null;
+
+  /**
+   * A gallery shows what has been earned, so a programme the register says is
+   * not finished shows nothing at all there.
+   *
+   * The course player is the other case: a learner is standing at the end of
+   * their course looking at what is coming, and a plate with "issued once the
+   * whole course is complete" under it is the point. In a list of what they
+   * hold, the same plate with their name on it reads as a certificate being
+   * withheld rather than one not yet earned.
+   */
+  if (variant === "gallery" && gap === "not-finished") return null;
 
   const revoked = issued ? isRevoked(issued) : false;
   // Finishing the course is what earns the certificate, and nobody has to

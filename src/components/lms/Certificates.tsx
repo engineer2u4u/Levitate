@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
 import CourseCertificates from "./CourseCertificates";
+import { contentBySlug } from "@/lib/lms/courseContent";
+import { kitReleased, readProgress } from "@/lib/lms/courseProgress";
 import { courseBySlug } from "@/lib/lms/courses";
 import { useSession } from "./useSession";
 
@@ -15,18 +18,59 @@ const SANS = "'Plus Jakarta Sans',sans-serif";
  * an audit, a job application — long after anyone would think to reopen a
  * finished course. So the same certificates live here, under My Learning.
  *
- * Nothing is decided on this screen: the register says whether a certificate
- * exists, what number it carries and whose name is on it, and it refuses
- * politely for a course that is not finished.
+ * Only finished programmes appear. The screen used to list every enrolment
+ * and leave the register to refuse the ones that had not been earned — which
+ * meant a learner on their first module was shown certificate plates with
+ * their own name on them, and told why they could not have them. That reads
+ * as a certificate being withheld rather than one not yet earned, and it is
+ * the wrong thing to show someone either way.
+ *
+ * What is on it still comes from the register: the number, the name it was
+ * made out to, and the date.
  */
 export default function Certificates() {
   const { user, loading, enrolments } = useSession();
+  // Which of this learner's courses are actually finished. Null while it is
+  // still being read, so the page waits rather than flashing "no certificates"
+  // at someone who has earned several.
+  const [finished, setFinished] = useState<Set<string> | null>(null);
+  // Programmes the register has since said are not finished. Only reachable
+  // for a course with no lesson list here, which cannot be judged in advance.
+  const [notEarned, setNotEarned] = useState<string[]>([]);
+  const dropSection = useCallback((slug: string) => {
+    setNotEarned((list) => (list.includes(slug) ? list : [...list, slug]));
+  }, []);
 
-  if (loading) return <div style={{ background: "#f7fafc", minHeight: "60vh" }} />;
+  const slugs = enrolments.map((e) => e.courseSlug).join(",");
+  useEffect(() => {
+    if (!user) return;
+    let alive = true;
+    const courses = slugs ? slugs.split(",") : [];
+    // The same rule the course page and the player use — every item done —
+    // so a programme is finished in one place or in none of them.
+    void Promise.all(
+      courses.map(async (slug) => {
+        const content = contentBySlug(slug);
+        // A programme with no lesson list here — a live cohort marked off by
+        // the office — cannot be judged from this browser. It is passed
+        // through to the register, which knows, and the section removes
+        // itself if the answer is that it is not finished.
+        if (!content) return slug;
+        return kitReleased(content, await readProgress(user.id, slug)) ? slug : null;
+      }),
+    ).then((done) => {
+      if (alive) setFinished(new Set(done.filter((x): x is string => x !== null)));
+    });
+    return () => {
+      alive = false;
+    };
+  }, [user, slugs]);
+
+  if (loading || (user && finished === null)) return <div style={{ background: "#f7fafc", minHeight: "60vh" }} />;
 
   const mine = enrolments
     .map((e) => ({ enrolment: e, course: courseBySlug(e.courseSlug) }))
-    .filter((row) => row.course?.certificate);
+    .filter((row) => row.course?.certificate && finished?.has(row.enrolment.courseSlug) && !notEarned.includes(row.enrolment.courseSlug));
 
   if (!user || !mine.length) {
     return (
@@ -71,6 +115,7 @@ export default function Certificates() {
               org={user.org}
               completedOn=""
               finished
+              onNotEarned={dropSection}
             />
           </section>
         ))}
