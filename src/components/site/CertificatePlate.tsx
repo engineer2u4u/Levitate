@@ -172,7 +172,12 @@ function Excellence({ issue }: { issue: CertificateIssue }) {
       {/* These two sit on the blue panel — hence the sampled colours. */}
       <Patch r={M.certId} fill={colors.certId} />
       <Patch r={M.issued} fill={colors.issued} />
-      <text x="362" y="805" textAnchor="end" fontFamily={SANS} fontSize="17" fontWeight="800" fill="#ffffff">
+      {/* Certificate numbers became alphanumeric and longer — LVT-2610-K7QF3M
+          rather than 2026-10-001 — and at 17px bold that is 163px wide, which
+          right-aligned at 362 reaches x=199: a pixel and a half outside the
+          patch, onto the plate's own lifted text. 15px holds it at 144. Mirror
+          of the same line in the admin's CertificateArt. */}
+      <text x="362" y="805" textAnchor="end" fontFamily={SANS} fontSize={issue.certificateId.length > 12 ? 15 : 17} fontWeight="800" fill="#ffffff">
         {issue.certificateId || "—"}
       </text>
       <text x="362" y="852" textAnchor="end" fontFamily={SANS} fontSize="17" fontWeight="800" fill="#ffffff">
