@@ -39,7 +39,17 @@
 
 set -euo pipefail
 
-HOST="u47-jossnzylkm8o@35.213.176.216"
+# The account moved servers on 13 Oct 2026, which changed BOTH halves of this:
+# the system user and the IP. The old pair kept connecting right up to the
+# migration and then failed as "Permission denied (publickey)", which reads
+# like a key problem and is not one — the key was still listed and allowed
+# from every IP. If this starts refusing, check the user and IP before the key:
+# Site Tools → Devs → SSH Keys Manager shows the username, and
+# Site Tools → Site → IP and Name Servers shows the current Site IP.
+#
+# `ssh.levitatepeoplesoft.com`, which Site Tools prints as the hostname, has no
+# DNS record — Google's resolver agrees — so the IP is used directly.
+HOST="u5217-g06ulvpdaipo@35.213.177.6"
 PORT=18765
 KEY="${HOME}/.ssh/levitate-deploy"
 SITE="www/levitatepeoplesoft.com"
