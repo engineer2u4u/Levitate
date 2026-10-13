@@ -49,6 +49,13 @@ set -euo pipefail
 #
 # `ssh.levitatepeoplesoft.com`, which Site Tools prints as the hostname, has no
 # DNS record — Google's resolver agrees — so the IP is used directly.
+#
+# And the reason the symptom lies: the OLD IP still answers and still serves
+# current content, because both addresses reach the same filesystem (md5 of
+# public_html/index.html read over SSH from the new IP matches the page fetched
+# over HTTPS pinned to the old one). So "the site is up" proves nothing about
+# which server you can deploy to. SSH is the only thing that tells them apart,
+# and it fails in a way that points at the key.
 HOST="u5217-g06ulvpdaipo@35.213.177.6"
 PORT=18765
 KEY="${HOME}/.ssh/levitate-deploy"
