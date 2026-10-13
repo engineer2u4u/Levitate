@@ -173,11 +173,20 @@ function Excellence({ issue }: { issue: CertificateIssue }) {
       <Patch r={M.certId} fill={colors.certId} />
       <Patch r={M.issued} fill={colors.issued} />
       {/* Certificate numbers became alphanumeric and longer — LVT-2610-K7QF3M
-          rather than 2026-10-001 — and at 17px bold that is 163px wide, which
-          right-aligned at 362 reaches x=199: a pixel and a half outside the
-          patch, onto the plate's own lifted text. 15px holds it at 144. Mirror
-          of the same line in the admin's CertificateArt. */}
-      <text x="362" y="805" textAnchor="end" fontFamily={SANS} fontSize={issue.certificateId.length > 12 ? 15 : 17} fontWeight="800" fill="#ffffff">
+          rather than 2026-10-001 — and at 17px bold they run past the patch
+          into the plate's own lifted text, and on towards the "Certificate ID"
+          label to their left.
+          
+          The number is right-aligned at 362 and the label ends around 195, so
+          162px is the room there is. Measured in the real font: a typical
+          number is 144px at 15px, which fits — but the alphabet includes M and
+          W, and the widest it can produce is 173px at 15px and exactly 162px
+          at 14px. Both of those are a knife-edge rather than a fit. 13px puts
+          the worst case at 150px and the usual one at 125px, which is about
+          the width the old format occupied anyway.
+          
+          Mirror of the same line in the admin's CertificateArt. */}
+      <text x="362" y="805" textAnchor="end" fontFamily={SANS} fontSize={issue.certificateId.length > 12 ? 13 : 17} fontWeight="800" fill="#ffffff">
         {issue.certificateId || "—"}
       </text>
       <text x="362" y="852" textAnchor="end" fontFamily={SANS} fontSize="17" fontWeight="800" fill="#ffffff">
