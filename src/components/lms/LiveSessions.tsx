@@ -200,9 +200,21 @@ export default function LiveSessions() {
                     </div>
                     {s.topic && <div style={{ font: `500 12px ${SANS}`, color: "#5b6e82" }}>{s.topic}</div>}
                     {s.recording_url && (
-                      <a href={s.recording_url} target="_blank" rel="noopener noreferrer" style={{ marginLeft: "auto", font: `700 12px ${SANS}`, color: "#1b8f88", whiteSpace: "nowrap" }}>
-                        Watch recording ↗
-                      </a>
+                      <div style={{ marginLeft: "auto", textAlign: "right" }}>
+                        <a href={s.recording_url} target="_blank" rel="noopener noreferrer" style={{ font: `700 12px ${SANS}`, color: "#1b8f88", whiteSpace: "nowrap" }}>
+                          Watch recording ↗
+                        </a>
+                        {/* Zoom asks for a passcode of its own before it will
+                            play a cloud recording, and it is not the one that
+                            opened the room. Without it here the link is a dead
+                            end, so it travels with the link rather than being
+                            something to ask the office for. */}
+                        {s.recording_passcode && (
+                          <div style={{ font: `600 10.5px ${SANS}`, color: "#5b6e82", whiteSpace: "nowrap", marginTop: 2 }}>
+                            Passcode <span style={{ color: "#0a1b33", letterSpacing: ".04em" }}>{s.recording_passcode}</span>
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
                 );

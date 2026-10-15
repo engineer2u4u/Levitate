@@ -25,6 +25,8 @@ export type AccessSession = {
   meeting_id: string | null;
   passcode: string | null;
   recording_url: string | null;
+  /** Zoom's passcode for the recording, which is not the meeting passcode. */
+  recording_passcode: string | null;
 };
 
 export type AccessModule = { id: string; title: string; release: "enrolment" | "manual"; item_ids: string[] };
