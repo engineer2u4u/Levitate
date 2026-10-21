@@ -34,6 +34,9 @@ const expertise = ["Leadership development", "Talent & performance management", 
 
 const regions = ["India", "United Kingdom", "Europe", "United States", "Canada"];
 
+/** Where the NGO work currently reaches. */
+const ngoStates = ["Uttarakhand", "Haryana"];
+
 const education = [
   { t: "University of Delhi", d: "Graduate" },
   { t: "XLRI – Xavier School of Management", d: "Alumna" },
@@ -289,6 +292,71 @@ export default function ParichitaPage() {
               </div>
             </Reveal>
           </div>
+
+          {/* NGO empanelment.
+              Its own block rather than a fourth card in the grid: the others
+              are a line each, and this one has a paragraph that explains what
+              the empanelment is actually for. */}
+          <Reveal style={{ marginTop: 34 }}>
+            <div
+              style={{
+                background: "#fff",
+                border: "1px solid #e3eaf0",
+                borderLeft: "4px solid #1b8f88",
+                borderRadius: 16,
+                padding: "26px 30px",
+                boxShadow: "0 2px 6px rgba(10,27,51,.05)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 10 }}>
+                <div style={{ width: 32, height: 32, flex: "none", borderRadius: "50%", background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z" />
+                    <path d="M9 12l2 2 4-4" />
+                  </svg>
+                </div>
+                <div style={{ font: "700 16px/1.35 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>
+                  NGO-Empanelled Facilitator
+                </div>
+                <div style={{ font: "600 13px/1.4 'Plus Jakarta Sans',sans-serif", color: "#1b8f88" }}>
+                  Advancing Safety, Dignity &amp; Awareness
+                </div>
+              </div>
+
+              <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#3d5064", margin: "0 0 18px", maxWidth: 760 }}>
+                Through her NGO engagements, Parichita facilitates PoSH and POCSO awareness initiatives that help people
+                recognise concerns, understand their rights, and know where to seek support. Her work supports
+                women&rsquo;s dignity and children&rsquo;s safety by encouraging informed action and shared
+                responsibility within communities.
+              </p>
+
+              <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", letterSpacing: ".14em", textTransform: "uppercase" }}>
+                  Currently serving
+                </div>
+                {/* The states are one flex item between them, so a narrow
+                    screen moves them below the label together rather than
+                    leaving the first one stranded beside it. */}
+                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                {ngoStates.map((s) => (
+                  <div
+                    key={s}
+                    style={{
+                      background: "rgba(27,143,136,.09)",
+                      border: "1px solid rgba(27,143,136,.32)",
+                      color: "#136f6a",
+                      font: "600 12.5px 'Plus Jakarta Sans',sans-serif",
+                      padding: "7px 14px",
+                      borderRadius: 999,
+                    }}
+                  >
+                    {s}
+                  </div>
+                ))}
+                </div>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </div>
 
