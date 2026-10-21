@@ -50,10 +50,16 @@ for (const { slug, startsAt, feePaise } of offers) {
     continue;
   }
   let rows;
+  const stop = new AbortController();
+  const timer = setTimeout(() => stop.abort(), 15000);
   try {
     const res = await fetch(
       `${url}/rest/v1/courses?slug=eq.${slug}&status=eq.live&select=site_status,price_paise,price_on_request`,
-      { headers: { apikey: key, Authorization: `Bearer ${key}` }, signal: AbortSignal.timeout(15000) },
+      // A controller whose timer is cleared, rather than AbortSignal.timeout:
+      // that one leaves a live handle behind, and exiting the process while it
+      // is pending trips a libuv assertion on Windows — which the deploy then
+      // reads as this check failing, blocking a deploy over nothing.
+      { headers: { apikey: key, Authorization: `Bearer ${key}` }, signal: stop.signal },
     );
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     rows = await res.json();
@@ -62,6 +68,8 @@ for (const { slug, startsAt, feePaise } of offers) {
     // which keeps its own cache. Not a reason to stop a deploy.
     console.log(`    ${slug}: catalogue unreachable (${e.message}) — skipped`);
     continue;
+  } finally {
+    clearTimeout(timer);
   }
 
   const c = Array.isArray(rows) ? rows[0] : null;
@@ -87,4 +95,5 @@ for (const { slug, startsAt, feePaise } of offers) {
   }
 }
 
-process.exit(bad ? 1 : 0);
+// Set rather than forced, so nothing is torn down from under a pending handle.
+process.exitCode = bad ? 1 : 0;
