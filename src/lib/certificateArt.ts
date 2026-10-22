@@ -22,9 +22,23 @@ export type CertificateTemplate = keyof typeof CANVASES;
 
 export const PLATES: Record<CertificateTemplate, string> = {
   shrm: "/certificates/shrm.jpg",
-  excellence: "/certificates/excellence.jpg",
+  // The blank one: the same artwork with its printed heading removed and the
+  // swirl behind it kept. The heading is drawn instead, because it is no longer
+  // the same on every certificate — see CERTIFICATE_TITLE.
+  excellence: "/certificates/excellence-blank.jpg",
   cpd: "/certificates/cpd.jpg",
 };
+
+/**
+ * The heading an issued certificate carries.
+ *
+ * The artwork prints "Certificate of Training Completion"; what Levitate
+ * awards is a Certificate of Achievement, so the blank plate is used and this
+ * is drawn over it. Matches the admin's DEFAULT_CERTIFICATE_TITLE, so a
+ * certificate the office prints and one a learner downloads are the same
+ * document.
+ */
+export const CERTIFICATE_TITLE = "Certificate of Achievement";
 
 /**
  * Splits text into lines of at most `max` characters, breaking on spaces.
@@ -246,7 +260,7 @@ export function certificateCards(certificate: { name: string; closing: string; h
       },
     },
     {
-      title: "Levitate PeopleSoft Certificate of Training Completion",
+      title: "Levitate PeopleSoft Certificate of Achievement",
       caption: "Carries a verifiable certificate ID, the completion date and the programme hours.",
       issue: {
         template: "excellence",

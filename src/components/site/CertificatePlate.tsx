@@ -1,5 +1,6 @@
 import {
   CANVASES,
+  CERTIFICATE_TITLE,
   CLOSING_NOTE,
   MASKS,
   MASK_COLORS,
@@ -49,7 +50,7 @@ export default function CertificatePlate({ issue }: { issue: CertificateIssue })
 
 const LABELS: Record<CertificateIssue["template"], string> = {
   shrm: "SHRM certificate of completion",
-  excellence: "certificate of training completion",
+  excellence: "certificate of achievement",
   cpd: "CPD certificate",
 };
 
@@ -119,6 +120,8 @@ const E_PANEL = 398;
 const E_MID = E_PANEL + (E.w - E_PANEL) / 2;
 const E_INK = "#0d2748";
 const E_TEAL = "#2f8f86";
+// The artwork centres its heading a shade right of the panel.s middle.
+const E_TITLE_MID = 1020;
 
 function Excellence({ issue }: { issue: CertificateIssue }) {
   const colors = MASK_COLORS.excellence;
@@ -142,6 +145,17 @@ function Excellence({ issue }: { issue: CertificateIssue }) {
     <>
       <rect width={E.w} height={E.h} fill="#fff" />
       <image href={PLATES.excellence} x="0" y="0" width={E.w} height={E.h} preserveAspectRatio="none" />
+
+      {/* The heading, drawn because the plate no longer carries one. The
+          artwork centres it a shade right of the panel's middle and sets it
+          slightly narrow, which is what the translate and the 0.914 are for —
+          the same two numbers the admin draws it with, since the two have to
+          come out as one document. */}
+      <g transform={`translate(${E_TITLE_MID} 0) scale(0.914 1)`}>
+        <text x="0" y="186" textAnchor="middle" fontFamily={SERIF} fontSize="56" fontWeight="700" fill={E_INK}>
+          {CERTIFICATE_TITLE}
+        </text>
+      </g>
 
       <Patch r={M.name} fill={colors.name} />
       <text x={E_MID} y="332" textAnchor="middle" fontFamily={SERIF} fontSize="68" fontStyle="italic" fill={E_INK}>
