@@ -22,6 +22,9 @@ const LANDING_PAGES = [
   "/posh-2026-masterclass",
   "/deib-masterclass",
   "/hr-edge-masterclass",
+  "/hr-edge-certification",
+  // Nothing of the site belongs on the page an enquiry lands on either.
+  "/thank-you",
 ];
 
 export const isLanding = (pathname: string) =>

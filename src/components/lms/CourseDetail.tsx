@@ -33,7 +33,15 @@ const Lock = () => (
   </svg>
 );
 
-export default function CourseDetail({ slug }: { slug: string }) {
+/**
+ * The same page, with every way out of it closed.
+ *
+ * A paid-ad landing page is one page and one action: the links back to the
+ * catalogue, the LMS and the contact form are all ways to lose a visitor who
+ * arrived for this programme, so in landing mode they are withheld and every
+ * call to action opens the enquiry form on the page instead.
+ */
+export default function CourseDetail({ slug, landing = false, onEnquire }: { slug: string; landing?: boolean; onEnquire?: () => void }) {
   const course = useCourse(slug);
   // Dates written into the FAQ answers are placeholders, filled from here.
   const entry = useCatalogCourse(slug);
@@ -141,18 +149,25 @@ export default function CourseDetail({ slug }: { slug: string }) {
       ? "Enrol · Pay securely"
       // Paused in the admin, fee on request, or payments closed: enquire.
       : "Enquire about this program →";
-  const onCta = canStart || completed
+  const enquire = onEnquire ?? (() => router.push("/contact"));
+  const onCta = landing
+    // Nothing on a landing page may leave it, not even to a checkout: the
+    // visitor says who they are first and the office takes it from there.
+    ? enquire
+    : canStart || completed
     ? () => router.push(`/lms/learn/${slug}`)
     : enrolled || canPay
       ? onEnrol
-      : () => router.push("/contact");
+      : enquire;
 
   return (
     <>
       {/* HERO */}
       <div style={{ background: "linear-gradient(120deg,#0c2a45,#0a1f38)", padding: "46px 48px" }} className="site-page-sec">
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
-          <Link href="/certifications" style={{ font: "600 12px 'Plus Jakarta Sans',sans-serif", color: "#7fe3dc", display: "inline-block", marginBottom: 18 }}>← All certifications</Link>
+          {!landing && (
+            <Link href="/certifications" style={{ font: "600 12px 'Plus Jakarta Sans',sans-serif", color: "#7fe3dc", display: "inline-block", marginBottom: 18 }}>← All certifications</Link>
+          )}
           <div className="lms-split" style={{ display: "grid", gridTemplateColumns: "1fr 330px", gap: 44, alignItems: "start" }}>
             <div>
               <div style={{ font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#7fe3dc", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 12 }}>
@@ -350,10 +365,10 @@ export default function CourseDetail({ slug }: { slug: string }) {
                 <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 14, padding: "18px 20px", font: "500 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#3d5064" }}>
                   {outline ? (
                     <>Batch dates for this programme are confirmed on request.{" "}
-                    <Link href="/contact" style={{ fontWeight: 700 }}>Book a consultation</Link> and we will hold you a place.</>
+                    <BookLink landing={landing} onEnquire={enquire} /> and we will hold you a place.</>
                   ) : (
                     <>The detailed curriculum and batch dates for this programme are being finalised.{" "}
-                    <Link href="/contact" style={{ fontWeight: 700 }}>Book a consultation</Link> and we will share the outline and hold you a place.</>
+                    <BookLink landing={landing} onEnquire={enquire} /> and we will share the outline and hold you a place.</>
                   )}
                 </div>
               </div>
@@ -537,11 +552,64 @@ export default function CourseDetail({ slug }: { slug: string }) {
 
       {/* A programme page is long. This is the mid-page ask; the one above the
           footer, which every page carries, is the second. */}
-      <ConsultationBand subject={course.short} background="#f7fafc" />
-
-      {/* Batch dates and fees sit on every program page, not only on the
-          certifications page — this is where a visitor decides. */}
-      <UpcomingBatches background="#eef4f7" />
+      {/* Both of these end in links off the page: the band at the contact
+          form, the batch cards at other programmes entirely. On a landing page
+          the band becomes the form itself, and the other programmes' batches
+          go — a visitor who came from an ad for this one is not being offered
+          four others on the way to answering. */}
+      {landing ? (
+        <LandingBand onEnquire={enquire} />
+      ) : (
+        <>
+          <ConsultationBand subject={course.short} background="#f7fafc" />
+          <UpcomingBatches background="#eef4f7" />
+        </>
+      )}
     </>
+  );
+}
+
+/**
+ * "Book a consultation", as a link off the site or as the thing that opens the
+ * form on it. Same words either way — only a landing page has somewhere else
+ * for them to go.
+ */
+function BookLink({ landing, onEnquire }: { landing: boolean; onEnquire: () => void }) {
+  if (!landing) {
+    return <Link href="/contact" style={{ fontWeight: 700 }}>Book a consultation</Link>;
+  }
+  return (
+    <button
+      type="button"
+      onClick={onEnquire}
+      style={{ background: "none", border: "none", padding: 0, font: "inherit", fontWeight: 700, color: "#1b8f88", cursor: "pointer", textDecoration: "underline" }}
+    >
+      Book a consultation
+    </button>
+  );
+}
+
+/** The closing call to action on a landing page: the form, not the contact page. */
+function LandingBand({ onEnquire }: { onEnquire: () => void }) {
+  const SANS = "'Plus Jakarta Sans',sans-serif";
+  return (
+    <div className="site-page-sec" style={{ background: "#f7fafc", padding: "64px 48px" }}>
+      <div style={{ maxWidth: 820, margin: "0 auto", textAlign: "center" }}>
+        <h2 style={{ font: `800 clamp(24px,2.8vw,34px)/1.25 ${SANS}`, color: "#0a1b33", margin: "0 0 12px", letterSpacing: "-.02em" }}>
+          Want the outline, the dates and the fee?
+        </h2>
+        <p style={{ font: `400 15px/1.8 ${SANS}`, color: "#5b6e82", margin: "0 0 24px" }}>
+          Tell us where to reach you and we will send everything across, and answer whatever you want to ask first.
+        </p>
+        <button
+          type="button"
+          onClick={onEnquire}
+          className="lp-btn-grad"
+          style={{ border: "none", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `700 15px ${SANS}`, padding: "15px 34px", borderRadius: 999, cursor: "pointer" }}
+        >
+          Book a Consultation
+        </button>
+      </div>
+    </div>
   );
 }
