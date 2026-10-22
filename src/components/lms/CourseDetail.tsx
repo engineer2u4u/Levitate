@@ -44,7 +44,18 @@ const Lock = () => (
 /** How many modules a programme shows before asking whether you want the rest. */
 const MODULES_SHOWN = 3;
 
-export default function CourseDetail({ slug, landing = false, onEnquire }: { slug: string; landing?: boolean; onEnquire?: () => void }) {
+export default function CourseDetail({ slug, landing = false, onEnquire, headline, sub, byline }: {
+  slug: string;
+  landing?: boolean;
+  onEnquire?: () => void;
+  /** A landing page sells the outcome rather than naming the product, so it
+   *  may carry its own headline. The catalogue's title is unaffected — this
+   *  is what one page says, not what the programme is called. */
+  headline?: string;
+  sub?: string;
+  /** Who it is by, where the headline no longer says so. */
+  byline?: string;
+}) {
   const course = useCourse(slug);
   // Dates written into the FAQ answers are placeholders, filled from here.
   const entry = useCatalogCourse(slug);
@@ -178,10 +189,13 @@ export default function CourseDetail({ slug, landing = false, onEnquire }: { slu
               <div style={{ font: "700 11px 'Plus Jakarta Sans',sans-serif", color: "#7fe3dc", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 12 }}>
                 <BrandText>{curriculum?.eyebrow ?? `${course.tag} · ${course.mode}`}</BrandText>
               </div>
-              <h1 style={{ font: "700 clamp(26px,2.8vw,38px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#fff", margin: "0 0 12px", letterSpacing: "-.02em" }}>{course.title}</h1>
-              <p style={{ font: "400 15px/1.75 'Plus Jakarta Sans',sans-serif", color: "rgba(255,255,255,.75)", margin: "0 0 22px", maxWidth: 620 }}>
-                {curriculum?.blurb ?? course.desc}
+              <h1 style={{ font: "700 clamp(26px,2.8vw,38px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#fff", margin: "0 0 12px", letterSpacing: "-.02em" }}>{headline ?? course.title}</h1>
+              <p style={{ font: "400 15px/1.75 'Plus Jakarta Sans',sans-serif", color: "rgba(255,255,255,.75)", margin: byline ? "0 0 10px" : "0 0 22px", maxWidth: 620 }}>
+                {sub ?? curriculum?.blurb ?? course.desc}
               </p>
+              {byline && (
+                <div style={{ font: "600 13px 'Plus Jakarta Sans',sans-serif", color: "#7fe3dc", margin: "0 0 22px" }}>{byline}</div>
+              )}
               <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                 {(curriculum?.meta ?? brochure?.meta ?? [course.modulesLabel, course.hoursLabel, course.mode]).map((m) => (
                   <div key={m} style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#e6f6f4", background: "rgba(255,255,255,.08)", border: "1px solid rgba(127,227,220,.35)", borderRadius: 999, padding: "8px 15px" }}>{m}</div>
@@ -590,9 +604,12 @@ export default function CourseDetail({ slug, landing = false, onEnquire }: { slu
           the band becomes the form itself, and the other programmes' batches
           go — a visitor who came from an ad for this one is not being offered
           four others on the way to answering. */}
-      {landing ? (
-        <LandingBand onEnquire={enquire} />
-      ) : (
+      {/* A landing page puts its own things after this one — the marks, and
+          then the band as the last word — so it renders both itself rather
+          than having the band fixed here above them. Other programmes' batch
+          cards link away to other programmes, which is the one thing a landing
+          page must not do. */}
+      {!landing && (
         <>
           <ConsultationBand subject={course.short} background="#f7fafc" />
           <UpcomingBatches background="#eef4f7" />
@@ -622,27 +639,3 @@ function BookLink({ landing, onEnquire }: { landing: boolean; onEnquire: () => v
   );
 }
 
-/** The closing call to action on a landing page: the form, not the contact page. */
-function LandingBand({ onEnquire }: { onEnquire: () => void }) {
-  const SANS = "'Plus Jakarta Sans',sans-serif";
-  return (
-    <div className="site-page-sec" style={{ background: "#f7fafc", padding: "64px 48px" }}>
-      <div style={{ maxWidth: 820, margin: "0 auto", textAlign: "center" }}>
-        <h2 style={{ font: `800 clamp(24px,2.8vw,34px)/1.25 ${SANS}`, color: "#0a1b33", margin: "0 0 12px", letterSpacing: "-.02em" }}>
-          Want the outline, the dates and the fee?
-        </h2>
-        <p style={{ font: `400 15px/1.8 ${SANS}`, color: "#5b6e82", margin: "0 0 24px" }}>
-          Tell us where to reach you and we will send everything across, and answer whatever you want to ask first.
-        </p>
-        <button
-          type="button"
-          onClick={onEnquire}
-          className="lp-btn-grad"
-          style={{ border: "none", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `700 15px ${SANS}`, padding: "15px 34px", borderRadius: 999, cursor: "pointer" }}
-        >
-          Book a Consultation
-        </button>
-      </div>
-    </div>
-  );
-}

@@ -6,7 +6,8 @@ import CourseDetail from "@/components/lms/CourseDetail";
 import { SessionProvider } from "@/components/lms/useSession";
 import EnquiryModal from "@/components/landing/EnquiryModal";
 import Accreditations from "@/components/site/Accreditations";
-import { contact, enquiryTopics } from "@/lib/site";
+import ConsultationBand from "@/components/site/ConsultationBand";
+import { enquiryTopics } from "@/lib/site";
 
 const SANS = "'Plus Jakarta Sans',sans-serif";
 const SLUG = "hr-edge";
@@ -55,7 +56,14 @@ export default function Landing() {
           landing mode every button opens the form rather than enrolling. It
           is provided so the component has what it asks for. */}
       <SessionProvider>
-        <CourseDetail slug={SLUG} landing onEnquire={() => setOpen(true)} />
+        <CourseDetail
+          slug={SLUG}
+          landing
+          onEnquire={() => setOpen(true)}
+          headline="Strategic HRBP Certification Programme"
+          sub="Build the skills to move from HR operations to strategic business partnering."
+          byline="By Levitate PeopleSoft | HR EDGE"
+        />
       </SessionProvider>
 
       {/* The marks the programme sits behind. On the rest of the site these
@@ -67,26 +75,10 @@ export default function Landing() {
         intro="The programmes are delivered by an organisation recognised by the bodies below."
       />
 
-      {/* FOOTER — how to reach a person, and nothing to click away to. The
-          policies open in a new tab so the page itself is never left; ad
-          platforms expect them to be reachable. */}
-      <footer style={{ background: "#0a1b33", padding: "34px 28px" }}>
-        <div style={{ maxWidth: 1240, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 18, flexWrap: "wrap" }}>
-          <div style={{ font: `500 12.5px/1.8 ${SANS}`, color: "rgba(255,255,255,.7)" }}>
-            © {new Date().getFullYear()} Levitate PeopleSoft · {contact.email} · {contact.phone}
-          </div>
-          <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
-            {[
-              { t: "Privacy Policy", h: "/privacy-policy/" },
-              { t: "Refund & Cancellation", h: "/refund-policy/" },
-            ].map((l) => (
-              <a key={l.h} href={l.h} target="_blank" rel="noopener noreferrer" style={{ font: `600 12.5px ${SANS}`, color: "rgba(255,255,255,.62)" }}>
-                {l.t}
-              </a>
-            ))}
-          </div>
-        </div>
-      </footer>
+      {/* The last word on the page, and the last chance to take it: the button
+          opens the form rather than going anywhere. */}
+      <ConsultationBand subject="HR EDGE" background="#f7fafc" onBook={() => setOpen(true)} />
+
 
       <EnquiryModal
         open={open}

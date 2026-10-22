@@ -16,6 +16,7 @@ export default function ConsultationBand({
   // section precedes it otherwise, wherever it is dropped in.
   padding = "72px 48px",
   maxWidth = 1240,
+  onBook,
 }: {
   /** What the conversation would be about — the programme, or the work. */
   subject?: string;
@@ -23,6 +24,9 @@ export default function ConsultationBand({
   padding?: string;
   /** Pages with their own content width pass it, so the band lines up. */
   maxWidth?: number;
+  /** A landing page has no contact page to send anyone to: the button opens
+   *  the form where they are standing instead. */
+  onBook?: () => void;
 }) {
   return (
     <div className="site-page-sec" style={{ background, padding }}>
@@ -42,9 +46,15 @@ export default function ConsultationBand({
             </p> */}
           </div>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-            <Link href="/contact" className="lp-btn-white" style={{ background: "#fff", color: "#0a1b33", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999, whiteSpace: "nowrap" }}>
-              Book a Consultation
-            </Link>
+            {onBook ? (
+              <button type="button" onClick={onBook} className="lp-btn-white" style={{ background: "#fff", color: "#0a1b33", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999, whiteSpace: "nowrap", border: "none", cursor: "pointer" }}>
+                Book a Consultation
+              </button>
+            ) : (
+              <Link href="/contact" className="lp-btn-white" style={{ background: "#fff", color: "#0a1b33", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 30px", borderRadius: 999, whiteSpace: "nowrap" }}>
+                Book a Consultation
+              </Link>
+            )}
             <a href={`tel:${contact.tel}`} className="lp-btn-outline-light" style={{ border: "1.5px solid rgba(255,255,255,.45)", color: "#fff", font: "700 15px 'Plus Jakarta Sans',sans-serif", padding: "16px 26px", borderRadius: 999, whiteSpace: "nowrap" }}>
               {contact.phone}
             </a>
