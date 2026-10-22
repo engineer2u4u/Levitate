@@ -6,6 +6,7 @@ import CourseDetail from "@/components/lms/CourseDetail";
 import { SessionProvider } from "@/components/lms/useSession";
 import EnquiryModal from "@/components/landing/EnquiryModal";
 import Accreditations from "@/components/site/Accreditations";
+import AskBand from "@/components/landing/AskBand";
 import ConsultationBand from "@/components/site/ConsultationBand";
 import { enquiryTopics } from "@/lib/site";
 
@@ -65,6 +66,10 @@ export default function Landing() {
           byline="By Levitate PeopleSoft | HR EDGE"
         />
       </SessionProvider>
+
+      {/* Asked once here, where the reader has finished the programme detail
+          and is deciding, and once more in the band that closes the page. */}
+      <AskBand onEnquire={() => setOpen(true)} />
 
       {/* The marks the programme sits behind. On the rest of the site these
           live in the footer; this page has no footer to speak of, and a
