@@ -11,9 +11,19 @@
 import { POSH_CURRICULUM } from "./poshCurriculum";
 import { curriculumToContent } from "./curriculumContent";
 import { POSH_CONTENT } from "./poshContent";
+import { POCSO_CONTENT } from "./pocsoContent";
 import { courseBySlug } from "./courses";
 
-export type ItemKind = "reading" | "video" | "quiz";
+export type ItemKind = "reading" | "video" | "quiz" | "download";
+
+/** A file the learner takes away, inside a lesson rather than in the kit. */
+export type CourseFile = {
+  title: string;
+  /** "PDF · 40 pages" — stated, because a file's weight is not guessable. */
+  meta: string;
+  /** Served from `public/`, so it is a site-root path. */
+  href: string;
+};
 
 export type QuizQuestion = {
   q: string;
@@ -67,6 +77,16 @@ export type CourseItem = {
    * and a tick box after the body; the item cannot complete until both are in.
    */
   acknowledgement?: { statement: string };
+  /**
+   * Files to take away, shown under the body.
+   *
+   * On a `download` item they are the item, and it holds its Proceed button
+   * until one has been taken — the same bargain a film makes by holding it
+   * until 90% is played. An item of that kind with nothing in it yet says the
+   * material is being prepared and lets the learner past, because an item
+   * nobody can finish stalls the certificate for the whole course.
+   */
+  downloads?: CourseFile[];
 };
 
 export type CourseModule = {
@@ -323,6 +343,7 @@ export const COURSE_CONTENT: Record<string, CourseContent> = {
   // Authored content wins over the syllabus-derived kind: the curriculum
   // says what the programme covers, this says what the learner works through.
   [POSH_CONTENT.slug]: POSH_CONTENT,
+  [POCSO_CONTENT.slug]: POCSO_CONTENT,
   [DEMO_COURSE.slug]: DEMO_COURSE,
 };
 

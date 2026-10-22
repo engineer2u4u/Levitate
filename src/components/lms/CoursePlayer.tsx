@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { contentBySlug, flatItems, totalMinutes, type CourseContent, type CourseItem } from "@/lib/lms/courseContent";
+import { contentBySlug, flatItems, totalMinutes, type CourseContent, type CourseFile, type CourseItem } from "@/lib/lms/courseContent";
 import {
   completeItem,
   courseStats,
@@ -80,6 +80,9 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   // Held as an id rather than a flag, so moving to another item resets the
   // gate by itself instead of through an effect that races the render.
   const [readTo, setReadTo] = useState<string | null>(null);
+  // The download item whose file has been taken on this visit. Not stored: it
+  // gates the Proceed button, and completing the item is what gets recorded.
+  const [took, setTook] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   // How far each film on this screen has played. Deliberately nowhere else:
@@ -283,6 +286,11 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   const completedOn = progress?.completedAt ? certificateDate(progress.completedAt) : TODAY;
   // A reading hands over its Proceed button once its end has been on screen.
   const unread = item.kind === "reading" && !item.acknowledgement && readTo !== item.id;
+  // A download hands it over once a file has been taken. An item whose files
+  // are not ready yet holds nothing back: a lesson nobody can finish would
+  // stall every certificate on the course.
+  const untaken =
+    item.kind === "download" && (item.downloads?.length ?? 0) > 0 && took !== item.id;
   // A film hands it over once 90% of it has played.
   const played = watched[item.id] ?? 0;
   const unwatched =
@@ -477,6 +485,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
             onComplete={onComplete}
             onQuizSubmit={onQuizSubmit}
             onReachEnd={setReadTo}
+            onTake={setTook}
             onVideoProgress={onVideoProgress}
             onVideoUnavailable={onVideoUnavailable}
           />
@@ -572,6 +581,10 @@ export default function CoursePlayer({ slug }: { slug: string }) {
               <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>
                 Read to the end of this page to continue.
               </span>
+            ) : untaken ? (
+              <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>
+                Download the material above to continue.
+              </span>
             ) : (
               <button
                 type="button"
@@ -599,13 +612,14 @@ const KIND_LABEL: Record<CourseItem["kind"], string> = {
   reading: "Reading",
   video: "Video",
   quiz: "Quiz",
+  download: "Download",
 };
 
 /** Content measured in pages or questions carries its own wording. */
 const itemMeta = (it: CourseItem) => it.meta ?? `${KIND_LABEL[it.kind]} · ${it.minutes} min`;
 
 function ItemView({
-  item, state, nextSession, sat, who, onComplete, onQuizSubmit, onReachEnd, onVideoProgress, onVideoUnavailable,
+  item, state, nextSession, sat, who, onComplete, onQuizSubmit, onReachEnd, onTake, onVideoProgress, onVideoUnavailable,
 }: {
   item: CourseItem;
   state: ItemState;
@@ -616,6 +630,7 @@ function ItemView({
   onComplete: (item: CourseItem) => void;
   onQuizSubmit: (item: CourseItem, attempt: QuizAttempt) => Promise<void>;
   onReachEnd: (itemId: string) => void;
+  onTake: (itemId: string) => void;
   onVideoProgress: (itemId: string, fraction: number) => void;
   onVideoUnavailable: (itemId: string) => void;
 }) {
@@ -703,6 +718,10 @@ function ItemView({
         </div>
       )}
 
+      {item.kind === "download" && state !== "preview" && (
+        <Downloads files={item.downloads ?? []} onTake={() => onTake(item.id)} />
+      )}
+
       {item.feedback && state !== "preview" && (
         <FeedbackForm item={item} who={who} sent={state === "done"} onSent={onComplete} />
       )}
@@ -751,6 +770,56 @@ function ItemView({
 
       <EndMarker id={item.id} onSee={onReachEnd} />
     </>
+  );
+}
+
+/**
+ * The files a lesson hands over.
+ *
+ * `download` is used rather than a plain link so the browser saves the file
+ * instead of opening a 40-page PDF in a tab the learner then has to find their
+ * way back out of. Taking any one of them satisfies the lesson — a pack of
+ * materials is not a reading list to be worked through in order.
+ *
+ * Nothing here is behind a signed URL: these sit in `public/`, so the address
+ * is guessable by anyone who thinks to try it. That matches how the PoSH
+ * handouts are already served, and it is a decision worth revisiting for
+ * material that is the programme's own work product.
+ */
+function Downloads({ files, onTake }: { files: CourseFile[]; onTake: () => void }) {
+  if (!files.length) {
+    return (
+      <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "26px 30px", marginBottom: 24 }}>
+        <div style={{ font: `700 14.5px ${SANS}`, color: "#0a1b33", marginBottom: 6 }}>Being prepared</div>
+        <p style={{ font: `400 13.5px/1.7 ${SANS}`, color: "#5b6e82", margin: 0 }}>
+          The material for this session is being assembled and will appear here. You can carry on with the course in
+          the meantime — nothing is waiting on it.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "clamp(22px,2.4vw,30px)", marginBottom: 24, display: "flex", flexDirection: "column", gap: 10 }}>
+      {files.map((file) => (
+        <a
+          key={file.href}
+          href={file.href}
+          download
+          onClick={onTake}
+          style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 16px", borderRadius: 14, border: "1px solid #e3eaf0", background: "#f8fbfc", textDecoration: "none" }}
+        >
+          <span aria-hidden style={{ flex: "none", width: 38, height: 38, borderRadius: 11, background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `800 10px ${SANS}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            {(file.href.split(".").pop() ?? "file").toUpperCase()}
+          </span>
+          <span style={{ flex: 1, minWidth: 0 }}>
+            <span style={{ display: "block", font: `700 13.5px ${SANS}`, color: "#0a1b33" }}>{file.title}</span>
+            <span style={{ display: "block", font: `500 11.5px ${SANS}`, color: "#8296a9", marginTop: 2 }}>{file.meta}</span>
+          </span>
+          <span style={{ flex: "none", font: `700 12px ${SANS}`, color: "#1b8f88" }}>Download ↓</span>
+        </a>
+      ))}
+    </div>
   );
 }
 
