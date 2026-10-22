@@ -15,7 +15,7 @@ export type Program = {
   /** Matches the course slug, so a card can open that program's own page. */
   slug: string;
   num: string; tag: string; short: string; title: string; sub: string;
-  p1: string; p2: string; ideal: string; pillarTitle: string; pillars: { k: string; v: string }[];
+  p1: string; p2?: string; ideal: string | string[]; pillarTitle: string; pillars: { k: string; v: string }[];
   /** Full curriculum breakdown. Only published for programs whose syllabus is finalised. */
   curriculum?: ProgramOutline;
 };
@@ -50,9 +50,15 @@ export const programs: Program[] = [
     pillarTitle: "The GUARD Child Safety Framework", pillars: [{ k: "G", v: "Ground Rules for Safety" }, { k: "U", v: "Understanding the Law" }, { k: "A", v: "Age-Appropriate Language" }, { k: "R", v: "Recognising Signals" }, { k: "D", v: "Disclosure & Reporting" }],
     curriculum: POCSO_OUTLINE },
   { id: "hredge", slug: "hr-edge", num: "06", tag: "For Students", short: "HR EDGE", title: "HR EDGE — Certified MNC-Ready HR Practitioner Programme", sub: "Think like an HR Business Partner",
-    p1: "An applied certification programme for people preparing to contribute as an HR Business Partner: understand the business, ask better questions and make stronger people decisions. It builds the practical judgement to connect business priorities with people decisions, partner with managers, and explain a recommendation with confidence.",
-    p2: "Learning happens through the work HR actually does. Participants work a simulated MNC environment of connected situations involving business leaders, managers, employees and specialist HR teams — interpreting manager emails, organisation charts, workforce figures and case records, practising role-plays, stakeholder discussions and decision labs, and applying each concept between sessions through guided LMS work and reusable tools.",
-    ideal: "MBA-HR and PGDM-HR students and recent graduates entering corporate HR, early-career HR professionals building confidence in workplace decisions and manager conversations, HR operations and talent acquisition professionals broadening into business partnering, and aspiring HR Business Partners and People Partners. Previous MNC experience is not required.",
+    p1: "An applied certification programme for aspiring HR Business Partners to understand business priorities, ask better questions, and make stronger people decisions. Through real-world simulations, role-plays, case studies, and practical tools, participants learn to partner with managers and confidently connect people's strategies with business goals.",
+    ideal: [
+      "MBA-HR & PGDM-HR students and recent graduates",
+      "Early-career HR professionals",
+      "HR Operations & Talent Acquisition professionals",
+      "Aspiring HR Business Partners / People Partners",
+      "Professionals looking to build confidence in HR decisions and manager conversations",
+      "No prior MNC experience required",
+    ],
     pillarTitle: "The EDGE Framework", pillars: [{ k: "E", v: "Explore — understand the situation before recommending a solution" }, { k: "D", v: "Diagnose — use evidence to understand what needs attention" }, { k: "G", v: "Guide — help managers make informed people decisions" }, { k: "E", v: "Enable — turn recommendations into responsible action" }],
     curriculum: HR_EDGE_OUTLINE },
 ];

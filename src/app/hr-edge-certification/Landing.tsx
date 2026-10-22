@@ -5,6 +5,7 @@ import { useState } from "react";
 import CourseDetail from "@/components/lms/CourseDetail";
 import { SessionProvider } from "@/components/lms/useSession";
 import EnquiryModal from "@/components/landing/EnquiryModal";
+import Accreditations from "@/components/site/Accreditations";
 import { contact, enquiryTopics } from "@/lib/site";
 
 const SANS = "'Plus Jakarta Sans',sans-serif";
@@ -56,6 +57,15 @@ export default function Landing() {
       <SessionProvider>
         <CourseDetail slug={SLUG} landing onEnquire={() => setOpen(true)} />
       </SessionProvider>
+
+      {/* The marks the programme sits behind. On the rest of the site these
+          live in the footer; this page has no footer to speak of, and a
+          visitor from an ad has no reason yet to take the organisation on
+          trust. */}
+      <Accreditations
+        maxWidth={1240}
+        intro="The programmes are delivered by an organisation recognised by the bodies below."
+      />
 
       {/* FOOTER — how to reach a person, and nothing to click away to. The
           policies open in a new tab so the page itself is never left; ad

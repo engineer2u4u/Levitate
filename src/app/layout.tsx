@@ -3,6 +3,7 @@ import ShrmMarquee from "@/components/site/ShrmMarquee";
 import EnquiryPopup from "@/components/site/EnquiryPopup";
 import ChromeGate from "@/components/site/ChromeGate";
 import GoogleTag from "@/components/site/GoogleTag";
+import TagManager, { TagManagerNoScript } from "@/components/site/TagManager";
 import MetaPixel from "@/components/site/MetaPixel";
 import AttributionCapture from "@/components/site/AttributionCapture";
 import CatalogProvider from "@/components/site/CatalogProvider";
@@ -88,6 +89,8 @@ export default async function RootLayout({
         />
       </head>
       <body>
+        {/* GTM asks for this first in the body, before anything else. */}
+        <TagManagerNoScript />
         <CatalogProvider initial={catalog}>
           <ChromeGate>
             <ShrmMarquee />
@@ -98,6 +101,7 @@ export default async function RootLayout({
           </ChromeGate>
         </CatalogProvider>
         <GoogleTag />
+        <TagManager />
         <MetaPixel />
         <AttributionCapture />
       </body>

@@ -125,7 +125,9 @@ export default function CertificationsPage() {
                   {!collapsed && (
                   <>
                   <p style={{ font: "400 15px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 14px", maxWidth: 640, textWrap: "pretty" } as CSSProperties}>{p.p1}</p>
-                  <p style={{ font: "400 15px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: 0, maxWidth: 640, textWrap: "pretty" } as CSSProperties}>{p.p2}</p>
+                  {p.p2 && (
+                    <p style={{ font: "400 15px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: 0, maxWidth: 640, textWrap: "pretty" } as CSSProperties}>{p.p2}</p>
+                  )}
                   <div style={{ marginTop: 24, background: "#fff", border: "1px solid rgba(27,143,136,.35)", borderRadius: 16, padding: "24px 26px" }}>
                     <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 16 }}><BrandText>{p.pillarTitle}</BrandText></div>
                     <div className="site-pillars" style={{ display: "grid", gridTemplateColumns: `repeat(${p.pillars.length},minmax(0,1fr))`, gap: 12 }}>
@@ -167,7 +169,20 @@ export default function CertificationsPage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 14, height: "100%" }}>
                   <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 16, padding: "22px 22px" }}>
                     <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 10 }}>Ideal for</div>
-                    <div style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>{p.ideal}</div>
+                    {Array.isArray(p.ideal) ? (
+                      <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 7 }}>
+                        {p.ideal.map((who) => (
+                          <li key={who} style={{ display: "flex", gap: 9, alignItems: "flex-start", font: "400 13.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none", marginTop: 3 }} aria-hidden>
+                              <path d="M5 13l4 4 10-10" />
+                            </svg>
+                            <span>{who}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>{p.ideal}</div>
+                    )}
                   </div>
                   <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 16, padding: "22px 22px", display: "flex", flexDirection: "column", gap: 12 }}>
                     <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase" }}>What&apos;s included</div>

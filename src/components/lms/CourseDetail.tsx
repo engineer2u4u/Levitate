@@ -41,6 +41,9 @@ const Lock = () => (
  * arrived for this programme, so in landing mode they are withheld and every
  * call to action opens the enquiry form on the page instead.
  */
+/** How many modules a programme shows before asking whether you want the rest. */
+const MODULES_SHOWN = 3;
+
 export default function CourseDetail({ slug, landing = false, onEnquire }: { slug: string; landing?: boolean; onEnquire?: () => void }) {
   const course = useCourse(slug);
   // Dates written into the FAQ answers are placeholders, filled from here.
@@ -63,6 +66,8 @@ export default function CourseDetail({ slug, landing = false, onEnquire }: { slu
   // Whether this learner has already finished it: a course someone has
   // completed should not be inviting them to start it again.
   const [completed, setCompleted] = useState(false);
+  // The module list opens on request — see where it is rendered.
+  const [allModules, setAllModules] = useState(false);
   const router = useRouter();
   // Raised when somebody signs up in order to enrol. The account does not
   // exist while the modal is open, so the enrolment cannot be written there —
@@ -275,7 +280,9 @@ export default function CourseDetail({ slug, landing = false, onEnquire }: { slu
                 <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 8 }}>About this certification</div>
                 <div style={{ font: "600 14px 'Plus Jakarta Sans',sans-serif", color: "#2f7fd6", marginBottom: 18 }}>{program.sub}</div>
                 <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 14px" }}>{program.p1}</p>
-                <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 24px" }}>{program.p2}</p>
+                {program.p2 && (
+                  <p style={{ font: "400 14.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 24px" }}>{program.p2}</p>
+                )}
 
                 <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 16, padding: "22px 24px", marginBottom: 22 }}>
                   <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 16 }}><BrandText>{program.pillarTitle}</BrandText></div>
@@ -292,7 +299,20 @@ export default function CourseDetail({ slug, landing = false, onEnquire }: { slu
                 <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
                   <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 16, padding: "20px 22px" }}>
                     <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase", marginBottom: 10 }}>Ideal for</div>
-                    <div style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>{program.ideal}</div>
+                    {Array.isArray(program.ideal) ? (
+                      <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 7 }}>
+                        {program.ideal.map((who) => (
+                          <li key={who} style={{ display: "flex", gap: 9, alignItems: "flex-start", font: "400 13.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1b8f88" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" style={{ flex: "none", marginTop: 3 }} aria-hidden>
+                              <path d="M5 13l4 4 10-10" />
+                            </svg>
+                            <span>{who}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div style={{ font: "400 13.5px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>{program.ideal}</div>
+                    )}
                   </div>
                   <div style={{ background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 16, padding: "20px 22px", display: "flex", flexDirection: "column", gap: 11 }}>
                     <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".14em", textTransform: "uppercase" }}>What&apos;s included</div>
@@ -344,7 +364,7 @@ export default function CourseDetail({ slug, landing = false, onEnquire }: { slu
                     </div>
                     <div style={{ font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: 14 }}>Programme modules</div>
                     <ol style={{ listStyle: "none", counterReset: "mod", margin: "0 0 22px", padding: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-                      {outline.modules.map((m, i) => (
+                      {outline.modules.slice(0, allModules ? outline.modules.length : MODULES_SHOWN).map((m, i) => (
                         <li key={moduleTitle(m)} style={{ display: "flex", gap: 14, alignItems: "flex-start", background: "#f7fafc", border: "1px solid #eef2f6", borderRadius: 13, padding: "14px 16px" }}>
                           <span aria-hidden style={{ flex: "none", width: 27, height: 27, borderRadius: 9, background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 12px 'Plus Jakarta Sans',sans-serif", display: "flex", alignItems: "center", justifyContent: "center" }}>
                             {i + 1}
@@ -358,6 +378,19 @@ export default function CourseDetail({ slug, landing = false, onEnquire }: { slu
                         </li>
                       ))}
                     </ol>
+                    {/* A long list of modules is reassuring to scroll past and
+                        exhausting to read. Three is enough to show what the
+                        programme is made of; the rest are a click away for
+                        anyone who wants them. */}
+                    {outline.modules.length > MODULES_SHOWN && !allModules && (
+                      <button
+                        type="button"
+                        onClick={() => setAllModules(true)}
+                        style={{ background: "#fff", border: "1.5px solid #1b8f88", color: "#1b8f88", font: "700 13px 'Plus Jakarta Sans',sans-serif", padding: "11px 22px", borderRadius: 999, cursor: "pointer", marginBottom: 22 }}
+                      >
+                        Show all {outline.modules.length} modules ↓
+                      </button>
+                    )}
                     <div style={{ font: "700 14px/1.6 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", marginBottom: 18 }}>{outline.closing}</div>
                   </>
                 ) : null}
