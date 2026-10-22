@@ -290,7 +290,8 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   // are not ready yet holds nothing back: a lesson nobody can finish would
   // stall every certificate on the course.
   const untaken =
-    item.kind === "download" && (item.downloads?.length ?? 0) > 0 && took !== item.id;
+    (item.kind === "download" && (item.downloads?.length ?? 0) > 0 && took !== item.id) ||
+    (item.kind === "link" && Boolean(item.link) && took !== item.id);
   // A film hands it over once 90% of it has played.
   const played = watched[item.id] ?? 0;
   const unwatched =
@@ -583,7 +584,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
               </span>
             ) : untaken ? (
               <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>
-                Download the material above to continue.
+                {item.kind === "link" ? "Open the link above to continue." : "Download the material above to continue."}
               </span>
             ) : (
               <button
@@ -613,6 +614,7 @@ const KIND_LABEL: Record<CourseItem["kind"], string> = {
   video: "Video",
   quiz: "Quiz",
   download: "Download",
+  link: "Visit",
 };
 
 /** Content measured in pages or questions carries its own wording. */
@@ -722,6 +724,10 @@ function ItemView({
         <Downloads files={item.downloads ?? []} onTake={() => onTake(item.id)} />
       )}
 
+      {item.kind === "link" && item.link && state !== "preview" && (
+        <LinkOut link={item.link} onTake={() => onTake(item.id)} />
+      )}
+
       {item.feedback && state !== "preview" && (
         <FeedbackForm item={item} who={who} sent={state === "done"} onSent={onComplete} />
       )}
@@ -819,6 +825,34 @@ function Downloads({ files, onTake }: { files: CourseFile[]; onTake: () => void 
           <span style={{ flex: "none", font: `700 12px ${SANS}`, color: "#1b8f88" }}>Download ↓</span>
         </a>
       ))}
+    </div>
+  );
+}
+
+/**
+ * A page the learner opens before carrying on.
+ *
+ * Opens in a new tab, so the course is still where they left it when they come
+ * back. Pressing it satisfies the item: the destination is someone else's page
+ * and reports nothing back, so "opened the link" is the only thing that can be
+ * claimed here — not that anything was filled in or submitted.
+ */
+function LinkOut({ link, onTake }: { link: { href: string; label: string }; onTake: () => void }) {
+  return (
+    <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "clamp(22px,2.4vw,30px)", marginBottom: 24 }}>
+      <a
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onTake}
+        className="lp-btn-grad"
+        style={{ display: "inline-block", padding: "13px 22px", borderRadius: 12, font: `800 12.5px ${SANS}`, color: "#fff", textDecoration: "none" }}
+      >
+        {link.label} ↗
+      </a>
+      <div style={{ font: `500 11.5px ${SANS}`, color: "#8296a9", marginTop: 12 }}>
+        Opens in a new tab — this page keeps your place.
+      </div>
     </div>
   );
 }

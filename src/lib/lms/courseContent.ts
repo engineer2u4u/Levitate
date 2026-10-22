@@ -14,7 +14,7 @@ import { POSH_CONTENT } from "./poshContent";
 import { POCSO_CONTENT } from "./pocsoContent";
 import { courseBySlug } from "./courses";
 
-export type ItemKind = "reading" | "video" | "quiz" | "download";
+export type ItemKind = "reading" | "video" | "quiz" | "download" | "link";
 
 /** A file the learner takes away, inside a lesson rather than in the kit. */
 export type CourseFile = {
@@ -87,6 +87,16 @@ export type CourseItem = {
    * nobody can finish stalls the certificate for the whole course.
    */
   downloads?: CourseFile[];
+  /**
+   * A page the learner opens before moving on — a form, a survey, a listing.
+   *
+   * What this can honestly gate is the visit, not what happened there. The
+   * page belongs to someone else, so nothing comes back from it: a learner who
+   * opens the link and closes the tab has satisfied the item exactly as one
+   * who filled the form in. Worth remembering before anything is made to
+   * depend on it.
+   */
+  link?: { href: string; label: string };
 };
 
 export type CourseModule = {

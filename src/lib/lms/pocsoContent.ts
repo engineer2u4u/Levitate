@@ -99,6 +99,24 @@ export const POCSO_CONTENT: CourseContent = {
             },
           ],
         },
+
+        {
+          id: "pc-case-lab-link",
+          kind: "link",
+          title: "Share your experience",
+          minutes: 3,
+          meta: "Opens in a new tab",
+          body: [
+            "Tell us how the programme has been so far. Open the link below, leave your response, and come back here to carry on.",
+          ],
+          // Deliberately neutral id and title: the destination is a Google
+          // share link, and swapping it for a form later should not mean
+          // changing an id that delegates already have progress against.
+          link: {
+            href: "https://share.google/JdRNcrv7Ga0rgTRFK",
+            label: "Open the link",
+          },
+        },
       ],
     },
 
