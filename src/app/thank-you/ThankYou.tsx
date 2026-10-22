@@ -8,11 +8,11 @@ const SANS = "'Plus Jakarta Sans',sans-serif";
 /**
  * The page after an enquiry.
  *
- * Deliberately a dead end in the same way the landing page is: it says what
- * happens next and offers the one thing worth offering someone who has
- * already asked — a faster way to reach a person. It does not try to send
- * them back into the site, because they have done the thing the page existed
- * for.
+ * The landing page before it is a closed funnel; this page is where that ends.
+ * Someone here has already done the thing the funnel existed for, so there is
+ * nothing left to protect them from — a faster way to reach a person if they
+ * are in a hurry, and the rest of the programmes for anyone curious enough to
+ * look now that they have asked.
  */
 export default function ThankYou() {
   return (
@@ -45,15 +45,26 @@ export default function ThankYou() {
           </div>
         </div>
 
-        <a
-          href={contact.whatsapp}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="lp-btn-grad"
-          style={{ display: "inline-block", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `700 14.5px ${SANS}`, padding: "14px 30px", borderRadius: 999, textDecoration: "none" }}
-        >
-          Message us on WhatsApp
-        </a>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+          <a
+            href={contact.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="lp-btn-grad"
+            style={{ display: "inline-block", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `700 14.5px ${SANS}`, padding: "14px 30px", borderRadius: 999, textDecoration: "none" }}
+          >
+            Message us on WhatsApp
+          </a>
+          {/* The way back into the site, which exists only here: the page
+              before this one has no link off it at all. */}
+          <a
+            href="/certifications/"
+            className="lp-btn-outline"
+            style={{ display: "inline-block", background: "#fff", border: "1.5px solid #1b8f88", color: "#1b8f88", font: `700 14.5px ${SANS}`, padding: "13px 28px", borderRadius: 999, textDecoration: "none" }}
+          >
+            Explore courses
+          </a>
+        </div>
       </div>
     </div>
   );
