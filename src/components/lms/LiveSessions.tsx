@@ -90,6 +90,10 @@ export default function LiveSessions() {
   // Null while the programmes are being read, so the page waits rather than
   // telling someone they have none.
   const [accesses, setAccesses] = useState<CourseAccess[] | null>(null);
+  // Finished programmes are hidden until asked for. The page answers "what is
+  // next"; a programme with nothing next is an archive, and an archive at the
+  // top of a list is in the way of the answer.
+  const [showAll, setShowAll] = useState(false);
 
   const slugs = enrolments.map((e) => e.courseSlug).sort().join(",");
   useEffect(() => {
@@ -117,11 +121,15 @@ export default function LiveSessions() {
     const next = a.sessions.find((s) => endOf(s) > now);
     return next ? endOf(next) : Infinity;
   };
-  // Soonest first; a programme whose sittings are all behind it sinks to the
-  // bottom rather than disappearing, because its recordings are still there.
-  const shown = [...(accesses ?? [])].sort((a, b) => nextAt(a) - nextAt(b));
+  // Soonest first. A finished programme sorts to the bottom and is then left
+  // out unless the box is ticked — its recordings are still there, so it is
+  // hidden rather than dropped.
+  const all = [...(accesses ?? [])].sort((a, b) => nextAt(a) - nextAt(b));
+  const live = all.filter((a) => nextAt(a) !== Infinity);
+  const shown = showAll ? all : live;
+  const finished = all.length - live.length;
 
-  if (!user || shown.length === 0) {
+  if (!user || all.length === 0) {
     return (
       <div style={{ background: "#f7fafc", padding: "70px 48px", minHeight: "60vh" }} className="site-page-sec">
         <div style={{ maxWidth: 600, margin: "0 auto", background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "34px 36px", textAlign: "center" }}>
@@ -138,12 +146,35 @@ export default function LiveSessions() {
   return (
     <div style={{ background: "#f7fafc", padding: "38px 48px 90px", minHeight: "60vh" }} className="site-page-sec">
       <div style={{ maxWidth: 1240, margin: "0 auto" }}>
-        <div style={{ marginBottom: 26 }}>
-          <h1 style={{ font: `700 27px ${SANS}`, color: "#0a1b33", margin: "0 0 6px", letterSpacing: "-.02em" }}>Live sessions</h1>
-          <div style={{ font: `500 13.5px ${SANS}`, color: "#5b6e82" }}>
-            {shown.length} programme{shown.length === 1 ? "" : "s"} · soonest first
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16, flexWrap: "wrap", marginBottom: 26 }}>
+          <div>
+            <h1 style={{ font: `700 27px ${SANS}`, color: "#0a1b33", margin: "0 0 6px", letterSpacing: "-.02em" }}>Live sessions</h1>
+            <div style={{ font: `500 13.5px ${SANS}`, color: "#5b6e82" }}>
+              {shown.length === 0
+                ? "Nothing coming up"
+                : `${shown.length} programme${shown.length === 1 ? "" : "s"} · soonest first`}
+            </div>
           </div>
+          {/* Only where there is something to reveal — a box that changes
+              nothing is a question nobody needed asking. */}
+          {finished > 0 && (
+            <label style={{ display: "flex", alignItems: "center", gap: 9, cursor: "pointer", font: `600 13px ${SANS}`, color: "#3d5064", background: "#fff", border: "1px solid #e3eaf0", borderRadius: 11, padding: "10px 14px" }}>
+              <input
+                type="checkbox"
+                checked={showAll}
+                onChange={(e) => setShowAll(e.target.checked)}
+                style={{ width: 16, height: 16, accentColor: "#1b8f88", cursor: "pointer" }}
+              />
+              Show finished ({finished})
+            </label>
+          )}
         </div>
+
+        {shown.length === 0 && (
+          <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 16, padding: "24px", font: `500 13.5px/1.7 ${SANS}`, color: "#5b6e82" }}>
+            None of your programmes has a session coming up. Tick <strong style={{ color: "#0a1b33" }}>Show finished</strong> above to see the ones that have run, and their recordings.
+          </div>
+        )}
 
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           {shown.map((access) => (
