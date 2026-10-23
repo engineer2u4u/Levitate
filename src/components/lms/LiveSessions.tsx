@@ -1,11 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { useCourse } from "@/components/site/CatalogProvider";
 import { dateTile } from "@/lib/catalog";
-import { useCourseAccess, type AccessSession } from "@/lib/lms/access";
-import { isPaid } from "@/lib/lms/enrolments";
+import { readCourseAccess, type AccessSession, type CourseAccess } from "@/lib/lms/access";
 import { useSession } from "./useSession";
 
 const SANS = "'Plus Jakarta Sans',sans-serif";
@@ -69,14 +68,18 @@ const endOf = (s: AccessSession) =>
  * shown only once payment is confirmed, which the database enforces: a pending
  * enrolment is never sent the links at all.
  */
+
+/**
+ * Every programme a learner is on, soonest first.
+ *
+ * This used to show one programme with a dropdown to change it, which asked
+ * someone to remember what they were enrolled in before they could see when
+ * it next met. A learner on three programmes wants one question answered —
+ * what is next — so each is a card and they are ordered by the sitting that
+ * comes soonest.
+ */
 export default function LiveSessions() {
   const { user, loading, enrolments } = useSession();
-  // Paid enrolments first; a pending one still shows its dates.
-  const choices = [...enrolments].sort((a, b) => Number(isPaid(b)) - Number(isPaid(a)));
-  const [picked, setPicked] = useState("");
-  const slug = picked || choices[0]?.courseSlug || "";
-  const course = useCourse(slug);
-  const { access, loading: accessLoading } = useCourseAccess(slug, user?.id ?? null);
   // Read once when the page opens: what is "held" and "next" does not need to
   // change under someone while they read it.
   const [now] = useState(Date.now);
@@ -84,10 +87,41 @@ export default function LiveSessions() {
   // the prerendered HTML, which is the honest answer before a browser has a
   // clock to ask.
   const tick = useSyncExternalStore(subscribeClock, () => clock, () => 0);
+  // Null while the programmes are being read, so the page waits rather than
+  // telling someone they have none.
+  const [accesses, setAccesses] = useState<CourseAccess[] | null>(null);
 
-  if (loading || (slug && accessLoading)) return <div style={{ background: "#f7fafc", minHeight: "60vh" }} />;
+  const slugs = enrolments.map((e) => e.courseSlug).sort().join(",");
+  useEffect(() => {
+    // Nothing to load is not the same as nothing loaded yet; that case is
+    // handled below without touching state, which an effect must not do
+    // synchronously.
+    if (!user || !slugs) return;
+    let alive = true;
+    void Promise.all(
+      slugs.split(",").map((slug) => readCourseAccess(slug).catch(() => null)),
+    ).then((rows) => {
+      if (alive) setAccesses(rows.filter((r): r is CourseAccess => r !== null));
+    });
+    return () => {
+      alive = false;
+    };
+  }, [user, slugs]);
 
-  if (!user || !access) {
+  // Waiting only while there is something to wait for.
+  const waiting = Boolean(user && slugs && accesses === null);
+  if (loading || waiting) return <div style={{ background: "#f7fafc", minHeight: "60vh" }} />;
+
+  /** The next sitting that has not finished — what the ordering is by. */
+  const nextAt = (a: CourseAccess) => {
+    const next = a.sessions.find((s) => endOf(s) > now);
+    return next ? endOf(next) : Infinity;
+  };
+  // Soonest first; a programme whose sittings are all behind it sinks to the
+  // bottom rather than disappearing, because its recordings are still there.
+  const shown = [...(accesses ?? [])].sort((a, b) => nextAt(a) - nextAt(b));
+
+  if (!user || shown.length === 0) {
     return (
       <div style={{ background: "#f7fafc", padding: "70px 48px", minHeight: "60vh" }} className="site-page-sec">
         <div style={{ maxWidth: 600, margin: "0 auto", background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "34px 36px", textAlign: "center" }}>
@@ -101,6 +135,29 @@ export default function LiveSessions() {
     );
   }
 
+  return (
+    <div style={{ background: "#f7fafc", padding: "38px 48px 90px", minHeight: "60vh" }} className="site-page-sec">
+      <div style={{ maxWidth: 1240, margin: "0 auto" }}>
+        <div style={{ marginBottom: 26 }}>
+          <h1 style={{ font: `700 27px ${SANS}`, color: "#0a1b33", margin: "0 0 6px", letterSpacing: "-.02em" }}>Live sessions</h1>
+          <div style={{ font: `500 13.5px ${SANS}`, color: "#5b6e82" }}>
+            {shown.length} programme{shown.length === 1 ? "" : "s"} · soonest first
+          </div>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          {shown.map((access) => (
+            <ProgrammeCard key={access.course.slug} access={access} now={now} tick={tick} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** One programme: its room, its dates and its recordings. */
+function ProgrammeCard({ access, now, tick }: { access: CourseAccess; now: number; tick: number }) {
+  const course = useCourse(access.course.slug);
   const paid = access.enrolment.status === "paid";
   /**
    * The sitting the card is about: the next one that has not finished, or the
@@ -116,22 +173,7 @@ export default function LiveSessions() {
   const joinable = opensAt === null || tick >= opensAt;
 
   return (
-    <div style={{ background: "#f7fafc", padding: "38px 48px 90px", minHeight: "60vh" }} className="site-page-sec">
-      <div style={{ maxWidth: 1240, margin: "0 auto" }}>
-        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16, flexWrap: "wrap", marginBottom: 26 }}>
-          <div>
-            <h1 style={{ font: `700 27px ${SANS}`, color: "#0a1b33", margin: "0 0 6px", letterSpacing: "-.02em" }}>Live sessions</h1>
-            <div style={{ font: `500 13.5px ${SANS}`, color: "#5b6e82" }}>
-              {access.course.title} · {access.batch.name} batch · {access.sessions.length} session{access.sessions.length === 1 ? "" : "s"}
-            </div>
-          </div>
-          {choices.length > 1 && (
-            <select value={slug} onChange={(e) => setPicked(e.target.value)} aria-label="Course" style={{ border: "1px solid #e3eaf0", borderRadius: 11, padding: "10px 12px", font: `600 13px ${SANS}`, background: "#fff" }}>
-              {choices.map((e) => <option key={e.id ?? e.courseSlug} value={e.courseSlug}>{e.courseSlug}{e.batchName ? ` · ${e.batchName}` : ""}</option>)}
-            </select>
-          )}
-        </div>
-
+    <div>
         {!paid && (
           <div style={{ font: `600 13px/1.6 ${SANS}`, color: "#9a6a12", background: "#fdf4e3", border: "1px solid #f0dcae", borderRadius: 14, padding: "14px 16px", marginBottom: 18 }}>
             Your payment is still to be confirmed. The dates are below; the Zoom links appear here as soon as it is.
@@ -229,6 +271,5 @@ export default function LiveSessions() {
           </div>
         )}
       </div>
-    </div>
   );
 }
