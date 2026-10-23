@@ -134,11 +134,23 @@ export const POCSO_CONTENT: CourseContent = {
           meta: "Materials in preparation",
           body: [
             "Session plans, slide decks, facilitation guides and templates — the material you use to run POCSO and child safety sessions of your own once you are certified. Everything in it is yours to use in your own practice.",
+            "The archive holds the three days of workshop films, the government notifications and official references — the Act, the 2019 amendment, the 2020 Rules, the user handbook and the school safety guidelines — and Levitate's own activity sheets, checklists and policy templates.",
+            "It is a large download — 342 MB — so take it over wifi rather than mobile data, and give it a minute.",
           ],
-          // Empty on purpose until the files arrive. A download item with
-          // nothing in it says so and lets the learner past, rather than
-          // holding the Proceed button on a file that does not exist yet.
-          downloads: [],
+          downloads: [
+            {
+              title: "Levitate POCSO Workshop — films, references and templates",
+              meta: "ZIP · 38 files · 342 MB",
+              // NOT in this repository: at 342MB it is past what GitHub will
+              // accept, and `public/` would put it through every build and
+              // every deploy. It is uploaded straight into
+              // public_html/assets/pocso/ on the server instead, and
+              // scripts/deploy.sh adds and replaces but never deletes, so it
+              // survives deploys. If it ever 404s, the file is missing from
+              // the server rather than from the build.
+              href: "/assets/pocso/levitate-pocso-workshop.zip",
+            },
+          ],
         },
       ],
     },

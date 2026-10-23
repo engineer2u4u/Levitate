@@ -67,3 +67,8 @@ next-env.d.ts
 # .sample.php beside it belongs in git — the secret must never be committed,
 # because git history is forever and rotating a leaked key is the only fix.
 /razorpay-config.php
+
+# The POCSO toolkit archive is 342MB — past what GitHub accepts, and it has
+# no business in a build. It lives on the server at the same path, uploaded by
+# hand; see the comment on the download entry in src/lib/lms/pocsoContent.ts.
+public/assets/pocso/levitate-pocso-workshop.zip
