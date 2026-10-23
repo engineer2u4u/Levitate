@@ -365,7 +365,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                   {m.summary && <div style={{ font: `500 11.5px/1.5 ${SANS}`, color: "#8296a9", marginBottom: 8 }}>{m.summary}</div>}
                   {moduleScheduled && (
                     <div style={{ font: `600 11px/1.5 ${SANS}`, color: "#1f5fa8", background: "rgba(47,127,214,.08)", border: "1px solid rgba(47,127,214,.22)", borderRadius: 8, padding: "6px 9px", margin: "4px 0 8px" }}>
-                      Opens after the next live session{nextSession ? ` · ${nextSession}` : ""}
+                      Will unlock soon
                     </div>
                   )}
 
@@ -381,7 +381,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                           disabled={st === "locked" || st === "scheduled"}
                           title={
                             st === "preview" ? "Look ahead — you cannot complete it from here"
-                            : st === "scheduled" ? "Opens after the next live session"
+                            : st === "scheduled" ? "Will unlock soon"
                             : undefined
                           }
                           onClick={() => {
@@ -438,11 +438,17 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                 }}
               >
                 <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ font: `${onKit ? 800 : 700} 12.5px ${SANS}`, color: kit ? "#0a1b33" : "#a9b8c6", flex: 1 }}>Reading kit</span>
+                  {/* Named for what is actually behind it: with no reading kit
+                      to release, this page is the certificate. */}
+                  <span style={{ font: `${onKit ? 800 : 700} 12.5px ${SANS}`, color: kit ? "#0a1b33" : "#a9b8c6", flex: 1 }}>
+                    {course.readingKit.length > 0 ? "Reading kit" : "Certificate"}
+                  </span>
                   {kit ? <Tick /> : <LockIcon />}
                 </span>
                 <span style={{ display: "block", font: `500 11.5px/1.5 ${SANS}`, color: "#8296a9", marginTop: 4 }}>
-                  {kit ? "Released — yours to keep" : "Unlocks when the course is complete"}
+                  {kit
+                    ? course.readingKit.length > 0 ? "Released — yours to keep" : "Ready to download"
+                    : "Unlocks when the course is complete"}
                 </span>
               </button>
             </div>
@@ -512,7 +518,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
               </>
             ) : state === "scheduled" ? (
               <span style={{ font: `600 12.5px/1.5 ${SANS}`, color: "#8296a9" }}>
-                This module opens after the next live session{nextSession ? ` (${nextSession})` : ""}.
+                This module will unlock soon.
               </span>
             ) : state === "preview" ? (
               <>
@@ -545,7 +551,7 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                       That is the whole course — well done.
                     </span>
                     <button type="button" onClick={() => setOnKit(true)} className="lp-btn-grad" style={{ ...FOOT_PRIMARY, cursor: "pointer" }}>
-                      Your certificate and kit →
+                      {course.readingKit.length > 0 ? "Your certificate and kit →" : "Your certificate →"}
                     </button>
                   </>
                 ) : (
@@ -640,10 +646,14 @@ function ItemView({
     return (
       <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "48px 40px", textAlign: "center" }}>
         <LockIcon size={30} />
-        <h2 style={{ font: `700 20px ${SANS}`, color: "#0a1b33", margin: "14px 0 8px" }}>Wait for the next live session</h2>
+        <h2 style={{ font: `700 20px ${SANS}`, color: "#0a1b33", margin: "14px 0 8px" }}>This will unlock soon</h2>
+        {/* No date promised. A module is opened when the office opens it, and
+            naming a session put a time against something nobody here can
+            guarantee — a session can move, or be held without the module being
+            released the same evening. */}
         <p style={{ font: `400 14px/1.7 ${SANS}`, color: "#5b6e82", margin: 0 }}>
-          “{item.title}” is part of a module your facilitator opens after the live session that covers it.
-          {nextSession ? ` The next session is ${nextSession}.` : ""} Your Zoom link is under Live sessions.
+          “{item.title}” is part of a module your facilitator has not opened yet. It will unlock soon. Your Zoom link
+          for the live sessions is under Live sessions.
         </p>
       </div>
     );
@@ -808,22 +818,38 @@ function Downloads({ files, onTake }: { files: CourseFile[]; onTake: () => void 
   return (
     <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "clamp(22px,2.4vw,30px)", marginBottom: 24, display: "flex", flexDirection: "column", gap: 10 }}>
       {files.map((file) => (
-        <a
-          key={file.href}
-          href={file.href}
-          download
-          onClick={onTake}
-          style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 16px", borderRadius: 14, border: "1px solid #e3eaf0", background: "#f8fbfc", textDecoration: "none" }}
-        >
-          <span aria-hidden style={{ flex: "none", width: 38, height: 38, borderRadius: 11, background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `800 10px ${SANS}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            {(file.href.split(".").pop() ?? "file").toUpperCase()}
-          </span>
-          <span style={{ flex: 1, minWidth: 0 }}>
-            <span style={{ display: "block", font: `700 13.5px ${SANS}`, color: "#0a1b33" }}>{file.title}</span>
-            <span style={{ display: "block", font: `500 11.5px ${SANS}`, color: "#8296a9", marginTop: 2 }}>{file.meta}</span>
-          </span>
-          <span style={{ flex: "none", font: `700 12px ${SANS}`, color: "#1b8f88" }}>Download ↓</span>
-        </a>
+        <div key={file.href}>
+          <a
+            href={file.href}
+            download
+            onClick={onTake}
+            style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 16px", borderRadius: 14, border: "1px solid #e3eaf0", background: "#f8fbfc", textDecoration: "none" }}
+          >
+            <span aria-hidden style={{ flex: "none", width: 38, height: 38, borderRadius: 11, background: "linear-gradient(135deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `800 10px ${SANS}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {(file.href.split(".").pop() ?? "file").toUpperCase()}
+            </span>
+            <span style={{ flex: 1, minWidth: 0 }}>
+              <span style={{ display: "block", font: `700 13.5px ${SANS}`, color: "#0a1b33" }}>{file.title}</span>
+              <span style={{ display: "block", font: `500 11.5px ${SANS}`, color: "#8296a9", marginTop: 2 }}>{file.meta}</span>
+            </span>
+            <span style={{ flex: "none", font: `700 12px ${SANS}`, color: "#1b8f88" }}>Download ↓</span>
+          </a>
+
+          {/* What unpacks out of it, under the file rather than in the body:
+              it belongs to this archive, and a second one would want its own. */}
+          {file.contents && file.contents.length > 0 && (
+            <div style={{ padding: "12px 16px 2px" }}>
+              <div style={{ font: `700 9.5px ${SANS}`, letterSpacing: ".14em", textTransform: "uppercase", color: "#8296a9", marginBottom: 7 }}>
+                What is inside
+              </div>
+              <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 5 }}>
+                {file.contents.map((line) => (
+                  <li key={line} style={{ font: `500 12px/1.6 ${SANS}`, color: "#5b6e82" }}>{line}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       ))}
     </div>
   );
@@ -840,13 +866,17 @@ function Downloads({ files, onTake }: { files: CourseFile[]; onTake: () => void 
 function LinkOut({ link, onTake }: { link: { href: string; label: string }; onTake: () => void }) {
   return (
     <div style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 20, padding: "clamp(22px,2.4vw,30px)", marginBottom: 24 }}>
+      {/* The gradient is set here, not by the class: `.lp-btn-grad` only adds
+          the hover transition, and every caller brings its own background.
+          Taking the class for a button style left this white on white — the
+          link was there, and invisible. */}
       <a
         href={link.href}
         target="_blank"
         rel="noopener noreferrer"
         onClick={onTake}
         className="lp-btn-grad"
-        style={{ display: "inline-block", padding: "13px 22px", borderRadius: 12, font: `800 12.5px ${SANS}`, color: "#fff", textDecoration: "none" }}
+        style={{ ...FOOT_PRIMARY, display: "inline-block", textDecoration: "none" }}
       >
         {link.label} ↗
       </a>
@@ -1351,19 +1381,28 @@ function KitPage({
   who: { id: string; name: string; email: string; org: string };
   completedOn: string;
 }) {
+  // Not every programme ends with a kit. POCSO hands its material over inside
+  // the course, in the Facilitator Toolkit lesson, so there is nothing left to
+  // release at the end — and a panel announcing an unlocked kit with no files
+  // under it reads as something broken.
+  const hasKit = course.readingKit.length > 0;
+
   return (
     <>
       <div style={{ background: "linear-gradient(120deg,#0c2a45,#0a1f38)", borderRadius: 20, padding: "30px 34px", marginBottom: 26 }}>
         <div style={{ font: `700 11px ${SANS}`, color: "#7fe3dc", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: 8 }}>Course complete</div>
-        <div style={{ font: `700 clamp(20px,2.4vw,26px) ${SANS}`, color: "#fff", marginBottom: 6 }}>Your reading kit is unlocked</div>
-        <p style={{ font: `400 13.5px/1.7 ${SANS}`, color: "rgba(255,255,255,.72)", margin: "0 0 20px", maxWidth: 560 }}>
-          Every item is finished. These materials are yours to keep — download them now or come back for them whenever
-          you need them.
+        <div style={{ font: `700 clamp(20px,2.4vw,26px) ${SANS}`, color: "#fff", marginBottom: 6 }}>
+          {hasKit ? "Your reading kit is unlocked" : "Every item is finished"}
+        </div>
+        <p style={{ font: `400 13.5px/1.7 ${SANS}`, color: "rgba(255,255,255,.72)", margin: hasKit ? "0 0 20px" : 0, maxWidth: 560 }}>
+          {hasKit
+            ? "Every item is finished. These materials are yours to keep — download them now or come back for them whenever you need them."
+            : "You have completed the programme. Your certificate is below, and the course stays open if you want to go back over any of it."}
         </p>
-        <KitDownload course={course} />
+        {hasKit && <KitDownload course={course} />}
 
         {/* A contents page for the archive, not seven downloads. */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 22 }} className="site-grid-2">
+        <div style={{ display: hasKit ? "grid" : "none", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 22 }} className="site-grid-2">
           {course.readingKit.map((file, i) => (
             <div
               key={file.title}

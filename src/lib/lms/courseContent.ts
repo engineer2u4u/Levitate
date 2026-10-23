@@ -23,6 +23,13 @@ export type CourseFile = {
   meta: string;
   /** Served from `public/`, so it is a site-root path. */
   href: string;
+  /**
+   * What is inside, for an archive.
+   *
+   * A 342MB zip is a decision to make before clicking, and "38 files" does not
+   * help anyone make it. These are the folders as they unpack.
+   */
+  contents?: string[];
 };
 
 export type QuizQuestion = {

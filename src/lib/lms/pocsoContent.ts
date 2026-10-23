@@ -131,11 +131,10 @@ export const POCSO_CONTENT: CourseContent = {
           kind: "download",
           title: "Facilitator Toolkit",
           minutes: 10,
-          meta: "Materials in preparation",
+          meta: "Download · 342 MB",
           body: [
             "Session plans, slide decks, facilitation guides and templates — the material you use to run POCSO and child safety sessions of your own once you are certified. Everything in it is yours to use in your own practice.",
             "The archive holds the three days of workshop films, the government notifications and official references — the Act, the 2019 amendment, the 2020 Rules, the user handbook and the school safety guidelines — and Levitate's own activity sheets, checklists and policy templates.",
-            "It is a large download — 342 MB — so take it over wifi rather than mobile data, and give it a minute.",
           ],
           downloads: [
             {
@@ -149,6 +148,13 @@ export const POCSO_CONTENT: CourseContent = {
               // survives deploys. If it ever 404s, the file is missing from
               // the server rather than from the build.
               href: "/assets/pocso/levitate-pocso-workshop.zip",
+              // The folders as they unpack, with what each holds, so the
+              // download is a decision somebody can make before clicking it.
+              contents: [
+                "POCSO Day 1 · Day 2 · Day 3 — the workshop films for each day",
+                "Government Notification and Official References — 16 documents: the Act, the 2019 amendment, the 2020 Rules, the user handbook, the bare Act, and the school safety, cyber safety and anti-bullying guidelines",
+                "Additional Resources — 10 files: Levitate's activity sheets, the CBSE child safety checklist, the school child protection policy and the My Body My Safety deck",
+              ],
             },
           ],
         },
