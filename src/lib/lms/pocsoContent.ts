@@ -109,11 +109,11 @@ export const POCSO_CONTENT: CourseContent = {
           body: [
             "Tell us how the programme has been so far. Open the link below, leave your response, and come back here to carry on.",
           ],
-          // Deliberately neutral id and title: the destination is a Google
-          // share link, and swapping it for a form later should not mean
-          // changing an id that delegates already have progress against.
+          // Deliberately neutral id and title: the destination has already
+          // changed once, and swapping it again should not mean changing an id
+          // that delegates already hold progress against.
           link: {
-            href: "https://share.google/JdRNcrv7Ga0rgTRFK",
+            href: "https://g.page/r/CQrCDueC3I5IEBM/review",
             label: "Open the link",
           },
         },
