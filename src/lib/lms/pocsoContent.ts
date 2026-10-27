@@ -131,15 +131,15 @@ export const POCSO_CONTENT: CourseContent = {
           kind: "download",
           title: "Facilitator Toolkit",
           minutes: 10,
-          meta: "Download · 342 MB",
+          meta: "Download · 347 MB",
           body: [
             "Session plans, slide decks, facilitation guides and templates — the material you use to run POCSO and child safety sessions of your own once you are certified. Everything in it is yours to use in your own practice.",
-            "The archive holds the three days of workshop films, the government notifications and official references — the Act, the 2019 amendment, the 2020 Rules, the user handbook and the school safety guidelines — and Levitate's own activity sheets, checklists and policy templates.",
+            "The archive holds the full programme deck, the three days of workshop films, the government notifications and official references — the Act, the 2019 amendment, the 2020 Rules, the user handbook and the school safety guidelines — and Levitate's own activity sheets, checklists and policy templates.",
           ],
           downloads: [
             {
               title: "Levitate POCSO Workshop — films, references and templates",
-              meta: "ZIP · 38 files · 342 MB",
+              meta: "ZIP · 39 files · 347 MB",
               // NOT in this repository: at 342MB it is past what GitHub will
               // accept, and `public/` would put it through every build and
               // every deploy. It is uploaded straight into
@@ -151,6 +151,7 @@ export const POCSO_CONTENT: CourseContent = {
               // The folders as they unpack, with what each holds, so the
               // download is a decision somebody can make before clicking it.
               contents: [
+                "Certified POCSO & Child Safety Facilitator Programme — Train the Trainer — the full programme deck, 153 pages, at the top of the archive",
                 "POCSO Day 1 · Day 2 · Day 3 — the workshop films for each day",
                 "Government Notification and Official References — 16 documents: the Act, the 2019 amendment, the 2020 Rules, the user handbook, the bare Act, and the school safety, cyber safety and anti-bullying guidelines",
                 "Additional Resources — 10 files: Levitate's activity sheets, the CBSE child safety checklist, the school child protection policy and the My Body My Safety deck",
