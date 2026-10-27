@@ -34,7 +34,21 @@ export type AccessModule = { id: string; title: string; release: "enrolment" | "
 export type CourseAccess = {
   course: { slug: string; title: string };
   enrolment: { id: string; status: "pending" | "paid"; payment_link: string; paid_at: string | null };
-  batch: { id: string; name: string; status: string; starts_on: string | null; ends_on: string | null };
+  batch: {
+    id: string;
+    name: string;
+    status: string;
+    starts_on: string | null;
+    ends_on: string | null;
+    /**
+     * The day the office closed this run.
+     *
+     * Null until it is marked complete, which is what the certificate page
+     * waits for — and once set, the date every certificate out of this batch
+     * carries, rather than the day each learner finished their last lesson.
+     */
+    completed_on: string | null;
+  };
   sessions: AccessSession[];
   modules: AccessModule[];
   unlocked_module_ids: string[];

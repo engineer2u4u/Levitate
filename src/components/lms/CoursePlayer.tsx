@@ -274,7 +274,13 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   const state = itemState(items, active, progress, gate);
   const stats = courseStats(course, progress);
   const done = new Set(progress?.completedItems ?? []);
-  const kit = kitReleased(course, progress);
+  // Finishing every lesson is not the same as the programme being over. Until
+  // the office marks the run complete there is no date to print, and
+  // issue_certificate refuses anyway — so the page says so rather than handing
+  // over a button that fails.
+  const batchClosed = !access || access.batch.status === "completed";
+  const everyItemDone = kitReleased(course, progress);
+  const kit = everyItemDone && batchClosed;
   // Where the learner actually stands. The list is freely navigable up to
   // here; one item past it can be previewed; the rest is locked.
   const frontier = frontierIndex(items, progress);
@@ -283,7 +289,15 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   const sat = attempt && attempt.id === item.id ? attempt.sat : null;
   // What the certificates are dated: the day the course was finished, or
   // today while the last item is being finished.
-  const completedOn = progress?.completedAt ? certificateDate(progress.completedAt) : TODAY;
+  // The programme's date, not the learner's. Two delegates on one run hold
+  // certificates dated the same day — the day the office closed the batch.
+  // Falls back to the learner's own completion only where there is no batch to
+  // ask, which is the local-build case with no database behind it.
+  const completedOn = access?.batch.completed_on
+    ? certificateDate(access.batch.completed_on)
+    : progress?.completedAt
+      ? certificateDate(progress.completedAt)
+      : TODAY;
   // A reading hands over its Proceed button once its end has been on screen.
   const unread = item.kind === "reading" && !item.acknowledgement && readTo !== item.id;
   // A download hands it over once a file has been taken. An item whose files
@@ -448,7 +462,9 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                 <span style={{ display: "block", font: `500 11.5px/1.5 ${SANS}`, color: "#8296a9", marginTop: 4 }}>
                   {kit
                     ? course.readingKit.length > 0 ? "Released — yours to keep" : "Ready to download"
-                    : "Unlocks when the course is complete"}
+                    : everyItemDone
+                      ? "Opens once the programme is marked complete"
+                      : "Unlocks when the course is complete"}
                 </span>
               </button>
             </div>
@@ -550,9 +566,15 @@ export default function CoursePlayer({ slug }: { slug: string }) {
                     <span style={{ font: `700 12.5px ${SANS}`, color: "#136f6a", marginRight: "auto" }}>
                       That is the whole course — well done.
                     </span>
-                    <button type="button" onClick={() => setOnKit(true)} className="lp-btn-grad" style={{ ...FOOT_PRIMARY, cursor: "pointer" }}>
-                      {course.readingKit.length > 0 ? "Your certificate and kit →" : "Your certificate →"}
-                    </button>
+                    {batchClosed ? (
+                      <button type="button" onClick={() => setOnKit(true)} className="lp-btn-grad" style={{ ...FOOT_PRIMARY, cursor: "pointer" }}>
+                        {course.readingKit.length > 0 ? "Your certificate and kit →" : "Your certificate →"}
+                      </button>
+                    ) : (
+                      <span style={{ font: `600 12.5px ${SANS}`, color: "#8296a9" }}>
+                        Your certificate opens once the programme is marked complete.
+                      </span>
+                    )}
                   </>
                 ) : (
                   <button type="button" onClick={advance} className="lp-btn-grad" style={{ ...FOOT_PRIMARY, cursor: "pointer" }}>
