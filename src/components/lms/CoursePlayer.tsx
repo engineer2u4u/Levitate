@@ -285,30 +285,74 @@ export default function CoursePlayer({ slug }: { slug: string }) {
   if (access?.enrolment.on_hold) {
     return (
       <Shell>
-        <h1 style={{ font: `700 24px ${SANS}`, color: "#0a1b33", margin: "0 0 10px" }}>{course.title}</h1>
-        <p style={{ font: `400 14.5px/1.75 ${SANS}`, color: "#5b6e82", maxWidth: 560, margin: "0 0 10px" }}>
-          Your course is on hold. Kindly contact{" "}
-          <a href={`tel:${contact.tel}`} style={{ color: "#1b8f88", fontWeight: 700, textDecoration: "none" }}>
-            {contact.phone}
-          </a>{" "}
-          and we will pick it up with you.
-        </p>
-        <p style={{ font: `400 13px/1.7 ${SANS}`, color: "#8296a9", maxWidth: 560, margin: "0 0 22px" }}>
-          Nothing you have done is lost — your progress is held exactly where you left it, and the course carries on from
-          there once the hold is lifted. {contact.hours}.
-        </p>
-        <a
-          href={contact.whatsapp}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="lp-btn-grad"
-          style={{ display: "inline-block", marginRight: 10, background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `700 14px ${SANS}`, padding: "13px 26px", borderRadius: 999 }}
+        {/* Centred in what is left of the viewport under the back link, rather
+            than hanging at the top of a screen's worth of empty page. The
+            min-height is the Shell's own chrome subtracted — padding top and
+            bottom plus the link — and it is a floor, not a height, so a long
+            course title still grows the card downwards instead of clipping. */}
+        <div style={{ minHeight: "calc(100dvh - 210px)", display: "flex", alignItems: "center" }}>
+        <div
+          style={{
+            background: "#fff",
+            border: "1px solid #e3eaf0",
+            borderRadius: 24,
+            boxShadow: "0 1px 2px rgba(10,27,51,.04), 0 12px 32px -18px rgba(10,27,51,.18)",
+            width: "100%",
+            padding: "clamp(30px,4vw,48px) clamp(24px,4vw,52px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+          }}
         >
-          Message us on WhatsApp
-        </a>
-        <Link href="/lms/dashboard" style={{ display: "inline-block", font: `700 14px ${SANS}`, color: "#5b6e82", padding: "13px 10px", textDecoration: "none" }}>
-          Back to My Learning
-        </Link>
+          <PauseBadge />
+
+          <div style={{ font: `800 10px ${SANS}`, letterSpacing: ".16em", textTransform: "uppercase", color: "#c07f1e", margin: "20px 0 10px" }}>
+            Course on hold
+          </div>
+          {/* The measure, held narrower than the card so the lines break where
+              they read best rather than running the full width of it.
+              width:100% with the cap on top, so these stay fluid inside a
+              centred flex column instead of sizing to their own content. */}
+          <h1 style={{ font: `700 clamp(19px,2.3vw,24px)/1.32 ${SANS}`, color: "#0a1b33", margin: "0 0 14px", width: "100%", maxWidth: 440 }}>
+            {course.title}
+          </h1>
+
+          <p style={{ font: `400 14.5px/1.75 ${SANS}`, color: "#5b6e82", width: "100%", maxWidth: 440, margin: "0 0 10px" }}>
+            Your course is on hold. Kindly contact{" "}
+            <a href={`tel:${contact.tel}`} style={{ color: "#1b8f88", fontWeight: 700, textDecoration: "none", whiteSpace: "nowrap" }}>
+              {contact.phone}
+            </a>{" "}
+            and we will pick it up with you.
+          </p>
+          <p style={{ font: `400 13px/1.7 ${SANS}`, color: "#8296a9", width: "100%", maxWidth: 440, margin: "0 0 26px" }}>
+            Nothing you have done is lost — your progress is held exactly where you left it, and the course carries on
+            from there once the hold is lifted.
+          </p>
+
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
+            <a
+              href={contact.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="lp-btn-grad"
+              style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `700 14px ${SANS}`, padding: "13px 26px", borderRadius: 999, textDecoration: "none" }}
+            >
+              Message us on WhatsApp
+            </a>
+            <Link
+              href="/lms/dashboard"
+              style={{ font: `700 14px ${SANS}`, color: "#5b6e82", padding: "12px 24px", borderRadius: 999, border: "1px solid #e3eaf0", textDecoration: "none" }}
+            >
+              Back to My Learning
+            </Link>
+          </div>
+
+          <div style={{ font: `500 11.5px ${SANS}`, color: "#a7b6c4", marginTop: 22, borderTop: "1px solid #eef3f7", paddingTop: 18, width: "100%" }}>
+            {contact.hours}
+          </div>
+        </div>
+        </div>
       </Shell>
     );
   }
@@ -2172,6 +2216,22 @@ const Shell = ({ children }: { children: React.ReactNode }) => (
 
 const Muted = ({ children }: { children: React.ReactNode }) => (
   <div style={{ font: `500 14px ${SANS}`, color: "#8296a9" }}>{children}</div>
+);
+
+/**
+ * The badge on the hold screen.
+ *
+ * A pause rather than a lock or a warning triangle: nothing is wrong and
+ * nothing is barred, the course is simply stopped and will start again. Amber
+ * for the same reason — it asks for attention without suggesting a fault.
+ */
+const PauseBadge = () => (
+  <svg width="68" height="68" viewBox="0 0 68 68" fill="none" aria-hidden style={{ flex: "none" }}>
+    <circle cx="34" cy="34" r="33" fill="#fff6e8" stroke="#f6e0bc" />
+    <circle cx="34" cy="34" r="23" fill="#fdeccd" />
+    <rect x="28" y="24.5" width="4.6" height="19" rx="2.3" fill="#c07f1e" />
+    <rect x="35.4" y="24.5" width="4.6" height="19" rx="2.3" fill="#c07f1e" />
+  </svg>
 );
 
 const Tick = () => (
