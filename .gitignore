@@ -72,3 +72,11 @@ next-env.d.ts
 # no business in a build. It lives on the server at the same path, uploaded by
 # hand; see the comment on the download entry in src/lib/lms/pocsoContent.ts.
 public/assets/pocso/levitate-pocso-workshop.zip
+
+# The PoSH toolkit archive is 42MB. Small enough for GitHub, but it changes
+# about once a year and would otherwise be copied through every build and
+# re-uploaded on every deploy. Same arrangement as POCSO's: it lives on the
+# server at the same path, rebuilt from
+# D:\Projects\Levitatepeoplesoft\PoSH LMS Levitate\Facilitator Toolkit with
+# `zip -r`; see the comment on the download entry in src/lib/lms/poshContent.ts.
+public/assets/posh/levitate-posh-toolkit.zip

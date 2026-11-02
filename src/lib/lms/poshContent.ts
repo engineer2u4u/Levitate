@@ -525,17 +525,51 @@ export const POSH_CONTENT: CourseContent = {
     {
       id: "case-laboratory",
       title: "Case Laboratory",
-      summary: "Cases worked end to end.",
+      summary: "Five judgments, worked against the Act.",
       items: [
         {
           id: "p-case-lab",
-          kind: "reading",
+          kind: "download",
           title: "Case Laboratory",
-          minutes: 5,
-          meta: "Materials in preparation",
+          minutes: 120,
+          meta: "Download · 6 files",
           body: [
-            "The Case Laboratory takes real-shape cases from intake to reasoned finding — the practice that separates a certified trainer from an informed one.",
-            "The case pack is being prepared and will appear in this section. The live laboratory session runs regardless; this is where the written cases will sit afterwards.",
+            "The Case Laboratory takes real cases from intake to reasoned finding — the practice that separates a certified trainer from an informed one.",
+            "Start with the deck: it sets out what each of the five judgments settles and turns it into something an Internal Committee can actually record. The judgment copies follow in the same order, so a point in the deck can be read back against the court's own words.",
+            "Each case answers a different question. Satpute asks whether the incident is inside the Act's workplace at all. Akhil Thomas asks whether the respondent was genuinely given a chance to answer. Shanta Kumar asks whether the conduct was sexual in nature rather than merely physical. Tejpal asks how credibility is assessed without leaning on how a survivor is supposed to behave. Amit Kumar asks what it takes for digital messages to carry a finding.",
+            "Read the deck before the live laboratory session, and bring your reasoning on at least two of the judgments. The discussion is where this work pays off.",
+          ],
+          downloads: [
+            {
+              title: "Decoding 5 Landmark PoSH Judgements",
+              meta: "Levitate PeopleSoft · PDF · 19 slides",
+              href: "/assets/posh/decoding-5-landmark-posh-judgements.pdf",
+            },
+            {
+              title: "Siddhesh Satpute v. State Bank of India — is it the workplace?",
+              meta: "Bombay High Court · 16 June 2026 · PDF · 16 pages",
+              href: "/assets/posh/case-siddhesh-satpute-v-state-bank-of-india.pdf",
+            },
+            {
+              title: "Akhil Thomas v. Kerala Social Security Mission — natural justice",
+              meta: "Kerala High Court · 17 March 2026 · PDF · 11 pages",
+              href: "/assets/posh/case-akhil-thomas-v-kerala-social-security-mission.pdf",
+            },
+            {
+              title: "Shanta Kumar v. CSIR — was the conduct sexual in nature?",
+              meta: "Delhi High Court · 31 October 2017 · PDF · 13 pages",
+              href: "/assets/posh/case-shanta-kumar-v-csir.pdf",
+            },
+            {
+              title: "State of Goa v. Tarunjit Tejpal — credibility and power",
+              meta: "Bombay High Court at Goa · 30 July 2026 · PDF · 81 pages",
+              href: "/assets/posh/case-state-of-goa-v-tarunjit-tejpal.pdf",
+            },
+            {
+              title: "Dr Amit Kumar v. University of Delhi — conduct in digital messages",
+              meta: "Delhi High Court · 17 July 2025 · PDF · 91 pages",
+              href: "/assets/posh/case-dr-amit-kumar-v-university-of-delhi.pdf",
+            },
           ],
         },
       ],
@@ -595,6 +629,60 @@ export const POSH_CONTENT: CourseContent = {
           feedback: true,
           body: [
             "Your feedback shapes the next cohort, so please give it honestly. It goes to the programme team, not to your organisation.",
+          ],
+        },
+      ],
+    },
+
+    /* ================================================================== */
+    /* Last, and deliberately after the feedback form: the toolkit is what a
+       delegate leaves with, and the certificate comes after it. The database
+       lists `p-toolkit` among the course's required items, so this module has
+       to be unlocked for a batch before anyone in it can issue a
+       certificate — see migration 0036. */
+    {
+      id: "toolkit",
+      title: "Facilitator Toolkit",
+      summary: "What you take away to run your own sessions.",
+      items: [
+        {
+          id: "p-toolkit",
+          kind: "download",
+          title: "Facilitator Toolkit",
+          minutes: 10,
+          meta: "Download · 42 MB",
+          body: [
+            "The material you use to run PoSH sessions of your own once you are certified: the Act and the Rules themselves, the official handbooks and notifications, the inquiry craft, and the templates and checklists that turn all of it into a working practice. Everything in it is yours to use in your own work.",
+            "Some of it you have already met as handouts inside the modules. It is gathered here in one archive so the whole set lives in one place on your own machine, rather than behind seven separate downloads.",
+          ],
+          downloads: [
+            {
+              title: "Levitate PoSH Facilitator Toolkit",
+              meta: "ZIP · 30 files · 42 MB",
+              // NOT in this repository, for the same reason as POCSO's: 42MB
+              // in `public/` goes through every build and every deploy for a
+              // file that changes once a year. It is uploaded straight into
+              // public_html/assets/posh/ on the server, and scripts/deploy.sh
+              // adds and replaces but never deletes, so it survives deploys.
+              // Rebuild it from
+              // D:\Projects\Levitatepeoplesoft\PoSH LMS Levitate\Facilitator Toolkit,
+              // which is the master, with `zip -r` — not Windows' own zip,
+              // which writes backslash separators and unpacks as flat files
+              // with the folder names baked into them on macOS and Linux.
+              // If it ever 404s, the file is missing from the server rather
+              // than from the build.
+              href: "/assets/posh/levitate-posh-toolkit.zip",
+              // The groups as they unpack, so the download is a decision
+              // somebody can make before clicking it.
+              contents: [
+                "The Act and the Rules — the PoSH Act 2013 bare act, the 2013 Rules, the UGC regulations and the Equity Bill",
+                "Official handbooks and notifications — the Handbook on Sexual Harassment of Women at Workplace, the NCW advisory and inspection notification, the Maharashtra notification and the She-Box guidance",
+                "Inquiry craft — the PoSH Inquiry Handbook, how to write an inquiry report, and the IC constitution and external member templates",
+                "Running your own practice — the Train the Trainer CPD deck, Levitate's compliance checklist, the 2026 inspection checklist, a client proposal template and a sample corporate PoSH policy",
+                "LMS Content — 11 handouts and quick references, the CLEAR framework and the module readings among them, plus 30 misconceptions and compliance gaps, common IC challenges, and the AI and synthetic harassment guide",
+                "Posters — editable anti-harassment posters in English and Hindi",
+              ],
+            },
           ],
         },
       ],
