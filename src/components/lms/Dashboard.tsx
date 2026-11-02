@@ -9,6 +9,7 @@ import { contentBySlug } from "@/lib/lms/courseContent";
 import { courseStats, readProgress } from "@/lib/lms/courseProgress";
 import { isPaid } from "@/lib/lms/enrolments";
 import { supabaseConfigured } from "@/lib/lms/supabase";
+import { contact } from "@/lib/site";
 import type { Enrolment } from "@/lib/lms/types";
 import { useSession } from "./useSession";
 
@@ -212,7 +213,14 @@ function NextSession({ slug, userId }: { slug: string; userId: string }) {
         </a>
       ) : (
         <div style={{ font: `500 11.5px/1.6 ${SANS}`, color: "rgba(255,255,255,.6)", marginTop: 8 }}>
-          {access.enrolment.status === "paid" ? "The Zoom link appears here once it is set." : "The Zoom link appears once your payment is confirmed."}
+          {/* A held enrolment has its session details withheld by
+              my_course_access, so without this case it would read "once it is
+              set" — which sends the delegate to the wrong question. */}
+          {access.enrolment.on_hold
+            ? `Your course is on hold. Kindly contact ${contact.phone}.`
+            : access.enrolment.status === "paid"
+              ? "The Zoom link appears here once it is set."
+              : "The Zoom link appears once your payment is confirmed."}
         </div>
       )}
       <Link href="/lms/sessions" style={{ display: "block", textAlign: "center", marginTop: 12, color: "rgba(255,255,255,.8)", font: `600 12px ${SANS}` }}>

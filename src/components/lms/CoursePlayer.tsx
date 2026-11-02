@@ -26,6 +26,7 @@ import { courseBySlug } from "@/lib/lms/courses";
 import { moduleGate, useCourseAccess } from "@/lib/lms/access";
 import { supabaseConfigured } from "@/lib/lms/supabase";
 import { submitEnquiry } from "@/lib/submitEnquiry";
+import { contact } from "@/lib/site";
 import { zipFiles } from "@/lib/lms/zip";
 import { fileStem } from "@/lib/lms/certificateExport";
 import CourseCertificates from "./CourseCertificates";
@@ -263,6 +264,50 @@ export default function CoursePlayer({ slug }: { slug: string }) {
         )}
         <Link href={`/lms/course/${course.slug}`} className="lp-btn-grad" style={{ display: "inline-block", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `700 14px ${SANS}`, padding: "13px 26px", borderRadius: 999 }}>
           Go to the course page
+        </Link>
+      </Shell>
+    );
+  }
+
+  // On hold: the office has paused this delegate mid-course. Shown after the
+  // payment gate, because a held seat is still a paid one and "pay first" is
+  // the wrong thing to tell someone whose money is not the problem.
+  //
+  // The screen is the explanation, not the enforcement. `my_course_access`
+  // withholds the session details and the unlocked modules, the RLS policy on
+  // course_progress refuses the writes, and record_assessment and
+  // issue_certificate refuse outright — so a learner who got past this by
+  // editing their own JavaScript would find every door behind it shut too.
+  //
+  // No reason is printed. The office writes one for itself, and a delegate
+  // reading "cheque bounced" off a web page is a worse conversation than the
+  // one they get by ringing.
+  if (access?.enrolment.on_hold) {
+    return (
+      <Shell>
+        <h1 style={{ font: `700 24px ${SANS}`, color: "#0a1b33", margin: "0 0 10px" }}>{course.title}</h1>
+        <p style={{ font: `400 14.5px/1.75 ${SANS}`, color: "#5b6e82", maxWidth: 560, margin: "0 0 10px" }}>
+          Your course is on hold. Kindly contact{" "}
+          <a href={`tel:${contact.tel}`} style={{ color: "#1b8f88", fontWeight: 700, textDecoration: "none" }}>
+            {contact.phone}
+          </a>{" "}
+          and we will pick it up with you.
+        </p>
+        <p style={{ font: `400 13px/1.7 ${SANS}`, color: "#8296a9", maxWidth: 560, margin: "0 0 22px" }}>
+          Nothing you have done is lost — your progress is held exactly where you left it, and the course carries on from
+          there once the hold is lifted. {contact.hours}.
+        </p>
+        <a
+          href={contact.whatsapp}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="lp-btn-grad"
+          style={{ display: "inline-block", marginRight: 10, background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: `700 14px ${SANS}`, padding: "13px 26px", borderRadius: 999 }}
+        >
+          Message us on WhatsApp
+        </a>
+        <Link href="/lms/dashboard" style={{ display: "inline-block", font: `700 14px ${SANS}`, color: "#5b6e82", padding: "13px 10px", textDecoration: "none" }}>
+          Back to My Learning
         </Link>
       </Shell>
     );

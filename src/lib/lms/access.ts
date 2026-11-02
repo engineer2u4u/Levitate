@@ -33,7 +33,23 @@ export type AccessModule = { id: string; title: string; release: "enrolment" | "
 
 export type CourseAccess = {
   course: { slug: string; title: string };
-  enrolment: { id: string; status: "pending" | "paid"; payment_link: string; paid_at: string | null };
+  enrolment: {
+    id: string;
+    status: "pending" | "paid";
+    payment_link: string;
+    paid_at: string | null;
+    /**
+     * Paused by the office.
+     *
+     * Separate from `status`, because a held delegate is still a paid one. The
+     * database does the enforcing — progress writes, the assessment and
+     * certificate issue are all refused while this is true, and the session
+     * details and unlocked module list are withheld — so this flag is what
+     * lets the player explain the wall rather than the only thing holding it
+     * up.
+     */
+    on_hold: boolean;
+  };
   batch: {
     id: string;
     name: string;
