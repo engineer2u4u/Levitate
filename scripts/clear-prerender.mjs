@@ -22,8 +22,25 @@ import { join } from "node:path";
 const root = new URL("..", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1");
 
 // The rendered pages and the manifests that say they are still good. The
-// compiler's own cache (.next/cache) is deliberately not in this list.
-const stale = ["server/app", "server/pages", "static", "export", "prerender-manifest.json", "app-build-manifest.json"];
+// compiler's own cache (.next/cache) is deliberately not in this list — it is
+// what makes a build fast.
+//
+// `cache/fetch-cache` is, though, and without it the rest of this script does
+// not work. Next caches fetch responses there and reuses them across builds,
+// so re-rendering every page still handed each one the catalogue from an
+// earlier build: a fee changed in the admin went on shipping at the old value,
+// which is the very thing this script exists to prevent. Clearing it costs one
+// HTTP request per build and nothing else — the compiled output it sits beside
+// is untouched.
+const stale = [
+  "server/app",
+  "server/pages",
+  "static",
+  "export",
+  "cache/fetch-cache",
+  "prerender-manifest.json",
+  "app-build-manifest.json",
+];
 
 // The export too. next build writes into out/ without emptying it, so a chunk
 // from an earlier build stays there — and a chunk from an earlier *testing*

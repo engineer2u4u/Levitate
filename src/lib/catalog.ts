@@ -432,6 +432,13 @@ let buildCatalog: Promise<Catalog> | null = null;
  * cannot be reached. Memoised, so the forty-odd pages of one build ask once.
  */
 export function loadCatalog(): Promise<Catalog> {
+  // NOT `fresh: true`. It looks like the right thing — a build should bake
+  // what the database says now — but `cache: "no-store"` is refused inside a
+  // prerender, so the fetch throws, fetchCatalog swallows it and returns null,
+  // and every page silently builds from the fallback catalogue below. The
+  // build still succeeds; it just stops reading the database at all. The
+  // staleness this was meant to fix is handled where it belongs, by clearing
+  // the fetch cache before the build — see scripts/.
   buildCatalog ??= fetchCatalog().then((db) => {
     if (db) return db;
     console.warn("[catalog] Supabase could not be reached — building with the fallback catalogue in src/lib/catalog.ts.");
