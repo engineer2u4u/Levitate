@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import { contact, services, type NavKey } from "@/lib/site";
-import { useCatalog, useVisibleCourses } from "@/components/site/CatalogProvider";
-import { catalogCourse, firstSession } from "@/lib/catalog";
+import { useVisibleCourses } from "@/components/site/CatalogProvider";
 import { MASTERCLASSES } from "@/lib/masterclass";
 
 function MailIcon({ size = 13 }: { size?: number }) {
@@ -33,9 +32,6 @@ function NewBadge() {
     </span>
   );
 }
-
-/** No subscription: the clock is read once per render, which is all a menu needs. */
-const noSubscribe = () => () => {};
 
 /**
  * A section of the phone menu: a heading that opens its own list.
@@ -85,24 +81,15 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
   const COURSES = useVisibleCourses();
 
   // Masterclasses are hidden from the catalogue — each is a one-off, not a
-  // programme — so they have a menu of their own. A session that has already
-  // happened leaves it rather than advertising something already over.
-  const catalog = useCatalog();
-  const mcEnds = MASTERCLASSES.map((m) => {
-    const entry = catalogCourse(catalog, m.slug);
-    const session = entry ? firstSession(entry) : null;
-    return session?.endsAt ?? m.endsAt;
-  });
-  // Shown in the exported HTML; the browser hides what is over once the clock
-  // says so. Read through an external-store snapshot so the two agree at
-  // hydration instead of flashing — and as one string per state rather than a
-  // timestamp, which would be a new value on every render and never settle.
-  const over = useSyncExternalStore(
-    noSubscribe,
-    () => mcEnds.map((at) => (Date.now() > new Date(at).getTime() ? "1" : "0")).join(""),
-    () => "0".repeat(MASTERCLASSES.length),
-  );
-  const masterclasses = MASTERCLASSES.filter((_, i) => over[i] !== "1");
+  // programme — so they have a menu of their own.
+  //
+  // All of them, past sittings included. They used to drop out of the menu
+  // once their end time passed, which emptied the menu entirely and made three
+  // live pages look deleted. A past masterclass is still something a visitor
+  // may want, and its page now asks for an enquiry instead of a payment — so
+  // the honest thing is to keep the way in and let the page say where the
+  // session stands.
+  const masterclasses = MASTERCLASSES;
   const [svcOpen, setSvcOpen] = useState(false);
   const [mcOpen, setMcOpen] = useState(false);
   // Which section of the phone menu is open. Nothing, until it is asked for:

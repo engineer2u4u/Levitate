@@ -210,9 +210,26 @@ export default function RegisterCard({ seat, closed }: { seat: Seat; closed: boo
         <div>
           <div style={{ font: T.cardTitle, color: "#0a1b33", marginBottom: 6 }}>Registrations have closed</div>
           <p style={{ font: T.body, color: "#5b6e82", margin: "0 0 16px" }}>{seat.closedNote}</p>
-          <a href={contact.whatsapp} target="_blank" rel="noopener noreferrer" className="lp-btn-grad" style={{ ...ctaPrimary, display: "inline-block" }}>
-            WhatsApp us
-          </a>
+          {/* Enquiry first, the way the certification pages ask when their
+              programme is not selling: it carries the slug, so the office can
+              see which sitting the person came looking for instead of a lead
+              that could have come from anywhere. WhatsApp stays beside it for
+              anyone who would rather just talk. */}
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+            <Link href={`/contact/?from=${seat.slug}#enquiry-form`} className="lp-btn-grad" style={{ ...ctaPrimary, display: "inline-block" }}>
+              Enquire about the next session
+            </Link>
+            {/* Its own style, not ctaGhost: that one is white-on-transparent
+                for the dark hero, and this card is white. */}
+            <a
+              href={contact.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "inline-block", background: "#fff", border: "1.5px solid #dce6ef", color: "#0a1b33", font: `700 15px ${SANS}`, padding: "13.5px 26px", borderRadius: 999, textDecoration: "none" }}
+            >
+              WhatsApp us
+            </a>
+          </div>
         </div>
       ) : (
         <form onSubmit={onSubmit}>

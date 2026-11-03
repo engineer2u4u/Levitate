@@ -147,12 +147,17 @@ export default function MasterclassPage({ offer: M }: { offer: MasterclassOffer 
               <Fact icon="hourglass" k="Duration" v={facts.duration} />
             </div>
 
-            {/* Phones stack the card below all this; one tap takes them to it. */}
-            {!closed && (
-              <button type="button" onClick={onReserve} className="lp-btn-grad mc-mobile-cta" style={{ ...ctaPrimary, width: "100%", marginBottom: 28, fontSize: 16 }}>
-                Reserve Your Seat · {formatPaise(facts.feePaise)} →
-              </button>
-            )}
+            {/* Phones stack the card below all this, so this jumps to it
+                either way — to the seat form while it is selling, to the
+                enquiry once it has closed. */}
+            <button
+              type="button"
+              onClick={onReserve}
+              className="lp-btn-grad mc-mobile-cta"
+              style={{ ...ctaPrimary, width: "100%", marginBottom: 28, fontSize: 16 }}
+            >
+              {closed ? "Enquire about the next session →" : `Reserve Your Seat · ${formatPaise(facts.feePaise)} →`}
+            </button>
 
             {M.chips && (
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 26 }}>
@@ -290,7 +295,13 @@ export default function MasterclassPage({ offer: M }: { offer: MasterclassOffer 
                 : `Including taxes. ${M.closing}`}
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            {!closed && (
+            {closed ? (
+              /* The same ask as the card above, so the foot of a closed page
+                 is not a dead end with only WhatsApp on it. */
+              <Link href={`/contact/?from=${M.slug}#enquiry-form`} className="lp-btn-grad" style={{ ...ctaPrimary, display: "inline-block" }}>
+                Enquire about the next session →
+              </Link>
+            ) : (
               <button type="button" onClick={onReserve} className="lp-btn-grad" style={ctaPrimary}>
                 Reserve Your Seat →
               </button>
