@@ -80,24 +80,29 @@ export const MASTERCLASS: MasterclassOffer = {
   titleRest: "The New Compliance & Workplace Reality",
   sub: "Judicial Developments, Evolving Workplaces & the AI × PoSH Intersection",
   short: "PoSH 2026 Masterclass",
-  checkoutTitle: "PoSH 2026 Masterclass · 31 October 2026",
+  checkoutTitle: "PoSH 2026 Masterclass · 6 December 2026",
   checkoutPrefix: "PoSH 2026 Masterclass",
 
-  date: "31 October 2026",
-  dateShort: "Sat, 31 Oct 2026",
-  day: "Saturday",
-  time: "11:30 AM – 1:30 PM IST",
-  duration: "2 Hours",
-  startsAt: "2026-10-31T11:30:00+05:30",
-  endsAt: "2026-10-31T13:30:00+05:30",
+  // The December sitting. These are the FALLBACK, as the header of this file
+  // says — the live values are the catalogue's, and the admin is where a date
+  // moves. They are kept in step anyway because they render into the static
+  // HTML, which is what a visitor sees before hydration and what a crawler
+  // sees full stop.
+  date: "6 December 2026",
+  dateShort: "Sun, 6 Dec 2026",
+  day: "Sunday",
+  time: "11:30 AM – 6:00 PM IST",
+  duration: "6.5 Hours",
+  startsAt: "2026-12-06T11:30:00+05:30",
+  endsAt: "2026-12-06T18:00:00+05:30",
 
   /** Early bird, open until the session starts. */
-  feePaise: 199900,
+  feePaise: 210000,
   /** Shown struck through. Never charged. */
   standardPaise: 299900,
 
   agenda: {
-    eyebrow: "What the two hours cover",
+    eyebrow: "What the day covers",
     heading: "Three shifts every PoSH programme now has to answer to",
     intro:
       "The law has not stood still since 2013, and neither has the workplace. This masterclass brings your understanding up to date on where PoSH compliance stands in 2026 — and what that asks of you.",
@@ -163,7 +168,7 @@ export const MASTERCLASS: MasterclassOffer = {
     startsFrom: "posh-trainer",
   },
 
-  closing: "Two hours that bring your PoSH practice up to date.",
+  closing: "A full day that brings your PoSH practice up to date.",
 
   faqs: [
     { q: "When is the masterclass?", a: ["{when}."] },
