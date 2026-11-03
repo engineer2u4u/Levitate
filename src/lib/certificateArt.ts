@@ -330,5 +330,8 @@ export function certificateDate(iso: string | number | Date): string {
 export function hoursLabel(value: string): string {
   const v = value.trim();
   if (!v) return "";
-  return /^d+(.d+)?$/.test(v) ? `${v} ${v === "1" ? "Hour" : "Hours"}` : v;
+  // \d and \., escaped. Written once as /^d+(.d+)?$/, which matches a literal
+  // "d" and so matched no number at all — every batch's bare "15" went
+  // straight through to the plate as "15".
+  return /^\d+(\.\d+)?$/.test(v) ? `${v} ${v === "1" ? "Hour" : "Hours"}` : v;
 }
