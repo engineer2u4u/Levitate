@@ -689,14 +689,19 @@ export const POSH_CONTENT: CourseContent = {
     },
   ],
 
-  /* The files still exist, as a take-away rather than as a lesson. */
-  readingKit: [
-    { title: "CLEAR PoSH Framework handout", meta: "PDF · 5 pages", href: "/assets/posh/clear-posh-framework-handout.pdf" },
-    { title: "Recognising Sexual Harassment — quick reference", meta: "PDF · 2 pages", href: "/assets/posh/recognising-sexual-harassment-quick-reference.pdf" },
-    { title: "PoSH Coverage and Jurisdiction — quick reference", meta: "PDF · 2 pages", href: "/assets/posh/posh-coverage-and-jurisdiction-quick-reference.pdf" },
-    { title: "Internal Committee — quick reference checklist", meta: "PDF · 2 pages", href: "/assets/posh/internal-committee-quick-reference-checklist.pdf" },
-    { title: "Complaint Intake and Fair Inquiry — process guide", meta: "PDF · 2 pages", href: "/assets/posh/complaint-intake-and-fair-inquiry-process-guide.pdf" },
-    { title: "Inquiry Report Structure — checklist", meta: "PDF · 2 pages", href: "/assets/posh/inquiry-report-structure-checklist.pdf" },
-    { title: "Dignity, Respect and Psychological Safety", meta: "PDF · 2 pages", href: "/assets/posh/dignity-respect-psychological-safety.pdf" },
-  ],
+  // No reading kit at the end — the certificate is what the course finishes
+  // on, the same as POCSO.
+  //
+  // What this gives up, stated because it is not nothing: the seven quick
+  // references it held were linked from here and from nowhere else in the
+  // course, so they are no longer individually downloadable in the player.
+  // They are all in the Facilitator Toolkit archive, under LMS Content, which
+  // is the module immediately before this screen — so a delegate still leaves
+  // with every one of them, in one download rather than eight.
+  //
+  // The PDFs stay in public/assets/posh/. Nothing in the build references
+  // them now, but they were linked from here for months and may be sitting in
+  // delegates' emails and bookmarks; deleting them would break those for no
+  // gain, and they are 1.3MB in total.
+  readingKit: [],
 };
