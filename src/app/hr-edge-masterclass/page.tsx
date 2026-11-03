@@ -15,17 +15,17 @@ export async function generateMetadata(): Promise<Metadata> {
   const when = session?.startsOn ? ` ${dateFull(session.startsOn)}, ${session.timeLabel}.` : ` ${M.date}, ${M.time}.`;
   const fee = formatFee(course ? course.feePaise : M.feePaise);
   return {
-    title: "HR EDGE Masterclass: Think Like an HR Business Partner",
-    description: `A two-hour practical masterclass with Parichita Kotnala for HR students and early-career HR professionals — business understanding, manager conversations and an HR Decision Lab.${when} Fee ${fee} including taxes.`,
+    title: "HR EDGE Masterclass: Talent Mapping & Succession Planning",
+    description: `A five-hour practical masterclass with Parichita Kotnala for HR professionals and students — skills-based talent mapping, talent reviews and a working succession plan, with ready-to-use templates.${when} Early-bird fee ${fee} including taxes.`,
     keywords: [
-      "HR business partner training",
-      "HRBP masterclass",
+      "talent mapping",
+      "succession planning",
       "HR masterclass India",
-      "MBA HR students",
+      "talent review",
+      "workforce planning",
+      "HRBP masterclass",
       "HR EDGE",
-      "performance improvement plan HR",
-      "HR interview preparation",
-      "early career HR",
+      "MBA HR students",
     ],
     alternates: { canonical: M.path },
   };

@@ -211,6 +211,25 @@ export default function MasterclassPage({ offer: M }: { offer: MasterclassOffer 
         </div>
       </Section>
 
+      {/* ---------------------------------------------------- WHAT YOU TAKE */}
+      {M.takeaways && (
+        <Section tone="soft">
+          <H2 eyebrow={M.takeaways.eyebrow}>{M.takeaways.heading}</H2>
+          <p style={{ font: T.lead, color: "#5b6e82", margin: "14px 0 26px", maxWidth: MEASURE }}>{M.takeaways.intro}</p>
+          <div className="site-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            {M.takeaways.items.map((t) => (
+              <div key={t} style={{ display: "flex", gap: 12, alignItems: "flex-start", background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "18px 20px" }}>
+                <Tick />
+                <span style={{ font: T.body, color: "#3d5064" }}>{t}</span>
+              </div>
+            ))}
+          </div>
+          {M.takeaways.note && (
+            <p style={{ font: T.body, color: "#5b6e82", margin: "18px 0 0", maxWidth: MEASURE }}>{M.takeaways.note}</p>
+          )}
+        </Section>
+      )}
+
       {/* ------------------------------------------- AUDIENCE + FACILITATOR */}
       <Section tone="soft">
         <div className="lp-hero-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" }}>

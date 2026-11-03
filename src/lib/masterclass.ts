@@ -60,6 +60,12 @@ export type MasterclassOffer = {
 
   agenda: { eyebrow: string; heading: string; intro: string };
   themes: readonly { icon: ThemeIcon; title: string; intro: string; points: readonly string[] }[];
+  /**
+   * What a participant walks away holding, where the session produces
+   * something. Optional: a masterclass that teaches a way of thinking has no
+   * artefacts to list, and an empty "what you take away" is worse than none.
+   */
+  takeaways?: { eyebrow: string; heading: string; intro: string; items: readonly string[]; note?: string };
   audience: { heading: string; items: readonly string[]; note?: string };
   facilitator: { strap: string; paragraphs: readonly string[] };
   /** Sits above the accreditation marks, where a programme claims them. */
@@ -199,149 +205,196 @@ export const MASTERCLASS: MasterclassOffer = {
 export const HR_EDGE_MASTERCLASS: MasterclassOffer = {
   slug: "hr-edge-masterclass",
   path: "/hr-edge-masterclass/",
-  eyebrow: "HR EDGE Masterclass",
-  title: "Think Like an",
-  titleRest: "HR Business Partner",
-  sub: "Understand the business. Ask better questions. Make informed people recommendations.",
+  eyebrow: "5-Hour HR EDGE Masterclass",
+  title: "Talent Mapping",
+  titleRest: "& Succession Planning",
+  sub: "Identify talent. Assess future readiness. Build a stronger talent pipeline.",
   intro:
-    "A two-hour practical masterclass for MBA-HR students, HR postgraduates and early-career HR professionals who want to build business understanding, workplace judgement and confidence in manager conversations.",
+    "A five-hour practical masterclass for HR professionals, HR students and aspiring HR professionals who want to connect talent decisions with business growth and continuity.",
   scenario: {
-    q: "A manager wants to put an employee on a PIP. What should an HR Business Partner ask first?",
+    q: "Your company is expanding. A critical employee could leave. Who is ready to step up?",
     body:
-      "Step into a realistic workplace situation and practise how HR connects business expectations, employee perspectives and manager accountability before recommending action.",
+      "Learn how to understand the talent available today, identify future gaps and prepare people for important roles before the need becomes urgent.",
   },
-  chips: ["Realistic HR cases", "Manager conversations", "HR Decision Lab", "Practical tools"],
+  chips: ["Practical business case", "Skills-based talent mapping", "Succession planning", "Ready-to-use templates"],
   short: "HR EDGE Masterclass",
-  checkoutTitle: "HR EDGE Masterclass · 16 October 2026",
+  checkoutTitle: "HR EDGE Masterclass · 28 November 2026",
   checkoutPrefix: "HR EDGE Masterclass",
 
-  date: "16 October 2026",
-  dateShort: "Fri, 16 Oct 2026",
-  day: "Friday",
-  time: "6:00 – 8:00 PM IST",
-  duration: "2 Hours",
-  startsAt: "2026-10-16T18:00:00+05:30",
-  endsAt: "2026-10-16T20:00:00+05:30",
+  // Two sittings. `startsAt` opens the first and `endsAt` closes the second,
+  // which is what the closed-clock and the calendar link want; the pair of
+  // dates a reader needs is in `date` and `time`.
+  date: "28 & 29 November 2026",
+  dateShort: "Sat 28 & Sun 29 Nov 2026",
+  day: "Saturday & Sunday",
+  time: "7:00 – 9:30 PM & 10:00 AM – 12:30 PM IST",
+  duration: "5 Hours across two days",
+  startsAt: "2026-11-28T19:00:00+05:30",
+  endsAt: "2026-11-29T12:30:00+05:30",
 
-  feePaise: 49900,
-  // One fee, so nothing is shown struck through.
-  standardPaise: 49900,
+  feePaise: 210000,
+  /** The regular fee, shown struck through. */
+  standardPaise: 300000,
 
   agenda: {
-    eyebrow: "What the two hours cover",
-    heading: "Experience three essentials of HR business partnering",
+    eyebrow: "What the five hours cover",
+    heading: "Three practical steps to building your talent pipeline",
     intro:
-      "Effective HR business partnering starts with understanding what the business is trying to achieve — and how people decisions affect that outcome. Built on the EDGE Framework that HR EDGE teaches — Explore, Diagnose, Guide, Enable — this masterclass takes you through a workplace case to practise understanding the problem, advising the manager and recommending a way forward.",
+      "Business plans depend on having capable people available at the right time. When companies grow, roles change or key employees leave, HR needs to know which roles are critical, whether the skills for future plans exist, who could take on greater responsibility, and where to develop people rather than hire. Work through a business case to understand current talent, assess future readiness and build a basic succession plan.",
   },
 
   themes: [
     {
       icon: "compass",
-      title: "Understand the business behind the request",
-      intro: "What problem are we actually trying to solve? A manager's request is your starting point.",
+      title: "Map talent against business needs",
+      intro: "What talent do we have — and what will the business need?",
       points: [
-        "Connect a people concern to delivery, quality, workload or team performance",
-        "Explore whether expectations, capability, resources or management practices need attention",
-        "Identify the evidence you need before forming a recommendation",
-      ],
-    },
-    {
-      icon: "dialogue",
-      title: "Partner with the manager",
-      intro: "How do you question constructively and build credibility?",
-      points: [
-        "Ask focused questions without making the conversation confrontational",
-        "Acknowledge business pressures while examining assumptions",
-        "Clarify what the manager owns and where HR can advise and support",
+        "Understand how to identify critical roles beyond senior leadership positions",
+        "Map employee skills and experience against role requirements",
+        "Identify strengths, skill gaps and development priorities",
+        "Connect your talent map with business growth and continuity needs",
       ],
     },
     {
       icon: "scales",
-      title: "Make and explain your recommendation",
-      intro: "What should happen next — and why? Use an HR Decision Lab to compare the options.",
+      title: "Review talent and assess readiness",
+      intro: "Who could step up, and what preparation would they need?",
       points: [
-        "Weigh business impact, fair treatment and people risks",
-        "Recommend a proportionate next step based on the available information",
-        "Explain who should act, what support is needed and how progress could be reviewed",
+        "Distinguish current performance, future potential and role readiness",
+        "Use evidence to support talent discussions and question assumptions",
+        "Consider employee aspirations alongside organisational needs",
+        "Segment potential leadership talent into suitable development pools",
+      ],
+    },
+    {
+      icon: "building",
+      title: "Build a practical succession plan",
+      intro: "How do we turn talent insights into action?",
+      points: [
+        "Identify potential successors and readiness timelines",
+        "Define development actions, exposure and support",
+        "Understand how leadership competencies guide readiness discussions",
+        "Explore key metrics, including succession coverage and readiness",
+        "Explain your recommendations from a business perspective",
       ],
     },
   ],
 
-  audience: {
-    heading: "For those preparing to contribute as an HR Business Partner",
+  takeaways: {
+    eyebrow: "What you will take away",
+    heading: "Practical outputs you can build on",
+    intro: "By the end of the masterclass, you will have practised creating:",
     items: [
-      "MBA-HR, PGDM-HR and HR postgraduate students",
-      "Recent graduates preparing for their first HR role",
-      "HR interns, management trainees and early-career generalists",
-      "HR operations and recruitment professionals exploring business-partnering responsibilities",
-      "Aspiring HRBPs who want to strengthen practical judgement and stakeholder conversations",
+      "A skills-based talent map",
+      "A view of potential successors and their readiness",
+      "Development priorities for future role requirements",
+      "A succession plan linked to business needs",
     ],
-    note: "You do not need an HRBP title to begin developing a business-partnering mindset.",
+    note: "You will also receive ready-to-use templates to support further application.",
+  },
+
+  audience: {
+    heading: "For those who want to make better talent decisions",
+    items: [
+      "HR professionals involved in talent, learning, performance or workforce planning",
+      "HR generalists, HR operations and recruitment professionals expanding their responsibilities",
+      "Aspiring HRBPs who want to connect people decisions with business priorities",
+      "MBA-HR, PGDM-HR and HR postgraduate students",
+      "Recent graduates, HR interns and professionals preparing to enter HR",
+    ],
+    note: "You do not need prior succession-planning experience. The concepts and case will be explained step by step.",
   },
 
   facilitator: {
-    strap: "15+ years of global HR leadership experience · XLRI alumna",
+    strap: "16 years of global HR experience · Global HR leader · XLRI alumna",
     paragraphs: [
-      "Parichita brings experience partnering with leaders and managers on performance, talent, employee concerns and organisational change.",
-      "Her facilitation connects business priorities with the everyday realities of managing people — helping participants examine context, ask purposeful questions and explain their recommendations.",
-      "This masterclass draws on that experience to make HR business partnering practical and accessible for students and early-career professionals.",
+      "Parichita brings experience working with leaders and managers on talent, performance, organisational design, employee relations and change.",
+      "Her work spans multinational organisations and Indian startups, connecting business priorities with practical people decisions.",
+      "In this masterclass, she will guide participants through a business case, helping them assess talent, examine readiness and explain their recommendations clearly.",
     ],
   },
 
   recognition:
-    "Learn with Levitate PeopleSoft — an SHRM Recertification Provider and a member of The CPD Certification Service, UK. Our HR EDGE learning approach combines global HR experience, realistic workplace scenarios and practical application.",
+    "Levitate PeopleSoft is an SHRM Recertification Provider and a member of The CPD Certification Service, UK. Our learning approach combines HR experience, realistic workplace situations and practical tools to help participants apply concepts with confidence.",
 
   crossSell: {
-    title: "Ready to build your HR business-partnering capability further?",
+    title: "Build your HR business-partnering capability further",
     body:
-      "HR EDGE — the Certified MNC-Ready HR Practitioner Programme, built on the EDGE Framework: Explore, Diagnose, Guide, Enable. Eight modules worked through a simulated MNC, from the business environment and workforce planning to employee relations, change and people analytics, closing with a career conversion lab. 6 weeks · 42 learning hours · 18 live sessions · live online. Separate programme enrolment applies.",
+      "HR EDGE — Strategic HR Business Partner Certification Programme. Talent mapping and succession planning are part of a wider set of capabilities needed to support business decisions. Develop your understanding across business strategy, workforce planning, performance, talent and hiring, rewards, employee relations, change and people analytics. Learn through practical cases, simulations and tools, with support for your HR career preparation. 6 weeks · 52 learning hours: 46 live + 6 LMS. Separate programme enrolment applies.",
     href: "/lms/course/hr-edge/",
     cta: "Explore HR EDGE",
   },
 
-  closing: "Two hours of practical learning that connect business understanding with people judgement.",
+  closing: "Learn to identify available talent, assess future readiness and recommend practical development actions.",
 
   faqs: [
     {
       q: "What will I learn in this masterclass?",
       a: [
-        "You will practise three foundations of HR business partnering: understanding the business context behind a people issue, advising a manager through purposeful questions, and explaining a reasoned recommendation.",
+        "You will learn how to create a skills-based talent map, identify critical roles, assess potential successors, segment talent into development pools and build a basic succession plan. You will also explore succession planning principles, leadership competencies and key metrics.",
       ],
     },
     {
-      q: "Is this a session on PIPs?",
+      q: "How does this connect with strategic HR and the HRBP role?",
       a: [
-        "The PIP scenario is the starting case. We use it to explore wider business-partnering skills: diagnosing a concern, examining evidence, managing stakeholder expectations and deciding what should happen next.",
+        "Strategic HR involves preparing the organisation for future business needs. Talent mapping and succession planning help HR recommend where to develop employees, build leadership capability and address talent gaps that could affect growth or continuity.",
+      ],
+    },
+    {
+      q: "Is succession planning only for senior leadership roles?",
+      a: [
+        "No. It can also cover specialist and other critical roles where a vacancy or loss of knowledge could significantly affect the business.",
       ],
     },
     {
       q: "Can I attend if I am a student or have no HR experience?",
       a: [
-        "Yes. The masterclass is designed for HR students, recent graduates and early-career professionals. The case and activities are explained step by step.",
+        "Yes. The masterclass is suitable for HR students and aspiring professionals. Concepts and activities will be explained through a guided business case.",
       ],
     },
     {
-      q: "How will the session be conducted?",
-      a: ["The live online session combines a realistic workplace case, guided discussion, manager-conversation practice and an HR Decision Lab."],
+      q: "Will this be useful if I already work in HR?",
+      a: [
+        "Yes, particularly if you are beginning to contribute to talent reviews, employee development, workforce planning or succession discussions. You can use the case and templates to strengthen your approach.",
+      ],
     },
     {
-      q: "Will this help me prepare for HR interviews?",
+      q: "How will the masterclass be conducted?",
       a: [
-        "The practice can help you structure answers to scenario-based questions by explaining what you would investigate, whom you would involve and how you would reach a recommendation.",
+        "It will be delivered live on Zoom across two sessions, combining concept explanations, guided discussion and practical case activities.",
+      ],
+    },
+    {
+      q: "Will I receive templates?",
+      a: [
+        "Yes. Ready-to-use talent mapping and succession planning templates will be shared to support your learning and further application.",
+      ],
+    },
+    {
+      q: "Will this help with HR interviews?",
+      a: [
+        "The case practice can help you explain how you would identify critical roles, assess talent gaps and recommend development actions in scenario-based interview questions.",
       ],
     },
     {
       q: "Is this the full HR EDGE programme?",
       a: [
-        "No. This is a standalone two-hour introduction to the way HR EDGE teaches. The full Certified MNC-Ready HR Practitioner Programme is a separate six-week journey — 42 learning hours across 18 live sessions, built on the EDGE Framework: Explore, Diagnose, Guide, Enable. Previous MNC experience is not required.",
+        "No. This is a standalone, five-hour masterclass focused on talent mapping and succession planning. The full HR EDGE Strategic HR Business Partner Certification Programme is a separate learning journey covering broader HRBP capabilities.",
       ],
     },
-    { q: "When is the masterclass?", a: ["{when}, live online."] },
-    { q: "What is the fee?", a: ["{fee}, including taxes."] },
+    {
+      // Written out rather than using {when}: that token is one day, one time,
+      // and this masterclass is two sittings with different hours.
+      q: "When is the masterclass?",
+      a: [
+        "28 November 2026, 7:00 – 9:30 PM IST, and 29 November 2026, 10:00 AM – 12:30 PM IST. Both sessions are conducted live on Zoom.",
+      ],
+    },
+    { q: "What is the fee?", a: ["The early-bird fee is {fee}, against the regular fee of {list_fee}."] },
     {
       q: "How do I register?",
       a: [
-        "Complete the registration form and payment to reserve your seat. Razorpay emails your payment receipt straight away, and we will be in touch before {date} with your joining link and everything else you need.",
+        "Use the registration button to complete your registration and payment. Razorpay emails your receipt straight away, and we will be in touch before {date} with your joining link. For assistance, contact our team on +91 90269 95540.",
       ],
     },
   ],
