@@ -21,7 +21,7 @@ const rpnTags = ["ONGC · Chief Manager HR", "Employee relations", "HR governanc
 const accred = [
   { badge: "ISO", t: "ISO Certified", d: "Quality-assured training organization." },
   { badge: "TTT", t: "Train-the-Trainer Framework", d: "Practice-led facilitator development with assessment-linked certification." },
-  { badge: "PoSH", t: "PoSH & IC Advisory", d: "Programs designed with legal clarity and facilitation sensitivity." },
+  { badge: "PoSH", t: "PoSH & IC Advisory", d: "Programmes designed with legal clarity and facilitation sensitivity." },
   { badge: "HR EDGE", t: "HR Edge Curriculum", d: "Integrated DEIB, PoSH and wellbeing certification for future HR professionals." },
 ];
 const gallery = [
@@ -117,7 +117,7 @@ export default function AboutPage() {
                 leadership, leadership development and workplace culture experience across diverse teams, geographies and business environments — spanning India, the UK, Europe, USA and Canada.
               </p>
               <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
-                We specialize in Train-the-Trainer certification programs, workplace facilitator development, corporate training and HR capability-building solutions across leadership, DEIB, workplace
+                We specialize in Train-the-Trainer certification programmes, workplace facilitator development, corporate training and HR capability-building solutions across leadership, DEIB, workplace
                 mental health and wellbeing, PoSH, POCSO, people culture and professional readiness.
               </p>
             </div>
@@ -188,7 +188,7 @@ export default function AboutPage() {
                 <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>Parichita Kotnala</div>
                 <div style={{ font: "600 13.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", margin: "6px 0 4px" }}>Founder &amp; Managing Partner</div>
                 <div style={{ font: "500 12.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginBottom: 18 }}>
-                  Global HR Leader · Workplace Culture Facilitator · Certification Program Designer
+                  Global HR Leader · Workplace Culture Facilitator · Certification Programme Designer
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 12, font: "400 14.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
                   <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
@@ -198,7 +198,7 @@ export default function AboutPage() {
                   <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
                     Having worked across global workplace contexts, she brings practical insight into how organizations build leadership capability, psychological safety, inclusive cultures, safe
                     workplace practices and meaningful employee experiences. At Levitate PeopleSoft she leads the organization&apos;s next phase of growth through globally designed, practice-led
-                    certification programs.
+                    certification programmes.
                   </p>
                 </div>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 9, marginTop: 20 }}>
@@ -393,7 +393,7 @@ export default function AboutPage() {
             Let&apos;s build capability that lasts
           </h2>
           <p style={{ position: "relative", font: "400 16px/1.7 'Plus Jakarta Sans',sans-serif", color: "#a9bcd0", maxWidth: 600, margin: "0 auto 32px" }}>
-            Partner with us for certification programs, customized training interventions and institutional learning solutions.
+            Partner with us for certification programmes, customized training interventions and institutional learning solutions.
           </p>
           <div style={{ position: "relative", display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <Link

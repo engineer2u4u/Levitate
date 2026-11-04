@@ -12,7 +12,7 @@ export type Service = { num: string; title: string; desc: string };
 export const services: Service[] = [
   {
     num: "01",
-    title: "Train-the-Trainer Certification Programs",
+    title: "Train-the-Trainer Certification Programmes",
     desc: "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity, Inclusion & Belonging, Applied Workplace Mental Health & Wellbeing, PoSH and POCSO — along with HR Edge certification for future HR professionals.",
   },
   {
@@ -54,7 +54,7 @@ export const blueprintSteps: BlueprintStep[] = [
     title: "Design",
     short: "Build the learning journey",
     img: "/assets/audience-red-hall.jpeg",
-    desc: "Insights become a focused learning journey — defining outcomes, designing modules, selecting the right format, building case scenarios and aligning the program to the needs of your team, institution or organization.",
+    desc: "Insights become a focused learning journey — defining outcomes, designing modules, selecting the right format, building case scenarios and aligning the programme to the needs of your team, institution or organization.",
     chips: ["Outcome definition", "Module design", "Case scenarios", "Format selection"],
   },
   {
@@ -86,35 +86,35 @@ export const certs: Cert[] = [
   {
     num: "01",
     tag: "Leadership Certification · TTT",
-    title: "Corporate Leadership Facilitator Program (CLF TTT)",
+    title: "Corporate Leadership Facilitator Programme (CLF TTT)",
     sub: "Powered by the HUMAN Leadership Framework",
     desc: "Facilitate leadership conversations on trust, coaching, feedback, accountability and team growth.",
   },
   {
     num: "02",
     tag: "DEIB · TTT",
-    title: "Certified Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
+    title: "Certified Diversity, Equity, Inclusion and Belonging Facilitator Programme TTT",
     sub: "Diversity, Equity, Inclusion & Belonging Certification",
     desc: "Lead meaningful conversations on inclusion, unconscious bias, belonging and psychological safety.",
   },
   {
     num: "03",
     tag: "Workplace Wellbeing · TTT",
-    title: "Workplace Wellbeing Facilitator Program (Mental Health & Wellbeing TTT)",
+    title: "Workplace Wellbeing Facilitator Programme (Mental Health & Wellbeing TTT)",
     sub: "Applied Mental Health & Wellbeing Certification",
     desc: "Facilitate workplace mental-health conversations with confidence, sensitivity and ethical responsibility.",
   },
   {
     num: "04",
     tag: "PoSH · TTT",
-    title: "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
+    title: "PoSH & Workplace Dignity Facilitator Programme (PoSH TTT)",
     sub: "PoSH Train-the-Trainer Certification",
     desc: "PoSH awareness, manager sensitisation and IC capability building — with legal clarity and maturity.",
   },
   {
     num: "05",
     tag: "POCSO · TTT",
-    title: "POCSO & Child Safety Facilitator Program (POCSO TTT)",
+    title: "POCSO & Child Safety Facilitator Programme (POCSO TTT)",
     sub: "POCSO Train-the-Trainer Certification",
     desc: "Child-safety awareness sessions with sensitivity, legal clarity and responsible communication.",
   },
@@ -250,7 +250,7 @@ export const tickerB = [
   "UDYAM Recognition",
   "2000+ Participants Trained",
   "SHRM recertification provider",
-  "Train-the-Trainer Programs",
+  "Train-the-Trainer Programmes",
   "Campus to Corporate",
   "HR Advisory & Culture Consulting",
   "Assessment-Based Certification",
@@ -279,7 +279,7 @@ export const founders = [
     imgPos: "50% 50%",
     name: "Parichita Kotnala",
     role: "Founder & Managing Partner · Global HR Leader",
-    bio: "15+ years of global HR leadership across India, the UK, Europe and North America — spanning leadership enablement, workplace culture, DEIB, PoSH, POCSO, wellbeing and people advisory. She leads Levitate's practice-led certification programs for credible workplace facilitators.",
+    bio: "15+ years of global HR leadership across India, the UK, Europe and North America — spanning leadership enablement, workplace culture, DEIB, PoSH, POCSO, wellbeing and people advisory. She leads Levitate's practice-led certification programmes for credible workplace facilitators.",
   },
   {
     img: "/assets/ravindra.png",

@@ -164,7 +164,7 @@ export default function CourseDetail({ slug, landing = false, onEnquire, headlin
     : canPay
       ? "Enrol · Pay securely"
       // Paused in the admin, fee on request, or payments closed: enquire.
-      : "Enquire about this program →";
+      : "Enquire about this programme →";
   const enquire = onEnquire ?? (() => router.push("/contact"));
   const onCta = landing
     // Nothing on a landing page may leave it, not even to a checkout: the

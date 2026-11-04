@@ -37,7 +37,7 @@ export default function AnnouncementBar() {
           className="lp-btn-white"
           style={{ background: "#fff", color: "#136f6a", font: "700 13.5px 'Plus Jakarta Sans',sans-serif", padding: "9px 20px", borderRadius: 999, whiteSpace: "nowrap" }}
         >
-          Check out our upcoming certification programs →
+          Check out our upcoming certification programmes →
         </Link>
       </div>
     </div>

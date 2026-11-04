@@ -96,7 +96,7 @@ export default function EnquiryPopup() {
     setBusy(true);
     setError("");
     // No `intent` override here — the dropdown's own value has to reach the
-    // mail, otherwise every pop-up enquiry arrives without the program on it.
+    // mail, otherwise every pop-up enquiry arrives without the programme on it.
     // Provenance goes in `source` instead.
     const res = await submitEnquiry(formRef.current, { source: `Landing pop-up (${window.location.pathname})` }, { form: "popup" });
     setBusy(false);
@@ -186,9 +186,9 @@ export default function EnquiryPopup() {
               <div>
                 <div style={label}>What are you interested in? *</div>
                 {/* Starts unselected on purpose: a pre-picked first option would
-                    file every untouched form against the leadership program. */}
+                    file every untouched form against the leadership programme. */}
                 <select name="intent" required defaultValue="" style={{ ...field, cursor: "pointer" }}>
-                  <option value="" disabled>Choose a program</option>
+                  <option value="" disabled>Choose a programme</option>
                   {enquiryTopics.map((t) => <option key={t}>{t}</option>)}
                 </select>
               </div>

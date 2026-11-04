@@ -170,7 +170,7 @@ export default function ServicePage({
                   <Link href={it.href} style={{ position: "absolute", inset: 0, borderRadius: 18 }} aria-label={`Open the ${it.t} page`} />
                 )}
                 {it.href && (
-                  <div aria-hidden style={{ marginTop: "auto", paddingTop: 4, font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88" }}>View program →</div>
+                  <div aria-hidden style={{ marginTop: "auto", paddingTop: 4, font: "700 12.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88" }}>View programme →</div>
                 )}
               </Reveal>
             ))}

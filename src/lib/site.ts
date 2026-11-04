@@ -18,7 +18,7 @@ export const services: {
   short: string;
   href: string;
 }[] = [
-  { key: "ttt", num: "01", label: "Train-the-Trainer Certification Programs", short: "Train-the-Trainer Certifications", href: "/services/train-the-trainer" },
+  { key: "ttt", num: "01", label: "Train-the-Trainer Certification Programmes", short: "Train-the-Trainer Certifications", href: "/services/train-the-trainer" },
   { key: "corporate", num: "02", label: "Corporate Training Solutions", short: "Corporate Training Solutions", href: "/corporate-soft-skills-training-service" },
   { key: "institutional", num: "03", label: "Institutional Training", short: "Institutional Training", href: "/services/institutional" },
   { key: "advisory", num: "04", label: "HR Advisory & Workplace Culture Consulting", short: "HR Advisory & Culture Consulting", href: "/hr-consulting-services" },
@@ -51,11 +51,11 @@ export const trustedLogos: { name: string; src: string }[] = [
  * the reply mail always names a program the team recognises.
  */
 export const enquiryTopics: string[] = [
-    "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
-  "POCSO & Child Safety Facilitator Program (POCSO TTT)",
-  "Corporate Leadership Facilitator Program (CLF TTT)",
-  "Certified Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
-  "Workplace Wellbeing Facilitator Program (Mental Health & Wellbeing TTT)",
+    "PoSH & Workplace Dignity Facilitator Programme (PoSH TTT)",
+  "POCSO & Child Safety Facilitator Programme (POCSO TTT)",
+  "Corporate Leadership Facilitator Programme (CLF TTT)",
+  "Certified Diversity, Equity, Inclusion and Belonging Facilitator Programme TTT",
+  "Workplace Wellbeing Facilitator Programme (Mental Health & Wellbeing TTT)",
   "HR Edge certification (HR Students)",
   "Corporate Training",
 ];

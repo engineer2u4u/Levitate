@@ -23,11 +23,11 @@ export default function PoshSection() {
         <Reveal>
           <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>PoSH &amp; Workplace Dignity</div>
           <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.18 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 18px", letterSpacing: "-.02em" }}>
-            PoSH programs delivered with legal clarity and facilitation maturity
+            PoSH programmes delivered with legal clarity and facilitation maturity
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 14, font: "400 15.5px/1.8 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>
             <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
-              Prevention of Sexual Harassment is not a tick-box session. Our PoSH programs help organizations meet their obligations while genuinely shifting how people behave — combining accurate
+              Prevention of Sexual Harassment is not a tick-box session. Our PoSH programmes help organizations meet their obligations while genuinely shifting how people behave — combining accurate
               legal grounding with the sensitivity these conversations demand.
             </p>
             <p style={{ margin: 0, textWrap: "pretty" } as CSSProperties}>
@@ -52,7 +52,7 @@ export default function PoshSection() {
               className="lp-btn-grad"
               style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14.5px 'Plus Jakarta Sans',sans-serif", padding: "14px 26px", borderRadius: 999 }}
             >
-              Discuss a PoSH program
+              Discuss a PoSH programme
             </Link>
             <Link
               href="/hr-consulting-services"

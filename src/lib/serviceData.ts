@@ -55,7 +55,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
   ttt: {
     crumb: "Train-the-Trainer",
     eyebrow: "01 · Train-the-Trainer Certifications",
-    title: "Train-the-Trainer Certification Programs",
+    title: "Train-the-Trainer Certification Programmes",
     lede: "Practice-led workplace facilitator certifications in Corporate Leadership Facilitation, Diversity, Equity, Inclusion & Belonging, Applied Workplace Mental Health & Wellbeing, PoSH and POCSO — along with HR Edge certification for future HR professionals.",
     img: "/assets/students-group.png",
     facts: [
@@ -65,11 +65,11 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     ],
     introHeading: "Our Certification Approach",
     intro: [
-      "Our certification programs are designed to help professionals build practical understanding, facilitation confidence and workplace-ready knowledge across six key areas: Corporate Leadership Facilitation, Diversity, Equity, Inclusion & Belonging, Applied Workplace Mental Health & Wellbeing, PoSH, POCSO and HR Edge certification.",
-      "Each program is built with global workplace content, practical HR insights and real-world application. The learning combines structured live sessions, practical examples, case discussions, workplace scenarios and guided learning material to help participants understand both the concept and its application in modern workplaces.",
+      "Our certification programmes are designed to help professionals build practical understanding, facilitation confidence and workplace-ready knowledge across six key areas: Corporate Leadership Facilitation, Diversity, Equity, Inclusion & Belonging, Applied Workplace Mental Health & Wellbeing, PoSH, POCSO and HR Edge certification.",
+      "Each programme is built with global workplace content, practical HR insights and real-world application. The learning combines structured live sessions, practical examples, case discussions, workplace scenarios and guided learning material to help participants understand both the concept and its application in modern workplaces.",
       "Participants receive access to session recordings, presentation decks, reading material, templates and relevant trainer resources to support continued learning beyond the live sessions.",
       "The focus is on helping participants understand the subject clearly, connect it with real workplace situations and build the confidence to facilitate awareness or learning conversations in their respective professional contexts.",
-      "Certification is awarded after successful completion of the program requirements, including live participation and completion of the final assessment.",
+      "Certification is awarded after successful completion of the programme requirements, including live participation and completion of the final assessment.",
     ],
     bestFor: "HR professionals, L&D leaders, managers, educators, consultants, coaches, trainers, psychologists, counsellors, HR students and aspiring workplace facilitators.",
     deliverTitle: "What Participants Receive",
@@ -82,36 +82,36 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
       "Certificate of Completion with unique verification ID",
     ],
     listEyebrow: "Certification pathways",
-    listHeading: "Six certification programs across the conversations workplaces need most",
+    listHeading: "Six certification programmes across the conversations workplaces need most",
     listGrid: "repeat(3,1fr)",
     items: [
       {
         num: "01",
-        t: "Corporate Leadership Facilitator Program (CLF TTT)",
+        t: "Corporate Leadership Facilitator Programme (CLF TTT)",
         href: "/lms/course/leadership-facilitator",
         d: "Powered by the HUMAN Leadership Framework Train-the-Trainer Certification — facilitate leadership conversations on trust, coaching, feedback, accountability and team growth.",
       },
       {
         num: "02",
-        t: "Certified Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
+        t: "Certified Diversity, Equity, Inclusion and Belonging Facilitator Programme TTT",
         href: "/lms/course/inclusive-workplace",
         d: "Powered by the BRIDGE Inclusion Framework Train-the-Trainer Certification Diversity, Equity, Inclusion & Belonging — lead conversations on inclusion, unconscious bias, belonging and psychological safety, including managing resistance.",
       },
       {
         num: "03",
-        t: "Workplace Wellbeing Facilitator Program (Mental Health & Wellbeing TTT)",
+        t: "Workplace Wellbeing Facilitator Programme (Mental Health & Wellbeing TTT)",
         href: "/lms/course/workplace-wellbeing",
         d: "Powered by the CARES Wellbeing Framework Train-the-Trainer Certification Applied Mental Health & Wellbeing — facilitate stress, burnout and psychological safety conversations with sensitivity and ethical boundaries.",
       },
       {
         num: "04",
-        t: "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
+        t: "PoSH & Workplace Dignity Facilitator Programme (PoSH TTT)",
         href: "/lms/course/posh-trainer",
         d: "Powered by the CLEAR PoSH Framework Train-the-Trainer Certification — awareness sessions, manager sensitisation and IC capability building with legal clarity and facilitation maturity.",
       },
       {
         num: "05",
-        t: "POCSO & Child Safety Facilitator Program (POCSO TTT)",
+        t: "POCSO & Child Safety Facilitator Programme (POCSO TTT)",
         href: "/lms/course/pocso-child-safety",
         d: "Powered by the GUARD CHild Saftey Framework Train-the-Trainer Certification — age-appropriate, institution-sensitive child-safety sessions and responsible reporting conversations.",
       },
@@ -142,7 +142,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     certLine1: "This certifies that",
     certLine2: "has successfully completed the",
     certLine3: "including facilitation practice, reflection and assessment",
-    certProgram: "Corporate Leadership Facilitator Program (CLF TTT)",
+    certProgram: "Corporate Leadership Facilitator Programme (CLF TTT)",
     audience: ["HR professionals", "L&D leaders", "People managers", "Educators", "Consultants", "Coaches", "Independent trainers", "Psychologists & counsellors", "HR students"],
     formHeading: "Enquire about a certification pathway",
     formSub: "Tell us your experience and goals — we will recommend the right pathway and share the next cohort dates.",
@@ -157,7 +157,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     faqs: [
       {
         q: "Do I need prior training experience?",
-        a: "No. Cohorts include first-time facilitators and experienced trainers. The practice feedback is calibrated to where you start — what matters is willingness to facilitate live during the program.",
+        a: "No. Cohorts include first-time facilitators and experienced trainers. The practice feedback is calibrated to where you start — what matters is willingness to facilitate live during the programme.",
       },
       {
         q: "How long does certification take?",
@@ -179,11 +179,11 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     introHeading: "Not one-size-fits-all workshops",
     intro: [
       "Every intervention begins with understanding the business context, participant profile, team challenges and desired behavioural outcomes.",
-      "Programs are built around your own scenarios. We collect real (anonymised) situations from managers and HR during scoping and write them into the case discussions, so participants recognise the problem in the room.",
+      "Programmes are built around your own scenarios. We collect real (anonymised) situations from managers and HR during scoping and write them into the case discussions, so participants recognise the problem in the room.",
       "Delivery is flexible — in-person, live online or blended, across single-site or multi-location cohorts. Where useful, we run manager and team sessions in sequence so language and expectations line up on both sides.",
     ],
     outcomes: [
-      "Programs scoped to real capability gaps",
+      "Programmes scoped to real capability gaps",
       "Your own workplace scenarios written in",
       "Manager and team sessions in sequence",
       "Practical tools managers keep using",
@@ -193,17 +193,17 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     bestFor: "Organizations building people capability across levels — from senior leadership to first-time managers — including teams in growth, change or culture transformation.",
     deliverTitle: "What the engagement includes",
     deliverables: [
-      "Training Needs Analysis summary and program design note",
+      "Training Needs Analysis summary and programme design note",
       "Customized session materials and participant workbooks",
       "Facilitated delivery across agreed cohorts and locations",
       "Manager action-plan templates and follow-through prompts",
-      "Post-program feedback report with observations and recommendations",
+      "Post-programme feedback report with observations and recommendations",
     ],
     listEyebrow: "Key training areas",
     listHeading: "Seven capability areas we deliver against",
     listGrid: "repeat(4,1fr)",
     items: [
-      { num: "01", t: "PoSH & Workplace Dignity", d: "PoSH awareness, manager sensitisation, Internal Committee capability building and respectful workplace behaviour programs with legal clarity." },
+      { num: "01", t: "PoSH & Workplace Dignity", d: "PoSH awareness, manager sensitisation, Internal Committee capability building and respectful workplace behaviour programmes with legal clarity." },
       { num: "02", t: "Leadership & Manager Capability", d: "Delegation, coaching skills, feedback conversations, accountability, prioritization, one-on-ones, decision-making and team development." },
       {
         num: "03",
@@ -234,13 +234,13 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     certEyebrow: "Participation record",
     certHeading: "Recognition your employees can keep on file",
     certBody:
-      "Participants in corporate interventions receive a certificate of participation naming the specific program delivered for your organization — useful for internal L&D records, appraisal evidence and compliance documentation where applicable.",
+      "Participants in corporate interventions receive a certificate of participation naming the specific programme delivered for your organization — useful for internal L&D records, appraisal evidence and compliance documentation where applicable.",
     certLabel: "Certificate of Participation",
     certName: "Employee Name",
     certLine1: "This certifies that",
     certLine2: "participated in the",
     certLine3: "delivered for your organization by Levitate PeopleSoft",
-    certProgram: "Leadership & Manager Capability Program",
+    certProgram: "Leadership & Manager Capability Programme",
     audience: [
       "Senior leadership teams",
       "Middle & people managers",
@@ -253,7 +253,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
       "High-potential employees",
     ],
     formHeading: "Request a customized training proposal",
-    formSub: "Share your context and we will come back with a scoped program outline, format options and commercials.",
+    formSub: "Share your context and we will come back with a scoped programme outline, format options and commercials.",
     orgLabel: "Organization *",
     orgPlaceholder: "Company name",
     pickLabel: "Primary capability area *",
@@ -262,15 +262,15 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     formButton: "Request a proposal",
     faqs: [
       {
-        q: "How quickly can a program be designed and delivered?",
-        a: "A focused single-topic program can be scoped and delivered in 2–3 weeks. Multi-cohort or multi-location interventions typically need 4–6 weeks from first conversation.",
+        q: "How quickly can a programme be designed and delivered?",
+        a: "A focused single-topic programme can be scoped and delivered in 2–3 weeks. Multi-cohort or multi-location interventions typically need 4–6 weeks from first conversation.",
       },
       {
         q: "Do you deliver across multiple locations?",
         a: "Yes. We run multi-city and multi-batch rollouts, and mix in-person and live online delivery where geography or shift patterns require it.",
       },
       {
-        q: "How do you show the program worked?",
+        q: "How do you show the programme worked?",
         a: "Through pre- and post-learning indicators, participant action plans, manager inputs and an outcome review after delivery — reported back to you in writing.",
       },
     ],
@@ -279,7 +279,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     crumb: "Institutional Training",
     eyebrow: "03 · Institutional Training",
     title: "From Campus to Career: Preparing Students for Professional Success",
-    lede: "HR-led programs for colleges, universities, business schools and professional institutions that turn academic learning into corporate readiness.",
+    lede: "HR-led programmes for colleges, universities, business schools and professional institutions that turn academic learning into corporate readiness.",
     img: "/assets/founder-speaking.jpeg",
     facts: [
       { k: "Format", v: "1–5 day modules" },
@@ -289,9 +289,9 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     ],
     introHeading: "What employers look for beyond the degree",
     intro: [
-      "Our student programs build communication skills, professional conduct, interview preparedness, career clarity and a practical understanding of what organizations expect in the first two years of a career.",
+      "Our student programmes build communication skills, professional conduct, interview preparedness, career clarity and a practical understanding of what organizations expect in the first two years of a career.",
       "Sessions are run by practitioners who have sat on the hiring side of the table. Students get mock interviews with real HR feedback, group-discussion practice, resume review and a candid view of how they come across to a recruiter.",
-      "Programs are scheduled around the placement calendar — pre-placement readiness, internship preparation, or a semester-long track. For HR postgraduates, the HR Edge certification adds an applied credential beyond the degree.",
+      "Programmes are scheduled around the placement calendar — pre-placement readiness, internship preparation, or a semester-long track. For HR postgraduates, the HR Edge certification adds an applied credential beyond the degree.",
     ],
     outcomes: [
       "Interview-ready introductions and answers",
@@ -304,14 +304,14 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     bestFor: "Final-year UG/PG students, placement and internship-readiness cohorts, early-career professionals, and MBA-HR / PGDM-HR students for the HR Edge certification.",
     deliverTitle: "What institutions receive",
     deliverables: [
-      "Program design mapped to your placement calendar",
+      "Programme design mapped to your placement calendar",
       "Student workbooks and self-practice material",
       "Mock interview and group-discussion panels with feedback",
       "Cohort-level readiness observations for your placement cell",
       "Participation certificates; HR Edge certification where applicable",
     ],
     listEyebrow: "Institutional training areas",
-    listHeading: "Five programs that bridge campus and corporate",
+    listHeading: "Five programmes that bridge campus and corporate",
     listGrid: "repeat(3,1fr)",
     items: [
       { num: "01", t: "Campus to Corporate Readiness", d: "Workplace expectations, corporate behaviour, communication standards and professional conduct in the first months of a career." },
@@ -331,7 +331,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     certEyebrow: "Student credential",
     certHeading: "A credential that means something to a recruiter",
     certBody:
-      "Students receive a certificate naming the program completed. For MBA-HR and PGDM-HR cohorts, the HR Edge certification records an applied, assessment-based credential in DEIB, PoSH and workplace wellbeing — a genuine differentiator in HR interviews.",
+      "Students receive a certificate naming the programme completed. For MBA-HR and PGDM-HR cohorts, the HR Edge certification records an applied, assessment-based credential in DEIB, PoSH and workplace wellbeing — a genuine differentiator in HR interviews.",
     certLabel: "HR Edge certification (HR Students)",
     certName: "Student Name",
     certLine1: "This certifies that",
@@ -351,7 +351,7 @@ export const PAGES: Record<ServiceKey, ServicePageData> = {
     formSub: "Tell us your cohort size, timelines and placement calendar — we will propose a track that fits your slots.",
     orgLabel: "Institution *",
     orgPlaceholder: "College or university name",
-    pickLabel: "Which program are you planning? *",
+    pickLabel: "Which programme are you planning? *",
     options: ["Campus to corporate", "Communication & etiquette", "Interview readiness", "Professional skills", "HR Edge certification (HR Students)", "Full track"],
     msgPlaceholder: "Cohort size, year of study, available slots and placement timelines",
     formButton: "Request institutional proposal",

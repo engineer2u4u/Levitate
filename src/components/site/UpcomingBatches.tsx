@@ -81,7 +81,7 @@ export default function UpcomingBatches({ background = "#f4f7f9" }: { background
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 18, flexWrap: "wrap", marginTop: "auto", paddingTop: 6 }}>
                 <div>
-                  <div style={{ font: "600 10.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", letterSpacing: ".13em", textTransform: "uppercase" }}>Program fee</div>
+                  <div style={{ font: "600 10.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", letterSpacing: ".13em", textTransform: "uppercase" }}>Programme fee</div>
                   <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", marginTop: 4 }}>{b.fee}</div>
                   <div style={{ font: "500 11.5px 'Plus Jakarta Sans',sans-serif", color: "#8296a9", marginTop: 2 }}>{b.feeNote}</div>
                 </div>

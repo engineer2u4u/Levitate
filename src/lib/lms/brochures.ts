@@ -40,10 +40,10 @@ export type ProgramBrochure = {
 };
 
 export const POSH_BROCHURE: ProgramBrochure = {
-  eyebrow: "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
+  eyebrow: "PoSH & Workplace Dignity Facilitator Programme (PoSH TTT)",
   strapline: "Learn the law. Navigate sensitive situations. Facilitate with confidence.",
   about:
-    "The PoSH & Workplace Dignity Facilitator Program (PoSH TTT) is an intensive, practice-led certification built to take participants beyond theory — equipping them with legal understanding, inquiry competence and the facilitation skill to run PoSH sessions and support Internal Committees with confidence.",
+    "The PoSH & Workplace Dignity Facilitator Programme (PoSH TTT) is an intensive, practice-led certification built to take participants beyond theory — equipping them with legal understanding, inquiry competence and the facilitation skill to run PoSH sessions and support Internal Committees with confidence.",
 
   stats: [
     { n: "2,000+", label: "Professionals Trained" },
@@ -99,11 +99,11 @@ export const POSH_BROCHURE: ProgramBrochure = {
 export const BROCHURE_ASSETS_READY = true;
 
 export const POCSO_BROCHURE: ProgramBrochure = {
-  eyebrow: "POCSO & Child Safety Facilitator Program (POCSO TTT)",
+  eyebrow: "POCSO & Child Safety Facilitator Programme (POCSO TTT)",
   strapline: "Protect with knowledge. Respond with responsibility. Facilitate with care.",
   meta: ["9 Hours · Duration", "3 Days · Format", "3 Hrs / Day · Session", "10 Modules · Curriculum"],
   about:
-    "The POCSO & Child Safety Facilitator Program (POCSO TTT) is an intensive, practice-led Train-the-Trainer certification designed to help professionals facilitate child-safety and POCSO awareness with legal clarity, age-appropriate communication and responsible reporting.",
+    "The POCSO & Child Safety Facilitator Programme (POCSO TTT) is an intensive, practice-led Train-the-Trainer certification designed to help professionals facilitate child-safety and POCSO awareness with legal clarity, age-appropriate communication and responsible reporting.",
 
   stats: [
     { n: "2,000+", label: "Professionals Trained" },
@@ -193,7 +193,7 @@ export const DEI_BROCHURE: ProgramBrochure = {
   strapline: "Understand. Reflect. Apply. Facilitate. Transform.",
   meta: ["20 + 5 Hours · Total Certification", "13 Modules · Curriculum", "BRIDGE · Inclusion Framework", "Applied TTT · Format"],
   about:
-    "The Certified Diversity, Equity, Inclusion and Belonging Facilitator Program TTT is a 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, equipping participants to translate inclusion from concept into everyday workplace behaviour and facilitate DEIB learning with confidence.",
+    "The Certified Diversity, Equity, Inclusion and Belonging Facilitator Programme TTT is a 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, equipping participants to translate inclusion from concept into everyday workplace behaviour and facilitate DEIB learning with confidence.",
 
   stats: [
     { n: "2,000+", label: "Professionals Trained" },

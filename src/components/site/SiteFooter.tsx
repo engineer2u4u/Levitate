@@ -79,7 +79,7 @@ export default function SiteFooter({
             <div style={head}>Company</div>
             <div style={col}>
               <Link href="/about-us" className="site-footlink">About Us</Link>
-              <Link href="/certifications" className="site-footlink">TTT Certification Programs</Link>
+              <Link href="/certifications" className="site-footlink">TTT Certification Programmes</Link>
               <Link href="/" className="site-footlink">Home</Link>
               <Link href="/contact" className="site-footlink">Contact</Link>
             </div>

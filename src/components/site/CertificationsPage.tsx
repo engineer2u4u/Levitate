@@ -70,7 +70,7 @@ export default function CertificationsPage() {
               {/* <span style={{ width: 44, height: 44, flex: "none", borderRadius: 13, background: "rgba(255,255,255,.2)", border: "1px solid rgba(255,255,255,.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M8 3v4M16 3v4M3 11h18" /><path d="M9 16l2 2 4-4" /></svg>
               </span> */}
-              Check out our upcoming certification programs <span style={{ fontSize: 22 }}>→</span>
+              Check out our upcoming certification programmes <span style={{ fontSize: 22 }}>→</span>
             </a>
           </div>
         </div>
@@ -85,7 +85,7 @@ export default function CertificationsPage() {
             <Link key={p.id} href={`/lms/course/${p.slug}`} className="site-card" style={{ background: "#fff", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 16px", display: "flex", flexDirection: "column", gap: 6, boxShadow: "0 2px 6px rgba(10,27,51,.05)" }}>
               <div style={{ font: "700 10.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".13em", textTransform: "uppercase" }}><BrandText>{p.tag}</BrandText></div>
               <div style={{ font: "700 13px/1.35 'Plus Jakarta Sans',sans-serif", color: "#0a1b33" }}>{p.short}</div>
-              <div style={{ marginTop: "auto", paddingTop: 6, font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88" }}>View program →</div>
+              <div style={{ marginTop: "auto", paddingTop: 6, font: "700 11.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88" }}>View programme →</div>
             </Link>
           ))}
         </div>
@@ -114,7 +114,7 @@ export default function CertificationsPage() {
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" style={{ transform: collapsed ? "rotate(0deg)" : "rotate(180deg)", transition: "transform .3s ease" }}><path d="M6 9l6 6 6-6" /></svg>
                       </span>
                     </div>
-                    {/* The name opens the program's page. Not on mobile, where
+                    {/* The name opens the programme's page. Not on mobile, where
                         this same block is the accordion's toggle — a tap there
                         has to expand the card, not navigate away from it. */}
                     <h2 style={{ font: "700 clamp(24px,2.5vw,32px)/1.2 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 6px", letterSpacing: "-.02em" }}>
@@ -194,7 +194,7 @@ export default function CertificationsPage() {
                     ))}
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: "auto" }}>
-                    <Link href={`/lms/course/${p.slug}`} className="lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "14px 22px", borderRadius: 999, textAlign: "center" }}>View full program page →</Link>
+                    <Link href={`/lms/course/${p.slug}`} className="lp-btn-grad" style={{ background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "14px 22px", borderRadius: 999, textAlign: "center" }}>View full programme page →</Link>
                     <Link href="/contact" className="lp-btn-outline" style={{ border: "1.5px solid rgba(10,27,51,.28)", color: "#0a1b33", font: "700 14px 'Plus Jakarta Sans',sans-serif", padding: "13px 22px", borderRadius: 999, textAlign: "center", background: "#fff" }}>Book a Consultation</Link>
                   </div>
                 </div>
@@ -215,7 +215,7 @@ export default function CertificationsPage() {
           <Reveal style={{ maxWidth: 760, marginBottom: 44 }}>
             <div style={eyebrow}>Why Get Certified With Us</div>
             <h2 style={{ font: "700 clamp(28px,3vw,40px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 16px", letterSpacing: "-.02em" }}>Built for professionals who refuse to remain slide-based trainers</h2>
-            <p style={{ font: "400 15.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: 0 }}>Our programs help participants become confident, credible and responsible workplace facilitators.</p>
+            <p style={{ font: "400 15.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: 0 }}>Our programmes help participants become confident, credible and responsible workplace facilitators.</p>
           </Reveal>
           <div className="site-grid-5" style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 16 }}>
             {why.map((w) => (
@@ -237,7 +237,7 @@ export default function CertificationsPage() {
           <Reveal>
             <div style={eyebrow}>Certificate Preview</div>
             <h2 style={{ font: "700 clamp(26px,2.8vw,36px)/1.18 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: "0 0 16px", letterSpacing: "-.02em" }}>A credential that reflects practice, not just attendance</h2>
-            <p style={{ font: "400 15.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 26px" }}>Certificates are issued upon successful completion of program requirements, including participation, practice activities and assessment where applicable.</p>
+            <p style={{ font: "400 15.5px/1.75 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 26px" }}>Certificates are issued upon successful completion of programme requirements, including participation, practice activities and assessment where applicable.</p>
             <div className="site-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
               <div style={{ background: "#f7fafc", border: "1px solid #e3eaf0", borderRadius: 14, padding: "16px 14px", textAlign: "center" }}>
                 <CertIcon d={<><path d="M12 3l7 3v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9V6l7-3z" /><path d="M9 12l2 2 4-4" /></>} />
@@ -261,7 +261,7 @@ export default function CertificationsPage() {
                 <div style={{ font: "600 10.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".3em", textTransform: "uppercase", marginBottom: 14 }}>Certificate of Completion</div>
                 <div style={{ font: "400 12.5px 'Plus Jakarta Sans',sans-serif", color: "#5b6e82" }}>This certifies that</div>
                 <div style={{ font: "700 26px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", borderBottom: "1px solid #cfdbe4", padding: "8px 0", margin: "6px 24px 12px" }}>Participant Name</div>
-                <div style={{ font: "400 12.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginBottom: 18 }}>has successfully completed the<br /><strong style={{ color: "#0a1b33" }}>Corporate Leadership Facilitator Program (CLF TTT)</strong><br />including participation, practice and assessment</div>
+                <div style={{ font: "400 12.5px/1.6 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", marginBottom: 18 }}>has successfully completed the<br /><strong style={{ color: "#0a1b33" }}>Corporate Leadership Facilitator Programme (CLF TTT)</strong><br />including participation, practice and assessment</div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 26, padding: "0 8px" }}>
                   <div style={{ textAlign: "left" }}>
                     <div style={{ font: "600 13px 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", borderTop: "1px solid #cfdbe4", paddingTop: 6 }}>Parichita Kotnala</div>

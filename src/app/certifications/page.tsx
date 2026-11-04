@@ -6,7 +6,7 @@ import ScrollToTop from "@/components/home/ScrollToTop";
 import CertificationsPage from "@/components/site/CertificationsPage";
 
 export const metadata: Metadata = {
-  title: "TTT Certification Programs",
+  title: "TTT Certification Programmes",
   description:
     "Six Train-the-Trainer certification pathways — Leadership, DEIB, Wellbeing, PoSH, POCSO and HR Edge — with practice-led learning and assessment-based, verifiable credentials.",
 };

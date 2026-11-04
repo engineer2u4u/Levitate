@@ -25,7 +25,7 @@ import type { CourseContent } from "./courseContent";
 
 export const POSH_CONTENT: CourseContent = {
   slug: "posh-trainer",
-  title: "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
+  title: "PoSH & Workplace Dignity Facilitator Programme (PoSH TTT)",
   intro:
     "Fifteen learning hours — twelve live with the founder, three guided here. Work through each item in order; the next one opens as you finish the one before it.",
 

@@ -89,7 +89,7 @@ export default function Checkout({ slug }: { slug: string }) {
           <p style={{ font: "400 14px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 20px" }}>
             {course.title} is not taking online enrolments at the moment. Send us an enquiry and we will confirm the next batch and its fee with you.
           </p>
-          <Link href="/contact" className="lp-btn-grad" style={{ display: "inline-block", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 13.5px 'Plus Jakarta Sans',sans-serif", padding: "13px 26px", borderRadius: 999 }}>Enquire about this program</Link>
+          <Link href="/contact" className="lp-btn-grad" style={{ display: "inline-block", background: "linear-gradient(120deg,#2fc4bc,#2f7fd6)", color: "#fff", font: "700 13.5px 'Plus Jakarta Sans',sans-serif", padding: "13px 26px", borderRadius: 999 }}>Enquire about this programme</Link>
         </div>
       </div>
     );

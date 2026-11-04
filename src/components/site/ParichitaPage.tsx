@@ -393,7 +393,7 @@ export default function ParichitaPage() {
             Work with Parichita
           </h2>
           <p style={{ position: "relative", font: "400 16px/1.7 'Plus Jakarta Sans',sans-serif", color: "#a9bcd0", maxWidth: 620, margin: "0 auto 32px" }}>
-            Explore certification programs, customized training interventions and HR advisory led by Levitate PeopleSoft.
+            Explore certification programmes, customized training interventions and HR advisory led by Levitate PeopleSoft.
           </p>
           <div style={{ position: "relative", display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <Link

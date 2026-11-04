@@ -38,7 +38,7 @@ const FOOTER_SERVICES: [string, string][] = [
 ];
 const FOOTER_COMPANY: [string, string][] = [
   ["About Us", "/about-us"],
-  ["TTT Certification Programs", "/certifications"],
+  ["TTT Certification Programmes", "/certifications"],
   ["Testimonials", "#testimonials"],
   ["Contact", "/contact"],
 ];
@@ -257,7 +257,7 @@ export default function HomePage() {
                   boxShadow: "0 12px 28px rgba(27,143,136,.28)",
                 }}
               >
-                Explore TTT Certification Programs <span>→</span>
+                Explore TTT Certification Programmes <span>→</span>
               </Link>
               <Link
                 href="/contact"
@@ -756,7 +756,7 @@ export default function HomePage() {
         <div style={{ position: "relative", maxWidth: 1240, margin: "0 auto" }}>
           <Reveal style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 32, flexWrap: "wrap", marginBottom: 52 }}>
             <div>
-              <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>TTT Certification Programs</div>
+              <div style={{ font: "700 12px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88", letterSpacing: ".18em", textTransform: "uppercase", marginBottom: 14 }}>TTT Certification Programmes</div>
               <h2 style={{ font: "700 clamp(30px,3.2vw,44px)/1.15 'Plus Jakarta Sans',sans-serif", color: "#0a1b33", margin: 0, letterSpacing: "-.02em", maxWidth: 620 }}>
                 Choose your certification pathway
               </h2>
@@ -803,7 +803,7 @@ export default function HomePage() {
                 <div style={{ font: "600 13px 'Plus Jakarta Sans',sans-serif", color: "#2f7fd6" }}>{c.sub}</div>
                 <div style={{ font: "400 13.5px/1.65 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", flex: 1, textWrap: "pretty" } as CSSProperties}>{c.desc}</div>
                 <Link href={CERT_HREFS[i] ?? "/certifications"} style={{ font: "700 13.5px 'Plus Jakarta Sans',sans-serif", color: "#1b8f88" }}>
-                  Program details →
+                  Programme details →
                 </Link>
               </Reveal>
             ))}
@@ -820,7 +820,7 @@ export default function HomePage() {
               Built for professionals who refuse to remain slide-based trainers
             </h2>
             <p style={{ font: "400 15px/1.7 'Plus Jakarta Sans',sans-serif", color: "#5b6e82", margin: "0 0 30px" }}>
-              Our programs help participants become confident, credible and responsible workplace facilitators.
+              Our programmes help participants become confident, credible and responsible workplace facilitators.
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {whyPoints.map((w) => (
@@ -1032,7 +1032,7 @@ export default function HomePage() {
             Ready to build workplace capability that lasts?
           </h2>
           <p style={{ position: "relative", font: "400 16px/1.7 'Plus Jakarta Sans',sans-serif", color: "#a9bcd0", maxWidth: 620, margin: "0 auto 34px" }}>
-            Partner with Levitate PeopleSoft for certification programs, customized training interventions and institutional learning solutions.
+            Partner with Levitate PeopleSoft for certification programmes, customized training interventions and institutional learning solutions.
           </p>
           <div style={{ position: "relative", display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <Link

@@ -8,7 +8,7 @@ import ServicePage from "@/components/site/ServicePage";
 export const metadata: Metadata = {
   title: "Institutional Training",
   description:
-    "Campus-to-corporate readiness, communication, interview preparation and the HR Edge Certification — HR-led programs that turn academic learning into corporate readiness.",
+    "Campus-to-corporate readiness, communication, interview preparation and the HR Edge Certification — HR-led programmes that turn academic learning into corporate readiness.",
 };
 
 export default function Page() {

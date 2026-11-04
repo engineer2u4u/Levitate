@@ -249,9 +249,9 @@ const RZP_CLOSES_AT = [
 
 /** Fallback invoice titles. */
 const RZP_COURSE_TITLES = [
-    'posh-trainer'        => 'PoSH & Workplace Dignity Facilitator Program (PoSH TTT)',
-    'pocso-child-safety'  => 'POCSO & Child Safety Facilitator Program (POCSO TTT)',
-    'inclusive-workplace' => 'Certified Diversity, Equity, Inclusion and Belonging Facilitator Program TTT',
+    'posh-trainer'        => 'PoSH & Workplace Dignity Facilitator Programme (PoSH TTT)',
+    'pocso-child-safety'  => 'POCSO & Child Safety Facilitator Programme (POCSO TTT)',
+    'inclusive-workplace' => 'Certified Diversity, Equity, Inclusion and Belonging Facilitator Programme TTT',
     'demo-course'         => 'Demo · Workplace Facilitation Essentials',
     'posh-masterclass-2026' => 'PoSH 2026: The New Compliance & Workplace Reality — Masterclass, 31 October 2026',
     'hr-edge-masterclass'   => 'HR EDGE Masterclass: Think Like an HR Business Partner, 16 October 2026',

@@ -7,7 +7,7 @@ export const COURSES: Course[] = [
   {
     slug: "posh-trainer",
     tag: "Enrolling", mode: "Live online · Weekend batch",
-    title: "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
+    title: "PoSH & Workplace Dignity Facilitator Programme (PoSH TTT)",
     short: "PoSH Train-the-Trainer",
     desc: "Build legal understanding, inquiry competence and PoSH facilitation skills across 15 practice-led modules.",
     img: "/assets/workshop-tables.jpeg", status: "enrolling",
@@ -15,7 +15,7 @@ export const COURSES: Course[] = [
     feePaise: null, priceNote: "quoted on request",
     modulesLabel: "15 modules", hoursLabel: "15 learning hours", facilitator: "Parichita Kotnala",
     certificate: {
-      name: "PoSH & Workplace Dignity Facilitator Program (PoSH TTT)",
+      name: "PoSH & Workplace Dignity Facilitator Programme (PoSH TTT)",
       closing: "under the **Prevention of Sexual Harassment at Workplace** (PoSH Act, 2013).",
       hours: "12 + 3 Hours",
       cpd: true,
@@ -24,7 +24,7 @@ export const COURSES: Course[] = [
   {
     slug: "pocso-child-safety",
     tag: "Enrolling", mode: "Live online · 3 days",
-    title: "POCSO & Child Safety Facilitator Program (POCSO TTT)",
+    title: "POCSO & Child Safety Facilitator Programme (POCSO TTT)",
     short: "POCSO & Child Safety",
     desc: "Facilitate child-safety awareness with sensitivity, legal clarity and responsible communication.",
     img: "/assets/school-group.jpeg", status: "enrolling",
@@ -33,7 +33,7 @@ export const COURSES: Course[] = [
     feePaise: 650000, listPricePaise: 1200000, priceNote: "Early bird · incl. taxes · from 24 Oct",
     modulesLabel: "10 modules", hoursLabel: "9 hours", facilitator: "Parichita Kotnala",
     certificate: {
-      name: "POCSO & Child Safety Facilitator Program (POCSO TTT)",
+      name: "POCSO & Child Safety Facilitator Programme (POCSO TTT)",
       closing: "under the **Protection of Children from Sexual Offences** (POCSO Act, 2012).",
       hours: "9 Hours",
       // POCSO is not a SHRM-accredited programme, so it claims no PDCs.
@@ -43,7 +43,7 @@ export const COURSES: Course[] = [
   {
     slug: "inclusive-workplace",
     tag: "DEIB · TTT", mode: "Live online · from 10 October",
-    title: "Certified Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
+    title: "Certified Diversity, Equity, Inclusion and Belonging Facilitator Programme TTT",
     short: "DEIB TTT",
     desc: "A 20 + 5 hour applied Train-the-Trainer certification anchored in the BRIDGE Inclusion Framework, equipping participants to translate inclusion from concept into everyday workplace behaviour and facilitate DEIB learning with confidence.",
     img: "/assets/workshop-handsup.jpeg", status: "enrolling",
@@ -51,7 +51,7 @@ export const COURSES: Course[] = [
     feePaise: null, priceNote: "quoted on request",
     modulesLabel: "13 Modules", hoursLabel: "20 + 5 Hours", facilitator: "Parichita Kotnala",
     certificate: {
-      name: "Certified Diversity, Equity, Inclusion and Belonging Facilitator Program TTT",
+      name: "Certified Diversity, Equity, Inclusion and Belonging Facilitator Programme TTT",
       closing: "in **Diversity, Equity, Inclusion & Belonging** workplace facilitation.",
       hours: "20 + 5 Hours",
     },
@@ -59,14 +59,14 @@ export const COURSES: Course[] = [
   {
     slug: "workplace-wellbeing",
     tag: "Wellbeing", mode: "Live online · dates announced soon",
-    title: "Workplace Wellbeing Facilitator Program (Mental Health & Wellbeing TTT)",
+    title: "Workplace Wellbeing Facilitator Programme (Mental Health & Wellbeing TTT)",
     short: "Workplace Wellbeing",
     desc: "Facilitate workplace mental-health conversations with confidence, sensitivity and ethical care.",
     img: "/assets/outdoor-group.jpeg", status: "waitlist",
     feePaise: null, priceNote: "confirmed with batch dates",
     modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Parichita Kotnala",
     certificate: {
-      name: "Workplace Wellbeing Facilitator Program (Mental Health & Wellbeing TTT)",
+      name: "Workplace Wellbeing Facilitator Programme (Mental Health & Wellbeing TTT)",
       closing: "in **Workplace Mental Health & Wellbeing** facilitation.",
       hours: "12 Hours",
     },
@@ -74,14 +74,14 @@ export const COURSES: Course[] = [
   {
     slug: "leadership-facilitator",
     tag: "Flagship", mode: "Live online · cohort based",
-    title: "Corporate Leadership Facilitator Program (CLF TTT)",
+    title: "Corporate Leadership Facilitator Programme (CLF TTT)",
     short: "Leadership Facilitator",
     desc: "Facilitate leadership conversations on trust, coaching, feedback, accountability and team growth.",
     img: "/assets/audience-red-hall.jpeg", status: "waitlist",
     feePaise: null, priceNote: "HUMAN Leadership Framework",
     modulesLabel: "Curriculum on request", hoursLabel: "To be confirmed", facilitator: "Parichita Kotnala",
     certificate: {
-      name: "Corporate Leadership Facilitator Program (CLF TTT)",
+      name: "Corporate Leadership Facilitator Programme (CLF TTT)",
       closing: "powered by the **HUMAN Leadership Framework**.",
       hours: "12 Hours",
     },

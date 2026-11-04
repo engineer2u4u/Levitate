@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     template: "%s · Levitate PeopleSoft",
   },
   description:
-    "Practice-led certification programs, corporate learning interventions and institutional training solutions that build high-trust, inclusive and human-centred workplaces.",
+    "Practice-led certification programmes, corporate learning interventions and institutional training solutions that build high-trust, inclusive and human-centred workplaces.",
   keywords: [
     "Train-the-Trainer certification",
     "corporate training",

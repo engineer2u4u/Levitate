@@ -22,7 +22,7 @@ import type { CourseContent } from "./courseContent";
 
 export const POCSO_CONTENT: CourseContent = {
   slug: "pocso-child-safety",
-  title: "POCSO & Child Safety Facilitator Program (POCSO TTT)",
+  title: "POCSO & Child Safety Facilitator Programme (POCSO TTT)",
   intro:
     "The programme deals with child sexual abuse, safeguarding, disclosures and the legal duties that follow them. Start with the orientation film and the learning agreement; the case laboratory and the facilitator toolkit open as the live sessions are held.",
 

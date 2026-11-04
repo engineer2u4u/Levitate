@@ -8,7 +8,7 @@ import ContactPage from "@/components/site/ContactPage";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Talk to Levitate PeopleSoft about certification programs, corporate training interventions, institutional programs or HR advisory. We respond within one working day.",
+    "Talk to Levitate PeopleSoft about certification programmes, corporate training interventions, institutional programmes or HR advisory. We respond within one working day.",
 };
 
 export default function Page() {

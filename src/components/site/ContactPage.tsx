@@ -9,7 +9,7 @@ import { submitEnquiry } from "@/lib/submitEnquiry";
 import { useCatalog } from "@/components/site/CatalogProvider";
 import { catalogCourse } from "@/lib/catalog";
 
-const INTENTS = ["Certification program (individual)", "Corporate training intervention", "Institutional / student program", "HR advisory & culture consulting", "Something else"];
+const INTENTS = ["Certification programme (individual)", "Corporate training intervention", "Institutional / student programme", "HR advisory & culture consulting", "Something else"];
 
 const WHO = [
   "Individual professionals becoming credible facilitators",
@@ -20,15 +20,15 @@ const WHO = [
 
 const FAQS = [
   {
-    q: "Who are the certification programs designed for?",
-    a: "HR professionals, L&D leaders, managers, educators, consultants, coaches, trainers, psychologists, counsellors, HR students and aspiring workplace facilitators. Each program page lists the ideal participant profile.",
+    q: "Who are the certification programmes designed for?",
+    a: "HR professionals, L&D leaders, managers, educators, consultants, coaches, trainers, psychologists, counsellors, HR students and aspiring workplace facilitators. Each programme page lists the ideal participant profile.",
   },
   {
     q: "How is certification awarded?",
-    a: "Certification is linked to participation, practice, reflection and assessment — not just attendance. Certificates are issued on successful completion of program requirements, including practice activities and assessment where applicable.",
+    a: "Certification is linked to participation, practice, reflection and assessment — not just attendance. Certificates are issued on successful completion of programme requirements, including practice activities and assessment where applicable.",
   },
   {
-    q: "Can programs be customized for our organization?",
+    q: "Can programmes be customized for our organization?",
     a: "Yes. Every corporate intervention begins with understanding your business context, participant profile, team challenges and desired behavioural outcomes, then follows our Diagnose → Design → Facilitate → Measure blueprint.",
   },
   {
