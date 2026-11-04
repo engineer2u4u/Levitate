@@ -74,6 +74,14 @@ export type MasterclassOffer = {
   /** The line under the closing headline. */
   closing: string;
   faqs: Faq[];
+
+  /**
+   * Keeps the page live but takes it out of the header menu — for a sitting
+   * that is over and is not being repeated. The page still answers, and
+   * anyone holding the link still reaches its enquiry form; the menu simply
+   * stops offering it alongside the sittings that are actually running.
+   */
+  unlisted?: boolean;
 };
 
 /* ------------------------------------------------------------- PoSH 2026 */
@@ -405,6 +413,9 @@ export const HR_EDGE_MASTERCLASS: MasterclassOffer = {
 export const DEIB_MASTERCLASS: MasterclassOffer = {
   slug: "deib-masterclass",
   path: "/deib-masterclass/",
+  // Off the menu: the 10 October sitting is over and is not being repeated.
+  // The page stays up, and so do the links to it from the DEIB programme.
+  unlisted: true,
   eyebrow: "DEIB Masterclass",
   title: "Unconscious Bias at Work",
   titleRest: "How it shapes leadership, decisions & belonging",

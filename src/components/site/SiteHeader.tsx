@@ -83,13 +83,16 @@ export default function SiteHeader({ active }: { active?: NavKey }) {
   // Masterclasses are hidden from the catalogue — each is a one-off, not a
   // programme — so they have a menu of their own.
   //
-  // All of them, past sittings included. They used to drop out of the menu
-  // once their end time passed, which emptied the menu entirely and made three
-  // live pages look deleted. A past masterclass is still something a visitor
-  // may want, and its page now asks for an enquiry instead of a payment — so
-  // the honest thing is to keep the way in and let the page say where the
-  // session stands.
-  const masterclasses = MASTERCLASSES;
+  // Past sittings included. They used to drop out of the menu once their end
+  // time passed, which emptied the menu entirely and made three live pages look
+  // deleted. A past masterclass is still something a visitor may want, and its
+  // page now asks for an enquiry instead of a payment — so the honest thing is
+  // to keep the way in and let the page say where the session stands.
+  //
+  // The exception is one marked `unlisted`: a sitting that is finished and is
+  // not coming back. Its page stays live for anyone holding the link; it just
+  // stops being offered next to the sittings that are running.
+  const masterclasses = MASTERCLASSES.filter((m) => !m.unlisted);
   const [svcOpen, setSvcOpen] = useState(false);
   const [mcOpen, setMcOpen] = useState(false);
   // Which section of the phone menu is open. Nothing, until it is asked for:
